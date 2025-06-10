@@ -6,7 +6,7 @@ Scade One Examples
    :target: https://www.ansys.com/fr-fr/products/embedded-software/
    :alt: Ansys Scade One
 
-.. |version| image:: https://img.shields.io/badge/version-2024R2-blue
+.. |version| image:: https://img.shields.io/badge/version-2025R2-blue
    :alt: version
 
 .. |CI-CD| image:: https://github.com/ansys/scadeone-examples/actions/workflows/ci_cd.yml/badge.svg
