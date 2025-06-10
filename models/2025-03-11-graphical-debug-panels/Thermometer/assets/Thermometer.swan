@@ -1,0 +1,62 @@
+-- version swan: 2025.0 graph: 2.0
+function ToCelsius (tempF: float32;)
+  returns (tempC: float32;)
+{
+  diagram
+    (#0 expr tempF
+    #pragma diagram {"xy":"H6687;V0","wh":"10000;3200"} #end)
+    (#1 def tempC
+    #pragma diagram {"xy":"H53313;V5600","wh":"10000;3200"} #end)
+    (#2 expr #3 - #4
+      where
+        (#3 group)
+        (#4 group)
+    #pragma diagram {"xy":"H19813;V1900"} #end)
+    (#5 expr #6 / #7
+      where
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H39813;V5600"} #end)
+    (#8 expr 32.0
+    #pragma diagram {"xy":"H6500;V3800"} #end)
+    (#9 expr 1.8
+    #pragma diagram {"xy":"H20813;V7500"} #end)
+    
+    (#10 wire #8 => #4)
+    (#11 wire #0 => #3)
+    (#12 wire #2 => #6
+    #pragma diagram {"wp":"#2 h6500 v1800 #6"} #end)
+    (#13 wire #9 => #7)
+    (#14 wire #5 => #1)
+}
+
+function ToFahrenheit (tempC: float32;)
+  returns (tempF: float32;)
+{
+  diagram
+    (#0 def tempF
+    #pragma diagram {"xy":"H-7338;V0","wh":"10000;3200"} #end)
+    (#1 expr tempC
+    #pragma diagram {"xy":"H-52914;V-1800","wh":"10000;3200"} #end)
+    (#2 expr 1.8
+    #pragma diagram {"xy":"H-52288;V-5600"} #end)
+    (#3 expr #4 * #5
+      where
+        (#4 group)
+        (#5 group)
+    #pragma diagram {"xy":"H-39813;V-3700"} #end)
+    (#6 expr #7 + #8
+      where
+        (#7 group)
+        (#8 group)
+    #pragma diagram {"xy":"H-19813;V0"} #end)
+    (#9 expr 32.0
+    #pragma diagram {"xy":"H-38813;V1900"} #end)
+    
+    (#10 wire #2 => #4)
+    (#11 wire #1 => #5)
+    (#12 wire #3 => #7
+    #pragma diagram {"wp":"#3 h6500 v1800 #7"} #end)
+    (#13 wire #6 => #0)
+    (#14 wire #9 => #8)
+}

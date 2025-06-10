@@ -1,0 +1,36 @@
+-- version swan: 2025.0 graph: 2.0 swant: 1.1
+use Thermometer;
+
+use ThermometerPanel;
+
+_harness TestHarnessDS
+{
+  diagram
+    (#0 #pragma swt under_test #end block Thermometer::ToCelsius
+                                          #pragma diagram {"xy":"H3599;V-8042","wh":"20000;14000"} #end)
+    (#1 block (_source tempsd)
+    #pragma diagram {"xy":"H-24451;V-8042","wh":"12000;7000"} #end)
+    (let _stop_condition = _current_cycle >= /* nb values */NB_CYCLES;
+    #pragma diagram {"xy":"H2021;V-18983","wh":"64944;3200"} #end)
+    
+    (#3 wire #1 .(tempF) => #0 .(tempF)
+    #pragma diagram {"wp":"v0|#1 #0"} #end)
+}
+
+const NB_CYCLES: uint64 = 100;
+
+_harness TH_ThermPanelToFahrenheit
+{
+  diagram
+    (#0 block ThermometerPanel::ThermometerPanel
+              #pragma diagram {"xy":"H-37950;V950","wh":"20000;14000"} #end)
+    (#1 #pragma swt under_test #end block Thermometer::ToFahrenheit
+                                          #pragma diagram {"xy":"H-350;V950","wh":"20000;14000"} #end)
+    (#2 def _
+    #pragma diagram {"xy":"H23575;V950"} #end)
+    
+    (#3 wire #0 .(tempCelsius) => #1 .(tempC)
+    #pragma diagram {"wp":"v0|#0 #1"} #end)
+    (#4 wire #1 .(tempF) => #2
+    #pragma diagram {"wp":"v0|#1 #2"} #end)
+}

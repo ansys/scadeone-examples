@@ -1,0 +1,19 @@
+{
+  "Version": "1.0",
+  "Name": "Thermometer",
+  "Dependencies": [
+    "..\\ThermometerPanel\\ThermometerPanel_ScadeOneCosimulation\\ThermometerPanel.sproj"
+  ],
+  "Resources": [
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\temp.sd",
+      "Key": "tempsd"
+    },
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\tempC.sd",
+      "Key": "tempCsd"
+    }
+  ]
+}

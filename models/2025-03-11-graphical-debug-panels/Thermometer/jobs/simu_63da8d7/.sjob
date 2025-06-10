@@ -1,0 +1,18 @@
+{
+  "Version": "2.0",
+  "Kind": "Simulation",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "SimuTemp",
+    "CustomArguments": "",
+    "FileScenario": "",
+    "SimulationInputType": "Harness",
+    "TestHarness": "TestModule::TestHarnessDS",
+    "UseCycleTime": "False"
+  },
+  "InputPaths": [
+    "assets/TestModule.swant"
+  ]
+}

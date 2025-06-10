@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?dom version="19.0" ?>
+
+<specification>
+    <IDE>
+        <project path="ThermometerPanel.etp"/>
+        <ratio horizontal="1" vertical="1"/>
+    </IDE>
+    <symbology>
+        <dimension height="256" width="350"/>
+    </symbology>
+    <children>
+        <layer oid="ff9c8c99-3baf-4a64-a5b2-1c0f38212f26">
+            <pathFromRoot value=""/>
+            <declaration>
+                <outputs>
+                    <output memory="true" name="tempCelsius" oid="6750c85f-d60c-4894-a760-9b53e1397f7f" type="real">
+                        <init>0.0</init>
+                    </output>
+                </outputs>
+            </declaration>
+            <properties name="control_panel">
+                <visible>
+                    <init>true</init>
+                </visible>
+                <origin>
+                    <x>
+                        <init>0.0</init>
+                    </x>
+                    <y>
+                        <init>0.0</init>
+                    </y>
+                </origin>
+                <id>
+                    <init>1</init>
+                </id>
+                <ratio horizontal="1" vertical="1"/>
+            </properties>
+            <children>
+                <rectangle oid="0714aee0-93bd-489e-9d71-b17fe8c790df">
+                    <pathFromRoot value="0"/>
+                    <properties name="rectangle">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <firstPoint>
+                            <x>
+                                <init>175.0</init>
+                            </x>
+                            <y>
+                                <init>-128.0</init>
+                            </y>
+                        </firstPoint>
+                        <thirdPoint>
+                            <x>
+                                <init>-175.0</init>
+                            </x>
+                            <y>
+                                <init>128.0</init>
+                            </y>
+                        </thirdPoint>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <lineStipple>
+                            <init>0</init>
+                        </lineStipple>
+                        <lineCap>
+                            <init>round</init>
+                        </lineCap>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>15</init>
+                        </outlineColor>
+                        <outlineOpacity>
+                            <init>255</init>
+                        </outlineOpacity>
+                        <fillColor>
+                            <init>1002</init>
+                        </fillColor>
+                        <fillOpacity>
+                            <init>255</init>
+                        </fillOpacity>
+                        <polygonSmooth>
+                            <init>false</init>
+                        </polygonSmooth>
+                        <textureControl>
+                            <init>false</init>
+                        </textureControl>
+                        <texture horizAlign="center" horizPattern="1.0" vertAlign="middle" vertPattern="1.0">
+                            <textureId>
+                                <init>-1</init>
+                            </textureId>
+                        </texture>
+                        <gradient>
+                            <init>-1</init>
+                        </gradient>
+                        <modulate>
+                            <init>false</init>
+                        </modulate>
+                        <tessellate>
+                            <init>false</init>
+                        </tessellate>
+                    </properties>
+                </rectangle>
+                <text oid="c3216cde-5200-4ec4-a281-2f6ce8327105">
+                    <pathFromRoot value="1"/>
+                    <properties name="text">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>-65.000004</init>
+                            </x>
+                            <y>
+                                <init>67.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>255</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[84, 104, 101, 114, 109, 111, 109, 101, 116, 101, 114, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>1</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>2</init>
+                        </lineWidth>
+                        <font>
+                            <init>22</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>bottom</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <referenceContainer oid="2a4c3c08-c7c5-4b1e-8ee8-c49649f342c3">
+                    <pathFromRoot value="2"/>
+                    <properties modular="false" name="Slider">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>-109.0</init>
+                            </x>
+                            <y>
+                                <init>13.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="Slider.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1239411018"/>
+                        <inputParameters>
+                            <parameter control="false" name="WidgetId" oid="b1af7546-00fb-4b5e-bd12-c4d4dffa2a58" type="int32">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="NextWidgetId" oid="6840384c-6059-4a81-b59d-9406f834be7e" type="int32">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeX" oid="030223af-5b8b-4a72-ad50-b7fc84846efb" type="real">
+                                <init>220.0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeY" oid="5fab0799-ce7e-4661-be81-c4eca636b311" type="real">
+                                <init>51.191406</init>
+                            </parameter>
+                            <parameter control="false" name="Enable" oid="c7dfe3a8-b0dc-4bc1-a4f9-493636ccab35" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="Style" oid="5ce6b547-296b-4d3e-8af8-9c16f56cd789" representation="index" type="int">
+                                <init>5</init>
+                            </parameter>
+                            <parameter control="false" name="ColorStyle" oid="e9f11414-fa80-4b83-9376-1974ecf0a70e" type="int">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="TextColor" oid="2699036d-dc80-4230-885f-164b88a0fad4" representation="color" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="e0fb27a0-c70c-4d8c-bbe7-32f9a343a250" representation="font" type="int">
+                                <init>21</init>
+                            </parameter>
+                            <parameter control="false" name="BackColor" oid="2da44668-761a-4a06-8cab-39f95420900c" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="InValue" oid="0aee8b16-6c61-47d8-a240-aa9e6e9a58c3" type="real">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="MinValue" oid="2e208792-7be4-43a9-a93b-e00e14b29031" type="real">
+                                <init>-50.0</init>
+                            </parameter>
+                            <parameter control="false" name="MaxValue" oid="1a3049a6-edd4-43ea-898e-e8171912043f" type="real">
+                                <init>50.0</init>
+                            </parameter>
+                            <parameter control="false" name="ValueDelta" oid="72d8f3b6-62ed-46e4-8af2-4c96cd7176b9" type="real">
+                                <init>1.0</init>
+                            </parameter>
+                            <parameter control="false" name="Orientation" oid="380c148f-af0a-463f-9189-3ec1cfc72160" representation="index" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="GraduationsPosition" oid="91437711-3c8d-407f-9fc4-798c3bca9f43" representation="index" type="int">
+                                <init>4</init>
+                            </parameter>
+                            <parameter control="false" name="ShowGraduations" oid="bae06267-2b53-452b-9291-366306b011d9" representation="index" type="int">
+                                <init>4</init>
+                            </parameter>
+                            <parameter control="false" name="InValueSet" oid="eaeedacf-1731-4708-9d37-4cfa266cc796" type="bool">
+                                <init>false</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="cc04bd11-aa8e-4295-9946-6d81b533fe64" representation="as_string" type="char^255">
+                                <init>[0]</init>
+                            </parameter>
+                        </inputParameters>
+                        <outputParameters>
+                            <parameter name="Value" oid="e63bae09-bbf2-4952-af67-66ae4a06d88a" type="real">
+                                <expr>tempCelsius</expr>
+                            </parameter>
+                            <parameter name="ValueChangeEmit" oid="f3d3a04d-d6e5-4459-aecc-0c9dafe1d5ae" type="bool"/>
+                        </outputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="351601bc-946b-4071-8ae3-24c19769e904">
+                    <pathFromRoot value="3"/>
+                    <properties modular="false" name="NumericDisplay">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>-60.0</init>
+                            </x>
+                            <y>
+                                <init>-72.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="NumericDisplay.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1403237424"/>
+                        <inputParameters>
+                            <parameter control="false" name="Value" oid="a3a5f970-1420-4fe1-9bd8-e35a8f306807" type="real">
+                                <expr>tempCelsius</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="ValueColor" oid="b982d917-8d18-417d-b064-017d245af51c" representation="color" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="BackColor" oid="3626f080-6df7-44a5-a206-b03d79290764" representation="color" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="NumberFormat" oid="9ca35185-6fbd-4767-aa97-1ff4ae261528" representation="index" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="3d8e3172-2c79-48a9-a235-d6bba2894b8d" representation="as_string" type="char^255">
+                                <init>[176,67,0]</init>
+                            </parameter>
+                            <parameter control="false" name="LegendColor" oid="e83a7fd8-ed56-419c-8274-f0026bf8b7bf" representation="color" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="Unit" oid="fe4bc7f8-1d1c-4907-9b1c-0110346f9c12" representation="as_string" type="char^255">
+                                <init>[0]</init>
+                            </parameter>
+                            <parameter control="false" name="UnitColor" oid="dc370f04-f53b-4986-b9a3-b1a7f5789537" representation="color" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="b4a39410-bf6a-4c05-8956-31515a1c7ee6" representation="font" type="int">
+                                <init>22</init>
+                            </parameter>
+                            <parameter control="false" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
+                                <init>115.0</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+            </children>
+        </layer>
+    </children>
+</specification>
+
+<!-- crc32 : 2141541730 -->

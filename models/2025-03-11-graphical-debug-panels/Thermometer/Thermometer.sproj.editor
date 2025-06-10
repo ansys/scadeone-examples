@@ -1,0 +1,11 @@
+{
+  "JobsOrder": [
+    "jobs\\codegen_ee6369e\\.sjob",
+    "jobs\\codegen_f53f7a6\\.sjob",
+    "jobs\\simu_63da8d7\\.sjob"
+  ],
+  "ModulesOrder": [
+    "assets\\TestModule.swant",
+    "assets\\Thermometer.swan"
+  ]
+}

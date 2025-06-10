@@ -1,0 +1,107 @@
+"""Sphinx documentation configuration file."""
+
+from datetime import datetime
+import os
+import pathlib
+
+from ansys_sphinx_theme import (
+    ansys_favicon,
+    ansys_logo_white,
+    ansys_logo_white_cropped,
+    get_version_match,
+    latex,
+    watermark,
+)
+from sphinx.builders.latex import LaTeXBuilder
+
+source_dir = pathlib.Path(__file__).parent.resolve().absolute()
+version_file = source_dir / "../../VERSION"
+with pathlib.Path(version_file).open() as file:
+    __version__ = file.read().splitlines()[0]
+release = version = __version__
+
+print(f"Building documentation for scadeone-examples version {__version__}")
+
+# Project information
+project = "scadeone-examples"
+copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
+author = "ANSYS, Inc."
+release = version = __version__
+cname = os.getenv("DOCUMENTATION_CNAME", "examples.scade.docs.pyansys.com")
+switcher_version = get_version_match(__version__)
+
+# HTML configuration
+html_favicon = ansys_favicon
+html_theme = "ansys_sphinx_theme"
+html_short_title = html_title = "Scade One Examples"
+html_static_path = ["_static"]
+templates_path = ["_templates"]
+html_context = {
+    "github_user": "ansys",
+    "github_repo": "scadeone-examples",
+    "github_version": "main",
+    "doc_path": "doc/source",
+}
+html_theme_options = {
+    "github_url": "https://github.com/ansys/scadeone-examples",
+    "contact_mail": "pyansys.core@ansys.com",
+    "use_edit_page_button": True,
+    "additional_breadcrumbs": [
+        ("PyAnsys", "https://docs.pyansys.com/"),
+    ],
+    "switcher": {
+        "json_url": f"https://{cname}/versions.json",
+        "version_match": get_version_match(__version__),
+    },
+    "check_switcher": False,
+    "logo": "ansys",
+}
+
+# Sphinx extensions
+extensions = [
+    "sphinx.ext.todo",
+    "sphinx_copybutton",
+    "sphinx_design",
+    "sphinx.ext.extlinks",
+]
+
+suppress_warnings = ["config.cache"]
+
+# The suffix(es) of source filenames.
+source_suffix = ".rst"
+
+# The master toctree document.
+master_doc = "index"
+
+linkcheck_ignore = [
+    # Possibly not-yet-deployed model zips
+    "https://github.com/ansys/scadeone-examples/*",
+    # The link below takes a long time to check
+    "https://www.ansys.com/products/embedded-software/ansys-scade-suite",
+    "https://www.ansys.com/*",
+    # AIS Knowledge links are external and should not be checked
+    "https://innovationspace.ansys.com/knowledge/wp-content/*",
+    "https://courses.ansys.com/index.php/embedded-software/*",
+]
+
+# suppress FontAwesome warnings
+suppress_warnings = [
+    "design.fa-build",
+]
+
+# additional logos for the latex coverpage
+LaTeXBuilder.supported_image_types = ["image/png", "image/pdf", "image/svg+xml"]
+latex_additional_files = [watermark, ansys_logo_white, ansys_logo_white_cropped]
+latex_elements = {"preamble": latex.generate_preamble(html_title)}
+
+# documentation link aliases
+extlinks = {
+    "model_zip": (
+        f"{html_theme_options['github_url']}/releases/latest/download/%s.zip",
+        None,
+    ),
+    "model_sources": (
+        f"{html_theme_options['github_url']}/tree/main/models/%s/",
+        None,
+    ),
+}

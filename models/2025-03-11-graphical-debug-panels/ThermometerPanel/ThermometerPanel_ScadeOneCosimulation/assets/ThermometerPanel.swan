@@ -1,0 +1,8 @@
+-- version swan: 2025.0 graph: 2.0
+{text%
+node #pragma harness data_source="../resources/ThermometerPanel.spanel" #end ThermometerPanel(
+
+) returns (
+  tempCelsius: float32
+);
+%text}
