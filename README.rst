@@ -17,8 +17,8 @@ Scade One Examples
    :target: https://opensource.org/licenses/MIT
    :alt: MIT License
 
-.. |doc| image:: https://img.shields.io/badge/docs-scade%20examples-green.svg?style=flat
-   :target: https://examples.scade.docs.pyansys.com/
+.. |doc| image:: https://img.shields.io/badge/docs-scadeone%20examples-green.svg?style=flat
+   :target: https://examples.scadeone.docs.pyansys.com/
    :alt: Doc
 
 Overview
