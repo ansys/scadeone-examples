@@ -14,6 +14,7 @@ ignore = [
 #   "E501",  # Line too long. Ignoring this so "ruff.formatter" manages line length.
     "D212", # Multi-line docstring summary should start at the first line
     "TD002", # Missing author in TODOs comment
+    "TD003", # Missing date in TODOs comment
 ]
 
 [format]

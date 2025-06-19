@@ -14,8 +14,10 @@ from ansys_sphinx_theme import (
 )
 from sphinx.builders.latex import LaTeXBuilder
 
-source_dir = pathlib.Path(__file__).parent.resolve().absolute()
-version_file = source_dir / "../../VERSION"
+DOC_SOURCE_DIR = pathlib.Path(__file__).parent
+ROOT_DIR = DOC_SOURCE_DIR.parent.parent
+version_file = ROOT_DIR / "VERSION"
+
 with pathlib.Path(version_file).open() as file:
     __version__ = file.read().splitlines()[0]
 release = version = __version__
@@ -35,7 +37,6 @@ html_favicon = ansys_favicon
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "Scade One Examples"
 html_static_path = ["_static"]
-templates_path = ["_templates"]
 html_context = {
     "github_user": "ansys",
     "github_repo": "scadeone-examples",
@@ -53,6 +54,7 @@ html_theme_options = {
         "json_url": f"https://{cname}/versions.json",
         "version_match": get_version_match(__version__),
     },
+    # TODO: remove this once the repo is public
     "check_switcher": False,
     "logo": "ansys",
 }
