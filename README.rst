@@ -28,7 +28,7 @@ This repository hosts a collection of example models demonstrating Ansys Scade O
 These models are often related to external content, for instance `Embedded Software Technical Blog <https://innovationspace.ansys.com/knowledge/forums/forum/additional-products/embedded-software/>`_
 articles, or `Embedded Software Courses <https://courses.ansys.com/index.php/embedded-software/>`_.
 
-In addition to example models stored in this repository, the documentation also points to separate repositories hosting larger, 'flagship' Scade One demo models. 
+In addition to example models stored in this repository, the documentation also points to separate repositories hosting larger, 'flagship' Scade One demo models.
 These 'flagship' models are larger in scale and have their own advanced CI/CD actions.
 
 Documentation

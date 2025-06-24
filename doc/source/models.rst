@@ -21,7 +21,7 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
 
 .. grid:: 2 2 3 3
 
-    .. grid-item-card:: Scade One – Using Rapid Prototyper to augment model simulation 
+    .. grid-item-card:: Scade One – Using Rapid Prototyper to augment model simulation
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2025-03-11-graphical-debug-panels.jpg
 

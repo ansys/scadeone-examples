@@ -22,8 +22,6 @@ with pathlib.Path(version_file).open() as file:
     __version__ = file.read().splitlines()[0]
 release = version = __version__
 
-print(f"Building documentation for scadeone-examples version {__version__}")
-
 # Project information
 project = "scadeone-examples"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
@@ -52,7 +50,7 @@ html_theme_options = {
     ],
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
-        "version_match": get_version_match(__version__),
+        "version_match": switcher_version,
     },
     # TODO: remove this once the repo is public
     "check_switcher": False,

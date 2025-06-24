@@ -14,13 +14,13 @@ repos:
       - id: add-license-headers
         args:
         - --start_year=2025
-  
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
     - id: check-merge-conflict
     - id: debug-statements
-  
+
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.33.1
     hooks:
