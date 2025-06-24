@@ -1,7 +1,7 @@
 documentation:
   - any:
       - changed-files:
-          - any-glob-to-any-file: ['doc/source/**/*.rst, README.rst']
+          - any-glob-to-any-file: ['doc/source/**/*.rst', 'README.rst']
 
 maintenance:
   - any:
