@@ -68,12 +68,11 @@ This way, it's not possible for you to push code that fails the style checks::
 
   $ pre-commit install
   $ git commit -am "added my cool feature"
+  ruff (legacy alias)......................................................Passed
+  ruff format..............................................................Passed
   Add License Headers......................................................Passed
   check for merge conflicts................................................Passed
   debug statements (python)................................................Passed
-  trim trailing whitespace.................................................Passed
-  check yaml...............................................................Passed
-  fix requirements.txt.....................................................Passed
   Check GitHub workflows...................................................Passed
 
 Build documentation
