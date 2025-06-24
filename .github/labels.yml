@@ -26,7 +26,7 @@
   description: Anything related to an incoming release
   color: ffffff
 
-- name: testing
-  description: Anything related to tests
-  color: BFE4D6
+- name: ci
+  description: Continuous integration and continuous deployment related
+  color: a9a9a9
 
