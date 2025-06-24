@@ -6,4 +6,4 @@
 
 ## Individual Contributors
 
-## Individual Contributors
+* [Revathy Venugopal (Ansys)](https://github.com/revathyvenugopal162)
