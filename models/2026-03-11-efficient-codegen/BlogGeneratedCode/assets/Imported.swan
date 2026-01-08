@@ -1,0 +1,59 @@
+-- version swan: 2025.2 graph: 2.1
+node Root (M: float64^N^N;
+           x: float64^N;)
+  returns (y: float64^N;)
+{
+  diagram
+    (#0 expr x
+    #pragma diagram {"xy":"H-27050;V-12750"} #end)
+    (#1 expr x
+    #pragma diagram {"xy":"H-69650;V-7350"} #end)
+    (#2 block (sgemv \ a: 1.0, b: 0.0)
+    #pragma diagram {"xy":"H-45150;V-7350","wh":"20000;14000"} #end)
+    (#3 expr M
+    #pragma diagram {"xy":"H-69650;V-12750"} #end)
+    (#4 block (saxpy \ a: 1.0)
+    #pragma diagram {"xy":"H-8950;V-7350","wh":"20000;14000"} #end)
+    (#5 expr 0.0^N
+    #pragma diagram {"xy":"H-70650;V-1950","wh":"10000;3200"} #end)
+    (-- y = M (Mx + x)
+     let
+    #pragma diagram {"xy":"H-21050;V-23041","wh":"20000;4219"} #end)
+    (#7 block (sgemv \ a: 1.0, b: 0.0)
+    #pragma diagram {"xy":"H27250;V-7350","wh":"20000;14000"} #end)
+    (#8 expr 0.0^N
+    #pragma diagram {"xy":"H9150;V-1950","wh":"10000;3200"} #end)
+    (#9 def y
+    #pragma diagram {"xy":"H48050;V-7350"} #end)
+    (#10 expr M
+    #pragma diagram {"xy":"H10150;V-12750"} #end)
+    
+    (#11 wire #1 => #2 .(x))
+    (#12 wire #4 => #7 .(x)
+    #pragma diagram {"wp":"v0|#4 #7"} #end)
+    (#13 wire #5 => #2 .(y))
+    (#14 wire #2 => #4 .(y)
+    #pragma diagram {"wp":"v0|#2 #4"} #end)
+    (#15 wire #0 => #4 .(x))
+    (#16 wire #8 => #7 .(y))
+    (#17 wire #3 => #2 .(M))
+    (#18 wire #7 => #9
+    #pragma diagram {"wp":"v0|#7 #9"} #end)
+    (#19 wire #10 => #7 .(M))
+}
+
+node saxpy (a: float64;
+            x: float64^N;
+            y: float64^N;)
+  returns (z: float64^N;);
+
+node sgemv (a: float64;
+            M: float64^P^N;
+            x: float64^N;
+            b: float64;
+            y: float64^P;)
+  returns (z: float64^P;);
+
+const N: int32 = 100;
+
+const P: int32 = 100;
