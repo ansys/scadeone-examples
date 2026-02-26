@@ -1,3 +1,26 @@
+# Copyright (C) 2025 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ruff: noqa: D103
+
 """
 Unit tests for CruiseSpeedMgt.
 
@@ -31,8 +54,9 @@ if TYPE_CHECKING:
     from .proxy.mgt.mgt import CruiseSpeedMgt_CC
 
 
-class CC_BTN(Enum):
+class CC_BTN(Enum):  # noqa: N801
     """Cruise Control Actions."""
+
     NONE, SET, ACCELERATE, DECELERATE = range(4)
 
     def __eq__(self, other):
@@ -59,7 +83,7 @@ def _set_action(cruise_speed_mgt: "CruiseSpeedMgt_CC", action: CC_BTN):
 
 
 @pytest.mark.parametrize(
-    'init, cycles, expected',
+    "init, cycles, expected",
     [
         # TC_CSM_N_001
         # Test Reference: CSM_TEST_CSM_00
@@ -72,7 +96,6 @@ def _set_action(cruise_speed_mgt: "CruiseSpeedMgt_CC", action: CC_BTN):
         # Test Case Acceptance Criteria:
         #    cruiseSpeed = initial speed
         (34.12, [], 34.12),
-
         # Test Reference: CSM_TEST_CSM_06
         #
         # Test Case Objectives:
@@ -83,7 +106,6 @@ def _set_action(cruise_speed_mgt: "CruiseSpeedMgt_CC", action: CC_BTN):
         # Test Case Acceptance Criteria:
         #    cruiseSpeed = initial speed
         (34.12, [(56.78, CC_BTN.NONE)], 34.12),
-
         # Test Reference: CSM_TEST_CSM_02
         #
         # Test Case Objectives:
@@ -94,7 +116,6 @@ def _set_action(cruise_speed_mgt: "CruiseSpeedMgt_CC", action: CC_BTN):
         # Test Case Acceptance Criteria:
         #    cruiseSpeed = new speed
         (34.12, [(56.78, CC_BTN.SET)], 56.78),
-
         # Test Reference: CSM_TEST_CSM_03
         #
         # Test Case Objectives:
@@ -106,7 +127,6 @@ def _set_action(cruise_speed_mgt: "CruiseSpeedMgt_CC", action: CC_BTN):
         # Test Case Acceptance Criteria:
         #    cruiseSpeed = initial speed + SPEED_INC
         (75.31, [(0.0, CC_BTN.ACCELERATE)], 77.81),
-
         # Test Reference: CSM_TEST_CSM_04
         #
         # Test Case Objectives:
@@ -118,7 +138,6 @@ def _set_action(cruise_speed_mgt: "CruiseSpeedMgt_CC", action: CC_BTN):
         # Test Case Acceptance Criteria:
         #    cruiseSpeed = initial speed - SPEED_INC
         (77.81, [(0.0, CC_BTN.DECELERATE)], 75.31),
-
         # TC_CSM_R_002
         # Test Reference: CSM_TEST_CSM_051
         #
@@ -131,7 +150,6 @@ def _set_action(cruise_speed_mgt: "CruiseSpeedMgt_CC", action: CC_BTN):
         # Test Case Acceptance Criteria:
         #    cruiseSpeed = SPEED_MIN
         (12.34, [], 30.0),
-
         # Test Reference: CSM_TEST_CSM_052
         #
         # Test Case Objectives:
@@ -143,7 +161,6 @@ def _set_action(cruise_speed_mgt: "CruiseSpeedMgt_CC", action: CC_BTN):
         # Test Case Acceptance Criteria:
         #    cruiseSpeed = SPEED_MAX
         (160, [], 150.0),
-
         # Test Reference: CSM_TEST_CSM_053
         #
         # Test Case Objectives:
@@ -155,7 +172,6 @@ def _set_action(cruise_speed_mgt: "CruiseSpeedMgt_CC", action: CC_BTN):
         # Test Case Acceptance Criteria:
         #    cruiseSpeed = SPEED_MAX
         (123.45, [(0.0, CC_BTN.ACCELERATE)] * 20, 150.0),
-
         # Test Reference: CSM_TEST_CSM_054
         #
         # Test Case Objectives:
@@ -170,11 +186,11 @@ def _set_action(cruise_speed_mgt: "CruiseSpeedMgt_CC", action: CC_BTN):
     ],
 )
 def test_cruise_speed_mgt(
-        cruise_speed_mgt: "CruiseSpeedMgt_CC",
-        init: float,
-        cycles: list[tuple[float, CC_BTN]],
-        expected: float,
-    ):
+    cruise_speed_mgt: "CruiseSpeedMgt_CC",
+    init: float,
+    cycles: list[tuple[float, CC_BTN]],
+    expected: float,
+):
     cruise_speed_mgt.reset()
     # set the initial speed
     cruise_speed_mgt.inputs.speed = init

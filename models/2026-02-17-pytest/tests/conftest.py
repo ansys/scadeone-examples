@@ -1,15 +1,36 @@
-"""Configuration of pytest: fixtures and additional features"""
+# Copyright (C) 2025 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+"""Configuration of pytest: fixtures and additional features."""
 
 import os
-import re
-import sys
 from pathlib import Path
+import re
 from shutil import rmtree
+import sys
 from typing import Generator, Union
 
-import pytest
 import matplotlib.pyplot as plt
-
+import pytest
 
 PathType = Union[str, os.PathLike[str]]
 TEST_DIR = Path(__file__).parent
@@ -29,7 +50,6 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 
 def _get_plot_dir(node_id: str, clean_dir: bool = False) -> Path:
     """Get the directory where plots for the given test nodeid are stored."""
-
     # The simplest way to be able to save multiple plots from the same test,
     # is to have a dedicated directory per test.
     # For the directory name, we need to create a sanitized file name from node id

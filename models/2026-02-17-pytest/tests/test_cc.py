@@ -1,3 +1,25 @@
+# Copyright (C) 2025 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 """
 Unit tests for Controller.
 
@@ -16,6 +38,7 @@ Unit tests for Controller.
   the CC is not regulating.
 * Pass criteria: The output result is identical to the expected value.
 """
+# ruff: noqa: D102 D103
 
 from enum import Enum
 from typing import TYPE_CHECKING
@@ -24,8 +47,9 @@ if TYPE_CHECKING:
     from .proxy.cc.cc import Controller_CC
 
 
-class CC_STATE(Enum):
+class CC_STATE(Enum):  # noqa: N801
     """Cruise Control states."""
+
     OFF, INT, STDBY, ON = range(4)
 
     def __eq__(self, other):
@@ -66,7 +90,9 @@ def test_controller_nominal(controller: "Controller_CC"):
         for i in range(20):
             controller.cycle()
             assert controller.outputs.cruiseState == CC_STATE.OFF
-            assert abs(controller.outputs.throttleCmd - controller.inputs.accel) < 5.0e-6
+            assert (
+                abs(controller.outputs.throttleCmd - controller.inputs.accel) < 5.0e-6
+            )
 
     # Test Reference: CC_TEST_CCB_02
     #

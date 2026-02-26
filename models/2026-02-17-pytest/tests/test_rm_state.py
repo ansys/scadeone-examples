@@ -1,3 +1,26 @@
+# Copyright (C) 2025 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ruff: noqa: D101 D103
+
 """
 Unit tests for RegulationMgt.
 
@@ -8,7 +31,7 @@ Unit tests for RegulationMgt.
   with different values of the accelerator.
 * Expected results: The throttle is expected to be null when the accelerator
   is pressed and not null else.
-  
+
   The state of the CC shall reflect that: either ON or STDBY.
 * Pass criteria: The output result is identical to the expected value, with a precision of 5.10-6.
 
@@ -21,8 +44,9 @@ if TYPE_CHECKING:
     from .proxy.mgt.mgt import RegulationMgt_CC
 
 
-class CC_STATE(Enum):
+class CC_STATE(Enum):  # noqa: N801
     """Possible states of the Cruise Control."""
+
     OFF, INT, STDBY, ON = range(4)
 
     def __eq__(self, other):
@@ -91,9 +115,9 @@ def test_regulation_mgt_state(regulation_mgt: "RegulationMgt_CC"):
     # Test Case Acceptance Criteria
     #    CruiseState is STDBY and throttleCmd = accel
     for inputs.accel in [3.14159, 5.0, 15.0, 20.0]:
-      regulation_mgt.cycle()
-      assert outputs.cruiseState == CC_STATE.STDBY
-      assert abs(outputs.throttleCmd - inputs.accel) < 5.0e-6
+        regulation_mgt.cycle()
+        assert outputs.cruiseState == CC_STATE.STDBY
+        assert abs(outputs.throttleCmd - inputs.accel) < 5.0e-6
 
     # Test Reference: RM_TEST_CCB_062
     #
@@ -105,9 +129,9 @@ def test_regulation_mgt_state(regulation_mgt: "RegulationMgt_CC"):
     # Test Case Acceptance Criteria
     #    CruiseState is ON and throttleCmd > 0
     for inputs.accel in [3.0, 2.0, 0.0]:
-      regulation_mgt.cycle()
-      assert outputs.cruiseState == CC_STATE.ON
-      assert outputs.throttleCmd > 0.0
+        regulation_mgt.cycle()
+        assert outputs.cruiseState == CC_STATE.ON
+        assert outputs.throttleCmd > 0.0
 
     # Test Reference: RM_TEST_CCB_052
     #
@@ -135,9 +159,9 @@ def test_regulation_mgt_state(regulation_mgt: "RegulationMgt_CC"):
     # Test Case Acceptance Criteria
     #    CruiseState is STDBY and throttleCmd = accel
     for inputs.speed in [15.0, 3.15159]:
-      regulation_mgt.cycle()
-      assert outputs.cruiseState == CC_STATE.STDBY
-      assert abs(outputs.throttleCmd - inputs.accel) < 5.0e-6
+        regulation_mgt.cycle()
+        assert outputs.cruiseState == CC_STATE.STDBY
+        assert abs(outputs.throttleCmd - inputs.accel) < 5.0e-6
 
     # Test Reference: RM_TEST_CCB_064
     #
@@ -149,9 +173,9 @@ def test_regulation_mgt_state(regulation_mgt: "RegulationMgt_CC"):
     # Test Case Acceptance Criteria
     #    CruiseState is ON and throttleCmd > 0
     for inputs.speed in [30.0, 120.0]:
-      regulation_mgt.cycle()
-      assert outputs.cruiseState == CC_STATE.ON
-      assert outputs.throttleCmd > 0.0
+        regulation_mgt.cycle()
+        assert outputs.cruiseState == CC_STATE.ON
+        assert outputs.throttleCmd > 0.0
 
     # Test Reference: RM_TEST_CCB_053
     #
@@ -179,9 +203,9 @@ def test_regulation_mgt_state(regulation_mgt: "RegulationMgt_CC"):
     # Test Case Acceptance Criteria
     #    CruiseState is STDBY and throttleCmd = accel
     for inputs.speed in [150.0001, 999.0]:
-      regulation_mgt.cycle()
-      assert outputs.cruiseState == CC_STATE.STDBY
-      assert abs(outputs.throttleCmd - inputs.accel) < 5.0e-6
+        regulation_mgt.cycle()
+        assert outputs.cruiseState == CC_STATE.STDBY
+        assert abs(outputs.throttleCmd - inputs.accel) < 5.0e-6
 
     # Test Reference: RM_TEST_CCB_066
     #
@@ -193,9 +217,9 @@ def test_regulation_mgt_state(regulation_mgt: "RegulationMgt_CC"):
     # Test Case Acceptance Criteria
     #    CruiseState is ON and throttleCmd > 0
     for inputs.speed in [150.0, 75.0]:
-      regulation_mgt.cycle()
-      assert outputs.cruiseState == CC_STATE.ON
-      assert outputs.throttleCmd > 0.0
+        regulation_mgt.cycle()
+        assert outputs.cruiseState == CC_STATE.ON
+        assert outputs.throttleCmd > 0.0
 
     # Test Reference: RM_TEST_CCB_07
     #
@@ -226,9 +250,9 @@ def test_regulation_mgt_state(regulation_mgt: "RegulationMgt_CC"):
     #    CruiseState is INT and throttleCmd = accel
     inputs.resume_ = True
     for inputs.brake in [99.0, 3.0001]:
-      regulation_mgt.cycle()
-      assert outputs.cruiseState == CC_STATE.INT
-      assert abs(outputs.throttleCmd - inputs.accel) < 5.0e-6
+        regulation_mgt.cycle()
+        assert outputs.cruiseState == CC_STATE.INT
+        assert abs(outputs.throttleCmd - inputs.accel) < 5.0e-6
 
     # Test Reference: RM_TEST_CCB_082
     #
@@ -246,9 +270,9 @@ def test_regulation_mgt_state(regulation_mgt: "RegulationMgt_CC"):
     assert outputs.cruiseState == CC_STATE.INT
     inputs.resume_ = True
     for inputs.brake in [3.0, 0.0]:
-      regulation_mgt.cycle()
-      assert outputs.cruiseState == CC_STATE.ON
-      assert outputs.throttleCmd > 0.0
+        regulation_mgt.cycle()
+        assert outputs.cruiseState == CC_STATE.ON
+        assert outputs.throttleCmd > 0.0
 
     # Test Reference: RM_TEST_CCB_083
     #
@@ -267,6 +291,6 @@ def test_regulation_mgt_state(regulation_mgt: "RegulationMgt_CC"):
     inputs.speed = 20.0
     inputs.resume_ = True
     for inputs.brake in [3.0, 0.0]:
-      regulation_mgt.cycle()
-      assert outputs.cruiseState == CC_STATE.STDBY
-      assert abs(outputs.throttleCmd - inputs.accel) < 5.0e-6
+        regulation_mgt.cycle()
+        assert outputs.cruiseState == CC_STATE.STDBY
+        assert abs(outputs.throttleCmd - inputs.accel) < 5.0e-6

@@ -1,3 +1,26 @@
+# Copyright (C) 2025 - 2026 ANSYS, Inc. and/or its affiliates.
+# SPDX-License-Identifier: MIT
+#
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+# ruff: noqa: D101 D102 D103
+
 """
 Unit tests for RegulationMgt.
 
@@ -14,7 +37,7 @@ Unit tests for RegulationMgt.
 """
 
 from math import exp
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import matplotlib.pyplot as plt
 
@@ -38,21 +61,21 @@ class Car:
 
     def power_train(self, throttle: float):
         # car parameters
-        Iengine = 0.025
-        Tengine = -0.04
-        TorqMax = 400
+        iengine = 0.025
+        tengine = -0.04
+        torq_max = 400
 
         throttle_sat = min(max(throttle, 0.0), 100.0)
-        engine_power = Tengine * throttle_sat
+        engine_power = tengine * throttle_sat
         engine_torq = 1.0 - exp(engine_power)
-        torq = (TorqMax / Iengine) * (engine_torq**2)
+        torq = (torq_max / iengine) * (engine_torq**2)
         return torq
 
     def vehicle_dynamic(self, torq, brake):
         # car parameters
-        Kbrake = 200
-        Mass = 1450
-        VehicleDynamic = 2.5
+        kbrake = 200
+        mass = 1450
+        vehicle_dynamic = 2.5
 
         if torq < 1:
             stop_brake = 150
@@ -61,7 +84,7 @@ class Car:
 
         brake_torq = (
             stop_brake
-            + Kbrake * brake
+            + kbrake * brake
             + +0.3 * (self.last_vehicle_speed**2)
             + 2.5 * self.last_vehicle_speed
         )
@@ -72,7 +95,7 @@ class Car:
 
         vehicle_speed = (
             self.last_vehicle_speed
-            + ((torq - brake_torq) * VehicleDynamic * T_CYCLE) / Mass
+            + ((torq - brake_torq) * vehicle_dynamic * T_CYCLE) / mass
         )
         return vehicle_speed
 
@@ -83,11 +106,11 @@ class Car:
 
 
 class PI:
-    """A simple PI regulator"""
+    """A simple PI regulator."""
 
-    def __init__(self, KP=0.2, KI=0.0, output_min=None, output_max=None):
-        self.Kp = KP
-        self.Ki = KI
+    def __init__(self, kp=0.2, ki=0.0, output_min=None, output_max=None):
+        self.Kp = kp
+        self.Ki = ki
         self._integral = 0.0
         self.saturated = False
         self.min = output_min
@@ -173,7 +196,9 @@ def test_regulation_mgt_throttle(regulation_mgt: "RegulationMgt_CC"):
     regulation_mgt.inputs.cruiseSpeed = 125
     for _ in range(100):
         # reference system
-        car_ref_throttle = regulator_ref(car_ref_speed, regulation_mgt.inputs.cruiseSpeed)  # type: ignore
+        car_ref_throttle = regulator_ref(
+            car_ref_speed, regulation_mgt.inputs.cruiseSpeed
+        )  # type: ignore
         car_ref_speed = car_ref.step(car_ref_throttle, regulation_mgt.inputs.brake)
 
         # system under test
