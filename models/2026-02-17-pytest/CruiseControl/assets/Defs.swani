@@ -1,0 +1,29 @@
+-- version swan: 2025.1 graph: 2.0
+type CruiseState = enum {
+    OFF,
+    INT,
+    STDBY,
+    ON
+  };
+
+type Percent = float32;
+
+type Speed = float32;
+
+const KI : float32 = 0.5;
+
+const KP : float32 = 8.113;
+
+const PEDALS_MIN : Percent = 3.0;
+
+const SPEED_INC : Speed = 2.5;
+
+const SPEED_MAX : Speed = 150.0;
+
+const SPEED_MIN : Speed = 30.0;
+
+const THROTTLE_SAT_MAX : Percent = 100.0;
+
+const ZERO_PERCENT : Percent = 0.0;
+
+const ZERO_SPEED : Speed = 0.0;
