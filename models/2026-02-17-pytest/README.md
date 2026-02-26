@@ -4,11 +4,15 @@
 
 This repository illustrates how to test Scade One Essential models with Python test environments, in particular [pytest](https://docs.pytest.org) within [VS Code](https://code.visualstudio.com/).
 
-It is based on the [Python Wrapper](https://scadeone.docs.pyansys.com/version/dev/examples/wrapper/index.html), which is packaged with [PyScadeOne](https://pypi.org/project/ansys-scadeone-core).
+It is based on the [Python Wrapper](https://scadeone.docs.pyansys.com/version/stable/api/svc/pywrapper.html), which is packaged with [PyScadeOne](https://pypi.org/project/ansys-scadeone-core).
+
+## Requirements:
+* Ansys Scade One 2025 R2 or later
+* Python 3.12 or later
 
 ## Installation
 
-1. Access the `scade-one-pytest` directory where the repository has been cloned:
+1. Access the `scade-one-pytest` directory where the files have been unzipped:
 
    ```cmd
    cd scade-one-pytest
@@ -40,7 +44,7 @@ It is based on the [Python Wrapper](https://scadeone.docs.pyansys.com/version/de
 
 ## Content
 
-The repository contains the following directories and files:
+This example contains the following directories and files:
 
 * `Documents`: Cruise Control Software requirement specifications.
 * `CruiseControl`: Scade One model.
@@ -57,7 +61,7 @@ The repository contains the following directories and files:
 
 ## Usage
 
-Open the directory `scade-one-pytest` with VS Code and make sure the Python environment is your local virtual environment. You can do that by opening one of the Python files included in the repository and clicking the bottom-right of VS Code's status bar:
+Open the `scade-one-pytest` directory, where the files have been unzipped, with VS Code and make sure the Python environment is your local virtual environment. You can do that by opening one of the Python files included in the repository and clicking the bottom-right of VS Code's status bar:
 
 ![Python env](img/venv.png)
 
