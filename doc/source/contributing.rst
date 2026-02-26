@@ -125,14 +125,14 @@ To add a new model, make a Pull Request with the following changes:
 .. code:: bash
 
       .. grid-item-card:: {MODEL_OR_COMPANION_ARTICLE_NAME}
-          :margin: 2
+          :margin: 0 4 0 0
           :img-top: _static/thumbnails/{MODEL_FOLDER_NAME}.jpg
 
           :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <{MODEL_FOLDER_NAME}>`
 
           :fas:`fa-solid fa-code` :model_sources:`View sources <{MODEL_FOLDER_NAME}>`
 
-          :fas:`fa-solid fa-newspaper` `Related content <{OPTIONAL_COMPANION_ARTICLE_URL}>`__
+          :fas:`fa-solid fa-newspaper` `Companion article <{OPTIONAL_COMPANION_ARTICLE_URL}>`__
 
 Post issues
 -----------

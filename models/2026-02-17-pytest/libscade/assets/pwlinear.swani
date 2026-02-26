@@ -1,0 +1,13 @@
+-- version swan: 2025.1 graph: 2.0
+function LimiterUnSymmetrical (input: 'T;
+                               lowLimit : 'T;
+                               highLimit: 'T;)
+  returns (output: 'T;)
+  where 'T numeric;
+
+function LimiterUnSymmetricalSat (input: 'T;
+                                  lowLimit : 'T;
+                                  highLimit : 'T;)
+  returns (saturate: bool;
+           output : 'T;)
+  where 'T numeric;

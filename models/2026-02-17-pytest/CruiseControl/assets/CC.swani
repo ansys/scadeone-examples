@@ -1,0 +1,37 @@
+-- version swan: 2025.1 graph: 2.0
+use Defs;
+
+node #pragma cg doc "Title_1" {Title = " Title : Top Level of the Cruise Control application"} #end
+     #pragma cg doc "Author_1" {Author = " Created by : ANSYS"} #end
+     #pragma cg doc "Date_1" {Date = " $Date$"} #end
+     #pragma cg doc "Version_1" {Version = " $Revision$"} #end
+      Controller (on: bool;
+                  off: bool;
+                  resume_: bool;
+                  set: bool;
+                  quickAccel: bool;
+                  quickDecel: bool;
+                  accel: Defs::Percent;
+                  brake: Defs::Percent;
+                  speed: Defs::Speed;)
+  returns (cruiseSpeed: Defs::Speed;
+           throttleCmd: Defs::Percent;
+           cruiseState: Defs::CruiseState;);
+
+node CruiseRegulation (cruiseSpeed: Defs::Speed;
+                       speed: Defs::Speed;)
+  returns (throttleCmd: Defs::Percent;);
+
+node CruiseSpeedMgt (set: bool;
+                     quickAccel: bool;
+                     quickDecel: bool;
+                     speed: Defs::Speed;)
+  returns (cruiseSpeed: Defs::Speed;);
+
+node RegulationMgt (resume_: bool;
+                    brake: Defs::Percent;
+                    accel: Defs::Percent;
+                    speed: Defs::Speed;
+                    cruiseSpeed: Defs::Speed;)
+  returns (cruiseState: Defs::CruiseState;
+           throttleCmd: Defs::Percent;);

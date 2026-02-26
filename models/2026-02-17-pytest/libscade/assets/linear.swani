@@ -1,0 +1,5 @@
+-- version swan: 2025.1 graph: 2.0
+function Gain (input: 'T;
+               gain : 'T;)
+  returns (output: 'T;)
+  where 'T numeric;
