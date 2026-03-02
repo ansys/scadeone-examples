@@ -1,0 +1,6 @@
+# generation output directories
+**/*.sproj.user
+**/jobs/**/out
+**/jobs/**/cg_log.json
+**/jobs/**/sim_log.json
+**/jobs/**/config.json
