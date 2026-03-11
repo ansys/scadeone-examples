@@ -1,0 +1,120 @@
+-- version swan: 2025.1 graph: 2.0
+function LimiterUnSymmetrical (input: 'T;
+                               lowLimit : 'T;
+                               highLimit: 'T;)
+  returns (output: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#0 expr input
+    #pragma diagram {"xy":"H-70710;V-425","wh":"10000;3200"} #end)
+    (assume $A1: lowLimit <= highLimit;
+    #pragma diagram {"xy":"H-84470;V-37070","wh":"36000;3200"} #end)
+    (#2 expr if #3 then #4 else #5
+      where
+        (#3 group)
+        (#4 group)
+        (#5 group)
+    #pragma diagram {"xy":"H7640;V20210"} #end)
+    (#6 expr lowLimit
+    #pragma diagram {"xy":"H-34790;V1695","wh":"12000;3200"} #end)
+    (#7 expr #8 >= #9
+      where
+        (#8 group)
+        (#9 group)
+    #pragma diagram {"xy":"H31270;V-18150"} #end)
+    (#10 expr #11 <= #12
+      where
+        (#11 group)
+        (#12 group)
+    #pragma diagram {"xy":"H-750;V900"} #end)
+    (#13 expr if #14 then #15 else #16
+      where
+        (#14 group)
+        (#15 group)
+        (#16 group)
+    #pragma diagram {"xy":"H39650;V18625"} #end)
+    (#17 expr highLimit
+    #pragma diagram {"xy":"H-35340;V-17355","wh":"14000;3200"} #end)
+    (#18 def output
+    #pragma diagram {"xy":"H81070;V18625","wh":"10000;3200"} #end)
+    
+    (#19 wire #7 => #14
+    #pragma diagram {"wp":"#7 h4880 #14"} #end)
+    (#20 wire #10 => #3
+    #pragma diagram {"wp":"#10 h4890 #3"} #end)
+    (#21 wire #6 => #4, #12
+    #pragma diagram {"wp":"#6 h8260 v1105[v15510 #4, #12]"} #end)
+    (#22 wire #2 => #16
+    #pragma diagram {"wp":"#2 h17320 v315 #16"} #end)
+    (#23 wire #17 => #9, #15
+    #pragma diagram {"wp":"#17 h49295 v1105[#9, v32975 #15]"} #end)
+    (#24 wire #0 => #8, #11, #5
+    #pragma diagram {"wp":"#0 h24370 v-575[v-19050 #8, h30330[#11, v23110 #5]]"} #end)
+    (#25 wire #13 => #18)
+}
+
+function LimiterUnSymmetricalSat (input: 'T;
+                                  lowLimit : 'T;
+                                  highLimit : 'T;)
+  returns (saturate: bool;
+           output : 'T;)
+  where 'T numeric
+{
+  diagram
+    (#0 expr #1 > #2
+      where
+        (#1 group)
+        (#2 group)
+    #pragma diagram {"xy":"H30780;V-9270"} #end)
+    (#3 expr if #4 then #5 else #6
+      where
+        (#4 group)
+        (#5 group)
+        (#6 group)
+    #pragma diagram {"xy":"H38710;V27505"} #end)
+    (#7 expr #8 < #9
+      where
+        (#8 group)
+        (#9 group)
+    #pragma diagram {"xy":"H-1240;V9780"} #end)
+    (#10 expr if #11 then #12 else #13
+      where
+        (#11 group)
+        (#12 group)
+        (#13 group)
+    #pragma diagram {"xy":"H6700;V29090"} #end)
+    (#14 def output
+    #pragma diagram {"xy":"H80130;V27505","wh":"10000;3200"} #end)
+    (#15 expr highLimit
+    #pragma diagram {"xy":"H-36280;V-8475","wh":"14000;3200"} #end)
+    (#16 def saturate
+    #pragma diagram {"xy":"H81330;V8725","wh":"12000;3200"} #end)
+    (#17 expr lowLimit
+    #pragma diagram {"xy":"H-35730;V10575","wh":"12000;3200"} #end)
+    (#18 expr #19 or #20
+      where
+        (#19 group)
+        (#20 group)
+    #pragma diagram {"xy":"H55380;V8715"} #end)
+    (#21 expr input
+    #pragma diagram {"xy":"H-71650;V8455","wh":"10000;3200"} #end)
+    (assume $A1: lowLimit <= highLimit;
+    #pragma diagram {"xy":"H-85410;V-28190","wh":"36000;3200"} #end)
+    
+    (#23 wire #18 => #16
+    #pragma diagram {"wp":"#18 h7975 v10 #16"} #end)
+    (#24 wire #21 => #1, #8, #13
+    #pragma diagram {"wp":"#21 h24370 v-575[v-19050 #1, h30667[#8, v23110 #13]]"} #end)
+    (#25 wire #10 => #6
+    #pragma diagram {"wp":"#10 h12505 v315 #6"} #end)
+    (#26 wire #0 => #4, #19
+    #pragma diagram {"wp":"#0 h4430 v16085[#4, #19]"} #end)
+    (#27 wire #15 => #5, #2
+    #pragma diagram {"wp":"#15 h49520 v1105[v32975 #5, #2]"} #end)
+    (#28 wire #17 => #9, #12
+    #pragma diagram {"wp":"#17 h8372 v1105[#9, v15510 #12]"} #end)
+    (#29 wire #7 => #11, #20
+    #pragma diagram {"wp":"#7 h4440[#11, h39345 v835 #20]"} #end)
+    (#30 wire #3 => #14)
+}

@@ -1,0 +1,26 @@
+-- version swan: 2025.1 graph: 2.0
+function Gain (input: 'T;
+               gain : 'T;)
+  returns (output: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#0 def output
+    #pragma diagram {"xy":"H44590;V-20052","wh":"10000;3200"} #end)
+    (#1 expr gain
+    #pragma diagram {"dir":"es","xy":"H-18240;V2058","wh":"3200;8000"} #end)
+    (#2 expr input
+    #pragma diagram {"xy":"H-41310;V-21112","wh":"10000;3200"} #end)
+    (#3 expr #4 * #5
+      where
+        (#4 group)
+        (#5 group)
+    #pragma diagram {"xy":"H3280;V-19918"} #end)
+    
+    (#6 wire #3 => #0
+    #pragma diagram {"wp":"#3 h17155 v-134 #0"} #end)
+    (#7 wire #1 => #5
+    #pragma diagram {"wp":"#1 v-17576 #5"} #end)
+    (#8 wire #2 => #4
+    #pragma diagram {"wp":"#2 h18795 v-706 #4"} #end)
+}

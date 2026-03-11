@@ -1,0 +1,11 @@
+{
+  "JobsOrder": [
+    "jobs\\codegen_5bf3a4e\\.sjob",
+    "jobs\\codegen_65a3920\\.sjob"
+  ],
+  "ModulesOrder": [
+    "assets\\CC.swan",
+    "assets\\Defs.swani",
+    "assets\\CC.swani"
+  ]
+}

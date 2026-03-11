@@ -31,6 +31,16 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/generating-efficient-code-from-a-swan-model/>`__
 
+    .. grid-item-card:: Testing Scade One models with Python
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2026-02-17-pytest.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2026-02-17-pytest>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2026-02-17-pytest>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/testing-scade-one-models-with-python/>`__
+
     .. grid-item-card:: Scade One – Using Rapid Prototyper to augment model simulation
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2025-03-11-graphical-debug-panels.jpg

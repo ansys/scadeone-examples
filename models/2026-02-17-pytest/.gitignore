@@ -1,0 +1,25 @@
+# Scade One generated files
+cg_log.json
+cg_map.json
+CruiseControl/jobs/*/out/
+CruiseControl/jobs/codegen_c867fdb/config.json
+tests/proxy/*/
+pyscadeone.log
+config.json
+
+# Pytest reports and misc files generated while running tests
+tests/plots/
+report.html
+test-output.xml
+htmlcov/
+.coverage
+
+# Python cache files
+__pycache__/
+.mypy_cache/
+*.pyc
+
+# Miscellaneous
+.venv/
+README.pdf
+~*.docx

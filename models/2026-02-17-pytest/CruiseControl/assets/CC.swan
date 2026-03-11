@@ -1,0 +1,362 @@
+-- version swan: 2025.1 graph: 2.0
+use linear;
+
+use pwlinear;
+
+use Defs;
+
+node Controller (on: bool;
+                 off: bool;
+                 resume_: bool;
+                 set: bool;
+                 quickAccel: bool;
+                 quickDecel: bool;
+                 accel: Defs::Percent;
+                 brake: Defs::Percent;
+                 speed: Defs::Speed;)
+  returns (cruiseSpeed: Defs::Speed;
+           throttleCmd: Defs::Percent;
+           cruiseState: Defs::CruiseState;)
+{
+  diagram
+    (automaton $Controller
+      initial state #9 Off
+      #pragma diagram {"xy":"h-77850;v-13825","wh":"54000;20000"} #end :
+        diagram
+          (#0 expr Defs::OFF
+          #pragma diagram {"xy":"h-11900;v5525","wh":"14000;3200"} #end)
+          (#1 expr accel
+          #pragma diagram {"xy":"h-9900;v-5525","wh":"10000;3200"} #end)
+          (#2 expr Defs::ZERO_SPEED
+          #pragma diagram {"xy":"h-14900;v0","wh":"20000;3200"} #end)
+          (#3 def cruiseState
+          #pragma diagram {"xy":"h15000;v5525","wh":"16000;3200"} #end)
+          (#4 def throttleCmd
+          #pragma diagram {"xy":"h15000;v-5525","wh":"16000;3200"} #end)
+          (#5 def cruiseSpeed
+          #pragma diagram {"xy":"h15000;v0","wh":"16000;3200"} #end)
+          
+          (#6 wire #0 => #3)
+          (#7 wire #1 => #4)
+          (#8 wire #2 => #5)
+      state #32 Enabled
+      #pragma diagram {"xy":"h32788;v2238","wh":"138150;52375"} #end :
+        diagram
+          (#10 def cruiseState
+          #pragma diagram {"xy":"h57075;v-14062","wh":"16000;3200"} #end)
+          (#11 def throttleCmd
+          #pragma diagram {"xy":"h57075;v-8862","wh":"16000;3200"} #end)
+          (#12 expr speed
+          #pragma diagram {"xy":"h-56075;v-8662","wh":"10000;3200"} #end)
+          (#13 expr brake
+          #pragma diagram {"xy":"h-56075;v-19762","wh":"10000;3200"} #end)
+          (#14 expr accel
+          #pragma diagram {"xy":"h-56075;v-16062","wh":"10000;3200"} #end)
+          (#15 expr resume_
+          #pragma diagram {"xy":"h-57075;v-12362","wh":"12000;3200"} #end)
+          (#16 block RegulationMgt
+                     #pragma diagram {"xy":"h20650;v-11362","wh":"20000;20000"} #end)
+          (#17 expr quickDecel
+          #pragma diagram {"xy":"h-58075;v7088","wh":"14000;3200"} #end)
+          (#18 block CruiseSpeedMgt
+                     #pragma diagram {"xy":"h-18775;v8838","wh":"20000;14000"} #end)
+          (#19 expr quickAccel
+          #pragma diagram {"xy":"h-58075;v10788","wh":"14000;3200"} #end)
+          (#20 def cruiseSpeed
+          #pragma diagram {"xy":"h57075;v8838","wh":"16000;3200"} #end)
+          (#21 expr set
+          #pragma diagram {"xy":"h-55075;v14488"} #end)
+          
+          (#22 wire #16 .(cruiseState) => #10
+          #pragma diagram {"wp":"v0|#16 #10"} #end)
+          (#23 wire #19 => #18 .(quickAccel))
+          (#24 wire #12 => #16 .(speed), #18 .(speed)
+          #pragma diagram {"wp":"#12 h12650[#16, v12917 #18]"} #end)
+          (#25 wire #15 => #16 .(resume_))
+          (#26 wire #13 => #16 .(brake))
+          (#27 wire #18 .(cruiseSpeed) => #20, #16 .(cruiseSpeed)
+          #pragma diagram {"wp":"v0|#18 h10213[#20, v-13300 #16]"} #end)
+          (#28 wire #17 => #18 .(quickDecel))
+          (#29 wire #21 => #18 .(set))
+          (#30 wire #14 => #16 .(accel))
+          (#31 wire #16 .(throttleCmd) => #11
+          #pragma diagram {"wp":"v0|#16 #11"} #end)
+      :1: #9 unless if (on)
+      restart #32
+      #pragma diagram {"tp":"h27000;v0|#9 h4854 h4854 h-69075;v-16062|#32"} #end;
+      :1: #32 unless if (off)
+      restart #9
+      #pragma diagram {"tp":"h-69075;v100|#32 h-500 h-22158 h-10579 h-4162 h-4162;v-2081 v-2081 v-667 v-667 h0;v10000|#9"} #end;
+      #pragma diagram {"xy":"H1400;V-20120","wh":"211725;64850"} #end)
+}
+
+node CruiseRegulation (cruiseSpeed: Defs::Speed;
+                       speed: Defs::Speed;)
+  returns (throttleCmd: Defs::Percent;)
+{
+  diagram
+    (#0 def throttleCmd
+    #pragma diagram {"xy":"H99215;V4967","wh":"16000;3200"} #end)
+    (#1 expr #2 - #3
+      where
+        (#2 group)
+        (#3 group)
+    #pragma diagram {"xy":"H-102695;V1512"} #end)
+    (#4 expr Defs::ZERO_SPEED
+    #pragma diagram {"xy":"H-123375;V-31528","wh":"20000;3200"} #end)
+    (#5 block (pwlinear::LimiterUnSymmetricalSat \ lowLimit: Defs::ZERO_PERCENT, highLimit: Defs::THROTTLE_SAT_MAX)
+              #pragma diagram {"xy":"H54605;V1468","wh":"45940;20790"} #end)
+    (#6 expr #7 + #8
+      where
+        (#7 group)
+        (#8 group)
+    #pragma diagram {"xy":"H-42915;V-42408"} #end)
+    (#9 expr #10 pre #11
+      where
+        (#10 group)
+        (#11 group)
+    #pragma diagram {"xy":"H-65295;V-29628"} #end)
+    (#12 expr Defs::ZERO_SPEED
+    #pragma diagram {"xy":"H-123375;V-45112","wh":"20000;3200"} #end)
+    (#13 block (linear::Gain \ gain: Defs::KI)
+               #pragma diagram {"xy":"H-12815;V-42392","wh":"18520;17730"} #end)
+    (#14 expr #15 + #16
+      where
+        (#15 group)
+        (#16 group)
+    #pragma diagram {"xy":"H14555;V1608"} #end)
+    (#17 expr false
+    #pragma diagram {"xy":"H-111685;V-58698","wh":"10000;3200"} #end)
+    (#18 expr cruiseSpeed
+    #pragma diagram {"xy":"H-121675;V-8658","wh":"16000;3200"} #end)
+    (#19 expr speed
+    #pragma diagram {"xy":"H-118375;V12898","wh":"10000;3200"} #end)
+    (#20 block (linear::Gain \ gain: Defs::KP)
+               #pragma diagram {"xy":"H-47125;V1608","wh":"18680;17890"} #end)
+    (#21 expr #22 pre #23
+      where
+        (#22 group)
+        (#23 group)
+    #pragma diagram {"xy":"H-87515;V-56798"} #end)
+    (#24 expr if #25 then #26 else #27
+      where
+        (#25 group)
+        (#26 group)
+        (#27 group)
+    #pragma diagram {"xy":"H-68755;V-45112"} #end)
+    
+    (#28 wire #21 => #25
+    #pragma diagram {"wp":"#21 h14260 #25"} #end)
+    (#29 wire #5 .(saturate) => #23
+    #pragma diagram {"wp":"v0|#5 h2500 v-58518 h-175090 v6400 #23"} #end)
+    (#30 wire #17 => #22)
+    (#31 wire #20 .(output) => #16
+    #pragma diagram {"wp":"v0|#20 #16"} #end)
+    (#32 wire #19 => #3
+    #pragma diagram {"wp":"#19 h4340 v-9486 #3"} #end)
+    (#33 wire #18 => #2
+    #pragma diagram {"wp":"#18 h3650 v8270 #2"} #end)
+    (#34 wire #13 .(output) => #15
+    #pragma diagram {"wp":"v0|#13 h7055 v42100 #15"} #end)
+    (#35 wire #12 => #26
+    #pragma diagram {"wp":"#12 h21310 v-1900 #26"} #end)
+    (#36 wire #4 => #10)
+    (#37 wire #9 => #8
+    #pragma diagram {"wp":"#9 h7190 v-10880 #8"} #end)
+    (#38 wire #6 => #11, #13 .(input)
+    #pragma diagram {"wp":"#6 h3500[v6390 h-37380 v8290 #11, #13]"} #end)
+    (#39 wire #5 .(output) => #0
+    #pragma diagram {"wp":"v0|#5 #0"} #end)
+    (#40 wire #24 => #7
+    #pragma diagram {"wp":"#24 h9420 v804 #7"} #end)
+    (#41 wire #1 => #27, #20 .(input)
+    #pragma diagram {"wp":"#1 h13470[v-44724 #27, #20]"} #end)
+    (#42 wire #14 => #5 .(input))
+}
+
+node CruiseSpeedMgt (set: bool;
+                     quickAccel: bool;
+                     quickDecel: bool;
+                     speed: Defs::Speed;)
+  returns (cruiseSpeed: Defs::Speed last = speed;)
+{
+  diagram
+    (#0 def cruiseSpeed
+    #pragma diagram {"xy":"H61948;V12925","wh":"16000;3200"} #end)
+    (#1 block (pwlinear::LimiterUnSymmetrical \ lowLimit: Defs::SPEED_MIN, highLimit: Defs::SPEED_MAX)
+              #pragma diagram {"xy":"H33448;V12925","wh":"27250;17720"} #end)
+    (#2 expr localCruiseSpeed
+    #pragma diagram {"xy":"H2948;V12925","wh":"20000;3200"} #end)
+    
+    (#3 wire #1 .(output) => #0
+    #pragma diagram {"wp":"v0|#1 #0"} #end)
+    (#4 wire #2 => #1 .(input))
+    
+    (var
+        localCruiseSpeed: Defs::Speed;)
+    (activate $IfBlock1
+      if set
+      then
+        {
+          diagram
+            (#5 def localCruiseSpeed
+            #pragma diagram {"xy":"h25000;v0","wh":"20000;3200"} #end)
+            (#6 expr speed
+            #pragma diagram {"xy":"h-20000;v0","wh":"10000;3200"} #end)
+            
+            (#7 wire #6 => #5)
+        #pragma diagram {"xy":"h0;v-19300","wh":"74000;7200"} #end
+        }
+      elsif quickAccel
+      then
+        {
+          diagram
+            (#8 expr Defs::SPEED_INC
+            #pragma diagram {"xy":"h-25000;v1900","wh":"20000;3200"} #end)
+            (#9 def localCruiseSpeed
+            #pragma diagram {"xy":"h25000;v0","wh":"20000;3200"} #end)
+            (#10 expr #11 + #12
+              where
+                (#11 group)
+                (#12 group)
+            #pragma diagram {"xy":"h0;v0"} #end)
+            (#13 expr last 'cruiseSpeed
+            #pragma diagram {"xy":"h-25000;v-1900","wh":"20000;3200"} #end)
+            
+            (#14 wire #13 => #11)
+            (#15 wire #8 => #12)
+            (#16 wire #10 => #9)
+        #pragma diagram {"xy":"h0;v-6000","wh":"74000;11000"} #end
+        }
+      elsif quickDecel
+      then
+        {
+          diagram
+            (#17 expr Defs::SPEED_INC
+            #pragma diagram {"xy":"h-25000;v1900","wh":"20000;3200"} #end)
+            (#18 def localCruiseSpeed
+            #pragma diagram {"xy":"h25000;v0","wh":"20000;3200"} #end)
+            (#19 expr #20 - #21
+              where
+                (#20 group)
+                (#21 group)
+            #pragma diagram {"xy":"h0;v0"} #end)
+            (#22 expr last 'cruiseSpeed
+            #pragma diagram {"xy":"h-25000;v-1900","wh":"20000;3200"} #end)
+            
+            (#23 wire #22 => #20)
+            (#24 wire #19 => #18)
+            (#25 wire #17 => #21)
+        #pragma diagram {"xy":"h0;v9200","wh":"74000;11000"} #end
+        }
+      else
+        {
+          diagram
+            (#26 def localCruiseSpeed
+            #pragma diagram {"xy":"h25000;v0","wh":"20000;3200"} #end)
+            (#27 expr last 'cruiseSpeed
+            #pragma diagram {"xy":"h-25000;v0","wh":"20000;3200"} #end)
+            
+            (#28 wire #27 => #26)
+        #pragma diagram {"xy":"h0;v22500","wh":"74000;7200"} #end
+        }
+    #pragma diagram {"xy":"H31448;V-28540","wh":"77000;55200"} #end)
+}
+
+node RegulationMgt (resume_: bool;
+                    brake: Defs::Percent;
+                    accel: Defs::Percent;
+                    speed: Defs::Speed;
+                    cruiseSpeed: Defs::Speed;)
+  returns (cruiseState: Defs::CruiseState;
+           throttleCmd: Defs::Percent;)
+{
+  diagram
+    (automaton $Regulation
+      initial state #27 Active
+      #pragma diagram {"xy":"h-29025;v2344","wh":"183900;65625"} #end :
+        diagram
+          (#0 def stdbyCondition
+          #pragma diagram {"xy":"h41000;v21812","wh":"18000;3200"} #end)
+          (#1 expr speed < Defs::SPEED_MIN
+          #pragma diagram {"xy":"h-28800;v26479","wh":"26000;3200"} #end)
+          (#2 expr accel > Defs::PEDALS_MIN
+          #pragma diagram {"xy":"h-29800;v17146","wh":"28000;3200"} #end)
+          (#3 block ({op_expr%or%op_expr})
+                    #pragma diagram {"xy":"h8100;v21812","wh":"20000;14000"} #end)
+          (#4 expr speed > Defs::SPEED_MAX
+          #pragma diagram {"xy":"h-28800;v21812","wh":"26000;3200"} #end)
+          
+          (#5 wire #1 => #3 .(2))
+          (#6 wire #2 => #3 .(1))
+          (#7 wire #4 => #3 .(3))
+          (#8 wire #3 .(1) => #0
+          #pragma diagram {"wp":"v0|#3 #0"} #end)
+          
+          (var
+              stdbyCondition: bool;)
+          (automaton $SM3
+            initial state #19 On
+            #pragma diagram {"xy":"h-31050;v2375","wh":"105800;26500"} #end :
+              diagram
+                (#9 expr Defs::ON
+                #pragma diagram {"xy":"h-11900;v9012","wh":"12000;3200"} #end)
+                (#10 expr cruiseSpeed
+                #pragma diagram {"xy":"h-40900;v1250","wh":"16000;3200"} #end)
+                (#11 def cruiseState
+                #pragma diagram {"xy":"h12100;v9012","wh":"16000;3200"} #end)
+                (#12 def throttleCmd
+                #pragma diagram {"xy":"h40900;v-2250","wh":"16000;3200"} #end)
+                (#13 expr speed
+                #pragma diagram {"xy":"h-37900;v-5750","wh":"10000;3200"} #end)
+                (#14 block CruiseRegulation
+                           #pragma diagram {"xy":"h0;v-2250","wh":"20000;14000"} #end)
+                
+                (#15 wire #14 .(throttleCmd) => #12
+                #pragma diagram {"wp":"v0|#14 #12"} #end)
+                (#16 wire #10 => #14 .(cruiseSpeed))
+                (#17 wire #9 => #11)
+                (#18 wire #13 => #14 .(speed))
+            state #26 StandBy
+            #pragma diagram {"xy":"h58950;v2375","wh":"50000;15600"} #end :
+              diagram
+                (#20 expr accel
+                #pragma diagram {"xy":"h-10000;v2200","wh":"10000;3200"} #end)
+                (#21 def throttleCmd
+                #pragma diagram {"xy":"h13000;v2200","wh":"16000;3200"} #end)
+                (#22 expr Defs::STDBY
+                #pragma diagram {"xy":"h-13000;v-2200","wh":"16000;3200"} #end)
+                (#23 def cruiseState
+                #pragma diagram {"xy":"h13000;v-2200","wh":"16000;3200"} #end)
+                
+                (#24 wire #22 => #23)
+                (#25 wire #20 => #21)
+            :1: #19 unless if (stdbyCondition)
+            restart #26
+            #pragma diagram {"tp":"h52900;v0|#19 h4033 h4033 h-25000;v0|#26"} #end;
+            :1: #26 unless if (not stdbyCondition)
+            restart #19
+            #pragma diagram {"tp":"h0;v-7800|#26 v-500 v-500 v-500 v-4350 h-8700;v-4350 h-8700 h-22367 h-22367 h-22367 h-2750 h-2750;v1375 v1375 v667 v667 h0;v-13250|#19"} #end;
+            #pragma diagram {"xy":"h0;v-9188","wh":"175900;39250"} #end)
+      state #34 Interrupt
+      #pragma diagram {"xy":"h96975;v2344","wh":"48000;15600"} #end :
+        diagram
+          (#28 expr accel
+          #pragma diagram {"xy":"h-11000;v2200","wh":"10000;3200"} #end)
+          (#29 def throttleCmd
+          #pragma diagram {"xy":"h12000;v2200","wh":"16000;3200"} #end)
+          (#30 expr Defs::INT
+          #pragma diagram {"xy":"h-13000;v-2200","wh":"14000;3200"} #end)
+          (#31 def cruiseState
+          #pragma diagram {"xy":"h12000;v-2200","wh":"16000;3200"} #end)
+          
+          (#32 wire #30 => #31)
+          (#33 wire #28 => #29)
+      :1: #27 unless if (brake > Defs::PEDALS_MIN)
+      restart #34
+      #pragma diagram {"tp":"h91950;v0|#27 h3350 h3350 h-24000;v0|#34"} #end;
+      :1: #34 unless if (resume_ and brake <= Defs::PEDALS_MIN)
+      restart #27
+      #pragma diagram {"tp":"h0;v-7800|#34 v-500 v-500 v-500 v-20981 h-14438;v-7219 h-41962 h-21408 h-21408 h-21408 h-2688 h-2688;v1344 v1344 v667 v667 h0;v-32812|#27"} #end;
+      #pragma diagram {"xy":"H5480;V-2840","wh":"249950;78312"} #end)
+}
