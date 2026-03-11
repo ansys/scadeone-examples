@@ -1,0 +1,34 @@
+-- version swan: 2025.2 graph: 2.1
+node MovingAvg (x: float32;)
+  returns (avg: float32;)
+{
+  diagram
+    (#0 expr x
+    #pragma diagram {"xy":"H-37350;V-4850"} #end)
+    (#1 expr window <<N>> (#2) (#3)
+      where
+        (#2 group)
+        (#3 group)
+    #pragma diagram {"xy":"H-20050;V-6750","wh":"18000;7000"} #end)
+    (#4 expr 0.0^N
+    #pragma diagram {"xy":"H-38350;V-8650","wh":"10000;3200"} #end)
+    (#5 block (fold {text%(+)%text}) <<N>>
+    #pragma diagram {"xy":"H8100;V-10750","wh":"12000;11000"} #end)
+    (#7 expr 0.0
+    #pragma diagram {"xy":"H-5450;V-10750"} #end)
+    (#8 def avg
+    #pragma diagram {"xy":"H44900;V-8750"} #end)
+    (#13 block ({op_expr%function x => x / (N :> float32)%op_expr})
+    #pragma diagram {"xy":"H27500;V-8750","wh":"18972;7000"} #end)
+    
+    (#9 wire #0 => #3)
+    (#10 wire #4 => #2)
+    (#11 wire #1 => #5 .(2))
+    (#12 wire #7 => #5 .(1))
+    (#14 wire #13 => #8
+    #pragma diagram {"wp":"v0|#13 #8"} #end)
+    (#15 wire #5 => #13 .(x)
+    #pragma diagram {"wp":"v0|#5 #13"} #end)
+}
+
+const N: int32 = 5;

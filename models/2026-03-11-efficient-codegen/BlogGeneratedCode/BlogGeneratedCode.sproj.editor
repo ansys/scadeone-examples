@@ -1,0 +1,19 @@
+{
+  "JobsOrder": [
+    "jobs\\codegen_7f60947\\.sjob",
+    "jobs\\codegen_4c5c2d2\\.sjob",
+    "jobs\\codegen_36c8357\\.sjob",
+    "jobs\\codegen_7597c5f\\.sjob",
+    "jobs\\codegen_ca39855\\.sjob",
+    "jobs\\codegen_ddda2e0\\.sjob",
+    "jobs\\codegen_ea1a933\\.sjob"
+  ],
+  "ModulesOrder": [
+    "assets\\Filters.swan",
+    "assets\\SimFilters.swant",
+    "assets\\Convol2D.swan",
+    "assets\\MovingAvg.swan",
+    "assets\\Imported.swan",
+    "assets\\Blas.swan"
+  ]
+}

@@ -1,0 +1,176 @@
+-- version swan: 2025.2 graph: 2.1
+node FIR_filter (x: float32;
+                 B: float32^(N+1);)
+  returns (y: float32;)
+{
+  diagram
+    (#0 expr window <<N>> (#1) (#2)
+      where
+        (#1 group)
+        (#2 group)
+    #pragma diagram {"xy":"H5844;V36200","wh":"18000;7000"} #end)
+    (#3 expr 0^N
+    #pragma diagram {"xy":"H-7456;V34300"} #end)
+    (#4 expr x
+    #pragma diagram {"xy":"H-20806;V29134"} #end)
+    (#5 expr B[0]
+    #pragma diagram {"xy":"H544;V25334"} #end)
+    (#6 expr #7 * #8
+      where
+        (#7 group)
+        (#8 group)
+    #pragma diagram {"xy":"H9844;V27234"} #end)
+    (#9 expr B[1 ..N]
+    #pragma diagram {"xy":"H22194;V31858","wh":"12000;3200"} #end)
+    (#10 def y
+    #pragma diagram {"xy":"H62969;V31858"} #end)
+    (#11 block (fold fmac) <<N>>
+    #pragma diagram {"xy":"H40494;V29858","wh":"24000;17975"} #end)
+    
+    (#13 wire #3 => #1)
+    (#14 wire #4 => #2, #8
+    #pragma diagram {"wp":"#4 h4675[v8966 #2, #8]"} #end)
+    (#15 wire #5 => #7)
+    (#16 wire #6 => #11 .(1))
+    (#17 wire #0 => #11 .(3))
+    (#18 wire #9 => #11 .(2))
+    (#19 wire #11 => #10
+    #pragma diagram {"wp":"v0|#11 #10"} #end)
+}
+
+node IIR_II_filter (x: float32;
+                    A: float32^N;
+                    B: float32^(N+1);)
+  returns (y: float32;)
+{
+  diagram
+    (#0 expr window <<N>> (#1) (#2)
+      where
+        (#1 group)
+        (#2 group)
+    #pragma diagram {"xy":"H55512;V55244","wh":"18000;7000"} #end)
+    (#3 expr 0^N
+    #pragma diagram {"xy":"H42212;V53345"} #end)
+    (#4 expr x
+    #pragma diagram {"xy":"H1846;V44085"} #end)
+    (#5 expr B[0]
+    #pragma diagram {"xy":"H36888;V40285"} #end)
+    (#6 expr #7 * #8
+      where
+        (#7 group)
+        (#8 group)
+    #pragma diagram {"xy":"H46400;V42185"} #end)
+    (#9 expr B[1 ..N]
+    #pragma diagram {"xy":"H62300;V45660","wh":"12000;3200"} #end)
+    (#10 def y
+    #pragma diagram {"xy":"H113800;V45660"} #end)
+    (#11 block (fold fmac) <<N>>
+    #pragma diagram {"xy":"H80600;V43660","wh":"24000;17950"} #end)
+    (#13 block (fold fmac) <<N>>
+    #pragma diagram {"xy":"H80600;V64828","wh":"24000;17950"} #end)
+    (#15 expr A
+    #pragma diagram {"xy":"H64300;V70462"} #end)
+    (#16 expr #17 - #18
+      where
+        (#17 group)
+        (#18 group)
+    #pragma diagram {"dir":"es","xy":"H38788;V70462"} #end)
+    (#19 expr 0
+    #pragma diagram {"xy":"H64300;V64828"} #end)
+    
+    (#20 wire #3 => #1)
+    (#21 wire #4 => #17, #8
+    #pragma diagram {"wp":"#4 h28742[v33377 h3800 #17, #8]"} #end)
+    (#22 wire #5 => #7)
+    (#23 wire #6 => #11 .(1))
+    (#24 wire #0 => #11 .(3), #13 .(3)
+    #pragma diagram {"wp":"#0 h3522[v-4054 #11, v6296 #13]"} #end)
+    (#25 wire #9 => #11 .(2))
+    (#26 wire #11 => #10
+    #pragma diagram {"wp":"v0|#11 #10"} #end)
+    (#27 wire #16 => #2
+    #pragma diagram {"wp":"#16 v-9818 #2"} #end)
+    (#28 wire #13 => #18
+    #pragma diagram {"wp":"v3504|#13 h2000 v7130 h-53912 #18"} #end)
+    (#29 wire #15 => #13 .(2))
+    (#30 wire #19 => #13 .(1))
+}
+
+node IIR_I_filter (x: float32;
+                   A: float32^N;
+                   B: float32^(N+1);)
+  returns (y: float32;)
+{
+  diagram
+    (#0 expr window <<N>> (#1) (#2)
+      where
+        (#1 group)
+        (#2 group)
+    #pragma diagram {"xy":"H4527;V35858","wh":"18000;7000"} #end)
+    (#3 expr 0^N
+    #pragma diagram {"xy":"H-8773;V33958"} #end)
+    (#4 expr x
+    #pragma diagram {"xy":"H-21906;V29067"} #end)
+    (#5 expr B[0]
+    #pragma diagram {"xy":"H-773;V25267"} #end)
+    (#6 expr #7 * #8
+      where
+        (#7 group)
+        (#8 group)
+    #pragma diagram {"xy":"H8527;V27167"} #end)
+    (#9 expr B[1 ..N]
+    #pragma diagram {"xy":"H22144;V31871","wh":"12000;3200"} #end)
+    (#10 block (fold fmac) <<N>>
+    #pragma diagram {"xy":"H40744;V29871","wh":"24000;17975"} #end)
+    (#12 expr window <<N>> (#13) (#14)
+      where
+        (#13 group)
+        (#14 group)
+    #pragma diagram {"xy":"H4227;V54371","wh":"18000;7000"} #end)
+    (#15 expr 0^N
+    #pragma diagram {"xy":"H-9073;V52471"} #end)
+    (#16 block (fold fmac) <<N>>
+    #pragma diagram {"xy":"H40744;V49866","wh":"24000;17975"} #end)
+    (#18 expr 0
+    #pragma diagram {"xy":"H24144;V46454"} #end)
+    (#19 expr A
+    #pragma diagram {"xy":"H24144;V49954"} #end)
+    (#20 def y
+    #pragma diagram {"xy":"H87527;V33771"} #end)
+    (#21 expr #22 - #23
+      where
+        (#22 group)
+        (#23 group)
+    #pragma diagram {"xy":"H66927;V33771"} #end)
+    
+    (#24 wire #3 => #1)
+    (#25 wire #4 => #2, #8
+    #pragma diagram {"wp":"#4 h4566[v8691 #2, #8]"} #end)
+    (#26 wire #5 => #7)
+    (#27 wire #6 => #10 .(1))
+    (#28 wire #0 => #10 .(3))
+    (#29 wire #9 => #10 .(2))
+    (#30 wire #15 => #13)
+    (#31 wire #12 => #16 .(3))
+    (#32 wire #18 => #16 .(1))
+    (#33 wire #19 => #16 .(2))
+    (#34 wire #10 => #22
+    #pragma diagram {"wp":"v0|#10 #22"} #end)
+    (#35 wire #16 => #23
+    #pragma diagram {"wp":"v-5250|#16 h4591 v-10945 #23"} #end)
+    (#36 wire #21 => #20, #14
+    #pragma diagram {"wp":"#21 h3500[#20, v26083 h-80700 v-3583 #14]"} #end)
+}
+
+function fmac (acc: 'T;
+               b : 'T;
+               x : 'T;)
+  returns (o: 'T;)
+  where 'T float
+{
+  diagram
+    (let o = acc + b * x;
+    #pragma diagram {"xy":"H-91050;V-43300","wh":"24000;3200"} #end)
+}
+
+const N: int32 = 3;

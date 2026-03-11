@@ -21,6 +21,16 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
 
 .. grid:: 2 2 3 3
 
+    .. grid-item-card:: Generating efficient code from a Swan model
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2026-03-11-efficient-codegen.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2026-03-11-efficient-codegen>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2026-03-11-efficient-codegen>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/generating-efficient-code-from-a-swan-model/>`__
+
     .. grid-item-card:: Testing Scade One models with Python
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2026-02-17-pytest.jpg
@@ -40,4 +50,3 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
         :fas:`fa-solid fa-code` :model_sources:`View sources <2025-03-11-graphical-debug-panels>`
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/scade-one-using-rapid-prototyper-to-augment-model-simulation/>`__
-

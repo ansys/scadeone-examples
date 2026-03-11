@@ -1,0 +1,112 @@
+-- version swan: 2025.2 graph: 2.1
+function Convol2D_8 (I: int32^8^8;
+                     K: int32^3^3;)
+  returns (C: int32^6^6;)
+{
+  diagram
+    (#0 block Convol2D <<8, 3>> 
+    #pragma diagram {"xy":"H-2750;V-15350","wh":"20000;14000"} #end)
+    (#1 def C
+    #pragma diagram {"xy":"H23550;V-15350"} #end)
+    (#2 expr I
+    #pragma diagram {"xy":"H-29050;V-18650"} #end)
+    (#3 expr K
+    #pragma diagram {"xy":"H-29050;V-11750"} #end)
+    
+    (#4 wire #0 => #1
+    #pragma diagram {"wp":"v0|#0 #1"} #end)
+    (#5 wire #3 => #0 .(K))
+    (#6 wire #2 => #0 .(I))
+}
+
+function Convol2D <<N, P>> (I: int32^N^N;
+                            K: int32^P^P;)
+  returns (C: int32^(N-2)^(N-2);)
+{
+  diagram
+    (#0 def C
+    #pragma diagram {"xy":"H-18050;V-33875"} #end)
+    (#1 expr I
+    #pragma diagram {"xy":"H-92400;V-33875"} #end)
+    (#2 block (map 
+                (map (WeightedAvg <<P, P>>  \ K: K)) <<N-2>>)
+               <<N-2>>
+    #pragma diagram {"xy":"H-41500;V-37375","wh":"24000;21000"} #end)
+    (#4 block Pack2D <<P, P, N-2, N-2>> 
+    #pragma diagram {"xy":"H-70950;V-33875","wh":"20000;8600"} #end)
+    
+    (#5 wire #1 => #4)
+    (#6 wire #4 .(A2) => #2
+    #pragma diagram {"wp":"v0|#4 #2"} #end)
+    (#7 wire #2 => #0
+    #pragma diagram {"wp":"v0|#2 #0"} #end)
+}
+
+function Pack2D <<K2, K1, N2, N1>> (A0: 'T^(N2+K2-1)^(N1+K1-1);)
+  returns (A2: 'T^K2^K1^N2^N1;)
+{
+  diagram
+    (#0 def A2
+    #pragma diagram {"xy":"H13950;V-9950"} #end)
+    (#1 def A1
+    #pragma diagram {"xy":"H13950;V-21650"} #end)
+    (#2 expr transpose {2, 3} (#3)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H-6250;V-21650","wh":"20000;7000"} #end)
+    (#4 expr transpose {2} (#5)
+      where
+        (#5 group)
+    #pragma diagram {"xy":"H-59650;V-21650","wh":"18000;7000"} #end)
+    (#6 expr pack <<K2, N2>>(#7)
+      where
+        (#7 group)
+    #pragma diagram {"xy":"H-33450;V-21650","wh":"22000;7000"} #end)
+    (#8 expr A0
+    #pragma diagram {"xy":"H-78850;V-21650"} #end)
+    (#9 expr transpose {2} (#10)
+      where
+        (#10 group)
+    #pragma diagram {"xy":"H-59650;V-9950","wh":"18000;7000"} #end)
+    (#11 expr pack <<K1, N1>>(#12)
+      where
+        (#12 group)
+    #pragma diagram {"xy":"H-33450;V-9950","wh":"22000;7000"} #end)
+    (#13 expr transpose {2, 3} (#14)
+      where
+        (#14 group)
+    #pragma diagram {"xy":"H-6250;V-9950","wh":"20000;7000"} #end)
+    (#15 expr A1
+    #pragma diagram {"xy":"H-78850;V-9950"} #end)
+    
+    (#16 wire #2 => #1)
+    (#17 wire #4 => #7)
+    (#18 wire #6 => #3)
+    (#19 wire #8 => #5)
+    (#20 wire #11 => #14)
+    (#21 wire #9 => #12)
+    (#22 wire #13 => #0)
+    (#23 wire #15 => #10)
+    
+    (var
+        A1;)
+}
+
+function WeightedAvg <<K2, K1>> (S: int32^K2^K1;
+                                 K: int32^K2^K1;)
+  returns (x: int32;)
+{
+  diagram
+    (#0 def x
+    #pragma diagram {"xy":"H9150;V-12050"} #end)
+    (#1 block (fold 
+                (fold ({op_expr%function s, i, k => s + i*k%op_expr})) <<K2>>)
+               <<K1>>
+    #pragma diagram {"xy":"H-18550;V-15550","wh":"24000;21000"} #end)
+    (#3 expr (0, S, K)
+    #pragma diagram {"xy":"H-49250;V-12050","wh":"14000;3200"} #end)
+    
+    (#4 wire #1 => #0
+    #pragma diagram {"wp":"v0|#1 #0"} #end)
+    (#5 wire #3 => #1)
+}
