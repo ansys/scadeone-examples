@@ -1,0 +1,18 @@
+{
+  "Version": "2.1",
+  "Kind": "Simulation",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "SimHarnessStep",
+    "CustomArguments": "",
+    "FileScenario": "",
+    "SimulationInputType": "Harness",
+    "TestHarness": "TestLowPassRC::HarnessStep",
+    "UseCycleTime": "False"
+  },
+  "InputPaths": [
+    "assets/TestLowPassRC.swant"
+  ]
+}
