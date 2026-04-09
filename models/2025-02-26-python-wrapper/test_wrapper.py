@@ -1,3 +1,5 @@
+"""Small test script for low-pass filter."""
+
 from pathlib import Path
 import sys
 
