@@ -1,8 +1,9 @@
-import sys, os
+from pathlib import Path
+import sys
 
-harness_dir = os.path.join(os.path.abspath(''), 'LowPassRC_Python')
+harness_dir = Path.resolve(Path()) / "LowPassRC_Python"
 sys.path.append(harness_dir)
-from LowPassRC_Python import LowPassRC_LowPassRC
+from LowPassRC_Python import LowPassRC_LowPassRC  # noqa E402
 
 lowpassfilter = LowPassRC_LowPassRC()
 lowpassfilter.reset()
