@@ -1,5 +1,5 @@
 {
-  "Version": "2.3",
+  "Version": "2.2",
   "Kind": "Simulation",
   "Properties": {
     "RootDeclarations": [
@@ -9,7 +9,7 @@
     "CustomArguments": "",
     "FileScenario": "",
     "SimulationInputType": "Harness",
-    "TestHarness": "Tests::TestPhysicalModel",
+    "TestHarness": "Simulation::TestPhysicalModel",
     "UseCycleTime": "False"
   },
   "InputPaths": [
