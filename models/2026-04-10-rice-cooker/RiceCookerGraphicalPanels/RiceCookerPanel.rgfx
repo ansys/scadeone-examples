@@ -4,7 +4,7 @@
 
 <specification>
     <IDE>
-        <project path="RiceCookerPanel.etp"/>
+        <project path="RiceCookerGraphicalPanels.etp"/>
         <ratio horizontal="1" vertical="1"/>
     </IDE>
     <symbology>
@@ -2111,4 +2111,3 @@
 </specification>
 
 <!-- crc32 : 1809571997 -->
-

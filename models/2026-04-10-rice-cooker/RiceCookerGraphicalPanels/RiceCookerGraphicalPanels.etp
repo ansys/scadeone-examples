@@ -71,7 +71,7 @@
 			<configuration>48</configuration>
 		</Prop>
 		<Prop id="56" name="@RAPIDPROTO:CONFOUTPUT">
-			<value>..\RiceCookerController\%ModelName%</value>
+			<value>..\%ModelName%</value>
 			<configuration>48</configuration>
 		</Prop>
 		<Prop id="57" name="@RAPIDPROTO:CONFPANELNAME">
