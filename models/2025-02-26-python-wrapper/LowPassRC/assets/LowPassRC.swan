@@ -1,0 +1,46 @@
+-- version swan: 2025.0 graph: 2.0
+node LowPassRC (x: float32;
+                alpha: float32;)
+  returns (y: float32;)
+{
+  diagram
+    (#1 expr x
+    #pragma diagram {"xy":"H7900;V14895"} #end)
+    (#2 expr alpha
+    #pragma diagram {"xy":"H7900;V8285","wh":"10000;3200"} #end)
+    (#3 def y
+    #pragma diagram {"xy":"H93580;V12085"} #end)
+    (#4 expr 0.0
+    #pragma diagram {"dir":"nw","xy":"H93580;V27199"} #end)
+    (#5 expr #7 pre #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"dir":"sw","xy":"H79295;V25299"} #end)
+    (#8 expr #10 + #9
+      where
+        (#10 group)
+        (#9 group)
+    #pragma diagram {"xy":"H72347;V12085"} #end)
+    (#11 expr #13 - #12
+      where
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H29070;V16795"} #end)
+    (#14 expr #16 * #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H51240;V10185"} #end)
+    
+    (#17 wire #11 => #15
+    #pragma diagram {"wp":"#11 h7585 v-4710 #15"} #end)
+    (#18 wire #5 => #9, #12
+    #pragma diagram {"wp":"#5 h-9448[v-11314 #9, h-43277 v-6604 #12]"} #end)
+    (#19 wire #1 => #13)
+    (#20 wire #14 => #10)
+    (#21 wire #4 => #7)
+    (#22 wire #2 => #16)
+    (#23 wire #8 => #6, #3
+    #pragma diagram {"wp":"#8 h11448[v11314 #6, #3]"} #end)
+}

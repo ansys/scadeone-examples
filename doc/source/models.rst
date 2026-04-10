@@ -50,3 +50,14 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
         :fas:`fa-solid fa-code` :model_sources:`View sources <2025-03-11-graphical-debug-panels>`
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/scade-one-using-rapid-prototyper-to-augment-model-simulation/>`__
+
+    .. grid-item-card:: Jupyter notebook programming with the SCADE Python Wrapper
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2025-02-26-python-wrapper.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2025-02-26-python-wrapper>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2025-02-26-python-wrapper>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/jupyter-notebook-programming-with-the-scade-python-wrapper/>`__
+        

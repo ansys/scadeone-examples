@@ -1,0 +1,15 @@
+{
+  "Version": "1.0",
+  "Name": "LowPassRC",
+  "Dependencies": [
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Flows\\Flows.sproj",
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Sources\\Sources.sproj"
+  ],
+  "Resources": [
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\LowPassRC_inputs.sd",
+      "Key": "LowPassRC_inputs"
+    }
+  ]
+}

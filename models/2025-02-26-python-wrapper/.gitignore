@@ -1,0 +1,9 @@
+
+LowPassRC_Python/
+pyscadeone.log
+.ipynb_checkpoints
+
+**/jobs/**/out
+**/jobs/**/cg_log.json
+**/jobs/**/config.json
+**/jobs/**/sim_log.json

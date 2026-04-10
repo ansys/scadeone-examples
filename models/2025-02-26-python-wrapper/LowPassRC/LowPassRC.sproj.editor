@@ -1,0 +1,11 @@
+{
+  "JobsOrder": [
+    "jobs\\codegen_df0aafe\\.sjob",
+    "jobs\\simu_219a1dc\\.sjob",
+    "jobs\\simu_f9a8265\\.sjob"
+  ],
+  "ModulesOrder": [
+    "assets\\LowPassRC.swan",
+    "assets\\TestLowPassRC.swant"
+  ]
+}

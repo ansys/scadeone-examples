@@ -1,0 +1,184 @@
+-- version swan: 2025.0 graph: 2.0 swant: 1.1
+use LowPassRC;
+
+use Harness::Sources::T as Sources;
+
+use Math::Common as Math;
+
+use Flows;
+
+_harness HarnessSin
+{
+  diagram
+    (#0 expr fc
+    #pragma diagram {"xy":"H-119500;V-7002"} #end)
+    (#1 expr (1.0 :> float32)
+    #pragma diagram {"xy":"H-125720;V-20110","wh":"20000;3200"} #end)
+    (#2 def alpha
+    #pragma diagram {"xy":"H-20845;V-27958","wh":"10000;3200"} #end)
+    (#4 expr #5 / #6
+      where
+        (#5 group)
+        (#6 group)
+    #pragma diagram {"xy":"H-38125;V-27957"} #end)
+    (#7 expr (Math::TWO_PI :> float32)
+    #pragma diagram {"xy":"H-129500;V-10802","wh":"28000;3200"} #end)
+    (#8 expr dt
+    #pragma diagram {"xy":"H-119500;V-29857"} #end)
+    (#9 expr alpha
+    #pragma diagram {"xy":"H-73450;V10963","wh":"10000;3200"} #end)
+    (#10 expr #11 + #12
+      where
+        (#11 group)
+        (#12 group)
+    #pragma diagram {"xy":"H-56860;V-20110"} #end)
+    (#13 def _
+    #pragma diagram {"xy":"H-28570;V6950"} #end)
+    (#14 expr dt
+    #pragma diagram {"xy":"H-119900;V10963"} #end)
+    (#15 #pragma swt under_test #end block LowPassRC::LowPassRC
+                                           #pragma diagram {"xy":"H-50510;V6950","wh":"22700;11225"} #end)
+    (#16 expr #17 / #18
+      where
+        (#17 group)
+        (#18 group)
+    #pragma diagram {"xy":"H-80440;V-18210"} #end)
+    (#19 expr 1.0 / 130
+    #pragma diagram {"xy":"H-122500;V4308","wh":"14000;3200"} #end)
+    (#22 block (Sources::Sine \ delay: 50, amplitude: 1.0, offset: 0)
+               #pragma diagram {"xy":"H-94120;V6950","wh":"22700;11225"} #end)
+    (#24 expr #25 * #26
+      where
+        (#25 group)
+        (#26 group)
+    #pragma diagram {"xy":"H-100470;V-8902"} #end)
+    (let
+       fc = 100.0;
+       dt = 0.0002;
+       _stop_condition = _current_cycle = 100;
+    #pragma diagram {"xy":"H-89650;V-46631","wh":"44000;7938"} #end)
+    
+    (#27 wire #4 => #2)
+    (#29 wire #16 => #12)
+    (#30 wire #22 .(flow) => #15 .(x)
+    #pragma diagram {"wp":"v-2306|#22 #15"} #end)
+    (#31 wire #7 => #25)
+    (#32 wire #19 => #22 .(period))
+    (#33 wire #15 .(y) => #13
+    #pragma diagram {"wp":"v0|#15 #13"} #end)
+    (#34 wire #8 => #5, #11
+    #pragma diagram {"wp":"#8 h49300[#5, v7847 #11]"} #end)
+    (#35 wire #14 => #22 .(ts))
+    (#36 wire #0 => #26)
+    (#37 wire #10 => #6
+    #pragma diagram {"wp":"#10 h5868 v-5947 #6"} #end)
+    (#38 wire #24 => #18
+    #pragma diagram {"wp":"#24 h6515 v-7408 #18"} #end)
+    (#40 wire #9 => #15 .(alpha))
+    (#41 wire #1 => #17)
+    
+    (var
+        fc;
+        dt;
+        alpha;)
+}
+
+_harness HarnessStep
+{
+  diagram
+    (#1 expr if #2 then #3 else #4
+      where
+        (#2 group)
+        (#3 group)
+        (#4 group)
+    #pragma diagram {"xy":"H-81795;V32922"} #end)
+    (#5 expr #6 / #7
+      where
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H-33830;V-27525"} #end)
+    (#8 expr #9 / #10
+      where
+        (#9 group)
+        (#10 group)
+    #pragma diagram {"xy":"H-73545;V-18050"} #end)
+    (#11 expr #12 * #13
+      where
+        (#12 group)
+        (#13 group)
+    #pragma diagram {"xy":"H-92400;V-8575"} #end)
+    (#14 block (Flows::Delay <<50>>  \ init: false)
+               #pragma diagram {"xy":"H-101095;V18622","wh":"17350;9743"} #end)
+    (#15 def alpha
+    #pragma diagram {"xy":"H-14725;V-27525","wh":"10000;3200"} #end)
+    (#16 #pragma swt under_test #end block LowPassRC::LowPassRC
+                                           #pragma diagram {"xy":"H-41830;V35592","wh":"25200;12340"} #end)
+    (#17 expr fc
+    #pragma diagram {"xy":"H-109225;V-6675"} #end)
+    (#18 expr (0.0 :> float32)
+    #pragma diagram {"xy":"H-109850;V34822","wh":"20000;3200"} #end)
+    (#20 expr (Math::TWO_PI :> float32)
+    #pragma diagram {"xy":"H-119225;V-10475","wh":"28000;3200"} #end)
+    (#21 expr (1.0 :> float32)
+    #pragma diagram {"xy":"H-115225;V-19950","wh":"20000;3200"} #end)
+    (let
+       fc = 100.0;
+       dt = 0.0002;
+       _stop_condition = _current_cycle = 100;
+    #pragma diagram {"xy":"H-103225;V-48310","wh":"44000;7938"} #end)
+    (#23 def _
+    #pragma diagram {"xy":"H-21398;V35592"} #end)
+    (#24 expr #25 + #26
+      where
+        (#25 group)
+        (#26 group)
+    #pragma diagram {"xy":"H-51570;V-19950"} #end)
+    (#27 expr (1.0 :> float32)
+    #pragma diagram {"xy":"H-109850;V31022","wh":"20000;3200"} #end)
+    (#28 expr alpha
+    #pragma diagram {"xy":"H-63263;V38488","wh":"10000;3200"} #end)
+    (#29 expr true
+    #pragma diagram {"xy":"H-119225;V18623"} #end)
+    (#30 expr dt
+    #pragma diagram {"xy":"H-109260;V-29425"} #end)
+    
+    (#32 wire #5 => #15)
+    (#33 wire #16 .(y) => #23
+    #pragma diagram {"wp":"v0|#16 #23"} #end)
+    (#34 wire #20 => #12)
+    (#35 wire #28 => #16 .(alpha))
+    (#36 wire #8 => #26)
+    (#37 wire #11 => #10
+    #pragma diagram {"wp":"#11 h5928 v-7575 #10"} #end)
+    (#38 wire #1 => #16 .(x))
+    (#39 wire #24 => #7
+    #pragma diagram {"wp":"#24 h5370 v-5675 #7"} #end)
+    (#41 wire #17 => #13)
+    (#42 wire #30 => #6, #25
+    #pragma diagram {"wp":"#30 h44202[#6, v7575 #25]"} #end)
+    (#43 wire #27 => #3)
+    (#44 wire #29 => #14)
+    (#45 wire #21 => #9)
+    (#46 wire #18 => #4)
+    (#48 wire #14 => #2
+    #pragma diagram {"wp":"v0|#14 h10625 #2"} #end)
+    
+    (var
+        alpha;
+        fc;
+        dt;)
+}
+
+_harness harness_LowPassRC
+{
+  diagram
+    (#0 block (_source LowPassRC_inputs)
+    #pragma diagram {"xy":"H0;V0","wh":"12000;7000"} #end)
+    (#1 #pragma swt under_test #end block LowPassRC::LowPassRC
+                                          #pragma diagram {"xy":"H43000;V-1750","wh":"20000;14000"} #end)
+    
+    (#2 wire #0 .(x) => #1 .(x)
+    #pragma diagram {"wp":"v1250|#0 #1"} #end)
+    (#3 wire #0 .(alpha) => #1 .(alpha)
+    #pragma diagram {"wp":"v-1250|#0 #1"} #end)
+}
