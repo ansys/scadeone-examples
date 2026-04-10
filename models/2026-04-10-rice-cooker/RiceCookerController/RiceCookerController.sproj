@@ -4,8 +4,8 @@
   "Dependencies": [
     "$(SCADE_ONE_LIBRARIES_DIR)\\Sources\\Sources.sproj",
     "$(SCADE_ONE_LIBRARIES_DIR)\\Math\\Math.sproj",
-    "VisualizationPanel\\VisualizationPanel.sproj",
-    "RiceCookerPanel\\RiceCookerPanel.sproj"
+    "..\\VisualizationPanel\\VisualizationPanel.sproj",
+    "..\\RiceCookerPanel\\RiceCookerPanel.sproj"
   ],
   "Resources": [
     {
