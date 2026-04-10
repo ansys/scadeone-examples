@@ -1,0 +1,314 @@
+-- version swan: 2025.2 graph: 2.1
+use Clock::Utils as Clk;
+
+use Utils::Msg;
+
+use Utils::PIController;
+
+node MainControl (btnStartStop: bool;
+                  btnDelay: bool;
+                  btnSetTime: bool;)
+  returns (heaterPowerPct: float32;
+           colorLED: ColorLED default = OFF;
+           displayText : char^Msg::SIZE_MSG default = '\x00'^Msg::SIZE_MSG;)
+{
+  diagram
+    (var
+        timer last = 0;)
+    (automaton #0 $mainLevel
+      initial state #10 Idle
+      #pragma diagram {"xy":"h-30835;v-16338","wh":"45050;20000"} #end
+      #pragma diagram detached #end :
+        diagram
+          (#1 def heaterPowerPct
+          #pragma diagram {"xy":"h19949;v-4516","wh":"18000;3200"} #end)
+          (#2 expr 0
+          #pragma diagram {"xy":"h-5051;v-4516"} #end)
+          (#5 def displayText
+          #pragma diagram {"xy":"h19949;v1650","wh":"16000;3200"} #end)
+          (#6 expr Msg::IDLE_MSG
+          #pragma diagram {"xy":"h-9051;v1650","wh":"18000;3200"} #end)
+          
+          (#7 wire #2 => #1)
+          (#9 wire #6 => #5)
+      state #22 SetDelay
+      #pragma diagram {"xy":"h-42522;v9979","wh":"21675;12000"} #end
+      #pragma diagram detached #end :
+        diagram
+          (#11 expr if btnSetTime then (last'choice + 1) mod NB_PRESET_DELAYS
+                    else last'choice
+          #pragma diagram {"xy":"h-81474;v-28603","wh":"58000;4219"} #end)
+          (#12 expr (PRESET_DELAYS_SEC.[choice] default PRESET_DELAYS_SEC[0]) * 1000
+          #pragma diagram {"xy":"h-85474;v-36859","wh":"66000;3200"} #end)
+          (#13 def choice
+          #pragma diagram {"xy":"h-35474;v-28603","wh":"10000;3200"} #end)
+          (#14 def timer
+          #pragma diagram {"xy":"h-35474;v-36859","wh":"10000;3200"} #end)
+          (#15 def displayText
+          #pragma diagram {"xy":"h-32474;v-16993","wh":"16000;3200"} #end)
+          (#16 expr timer
+          #pragma diagram {"xy":"h-103974;v-16993","wh":"10000;3200"} #end)
+          (#17 block Msg::MillisecToHHMM
+          #pragma diagram {"xy":"h-68320;v-16993","wh":"20000;7000"} #end)
+          
+          (#18 wire #11 => #13)
+          (#19 wire #12 => #14)
+          (#20 wire #16 => #17)
+          (#21 wire #17 => #15
+          #pragma diagram {"wp":"v0|#17 #15"} #end)
+          
+          (var
+              choice last = 0_i32;)
+      state #43 DelayedCooking
+      #pragma diagram {"xy":"h-12494;v9979","wh":"20056;11200"} #end
+      #pragma diagram detached #end :
+        diagram
+          (#25 def displayText
+          #pragma diagram {"xy":"h19662;v16399","wh":"16000;3200"} #end)
+          (#26 expr timer
+          #pragma diagram {"xy":"h-34238;v16399","wh":"10000;3200"} #end)
+          (#27 block Msg::MillisecToHHMM
+          #pragma diagram {"xy":"h-5338;v16399","wh":"18400;7000"} #end)
+          (#29 block Clk::MsElapsed
+          #pragma diagram {"xy":"h-5338;v8486","wh":"18400;7000"} #end)
+          (#33 def timer
+          #pragma diagram {"xy":"h16662;v8486","wh":"10000;3200"} #end)
+          (#34 def colorLED
+          #pragma diagram {"xy":"h17662;v25786","wh":"12000;3200"} #end)
+          (#35 expr GREEN
+          #pragma diagram {"xy":"h-3338;v25786","wh":"10000;3200"} #end)
+          
+          (#37 wire #26 => #27)
+          (#38 wire #27 => #25
+          #pragma diagram {"wp":"v0|#27 #25"} #end)
+          (#42 wire #35 => #34)
+          (#28 wire #29 => #33
+          #pragma diagram {"wp":"v0|#29 #33"} #end)
+      state #56 Cooking
+      #pragma diagram {"xy":"h27588;v-6598","wh":"20056;27605"} #end
+      #pragma diagram detached #end :
+        diagram
+          (var
+              isCooked default=false;)
+          (automaton #3 $SoakingAndCooking
+            initial state #4 WaterAbsorption
+            #pragma diagram {"xy":"h-102184;v-2778","wh":"112796;53401"} #end :
+              diagram
+                (#23 def colorLED
+                #pragma diagram {"xy":"h36548;v9014","wh":"12000;3200"} #end)
+                (#24 expr GREEN
+                #pragma diagram {"xy":"h11452;v9014","wh":"10000;3200"} #end)
+                (#36 def displayText
+                #pragma diagram {"xy":"h38548;v1744","wh":"16000;3200"} #end)
+                (#44 expr Msg::SOAK_MSG
+                #pragma diagram {"xy":"h7452;v1744","wh":"18000;3200"} #end)
+                (#96 expr #97 * #98
+                  where
+                    (#97 group)
+                    (#98 group)
+                #pragma diagram {"xy":"h21752;v-8101"} #end)
+                (#99 block (PIController::PIAntiWindUp \ kp: KP_SOAKING, ki: KI_SOAKING)
+                #pragma diagram {"xy":"h-3098;v-15501","wh":"20000;10400"} #end)
+                (#100 expr TEMP_SOAKING_C
+                #pragma diagram {"xy":"h-43398;v-12901","wh":"18000;3200"} #end)
+                (#101 expr tempPot
+                #pragma diagram {"xy":"h-40398;v-18101","wh":"12000;3200"} #end)
+                (#102 expr 100
+                #pragma diagram {"xy":"h-13098;v-6201"} #end)
+                (#103 def heaterPowerPct
+                #pragma diagram {"xy":"h39548;v-8100","wh":"18000;3200"} #end)
+                (#112 block Clk::MsElapsed
+                #pragma diagram {"xy":"h6452;v19201","wh":"20000;7000"} #end)
+                (#113 def timer
+                #pragma diagram {"xy":"h35548;v19201","wh":"10000;3200"} #end)
+                
+                (#45 wire #44 => #36)
+                (#48 wire #24 => #23)
+                (#104 wire #96 => #103)
+                (#105 wire #102 => #98)
+                (#106 wire #99 => #97
+                #pragma diagram {"wp":"v0|#99 h4925 v5500 #97"} #end)
+                (#107 wire #100 => #99 .(target))
+                (#108 wire #101 => #99 .(current))
+                (#30 wire #112 => #113
+                #pragma diagram {"wp":"v0|#112 #113"} #end)
+            state #8 CookingPhases
+            #pragma diagram {"xy":"h73571;v-2502","wh":"180290;89625"} #end :
+              diagram
+                (#49 def colorLED
+                #pragma diagram {"xy":"h-19360;v38745","wh":"12000;3200"} #end)
+                (#50 expr RED
+                #pragma diagram {"xy":"h-41360;v38745"} #end)
+                (#51 def displayText
+                #pragma diagram {"xy":"h-17360;v33612","wh":"16000;3200"} #end)
+                (#52 expr Msg::COOK_MSG
+                #pragma diagram {"xy":"h-46360;v33612","wh":"18000;3200"} #end)
+                
+                (#54 wire #52 => #51)
+                (#55 wire #50 => #49)
+                
+                (automaton #82
+                  initial state #83 PreCooking
+                  #pragma diagram {"xy":"h-49191;v-13597","wh":"40975;26000"} #end :
+                    diagram
+                      (#46 expr 100
+                      #pragma diagram {"xy":"h-12488;v0"} #end)
+                      (#47 def heaterPowerPct
+                      #pragma diagram {"xy":"h5886;v0","wh":"18000;3200"} #end)
+                      
+                      (#53 wire #46 => #47)
+                  state #84 ReachingBoiling
+                  #pragma diagram {"xy":"h58036;v-13597","wh":"40218;26000"} #end :
+                    diagram
+                      (#87 expr 100
+                      #pragma diagram {"xy":"h-12109;v0"} #end)
+                      (#88 def heaterPowerPct
+                      #pragma diagram {"xy":"h7109;v0","wh":"18000;3200"} #end)
+                      
+                      (#89 wire #87 => #88)
+                  state #85 Simmering
+                  #pragma diagram {"xy":"h58915;v17229","wh":"41977;26000"} #end :
+                    diagram
+                      (#90 expr 60
+                      #pragma diagram {"xy":"h-12989;v-59"} #end)
+                      (#91 def heaterPowerPct
+                      #pragma diagram {"xy":"h6230;v-59","wh":"18000;3200"} #end)
+                      
+                      (#31 wire #90 => #91)
+                  state #86 EnzymaticActivation
+                  #pragma diagram {"xy":"h6699;v-13597","wh":"40218;26000"} #end :
+                    diagram
+                      (#93 expr 20
+                      #pragma diagram {"xy":"h-10584;v0"} #end)
+                      (#94 def heaterPowerPct
+                      #pragma diagram {"xy":"h7109;v0","wh":"18000;3200"} #end)
+                      
+                      (#95 wire #93 => #94)
+                  state #134 Resting
+                  #pragma diagram {"xy":"h-50681;v17893","wh":"40642;26664"} #end :
+                    diagram
+                      (#131 expr 0
+                      #pragma diagram {"xy":"h-12321;v-332"} #end)
+                      (#132 def heaterPowerPct
+                      #pragma diagram {"xy":"h7321;v-332","wh":"18000;3200"} #end)
+                      (#135 def isCooked
+                      #pragma diagram {"xy":"h4321;v6618","wh":"12000;3200"} #end)
+                      (#136 expr true
+                      #pragma diagram {"xy":"h-12321;v6618"} #end)
+                      
+                      (#133 wire #131 => #132)
+                      (#137 wire #136 => #135)
+                  :1: #83 until if (tempPot >= 60)
+                  restart #86
+                  #pragma diagram {"tp":"h20488;v0|#83 h5098 h5098 h-20109;v0|#86"} #end;
+                  :1: #84 until if (tempPot >= 100)
+                  restart #85
+                  #pragma diagram {"tp":"h0;v13000|#84 v1609 v1609 h-879;v-13000|#85"} #end;
+                  :1: #86 until if (tempPot >= 80)
+                  restart #84
+                  #pragma diagram {"tp":"h20109;v0|#86 h3706 h3706 h-20109;v0|#84"} #end;
+                  :1: #85 until if (Clk::TON(tempPot >= TEMP_BOILING_THRESHOLD_C, 5000).(1))
+                  restart #134
+                  #pragma diagram {"tp":"h-20989;v166|#85 h-22762 h-22762 h20321;v-498|#134"} #end;
+                #pragma diagram {"xy":"h0;v-5587","wh":"172290;70450"} #end)
+            :1: #4 until if (timer >= SOAKING_TIME_S * 1000 and not isLidOpen)
+            restart #8
+            #pragma diagram {"tp":"h56398;v-1975|#4 h9737 h9737 h-90145;v-2251|#8"} #end;
+          #pragma diagram {"xy":"h-111008;v-56487","wh":"335432;102629"} #end)
+      state #81 KeepWarm
+      #pragma diagram {"xy":"h48870;v29325","wh":"20056;11200"} #end
+      #pragma diagram detached #end :
+        diagram
+          (#57 def colorLED
+          #pragma diagram {"xy":"h42190;v-58046","wh":"12000;3200"} #end)
+          (#58 expr YELLOW
+          #pragma diagram {"xy":"h19190;v-58046","wh":"10000;3200"} #end)
+          (#59 block (PIController::PIAntiWindUp \ kp: KP_WARM, ki: KI_WARM)
+          #pragma diagram {"xy":"h-388;v-29545","wh":"20000;10400"} #end)
+          (#60 expr TEMP_KEEP_WARM_C
+          #pragma diagram {"xy":"h-41688;v-26945","wh":"20000;3200"} #end)
+          (#61 expr tempPot
+          #pragma diagram {"xy":"h-37688;v-32145","wh":"12000;3200"} #end)
+          (#64 expr Clk::MsElapsed()
+          #pragma diagram {"xy":"h-14603;v-44607","wh":"20000;3200"} #end)
+          (#65 def displayText
+          #pragma diagram {"xy":"h44962;v-44607","wh":"16000;3200"} #end)
+          (#66 block Msg::MillisecToHHMM
+          #pragma diagram {"xy":"h16697;v-44607","wh":"20000;7000"} #end)
+          (#67 def heaterPowerPct
+          #pragma diagram {"xy":"h45962;v-22145","wh":"18000;3200"} #end)
+          (#68 expr 100
+          #pragma diagram {"xy":"h-10388;v-20245"} #end)
+          (#69 expr #70 * #71
+            where
+              (#70 group)
+              (#71 group)
+          #pragma diagram {"xy":"h24462;v-22145"} #end)
+          
+          (#72 wire #58 => #57)
+          (#73 wire #60 => #59 .(target))
+          (#74 wire #61 => #59 .(current))
+          (#76 wire #64 => #66)
+          (#77 wire #66 => #65
+          #pragma diagram {"wp":"v0|#66 #65"} #end)
+          (#78 wire #59 => #70
+          #pragma diagram {"wp":"v3550|#59 h4925 v1950 #70"} #end)
+          (#79 wire #68 => #71)
+          (#80 wire #69 => #67)
+      :2: #56 until if (isCooked and tempPot <= TEMP_KEEP_WARM_C)
+      restart #81
+      #pragma diagram {"tp":"h-1307;v13803|#56 v500 v500 v500 v10310 h5280;v10310 h5280 h667 h667 h-10028;v0|#81"} #end;
+      :1: #10 until if (btnDelay)
+      restart #22
+      #pragma diagram {"tp":"h-11688;v10000|#10 v3439 v3439 h0;v-6000|#22"} #end;
+      :2: #22 until if (btnStartStop)
+      restart #43
+      #pragma diagram {"tp":"h10838;v0|#22 h3054 h3054 h-10028;v0|#43"} #end;
+      :2: #43 until if (timer <= SOAKING_TIME_S * 1000)
+      restart #56
+      #pragma diagram {"tp":"h10028;v-4187|#43 h6675 h6675 h-10028;v12390|#56"} #end;
+      :2: #10 until if (btnStartStop)
+      restart #56
+      #pragma diagram {"tp":"h22525;v2969|#10 h8623 h8623 h-10028;v-6771|#56"} #end;
+      :1: #22 until if (btnDelay)
+      restart #10
+      #pragma diagram {"tp":"h-10838;v89|#22 h-500 h-500 h-500 h-1490 h-1490;v-2981 v-2981 v-5161 v-5161 v-5161 v-2481 h1240;v-2481 h1240 h667 h667 h-22525;v0|#10"} #end;
+      :1: #43 until if (btnStartStop)
+      restart #10
+      #pragma diagram {"tp":"h-2922;v-5600|#43 v-3572 v-3572 h15419;v10000|#10"} #end;
+      :1: #56 until if (btnStartStop)
+      restart #10
+      #pragma diagram {"tp":"h-10028;v-9740|#56 h-8623 h-8623 h22525;v0|#10"} #end;
+      :1: #81 until if (btnStartStop)
+      restart #10
+      #pragma diagram {"tp":"h1411;v-5600|#81 v-500 v-18708 v-8854 v-17708 h-12666;v-8854 h-25331 h-12666 h-12666 h-12666 h-2561 h-2561;v1281 v1280 v667 v667 h0;v-10000|#10"} #end;
+    #pragma diagram {"xy":"H-270281;V-52101","wh":"145219;77850"} #end)
+}
+
+sensor tempPot: float32;
+
+sensor isLidOpen: bool;
+
+type ColorLED = enum { OFF, GREEN, RED, YELLOW };
+
+const NB_PRESET_DELAYS: int32 = 8;
+
+const PRESET_DELAYS_SEC: uint32^NB_PRESET_DELAYS = [30*60, 45*60, 1*3600, 2*3600, 3*3600, 5*3600, 7*3600, 9*3600 ];
+
+const SOAKING_TIME_S: uint32 = 15 * 60;
+
+const TEMP_SOAKING_C: float32 = 45;
+
+const TEMP_BOILING_THRESHOLD_C: float32 = 105;
+
+const TEMP_KEEP_WARM_C: float32 = 65;
+
+const KP_SOAKING: float32 = 0.038;
+
+const KI_SOAKING: float32 = 0.00002;
+
+const KP_WARM: float32 = 0.03;
+
+const KI_WARM: float32 = 0.00012;
+
+const MAX_POWER_WARMUP_PCT: float32 = 50;

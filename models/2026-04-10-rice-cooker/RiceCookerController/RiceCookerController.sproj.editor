@@ -1,0 +1,18 @@
+{
+  "JobsOrder": [
+    "jobs\\simu_f123daf\\.sjob",
+    "jobs\\simu_2b38846\\.sjob",
+    "jobs\\codegen_c4483e5\\.sjob"
+  ],
+  "ModulesOrder": [
+    "assets\\Controller.swan",
+    "assets\\PlantModel.swan",
+    "assets\\Utils-PIController.swan",
+    "assets\\Clock-Utils.swan",
+    "assets\\Clock-Ticks.swan",
+    "assets\\Utils-Msg.swani",
+    "assets\\Utils-Msg.swan",
+    "assets\\Simulation.swant",
+    "assets\\SimulationWithPanel.swant"
+  ]
+}

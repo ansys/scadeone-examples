@@ -1,0 +1,7 @@
+{
+  "JobsOrder": [],
+  "ModulesOrder": [
+    "assets\\RiceCookerPanel.swan",
+    "assets\\Wrapper.swan"
+  ]
+}

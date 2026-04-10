@@ -1,0 +1,291 @@
+-- version swan: 2025.2 graph: 2.1 swant: 1.1
+use Controller;
+
+use PlantModel;
+
+use RiceCookerPanel;
+
+use Utils::Msg;
+
+use VisualizationPanel as PanelVisu;
+
+node Counter (increment : bool;)
+  returns (count: int32 last=0;)
+{
+  diagram
+    (activate #0
+      if increment
+      then
+        {
+          diagram
+            (#1 def count
+            #pragma diagram {"xy":"h15000;v0","wh":"10000;3200"} #end)
+            (#2 expr last'count + 1
+            #pragma diagram {"xy":"h-11000;v0","wh":"18000;3200"} #end)
+            
+            (#3 wire #2 => #1)
+        #pragma diagram {"xy":"h0;v-3370","wh":"44000;7200"} #end
+        }
+      else
+        {
+        #pragma diagram {"xy":"h0;v7630","wh":"44000;6400"} #end
+        }
+    #pragma diagram {"xy":"H-65300;V-22500","wh":"44000;21659"} #end)
+}
+
+function LedColor2Index (led: Controller::ColorLED;)
+  returns (idx: int32;)
+{
+  diagram
+    (#0 expr
+      (case #1 of
+        | Controller::OFF : #2
+        | Controller::GREEN : #3
+        | Controller::RED : #4
+        | Controller::YELLOW : #5)
+      where
+        (#1 group)
+        (#2 group)
+        (#3 group)
+        (#4 group)
+        (#5 group)
+    #pragma diagram {"xy":"H-43350;V-9950","wh":"22000;18400"} #end)
+    (#6 expr led
+    #pragma diagram {"xy":"H-55650;V-24850"} #end)
+    (#7 expr 0
+    #pragma diagram {"xy":"H-67950;V-13750"} #end)
+    (#8 def idx
+    #pragma diagram {"xy":"H-12750;V-13750"} #end)
+    (#9 expr 1
+    #pragma diagram {"xy":"H-67950;V-9950"} #end)
+    (#10 expr 2
+    #pragma diagram {"xy":"H-67950;V-6150"} #end)
+    (#11 expr 3
+    #pragma diagram {"xy":"H-68050;V-2350"} #end)
+    
+    (#12 wire #6 => #1
+    #pragma diagram {"wp":"#6 h6800 #1"} #end)
+    (#13 wire #7 => #2)
+    (#14 wire #0 => #8)
+    (#15 wire #9 => #3)
+    (#16 wire #11 => #5)
+    (#17 wire #10 => #4)
+}
+
+node ButtonPressed (MousePressed: bool;
+                    MouseReleased: bool;
+                    InsideButton1: bool;
+                    InsideButton2: bool;
+                    InsideButton3: bool;)
+  returns (Button1Pressed: bool;
+           Button2Pressed: bool;
+           Button3Pressed: bool;)
+{
+  diagram
+    (automaton #0
+      initial state #1 Idle
+      #pragma diagram {"xy":"h-43638;v2321","wh":"26300;12425"} #end :
+      state #2 Pressed
+      #pragma diagram {"xy":"h-4212;v2321","wh":"21350;12000"} #end :
+      state #7 Released
+      #pragma diagram {"xy":"h38788;v2321","wh":"36000;52459"} #end :
+        diagram
+          (activate #3
+            if InsideButton1
+            then
+              {
+                diagram
+                  (emit'Button1Pressed;
+                  #pragma diagram {"xy":"h0;v0","wh":"24000;3200"} #end)
+              #pragma diagram {"xy":"h0;v-14770","wh":"28000;7200"} #end
+              }
+            elsif InsideButton2
+            then
+              {
+                diagram
+                  (emit'Button2Pressed;
+                  #pragma diagram {"xy":"h0;v0","wh":"24000;3200"} #end)
+              #pragma diagram {"xy":"h0;v-3370","wh":"28000;7200"} #end
+              }
+            elsif InsideButton3
+            then
+              {
+                diagram
+                  (emit'Button3Pressed;
+                  #pragma diagram {"xy":"h0;v0","wh":"24000;3200"} #end)
+              #pragma diagram {"xy":"h0;v8030","wh":"28000;7200"} #end
+              }
+            else
+              {
+              #pragma diagram {"xy":"h0;v19030","wh":"28000;6400"} #end
+              }
+          #pragma diagram {"xy":"h0;v0","wh":"28000;44459"} #end)
+      :1: #1 until if (MousePressed)
+      restart #2
+      #pragma diagram {"tp":"h13150;v0|#1 h5200 h5200 h-10675;v0|#2"} #end;
+      :1: #2 until if (MouseReleased)
+      restart #7
+      #pragma diagram {"tp":"h10675;v0|#2 h4775 h4775 h-18000;v0|#7"} #end;
+      :1: #7 until 
+      restart #1
+      #pragma diagram {"tp":"h-18000;v18297|#7 h-500 h-29504 h-14252 h-10085 h-10085;v-5042 v-5042 v-667 v-667 h0;v6212|#1"} #end;
+    #pragma diagram {"xy":"H-12379;V40882","wh":"121575;65102"} #end)
+}
+
+_harness harness_RiceCookerPanel
+{
+  diagram
+    (#0 block RiceCookerPanel::RiceCookerPanel
+    #pragma diagram {"xy":"H0;V-58","wh":"20000;26217"} #end)
+    (#1 expr Msg::IDLE_MSG pre Msg::SOAK_MSG pre Msg::MillisecToHHMM((_current_cycle * 60 * 1000 :> uint32))
+    #pragma diagram {"xy":"H-89425;V-6967","wh":"94000;3200"} #end)
+    (#2 expr (_current_cycle mod 4 :> int32)
+    #pragma diagram {"xy":"H-59425;V3067","wh":"34000;3200"} #end)
+    (#5 expr #6 @ #7
+      where
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H-31325;V-5067"} #end)
+    (#8 expr '\x00' ^ (255 - Msg::SIZE_MSG)
+    #pragma diagram {"xy":"H-59425;V-3167","wh":"34000;3200"} #end)
+    (#11 def _
+    #pragma diagram {"xy":"H88350;V-9666"} #end)
+    (#14 block Counter
+    #pragma diagram {"xy":"H66062;V-58","wh":"20000;7000"} #end)
+    (#13 block Counter
+    #pragma diagram {"xy":"H66062;V-9666","wh":"20000;7000"} #end)
+    (#15 def _
+    #pragma diagram {"xy":"H88350;V-58"} #end)
+    (#17 block Counter
+    #pragma diagram {"xy":"H66062;V9142","wh":"20000;7000"} #end)
+    (#18 def _
+    #pragma diagram {"xy":"H88350;V9142"} #end)
+    (#25 expr (_current_cycle :> uint32) * 60 * 1000
+    #pragma diagram {"xy":"H-86425;V-28700","wh":"40000;3200"} #end)
+    (#26 block Msg::MillisecToHHMM
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-50125;V-28700","wh":"20000;14000"} #end)
+    (#27 def _
+    #pragma diagram {"xy":"H-12850;V-28700"} #end)
+    
+    (#3 wire #5 => #0 .(ScreenText))
+    (#4 wire #2 => #0 .(ColorLED))
+    (#9 wire #8 => #7)
+    (#10 wire #1 => #6)
+    (#16 wire #13 => #11
+    #pragma diagram {"wp":"v0|#13 #11"} #end)
+    (#19 wire #14 => #15
+    #pragma diagram {"wp":"v0|#14 #15"} #end)
+    (#20 wire #17 => #18
+    #pragma diagram {"wp":"v0|#17 #18"} #end)
+    (#28 wire #25 => #26)
+    (#29 wire #26 => #27
+    #pragma diagram {"wp":"v0|#26 #27"} #end)
+    (#12 wire #0 .(Button1Pressed) => #13
+    #pragma diagram {"wp":"v-9608|#0 #13"} #end)
+    (#21 wire #0 .(Button2Pressed) => #14
+    #pragma diagram {"wp":"v714|#0 #14"} #end)
+    (#22 wire #0 .(Button3Pressed) => #17
+    #pragma diagram {"wp":"v9200|#0 #17"} #end)
+}
+
+_harness harness_ControlPhysicsPanel
+{
+  diagram
+    (#0 block RiceCookerPanel::RiceCookerPanel
+    #pragma diagram {"xy":"H-163375;V46843","wh":"20000;16392"} #end)
+    (#3 expr #4 @ #5
+      where
+        (#4 group)
+        (#5 group)
+    #pragma diagram {"xy":"H-190050;V42389"} #end)
+    (#6 expr '\x00' ^ (255 - Msg::SIZE_MSG)
+    #pragma diagram {"xy":"H-216725;V44289","wh":"34000;3200"} #end)
+    (#46 block LedColor2Index
+    #pragma diagram {"xy":"H-190050;V51539","wh":"20000;7000"} #end)
+    (#34 expr 0.33
+    #pragma diagram {"xy":"H-72537;V56888"} #end)
+    (#35 _sensor Controller::tempPot
+    #pragma diagram {"xy":"H4975;V65250","wh":"28000;3200"} #end)
+    (#36 expr 0
+    #pragma diagram {"xy":"H-82737;V41454"} #end)
+    (#37 expr false
+    #pragma diagram {"xy":"H-36862;V70628","wh":"10000;3200"} #end)
+    (#38 expr #39 pre #40
+      where
+        (#39 group)
+        (#40 group)
+    #pragma diagram {"xy":"H-68487;V43354"} #end)
+    (#41 _sensor Controller::isLidOpen
+    #pragma diagram {"xy":"H4975;V70628","wh":"30000;3200"} #end)
+    (#44 block PlantModel::PhysicalModel
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-34812;V43354","wh":"20000;35543"} #end)
+    (#9 expr #11 pre #17
+      where
+        (#11 group)
+        (#17 group)
+    #pragma diagram {"dir":"nw","xy":"H-163375;V62814"} #end)
+    (#28 expr Controller::OFF
+    #pragma diagram {"dir":"nw","xy":"H-143375;V60914","wh":"20000;3200"} #end)
+    (#47 expr 20
+    #pragma diagram {"xy":"H-72537;V51071"} #end)
+    (#48 block Controller::MainControl
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-114231;V46025","wh":"20000;21827"} #end)
+    (#19 expr #20 pre #21
+      where
+        (#20 group)
+        (#21 group)
+    #pragma diagram {"dir":"nw","xy":"H-163375;V29111"} #end)
+    (#22 expr Msg::IDLE_MSG
+    #pragma diagram {"dir":"nw","xy":"H-140250;V27211","wh":"18000;3200"} #end)
+    (#14 block PanelVisu::VisualizationPanel
+    #pragma diagram {"xy":"H53481;V37834","wh":"20000;51043"} #end)
+    (#7 block (PlantModel::ComputeHeight \ unit: PlantModel::METERS_3)
+    #pragma diagram {"xy":"H9975;V42391","wh":"20000;9350"} #end)
+    (#10 block (PlantModel::ComputeHeight \ unit: PlantModel::LITERS)
+    #pragma diagram {"xy":"H9335;V27041","wh":"20000;10627"} #end)
+    
+    (#18 wire #6 => #5)
+    (#25 wire #22 => #20)
+    (#16 wire #3 => #0 .(ScreenText))
+    (#26 wire #19 => #4
+    #pragma diagram {"wp":"#19 h-29175 v11378 #4"} #end)
+    (#49 wire #9 => #46
+    #pragma diagram {"wp":"#9 h-34175 v-11275 #46"} #end)
+    (#45 wire #28 => #11)
+    (#50 wire #46 => #0 .(ColorLED)
+    #pragma diagram {"wp":"v0|#46 #0"} #end)
+    (#1 wire #0 .(Button3Pressed) => #48 .(btnSetTime)
+    #pragma diagram {"wp":"v4797|#0 #48"} #end)
+    (#59 wire #48 .(colorLED) => #17
+    #pragma diagram {"wp":"v6914|#48 h2000 v11775 #17"} #end)
+    (#60 wire #38 => #44 .(powerPct), #14 .(powerPct)
+    #pragma diagram {"wp":"#38 h10337[#44, v-26334 #14]"} #end)
+    (#61 wire #37 => #41)
+    (#62 wire #36 => #39)
+    (#27 wire #48 .(displayText) => #21
+    #pragma diagram {"wp":"v-7559|#48 h3000 v-7455 #21"} #end)
+    (#65 wire #47 => #44 .(tempExt))
+    (#67 wire #44 .(tempC) => #35, #14 .(tempC)
+    #pragma diagram {"wp":"v14762|#44 h14787[v7135 #35, #14]"} #end)
+    (#68 wire #48 .(heaterPowerPct) => #40
+    #pragma diagram {"wp":"v-771|#48 #40"} #end)
+    (#2 wire #0 .(Button1Pressed) => #48 .(btnStartStop)
+    #pragma diagram {"wp":"v0|#0 #48"} #end)
+    (#8 wire #0 .(Button2Pressed) => #48 .(btnDelay)
+    #pragma diagram {"wp":"v-4798|#0 #48"} #end)
+    (#74 wire #34 => #44 .(volWaterInit), #44 .(volRiceInit)
+    #pragma diagram {"wp":"#34 h7500[#44, v-2925 #44]"} #end)
+    (#13 wire #44 .(massWaterKg) => #10, #14 .(waterMassKg)
+    #pragma diagram {"wp":"v-14385|#44 h18467[#10, v6066 #14]"} #end)
+    (#12 wire #44 .(volRiceM3) => #7, #14 .(riceVolM3)
+    #pragma diagram {"wp":"v-963|#44 h20787[#7, v7685 #14]"} #end)
+    (#15 wire #10 => #14 .(waterHeight)
+    #pragma diagram {"wp":"v0|#10 #14"} #end)
+    (#23 wire #7 => #14 .(riceHeight)
+    #pragma diagram {"wp":"v0|#7 #14"} #end)
+    (#24 wire #44 .(massWaterPct) => #14 .(waterPct)
+    #pragma diagram {"wp":"v10742|#44 #14"} #end)
+}

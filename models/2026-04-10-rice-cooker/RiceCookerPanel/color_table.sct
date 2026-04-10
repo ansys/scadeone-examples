@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?dom version="19.0" ?>
+
+<colorTable backgroundIndex="-1" name="color_table" size="11">
+    <colorDefinition alpha="0xFF" index="8" name="255_227_244_215" rgb="0xE3F4D7"/>
+    <colorDefinition alpha="0xFF" index="9" name="255_26_26_26" rgb="0x1A1A1A"/>
+    <colorDefinition alpha="0xFF" index="10" name="255_249_249_249" rgb="0xF9F9F9"/>
+</colorTable>
+
+<!-- crc32 : 1272688881 -->
+
