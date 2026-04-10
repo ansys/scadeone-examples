@@ -19,6 +19,13 @@ models/**/Standalone/
 models/**/GCS_Exe/
 models/**/kcgdisplay/
 
+# Files ignored for configuration management with Scade One
+**/*.sproj.user
+**/jobs/**/out
+**/jobs/**/cg_log.json
+**/jobs/**/sim_log.json
+**/jobs/**/config.json
+
 ### Python #### Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -26,6 +33,7 @@ __pycache__/
 
 # C extensions
 *.so
+*.a
 
 # Distribution / packaging
 .Python
