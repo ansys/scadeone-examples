@@ -2,11 +2,16 @@
 
 <?dom version="19.0" ?>
 
-<colorTable backgroundIndex="-1" name="color_table" size="11">
-    <colorDefinition alpha="0xFF" index="8" name="255_227_244_215" rgb="0xE3F4D7"/>
-    <colorDefinition alpha="0xFF" index="9" name="255_26_26_26" rgb="0x1A1A1A"/>
-    <colorDefinition alpha="0xFF" index="10" name="255_249_249_249" rgb="0xF9F9F9"/>
+<colorTable backgroundIndex="-1" name="color_table" size="83">
+    <colorDefinition alpha="0xFF" index="8" name="rice_cooker" rgb="0xC8CABA"/>
+    <colorDefinition alpha="0xFF" index="9" name="background" rgb="0x373545"/>
+    <colorDefinition alpha="0xFF" index="10" name="light_gray" rgb="0xF9F9F9"/>
+    <colorDefinition alpha="0xFF" index="78" name="water" rgb="0xB5CDCF"/>
+    <colorDefinition alpha="0xFF" index="79" name="rice" rgb="0xF7F7F7"/>
+    <colorDefinition alpha="0xFF" index="80" name="yellow" rgb="0xF7FF3C"/>
+    <colorDefinition alpha="0xFF" index="81" name="green" rgb="0x008020"/>
+    <colorDefinition alpha="0xFF" index="82" name="red" rgb="0xE9383F"/>
 </colorTable>
 
-<!-- crc32 : 1272688881 -->
+<!-- crc32 : 868545039 -->
 

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Project id="1" oid_count="82" defaultConfiguration="2">
+<Project id="1" oid_count="91" defaultConfiguration="2">
 	<props>
 		<Prop id="3" name="@STUDIO:PRODUCT">
 			<value>RAPIDPROTO</value>
 		</Prop>
 		<Prop id="4" name="@RAPIDPROTO:RELEASE">
 			<value>25.2</value>
-		</Prop>
-		<Prop id="6" name="@RAPIDPROTO:USELIBRARYRESOURCES">
-			<value>libWidgets.etp</value>
 		</Prop>
 		<Prop id="8" name="@RAPIDPROTO:CONFTARGET">
 			<value>Windows</value>
@@ -82,6 +79,27 @@
 			<value>true</value>
 			<configuration>7</configuration>
 		</Prop>
+		<Prop id="85" name="@RAPIDPROTO:DEFAULTCOLORTABLE">
+			<value>color_table.sct</value>
+			<value>Widgets_colors.sct</value>
+			<value>Styles_colors.sct</value>
+		</Prop>
+		<Prop id="86" name="@RAPIDPROTO:DEFAULTLWTABLE">
+			<value>line_width_table.swt</value>
+			<value>Widgets_line_width.swt</value>
+		</Prop>
+		<Prop id="87" name="@RAPIDPROTO:DEFAULTLSTABLE">
+			<value>Widgets_line_stipple.sst</value>
+		</Prop>
+		<Prop id="88" name="@RAPIDPROTO:TEXTURETABLE">
+			<value>Widgets_textures.stt</value>
+		</Prop>
+		<Prop id="89" name="@RAPIDPROTO:GRADIENTTABLE"/>
+		<Prop id="90" name="@RAPIDPROTO:FONTTABLE">
+			<value>font_table.sft</value>
+			<value>Widgets_fonts.sft</value>
+		</Prop>
+		<Prop id="91" name="@RAPIDPROTO:GLOBALDEFS"/>
 	</props>
 	<roots>
 		<FileRef id="5" persistAs="$(RAPID_PROTOTYPER)\Widgets_behavior\libWidgets.etp"/>
@@ -155,6 +173,7 @@
 			<elements>
 				<FileRef id="20" persistAs="line_width_table.swt"/>
 				<FileRef id="22" persistAs="color_table.sct"/>
+				<FileRef id="83" persistAs="font_table.sft"/>
 			</elements>
 		</Folder>
 		<FileRef id="77" persistAs="$(RAPID_PROTOTYPER)\Widgets_behavior\Suite\PushButton\PushButton.etp"/>

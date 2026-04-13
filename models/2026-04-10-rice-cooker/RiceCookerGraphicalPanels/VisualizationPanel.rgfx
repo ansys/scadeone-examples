@@ -4,7 +4,7 @@
 
 <specification>
     <IDE>
-        <project path="RiceCookerGraphicalPanels.etp"/>
+        <project path="RiceCookerPanel.etp"/>
         <ratio horizontal="1" vertical="1"/>
     </IDE>
     <symbology>
@@ -15,25 +15,25 @@
             <pathFromRoot value=""/>
             <declaration>
                 <inputs>
-                    <input name="waterPct" oid="f026f73e-ccf9-4373-8fe9-6f907580a072" type="real">
+                    <input name="waterPct" oid="f026f73e-ccf9-4373-8fe9-6f907580a072" type="float32">
                         <init>0.0</init>
                     </input>
-                    <input name="waterMassKg" oid="10baa3c3-8e85-466f-bc57-d23fc3f4a068" type="real">
+                    <input name="waterMassKg" oid="10baa3c3-8e85-466f-bc57-d23fc3f4a068" type="float32">
                         <init>0.0</init>
                     </input>
-                    <input name="waterHeight" oid="f5b9ac29-0663-451b-b7e0-b73c452a4e89" type="real">
+                    <input name="waterHeight" oid="f5b9ac29-0663-451b-b7e0-b73c452a4e89" type="float32">
                         <init>5.0</init>
                     </input>
-                    <input name="tempC" oid="5a8e693e-89ae-4075-a877-f8c54c43dcd1" type="real">
+                    <input name="tempC" oid="5a8e693e-89ae-4075-a877-f8c54c43dcd1" type="float32">
                         <init>0.0</init>
                     </input>
-                    <input name="riceVolM3" oid="b6406cf3-d9ed-4c97-b839-63e6d5f0d157" type="real">
+                    <input name="riceVolM3" oid="b6406cf3-d9ed-4c97-b839-63e6d5f0d157" type="float32">
                         <init>0.0</init>
                     </input>
-                    <input name="riceHeight" oid="8d9bda4e-90e6-4266-a26d-22f64509da7b" type="real">
+                    <input name="riceHeight" oid="8d9bda4e-90e6-4266-a26d-22f64509da7b" type="float32">
                         <init>10.0</init>
                     </input>
-                    <input name="powerPct" oid="602e9f0b-1217-461d-b346-279f4c4e9e61" type="real">
+                    <input name="powerPct" oid="602e9f0b-1217-461d-b346-279f4c4e9e61" type="float32">
                         <init>75.0</init>
                     </input>
                 </inputs>
@@ -56,8 +56,117 @@
                 <ratio horizontal="0.5" vertical="0.5"/>
             </properties>
             <children>
-                <container oid="b4f67d3e-857f-4ed3-93c9-f42893a66452">
+                <container oid="134777eb-d8bc-424c-a01f-a6f2cd04ecff">
                     <pathFromRoot value="0"/>
+                    <properties name="Background">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>0.0</init>
+                            </x>
+                            <y>
+                                <init>0.0</init>
+                            </y>
+                        </origin>
+                        <priority>
+                            <init>-1</init>
+                        </priority>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <static editorLinked="true" generateStaticSequence="true" maxX="259.0" maxY="259.0" minX="-259.0" minY="-259.0">
+                            <init>false</init>
+                        </static>
+                    </properties>
+                    <children>
+                        <rectangle oid="ef54042e-4189-4692-90e3-9f99a47b8194">
+                            <pathFromRoot value="0,0"/>
+                            <properties name="rectangle">
+                                <visible>
+                                    <init>true</init>
+                                </visible>
+                                <firstPoint>
+                                    <x>
+                                        <init>-256.0</init>
+                                    </x>
+                                    <y>
+                                        <init>-256.0</init>
+                                    </y>
+                                </firstPoint>
+                                <thirdPoint>
+                                    <x>
+                                        <init>256.0</init>
+                                    </x>
+                                    <y>
+                                        <init>256.0</init>
+                                    </y>
+                                </thirdPoint>
+                                <lineWidth>
+                                    <init>0</init>
+                                </lineWidth>
+                                <lineStipple>
+                                    <init>0</init>
+                                </lineStipple>
+                                <lineCap>
+                                    <init>round</init>
+                                </lineCap>
+                                <haloing>
+                                    <init>false</init>
+                                </haloing>
+                                <haloColor>
+                                    <init>-1</init>
+                                </haloColor>
+                                <outlineColor>
+                                    <init>-1</init>
+                                </outlineColor>
+                                <outlineOpacity>
+                                    <init>255</init>
+                                </outlineOpacity>
+                                <fillColor>
+                                    <init>9</init>
+                                </fillColor>
+                                <fillOpacity>
+                                    <init>255</init>
+                                </fillOpacity>
+                                <polygonSmooth>
+                                    <init>false</init>
+                                </polygonSmooth>
+                                <textureControl>
+                                    <init>false</init>
+                                </textureControl>
+                                <texture horizAlign="center" horizPattern="1.0" vertAlign="middle" vertPattern="1.0">
+                                    <textureId>
+                                        <init>-1</init>
+                                    </textureId>
+                                </texture>
+                                <gradient>
+                                    <init>-1</init>
+                                </gradient>
+                                <modulate>
+                                    <init>false</init>
+                                </modulate>
+                                <tessellate>
+                                    <init>false</init>
+                                </tessellate>
+                            </properties>
+                        </rectangle>
+                    </children>
+                </container>
+                <container oid="b4f67d3e-857f-4ed3-93c9-f42893a66452">
+                    <pathFromRoot value="1"/>
                     <properties name="Bowl">
                         <visible>
                             <init>true</init>
@@ -87,13 +196,13 @@
                             </angle>
                         </rotate>
                         <orientation clockwise="false"/>
-                        <static editorLinked="true" generateStaticSequence="true" maxX="364.6164" maxY="109.5" minX="211.8664" minY="-9.59845">
+                        <static editorLinked="true" generateStaticSequence="true" maxX="361.6164" maxY="149.40155" minX="214.8664" minY="-6.5984497">
                             <init>false</init>
                         </static>
                     </properties>
                     <children>
                         <container oid="85cdfdf2-d581-45fc-a07f-914b690e6d9c">
-                            <pathFromRoot value="0,0"/>
+                            <pathFromRoot value="0,1"/>
                             <properties name="BowlShape">
                                 <visible>
                                     <init>true</init>
@@ -103,7 +212,7 @@
                                         <init>0.0</init>
                                     </x>
                                     <y>
-                                        <init>6.5</init>
+                                        <init>0.0</init>
                                     </y>
                                 </origin>
                                 <priority>
@@ -123,13 +232,13 @@
                                     </angle>
                                 </rotate>
                                 <orientation clockwise="false"/>
-                                <static editorLinked="true" generateStaticSequence="true" maxX="245.3082" maxY="106.59845" minX="92.5582" minY="-12.5">
+                                <static editorLinked="true" generateStaticSequence="true" maxX="242.3082" maxY="116.09845" minX="95.5582" minY="3.0">
                                     <init>false</init>
                                 </static>
                             </properties>
                             <children>
                                 <rectangle oid="1b3240f5-0758-4186-b403-9af40575a967">
-                                    <pathFromRoot value="0,0,0"/>
+                                    <pathFromRoot value="0,0,1"/>
                                     <properties name="bowl">
                                         <visible>
                                             <init>true</init>
@@ -139,7 +248,7 @@
                                                 <init>233.308197</init>
                                             </x>
                                             <y>
-                                                <init>0.0</init>
+                                                <init>6.0</init>
                                             </y>
                                         </firstPoint>
                                         <thirdPoint>
@@ -147,7 +256,7 @@
                                                 <init>103.308197</init>
                                             </x>
                                             <y>
-                                                <init>100.0</init>
+                                                <init>106.0</init>
                                             </y>
                                         </thirdPoint>
                                         <lineWidth>
@@ -200,7 +309,7 @@
                                     </properties>
                                 </rectangle>
                                 <rectangle oid="aac2aadd-9cc8-4ede-a551-b741c590f5a6">
-                                    <pathFromRoot value="1,0,0"/>
+                                    <pathFromRoot value="1,0,1"/>
                                     <properties name="top">
                                         <visible>
                                             <init>true</init>
@@ -210,7 +319,7 @@
                                                 <init>98.558197</init>
                                             </x>
                                             <y>
-                                                <init>99.59845</init>
+                                                <init>105.59845</init>
                                             </y>
                                         </firstPoint>
                                         <thirdPoint>
@@ -218,7 +327,7 @@
                                                 <init>239.308197</init>
                                             </x>
                                             <y>
-                                                <init>107.09845</init>
+                                                <init>113.09845</init>
                                             </y>
                                         </thirdPoint>
                                         <lineWidth>
@@ -273,7 +382,7 @@
                             </children>
                         </container>
                         <container oid="9e4811b9-d1f9-4306-b36e-2076565ebfaa">
-                            <pathFromRoot value="1,0"/>
+                            <pathFromRoot value="1,1"/>
                             <properties name="BowlContent">
                                 <visible>
                                     <init>true</init>
@@ -283,7 +392,7 @@
                                         <init>0.0</init>
                                     </x>
                                     <y>
-                                        <init>6.5</init>
+                                        <init>0.0</init>
                                     </y>
                                 </origin>
                                 <priority>
@@ -303,13 +412,13 @@
                                     </angle>
                                 </rotate>
                                 <orientation clockwise="false"/>
-                                <static editorLinked="true" generateStaticSequence="true" maxX="237.8082" maxY="99.5" minX="98.3082" minY="-12.5">
+                                <static editorLinked="true" generateStaticSequence="true" maxX="234.8082" maxY="153.0" minX="101.5582" minY="-3.0">
                                     <init>false</init>
                                 </static>
                             </properties>
                             <children>
                                 <clipBox oid="3dd14cdf-03a2-48a3-a778-bb13b0a9cdfc">
-                                    <pathFromRoot value="2147483647,1,0"/>
+                                    <pathFromRoot value="2147483647,1,1"/>
                                     <properties name="clip box">
                                         <maskActivity>
                                             <init>true</init>
@@ -322,7 +431,7 @@
                                                 <init>233.308197</init>
                                             </x>
                                             <y>
-                                                <init>0.0</init>
+                                                <init>6.0</init>
                                             </y>
                                         </firstPoint>
                                         <thirdPoint>
@@ -330,13 +439,13 @@
                                                 <init>103.308197</init>
                                             </x>
                                             <y>
-                                                <init>100.0</init>
+                                                <init>106.0</init>
                                             </y>
                                         </thirdPoint>
                                     </properties>
                                 </clipBox>
                                 <rectangle oid="b9833e7c-5f17-4674-b48f-01c33c5c9db4">
-                                    <pathFromRoot value="0,1,0"/>
+                                    <pathFromRoot value="0,1,1"/>
                                     <properties name="Water">
                                         <visible>
                                             <init>true</init>
@@ -346,21 +455,21 @@
                                                 <init>231.808197</init>
                                             </x>
                                             <y>
-                                                <init>0.0</init>
+                                                <init>100.0</init>
                                                 <expr>riceHeight * 10.0</expr>
                                             </y>
                                         </firstPoint>
                                         <thirdPoint>
                                             <x>
-                                                <init>104.308197</init>
+                                                <init>104.558197</init>
                                             </x>
                                             <y>
-                                                <init>100.0</init>
+                                                <init>150.0</init>
                                                 <expr>(riceHeight + waterHeight) * 10.0</expr>
                                             </y>
                                         </thirdPoint>
                                         <lineWidth>
-                                            <init>4</init>
+                                            <init>0</init>
                                         </lineWidth>
                                         <lineStipple>
                                             <init>0</init>
@@ -375,13 +484,13 @@
                                             <init>-1</init>
                                         </haloColor>
                                         <outlineColor>
-                                            <init>52</init>
+                                            <init>78</init>
                                         </outlineColor>
                                         <outlineOpacity>
                                             <init>255</init>
                                         </outlineOpacity>
                                         <fillColor>
-                                            <init>52</init>
+                                            <init>78</init>
                                         </fillColor>
                                         <fillOpacity>
                                             <init>255</init>
@@ -409,7 +518,7 @@
                                     </properties>
                                 </rectangle>
                                 <rectangle oid="488cda79-afb2-4854-a97e-014d1a5ed9cb">
-                                    <pathFromRoot value="1,1,0"/>
+                                    <pathFromRoot value="1,1,1"/>
                                     <properties name="Rice">
                                         <visible>
                                             <init>true</init>
@@ -432,7 +541,7 @@
                                             </y>
                                         </thirdPoint>
                                         <lineWidth>
-                                            <init>4</init>
+                                            <init>0</init>
                                         </lineWidth>
                                         <lineStipple>
                                             <init>0</init>
@@ -447,13 +556,13 @@
                                             <init>-1</init>
                                         </haloColor>
                                         <outlineColor>
-                                            <init>2</init>
+                                            <init>79</init>
                                         </outlineColor>
                                         <outlineOpacity>
                                             <init>255</init>
                                         </outlineOpacity>
                                         <fillColor>
-                                            <init>2</init>
+                                            <init>79</init>
                                         </fillColor>
                                         <fillOpacity>
                                             <init>255</init>
@@ -485,7 +594,7 @@
                     </children>
                 </container>
                 <container oid="bfca0c49-5c7d-4746-a94d-86924584444d">
-                    <pathFromRoot value="1"/>
+                    <pathFromRoot value="2"/>
                     <properties name="Data">
                         <visible>
                             <init>true</init>
@@ -515,13 +624,13 @@
                             </angle>
                         </rotate>
                         <orientation clockwise="false"/>
-                        <static editorLinked="true" generateStaticSequence="true" maxX="-21.5" maxY="94.74996" minX="-115.5" minY="81.74995">
+                        <static editorLinked="true" generateStaticSequence="true" maxX="161.0" maxY="105.0" minX="-145.0" minY="-195.5">
                             <init>false</init>
                         </static>
                     </properties>
                     <children>
                         <container oid="64392c78-b27b-41c0-a65a-39a06af926b2">
-                            <pathFromRoot value="0,1"/>
+                            <pathFromRoot value="0,2"/>
                             <properties name="PowerGauge">
                                 <visible>
                                     <init>true</init>
@@ -551,13 +660,13 @@
                                     </angle>
                                 </rotate>
                                 <orientation clockwise="false"/>
-                                <static editorLinked="true" generateStaticSequence="true" maxX="-14.5" maxY="93.24996" minX="-108.5" minY="80.24995">
+                                <static editorLinked="true" generateStaticSequence="true" maxX="-8.500023" maxY="103.5" minX="-105.50002" minY="78.5">
                                     <init>false</init>
                                 </static>
                             </properties>
                             <children>
                                 <referenceContainer oid="878ca5c9-56f5-421c-b31d-ebee405f608a">
-                                    <pathFromRoot value="0,0,1"/>
+                                    <pathFromRoot value="0,0,2"/>
                                     <properties modular="false" name="Gauge">
                                         <visible>
                                             <init>true</init>
@@ -587,10 +696,10 @@
                                         <file name="Gauge.wgfx" path="$(RAPID_PROTOTYPER)\Widgets_behavior"/>
                                         <crc value="1929459002"/>
                                         <inputParameters>
-                                            <parameter control="true" name="SizeX" oid="6155a022-c4b5-496b-90e0-23e66a70a071" type="real">
+                                            <parameter control="false" name="SizeX" oid="6155a022-c4b5-496b-90e0-23e66a70a071" type="real">
                                                 <init>44.5</init>
                                             </parameter>
-                                            <parameter control="true" name="SizeY" oid="bcd0e24d-d81d-4d91-8788-f0195fa6a713" type="real">
+                                            <parameter control="false" name="SizeY" oid="bcd0e24d-d81d-4d91-8788-f0195fa6a713" type="real">
                                                 <init>17.0</init>
                                             </parameter>
                                             <parameter control="false" name="Style" oid="7877d93b-ba6d-45bc-aeb9-5e3d81a57d51" representation="index" type="int">
@@ -600,13 +709,13 @@
                                                 <init>0</init>
                                             </parameter>
                                             <parameter control="false" name="BackColor" oid="435c1eb4-ca7e-4847-9f07-a6697efd1419" representation="color" type="int">
-                                                <init>-1</init>
+                                                <init>79</init>
                                             </parameter>
                                             <parameter control="false" name="FrontColor" oid="b478dbfe-54cb-4d0f-9d88-d068bff0300d" representation="color" type="int">
-                                                <init>-1</init>
+                                                <init>78</init>
                                             </parameter>
                                             <parameter control="false" name="Font" oid="22226ba0-8030-4da1-ad85-75c798f3ae63" representation="font" type="int">
-                                                <init>21</init>
+                                                <init>0</init>
                                             </parameter>
                                             <parameter control="false" name="TextColor" oid="2bf2491e-24a7-4314-849b-7711e5683866" representation="color" type="int">
                                                 <init>-1</init>
@@ -638,7 +747,7 @@
                                     <children/>
                                 </referenceContainer>
                                 <text oid="1db0ace3-79fa-429a-839d-83d66a533055">
-                                    <pathFromRoot value="1,0,1"/>
+                                    <pathFromRoot value="1,0,2"/>
                                     <properties name="Label">
                                         <visible>
                                             <init>true</init>
@@ -670,7 +779,7 @@
                                             <init>2</init>
                                         </lineWidth>
                                         <font>
-                                            <init>21</init>
+                                            <init>0</init>
                                         </font>
                                         <horizAlign>
                                             <init>left</init>
@@ -681,7 +790,7 @@
                                     </properties>
                                 </text>
                                 <text oid="bbcbe134-19a7-470c-9a53-2ee0ede41a72">
-                                    <pathFromRoot value="2,0,1"/>
+                                    <pathFromRoot value="2,0,2"/>
                                     <properties name="Unit">
                                         <visible>
                                             <init>true</init>
@@ -713,7 +822,7 @@
                                             <init>2</init>
                                         </lineWidth>
                                         <font>
-                                            <init>21</init>
+                                            <init>0</init>
                                         </font>
                                         <horizAlign>
                                             <init>left</init>
@@ -726,7 +835,7 @@
                             </children>
                         </container>
                         <referenceContainer oid="1dc36916-baec-4bb7-806f-0ca6567b0a08">
-                            <pathFromRoot value="1,1"/>
+                            <pathFromRoot value="1,2"/>
                             <properties modular="false" name="Temp">
                                 <visible>
                                     <init>true</init>
@@ -764,7 +873,7 @@
                                         <init>1</init>
                                     </parameter>
                                     <parameter control="false" name="BackColor" oid="3626f080-6df7-44a5-a206-b03d79290764" representation="color" type="int">
-                                        <init>2</init>
+                                        <init>79</init>
                                     </parameter>
                                     <parameter control="false" name="NumberFormat" oid="9ca35185-6fbd-4767-aa97-1ff4ae261528" representation="index" type="int">
                                         <init>2</init>
@@ -782,9 +891,9 @@
                                         <init>2</init>
                                     </parameter>
                                     <parameter control="false" name="Font" oid="b4a39410-bf6a-4c05-8956-31515a1c7ee6" representation="font" type="int">
-                                        <init>21</init>
+                                        <init>0</init>
                                     </parameter>
-                                    <parameter control="true" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
+                                    <parameter control="false" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
                                         <init>55.5</init>
                                     </parameter>
                                 </inputParameters>
@@ -792,7 +901,7 @@
                             <children/>
                         </referenceContainer>
                         <referenceContainer oid="e88863a9-b66b-469c-9ffa-ec372cc6b38d">
-                            <pathFromRoot value="2,1"/>
+                            <pathFromRoot value="2,2"/>
                             <properties modular="false" name="MassWater">
                                 <visible>
                                     <init>true</init>
@@ -830,7 +939,7 @@
                                         <init>1</init>
                                     </parameter>
                                     <parameter control="false" name="BackColor" oid="3626f080-6df7-44a5-a206-b03d79290764" representation="color" type="int">
-                                        <init>2</init>
+                                        <init>79</init>
                                     </parameter>
                                     <parameter control="false" name="NumberFormat" oid="9ca35185-6fbd-4767-aa97-1ff4ae261528" representation="index" type="int">
                                         <init>1</init>
@@ -848,9 +957,9 @@
                                         <init>2</init>
                                     </parameter>
                                     <parameter control="false" name="Font" oid="b4a39410-bf6a-4c05-8956-31515a1c7ee6" representation="font" type="int">
-                                        <init>21</init>
+                                        <init>0</init>
                                     </parameter>
-                                    <parameter control="true" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
+                                    <parameter control="false" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
                                         <init>55.5</init>
                                     </parameter>
                                 </inputParameters>
@@ -858,7 +967,7 @@
                             <children/>
                         </referenceContainer>
                         <referenceContainer oid="02bd11b3-27b8-4ca4-a467-ac8798d6c974">
-                            <pathFromRoot value="3,1"/>
+                            <pathFromRoot value="3,2"/>
                             <properties modular="false" name="Rice">
                                 <visible>
                                     <init>true</init>
@@ -896,7 +1005,7 @@
                                         <init>1</init>
                                     </parameter>
                                     <parameter control="false" name="BackColor" oid="3626f080-6df7-44a5-a206-b03d79290764" representation="color" type="int">
-                                        <init>2</init>
+                                        <init>79</init>
                                     </parameter>
                                     <parameter control="false" name="NumberFormat" oid="9ca35185-6fbd-4767-aa97-1ff4ae261528" representation="index" type="int">
                                         <init>3</init>
@@ -914,9 +1023,9 @@
                                         <init>2</init>
                                     </parameter>
                                     <parameter control="false" name="Font" oid="b4a39410-bf6a-4c05-8956-31515a1c7ee6" representation="font" type="int">
-                                        <init>21</init>
+                                        <init>0</init>
                                     </parameter>
-                                    <parameter control="true" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
+                                    <parameter control="false" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
                                         <init>55.5</init>
                                     </parameter>
                                 </inputParameters>
@@ -924,7 +1033,7 @@
                             <children/>
                         </referenceContainer>
                         <referenceContainer oid="29f51ea6-562c-49e3-b86b-6d258daf5d4a">
-                            <pathFromRoot value="4,1"/>
+                            <pathFromRoot value="4,2"/>
                             <properties modular="false" name="Graph_F_T">
                                 <visible>
                                     <init>true</init>
@@ -954,10 +1063,10 @@
                                 <file name="Graph_F_T.wgfx" path="$(RAPID_PROTOTYPER)\Widgets_behavior"/>
                                 <crc value="1041320290"/>
                                 <inputParameters>
-                                    <parameter control="true" name="SizeX" oid="357e94ac-dc05-4a5d-80f0-0cc55c1804e1" type="real">
+                                    <parameter control="false" name="SizeX" oid="357e94ac-dc05-4a5d-80f0-0cc55c1804e1" type="real">
                                         <init>180.0</init>
                                     </parameter>
-                                    <parameter control="true" name="SizeY" oid="24803017-818d-41f0-95d8-f7ef8f27046f" type="real">
+                                    <parameter control="false" name="SizeY" oid="24803017-818d-41f0-95d8-f7ef8f27046f" type="real">
                                         <init>100.0</init>
                                     </parameter>
                                     <parameter control="false" name="Font" oid="10d13da3-f6b4-49d9-8e5b-31d302d0540c" representation="font" type="int">
@@ -1064,10 +1173,10 @@
                                     <parameter control="false" name="LabelY" oid="01aecdb3-e647-4f71-addd-86557c179be3" representation="as_string" type="char^20">
                                         <init>[0]</init>
                                     </parameter>
-                                    <parameter control="true" name="LegendPosX" oid="c86c6333-9d9e-4fc4-a7d4-75203967e7e6" type="real">
+                                    <parameter control="false" name="LegendPosX" oid="c86c6333-9d9e-4fc4-a7d4-75203967e7e6" type="real">
                                         <init>0.0</init>
                                     </parameter>
-                                    <parameter control="true" name="LegendPosY" oid="3a9d735f-27d8-404f-bf86-04a376d7ac5b" type="real">
+                                    <parameter control="false" name="LegendPosY" oid="3a9d735f-27d8-404f-bf86-04a376d7ac5b" type="real">
                                         <init>-40.0</init>
                                     </parameter>
                                     <parameter control="false" name="ColorStyle" oid="7c4e7a99-e05e-4eae-b3ad-4e20ea43eb30" type="int">
@@ -1084,4 +1193,5 @@
     </children>
 </specification>
 
-<!-- crc32 : 2033252 -->
+<!-- crc32 : 601880886 -->
+
