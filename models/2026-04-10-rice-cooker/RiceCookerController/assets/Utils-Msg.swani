@@ -1,0 +1,11 @@
+-- version swan: 2025.2 graph: 2.1
+function MillisecToHHMM (ms: uint32;)
+  returns (msg: char^SIZE_MSG;);
+
+const SIZE_MSG: int32 = 6;
+
+const IDLE_MSG: char^SIZE_MSG = ['I', 'D', 'L', 'E', '\x00', '\x00'];
+
+const SOAK_MSG: char^SIZE_MSG = ['S', 'O', 'A', 'K', '\x00', '\x00'];
+
+const COOK_MSG: char^SIZE_MSG = ['C', 'O', 'O', 'K', '\x00', '\x00'];

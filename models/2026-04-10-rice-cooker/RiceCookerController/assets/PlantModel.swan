@@ -1,0 +1,558 @@
+-- version swan: 2025.2 graph: 2.1
+use Math::Common as M;
+
+use Clock::Utils as Clk;
+
+use Utils::PIController as U;
+
+node PhysicalModel (tempExt : float32;
+                    powerPct : float32;
+                    volWaterInit: float32;
+                    volRiceInit: float32;)
+  returns (tempC: float32 last = tempExt;
+           massWaterKg: float32 last = volWaterInit;
+           massWaterPct : float32;
+           volRiceM3 : float32;
+           volRicePct : float32 default=volRiceInit;)
+{
+  diagram
+    (#2 expr Clk::DeltaSeconds()
+    #pragma diagram {"xy":"H-116122;V-42395","wh":"22000;3200"} #end)
+    (#5 def deltaSec
+    #pragma diagram {"xy":"H-44426;V-42395","wh":"12000;3200"} #end)
+    
+    (#6 wire #2 => #5)
+
+    (var
+        massRiceKg;
+        massWaterAbsorbed last=0;
+        massWaterEvaporated last=0;
+        deltaSec;
+        powerIn;
+        powerLoss;)
+    (activate #0 $PhysicalStates
+      if last'tempC >= BOILING_POINT_C and last'massWaterKg > 0
+      then
+        {
+          diagram
+            (#7 def tempC
+            #pragma diagram {"xy":"h19425;v-8186","wh":"10000;3200"} #end)
+            (#8 def massWaterEvaporated
+            #pragma diagram {"xy":"h58347;v1484","wh":"22000;3200"} #end)
+            (#9 expr volWaterInit - last'massWaterAbsorbed
+            #pragma diagram {"xy":"h-11291;v9510","wh":"40000;3200"} #end)
+            (#10 block M::Min
+            #pragma diagram {"xy":"h28028;v1484","wh":"20000;14000"} #end)
+            (#11 $EvaporationDuringBoiling block MassWaterEvap
+            #pragma diagram {"xy":"h-1291;v1484","wh":"20000;8725"} #end)
+            (#12 expr BOILING_POINT_C
+            #pragma diagram {"xy":"h-30866;v-8186","wh":"20000;3200"} #end)
+            (#13 expr last'massWaterEvaporated
+            #pragma diagram {"xy":"h-34866;v4247","wh":"28000;3200"} #end)
+            (#14 expr (powerIn, powerLoss, deltaSec)
+            #pragma diagram {"xy":"h-37866;v76","wh":"34000;3200"} #end)
+            
+            (#15 wire #13 => #11 .(4))
+            (#16 wire #10 => #8
+            #pragma diagram {"wp":"v0|#10 #8"} #end)
+            (#17 wire #9 => #10 .(2)
+            #pragma diagram {"wp":"#9 h7018 v-4026 #10"} #end)
+            (#18 wire #14 => #11 .(1,2,3))
+            (#19 wire #11 => #10 .(1)
+            #pragma diagram {"wp":"v0|#11 #10"} #end)
+            (#20 wire #12 => #7)
+        #pragma doc Pre-Boiling #end
+        #pragma diagram {"xy":"h0;v-18492","wh":"142694;26221"} #end
+        }
+      else
+        {
+          diagram
+            (#35 expr last'tempC
+            #pragma diagram {"xy":"h5453;v-14892","wh":"14000;3200"} #end)
+            (#36 expr #37 + #38
+              where
+                (#37 group)
+                (#38 group)
+            #pragma diagram {"xy":"h33028;v-12992"} #end)
+            (#39 def tempC
+            #pragma diagram {"xy":"h53744;v-12992","wh":"10000;3200"} #end)
+            (#21 expr powerLoss
+            #pragma diagram {"xy":"h-32111;v-2898","wh":"14000;3200"} #end)
+            (#22 expr deltaSec
+            #pragma diagram {"xy":"h-31111;v11156","wh":"12000;3200"} #end)
+            (#23 expr massRiceKg
+            #pragma diagram {"xy":"h-32111;v1696","wh":"14000;3200"} #end)
+            (#24 expr last'massWaterKg + last'massWaterAbsorbed
+            #pragma diagram {"xy":"h-47111;v6362","wh":"44000;3200"} #end)
+            (#29 $ChangeTempNotBoiling block ChangeTemp
+            #pragma diagram {"xy":"h5453;v2315","wh":"20000;20626"} #end)
+            (#30 expr powerIn
+            #pragma diagram {"xy":"h-32111;v-6398","wh":"12000;3200"} #end)
+            
+            (#43 wire #35 => #37)
+            (#45 wire #36 => #39)
+            (#40 wire #23 => #29 .(massRice))
+            (#41 wire #21 => #29 .(powerLoss))
+            (#42 wire #30 => #29 .(powerPlateBowl))
+            (#44 wire #24 => #29 .(massWaterTotal))
+            (#46 wire #22 => #29 .(deltaTime))
+            (#55 wire #29 => #38
+            #pragma diagram {"wp":"v0|#29 h6288 v-13408 #38"} #end)
+        #pragma doc Keeping Warm #end
+        #pragma diagram {"xy":"h0;v16970","wh":"142694;36985"} #end
+        }
+    #pragma diagram {"xy":"H-12243;V82464","wh":"142694;70925"} #end)
+    (diagram $Power
+       (#47 expr powerPct / 100 * FULL_POWER_COOKER_W
+       #pragma diagram {"xy":"h-18718;v4990","wh":"38000;3200"} #end)
+       (#48 def powerIn
+       #pragma diagram {"xy":"h36130;v4989","wh":"12000;3200"} #end)
+       (#49 expr HEAT_LOSS_W_PER_K * (last'tempC - tempExt)
+       #pragma diagram {"xy":"h-23718;v-2989","wh":"44000;3200"} #end)
+       (#50 def powerLoss
+       #pragma diagram {"xy":"h36130;v-2989","wh":"14000;3200"} #end)
+       
+       (#51 wire #47 => #48)
+       (#52 wire #49 => #50)
+     #pragma diagram {"xy":"H-85791;V-26009","wh":"140366;21179"} #end)
+    (diagram $Mass
+       (#53 block MassWaterAbsorbed
+       #pragma diagram {"xy":"h-9011;v846","wh":"20000;14613"} #end)
+       (#54 def massWaterAbsorbed
+       #pragma diagram {"xy":"h57239;v-2932","wh":"20000;3200"} #end)
+       (#56 expr last'tempC
+       #pragma diagram {"xy":"h-48891;v-4860","wh":"14000;3200"} #end)
+       (#57 def massRiceKg
+       #pragma diagram {"xy":"h54239;v-18186","wh":"14000;3200"} #end)
+       (#58 expr volRiceInit / 1000 * DENSITY_RICE_KG_PER_M3
+       #pragma diagram {"xy":"h-22011;v-18186","wh":"46000;3200"} #end)
+       (#59 expr deltaSec
+       #pragma diagram {"xy":"h-49891;v-1360","wh":"12000;3200"} #end)
+       (#60 block M::Min
+       #pragma diagram {"xy":"h26389;v-2932","wh":"12000;22494"} #end)
+       (#61 expr volWaterInit - last'massWaterEvaporated
+       #pragma diagram {"xy":"h-20011;v-11523","wh":"42000;3200"} #end)
+       (#25 expr massRiceKg
+       #pragma diagram {"xy":"h-49016;v6899","wh":"14000;3200"} #end)
+       (#85 def massWaterPct
+       #pragma diagram {"xy":"h55763;v17801","wh":"16000;3200"} #end)
+       (#86 expr massWaterKg / volWaterInit * 100
+       #pragma diagram {"xy":"h-8016;v17801","wh":"36000;3200"} #end)
+       (#104 expr last'massWaterAbsorbed
+       #pragma diagram {"xy":"h-54891;v2769","wh":"26000;3200"} #end)
+       (#1 def massWaterKg
+       #pragma diagram {"xy":"h55763;v12322","wh":"16000;3200"} #end)
+       (#3 expr M::Max(0, volWaterInit - massWaterAbsorbed - massWaterEvaporated)
+       #pragma diagram {"xy":"h-23016;v12322","wh":"66000;3200"} #end)
+       
+       (#62 wire #59 => #53 .(deltaT))
+       (#63 wire #56 => #53 .(tempC))
+       (#64 wire #53 => #60 .(2)
+       #pragma diagram {"wp":"v0|#53 #60"} #end)
+       (#65 wire #61 => #60 .(1))
+       (#66 wire #60 => #54
+       #pragma diagram {"wp":"v0|#60 #54"} #end)
+       (#68 wire #58 => #57)
+       (#26 wire #25 => #53 .(massRiceKg))
+       (#87 wire #86 => #85)
+       (#105 wire #104 => #53 .(prevMassAbsorbed))
+       (#4 wire #3 => #1)
+     #pragma diagram {"xy":"H-87498;V14022","wh":"143781;49186"} #end)
+    (diagram $Volumes
+       (#89 def volRiceM3
+       #pragma diagram {"xy":"h56369;v-2707","wh":"14000;3200"} #end)
+       (#91 def volRicePct
+       #pragma diagram {"xy":"h56369;v4462","wh":"14000;3200"} #end)
+       (#92 expr #93 / #94
+         where
+           (#93 group)
+           (#94 group)
+       #pragma diagram {"xy":"h14162;v2562"} #end)
+       (#95 expr #96 * #97
+         where
+           (#96 group)
+           (#97 group)
+       #pragma diagram {"xy":"h37728;v4462"} #end)
+       (#98 expr 100
+       #pragma diagram {"xy":"h15162;v8412"} #end)
+       (#99 expr volRiceInit
+       #pragma diagram {"xy":"h-42120;v4462","wh":"16000;3200"} #end)
+       (#27 block VolumeRice
+       #pragma diagram {"xy":"h-18554;v-2707","wh":"20000;9650"} #end)
+       (#31 expr last'tempC
+       #pragma diagram {"xy":"h-41401;v-5762","wh":"14000;3200"} #end)
+       (#33 expr last'massWaterAbsorbed
+       #pragma diagram {"xy":"h-47120;v-2251","wh":"26000;3200"} #end)
+       
+       (#28 wire #27 => #89, #93
+       #pragma diagram {"wp":"v1825|#27 h5429[v-1826 #89, h6858 v1544 #93]"} #end)
+       (#100 wire #95 => #91)
+       (#101 wire #92 => #96)
+       (#102 wire #98 => #97
+       #pragma diagram {"wp":"#98 h8283 v-2050 #97"} #end)
+       (#103 wire #99 => #94, #27 .(3)
+       #pragma diagram {"wp":"#99 h4283[#94, v-4467 #27]"} #end)
+       (#32 wire #31 => #27 .(1))
+       (#34 wire #33 => #27 .(2))
+     #pragma diagram {"xy":"H68392;V-1457","wh":"142694;29431"} #end)
+}
+
+function MassWaterAbsorbed (tempC: float32;
+                            deltaT: float32;
+                            prevMassAbsorbed : float32;
+                            massRiceKg : float32;)
+  returns (mass: float32;)
+{
+  diagram
+    (#0 expr 0.0001
+    #pragma diagram {"xy":"H-62875;V-11129","wh":"10000;3200"} #end)
+    (#1 expr tempC / BOILING_POINT_C
+    #pragma diagram {"xy":"H-70875;V-20463","wh":"26000;3200"} #end)
+    (#2 expr deltaT
+    #pragma diagram {"xy":"H-62875;V-15796","wh":"10000;3200"} #end)
+    (#3 block ({op_expr%*%op_expr})
+    #pragma diagram {"xy":"H-5975;V-15796","wh":"20000;14000"} #end)
+    (#4 def mass
+    #pragma diagram {"xy":"H84325;V-6961"} #end)
+    (#8 expr prevMassAbsorbed
+    #pragma diagram {"xy":"H-5975;V-4950","wh":"20000;3200"} #end)
+    (#9 expr #10 + #11
+      where
+        (#10 group)
+        (#11 group)
+    #pragma diagram {"xy":"H27125;V-13896"} #end)
+    (#14 expr massRiceKg * (MAX_RATIO_WATER_ABSORB_BY_MASS - 1)
+    #pragma diagram {"xy":"H9025;V1875","wh":"50000;3200"} #end)
+    (#15 block M::Min
+    #pragma diagram {"xy":"H56225;V-6961","wh":"20000;20871"} #end)
+    
+    (#5 wire #0 => #3 .(1))
+    (#6 wire #1 => #3 .(2))
+    (#7 wire #2 => #3 .(3))
+    (#12 wire #3 => #10
+    #pragma diagram {"wp":"v0|#3 #10"} #end)
+    (#13 wire #8 => #11
+    #pragma diagram {"wp":"#8 h10550 v-7046 #11"} #end)
+    (#16 wire #15 => #4
+    #pragma diagram {"wp":"v0|#15 #4"} #end)
+    (#17 wire #9 => #15 .(1))
+    (#18 wire #14 => #15 .(2))
+}
+
+function MassWaterEvap (powerIn : float32;
+                        powerLoss : float32;
+                        deltaT: float32;
+                        prevMassEvap: float32;)
+  returns (mass: float32;)
+{
+  diagram
+    (#0 expr deltaT
+    #pragma diagram {"xy":"H-18244;V-12944","wh":"10000;3200"} #end)
+    (#1 expr powerIn - powerLoss
+    #pragma diagram {"xy":"H-25719;V-16744","wh":"22000;3200"} #end)
+    (#2 expr #3 * #4
+      where
+        (#3 group)
+        (#4 group)
+    #pragma diagram {"xy":"H3578;V-14844"} #end)
+    (#5 expr #6 / #7
+      where
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H26875;V-12944"} #end)
+    (#8 expr LATENT_HEAT_VAPOR_J_PER_KG
+    #pragma diagram {"xy":"H-6422;V-3150","wh":"30000;3200"} #end)
+    (#9 def mass
+    #pragma diagram {"xy":"H65544;V-11044"} #end)
+    (#13 expr prevMassEvap
+    #pragma diagram {"xy":"H27950;V-5400","wh":"16000;3200"} #end)
+    (#15 expr #16 + #17
+      where
+        (#16 group)
+        (#17 group)
+    #pragma diagram {"xy":"H47450;V-11044"} #end)
+    
+    (#10 wire #2 => #6)
+    (#11 wire #0 => #4)
+    (#12 wire #8 => #7
+    #pragma diagram {"wp":"#8 h8149 v-7894 #7"} #end)
+    (#14 wire #1 => #3)
+    (#18 wire #15 => #9)
+    (#19 wire #5 => #16)
+    (#20 wire #13 => #17
+    #pragma diagram {"wp":"#13 h4750 v-3744 #17"} #end)
+}
+
+function ChangeTemp (powerPlateBowl : float32;
+                     powerLoss: float32;
+                     massRice: float32;
+                     massWaterTotal: float32;
+                     deltaTime: float32;)
+  returns (deltaTempC: float32;)
+{
+  diagram
+    (#0 expr #1 * #2
+      where
+        (#1 group)
+        (#2 group)
+    #pragma diagram {"xy":"H62600;V7102"} #end)
+    (#3 def deltaTempC
+    #pragma diagram {"xy":"H108600;V12241","wh":"14000;3200"} #end)
+    (#4 expr C_P_ALU * MASS_BOWL_KG 
+             + C_P_DRY_RICE * massRice
+             + C_P_WATER * massWaterTotal
+    #pragma diagram {"xy":"H51600;V14141","wh":"32000;6078"} #end)
+    (#5 expr #6 / #7
+      where
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H84600;V12241"} #end)
+    (#8 expr deltaTime
+    #pragma diagram {"xy":"H18600;V9002","wh":"14000;3200"} #end)
+    (#9 expr powerPlateBowl - powerLoss
+    #pragma diagram {"xy":"H10600;V5202","wh":"30000;3200"} #end)
+    
+    (#10 wire #8 => #2)
+    (#11 wire #0 => #6
+    #pragma diagram {"wp":"#0 h7500 v3239 #6"} #end)
+    (#12 wire #4 => #7)
+    (#13 wire #5 => #3)
+    (#14 wire #9 => #1)
+}
+
+node VolumeRice (tempC: float32;
+                 prevMassWaterAbsorbed : float32;
+                 volRiceInitLiters: float32;)
+  returns (volume: float32;)
+{
+  diagram
+    (#0 block ({op_expr%*%op_expr})
+    #pragma diagram {"xy":"H84625;V-1880","wh":"12000;30375"} #end)
+    (#1 expr #2 + #3
+      where
+        (#2 group)
+        (#3 group)
+    #pragma diagram {"xy":"H17025;V20"} #end)
+    (#4 expr 0.5
+    #pragma diagram {"xy":"H-42725;V-280"} #end)
+    (#5 expr #6 / #7
+      where
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H39025;V-1880"} #end)
+    (#8 expr prevMassWaterAbsorbed
+    #pragma diagram {"xy":"H-11975;V-3780","wh":"24000;3200"} #end)
+    (#12 def volume
+    #pragma diagram {"xy":"H142800;V11080","wh":"10000;3200"} #end)
+    (#13 expr MAX_RATIO_WATER_ABSORB_BY_VOL - 1
+    #pragma diagram {"xy":"H53325;V-13037","wh":"36000;3200"} #end)
+    (#30 expr #31 + #32
+      where
+        (#31 group)
+        (#32 group)
+    #pragma diagram {"xy":"H101475;V9180"} #end)
+    (#15 expr volRiceInitLiters / 1000
+    #pragma diagram {"xy":"H-52725;V6780","wh":"28000;3200"} #end)
+    (#33 expr 1
+    #pragma diagram {"xy":"H84625;V15827"} #end)
+    (#35 expr #36 * #37
+      where
+        (#36 group)
+        (#37 group)
+    #pragma diagram {"xy":"H127625;V11080"} #end)
+    (#24 expr fPhase
+    #pragma diagram {"xy":"H66325;V11276","wh":"10000;3200"} #end)
+    (#14 block (U::Limiter \ lowLimit: 0, highLimit: 1)
+    #pragma diagram {"xy":"H61325;V-1880","wh":"20000;10675"} #end)
+    (#9 block ({op_expr%*%op_expr})
+    #pragma diagram {"xy":"H-9975;V3720","wh":"20000;11200"} #end)
+    (#10 expr DENSITY_RICE_KG_PER_M3
+    #pragma diagram {"xy":"H-51725;V3220","wh":"26000;3200"} #end)
+    
+    (#20 wire #8 => #2, #6
+    #pragma diagram {"wp":"#8 h7500[v1900 #2, #6]"} #end)
+    (#21 wire #1 => #7)
+    (#29 wire #13 => #0 .(1))
+    (#38 wire #0 => #31
+    #pragma diagram {"wp":"v9160|#0 #31"} #end)
+    (#39 wire #33 => #32
+    #pragma diagram {"wp":"#33 h6425 v-4747 #32"} #end)
+    (#40 wire #30 => #36)
+    (#42 wire #35 => #12)
+    (#18 wire #5 => #14)
+    (#25 wire #24 => #0 .(3))
+    (#26 wire #14 .(1) => #0 .(2)
+    #pragma diagram {"wp":"v0|#14 #0"} #end)
+    (#11 wire #15 => #9 .(1), #37
+    #pragma diagram {"wp":"#15 h9375[#9, v11647 h145400 v-5447 #37]"} #end)
+    (#19 wire #4 => #9 .(3))
+    (#22 wire #9 => #3
+    #pragma diagram {"wp":"v-1800|#9 #3"} #end)
+    (#23 wire #10 => #9 .(2))
+    
+    (var
+        fPhase;)
+    (automaton #27 $VolumeGrowthByPhases
+      initial state #45 preGelatinization
+      #pragma diagram {"xy":"h-48562;v-24777","wh":"54000;11200"} #end :
+        diagram
+          (#28 def fPhase
+          #pragma diagram {"xy":"h18000;v0","wh":"10000;3200"} #end)
+          (#43 expr S0_BASELINE_SWELLING
+          #pragma diagram {"xy":"h-11000;v0","wh":"24000;3200"} #end)
+          
+          (#44 wire #43 => #28)
+      state #67 Gelatinization
+      #pragma diagram {"xy":"h0;v1702","wh":"151125;28163"} #end :
+        diagram
+          (#17 expr tempC - TEMP_GEL_LOW_C
+          #pragma diagram {"xy":"h-48562;v1400","wh":"26000;3200"} #end)
+          (#46 expr S0_BASELINE_SWELLING
+          #pragma diagram {"xy":"h22938;v-8081","wh":"24000;3200"} #end)
+          (#47 expr 1 - S0_BASELINE_SWELLING
+          #pragma diagram {"xy":"h738;v-3581","wh":"28000;3200"} #end)
+          (#48 expr #49 / #50
+            where
+              (#49 group)
+              (#50 group)
+          #pragma diagram {"xy":"h-22538;v3300"} #end)
+          (#16 block (U::Limiter \ lowLimit: 0, highLimit: 1)
+          #pragma diagram {"xy":"h4738;v3300","wh":"20000;9562"} #end)
+          (#51 expr TEMP_GEL_HIGH_C - TEMP_GEL_LOW_C
+          #pragma diagram {"xy":"h-53562;v5200","wh":"36000;3200"} #end)
+          (#52 def fPhase
+          #pragma diagram {"xy":"h66562;v-3581","wh":"10000;3200"} #end)
+          (#53 expr #54 * #55
+            where
+              (#54 group)
+              (#55 group)
+          #pragma diagram {"xy":"h29938;v-1681"} #end)
+          (#56 expr #57 + #58
+            where
+              (#57 group)
+              (#58 group)
+          #pragma diagram {"xy":"h50138;v-3581"} #end)
+          
+          (#59 wire #47 => #54)
+          (#60 wire #48 => #16)
+          (#61 wire #17 => #49)
+          (#62 wire #51 => #50)
+          (#63 wire #16 .(1) => #55
+          #pragma diagram {"wp":"v-3081|#16 #55"} #end)
+          (#64 wire #46 => #57
+          #pragma diagram {"wp":"#46 h6600 v2600 #57"} #end)
+          (#65 wire #53 => #58)
+          (#66 wire #56 => #52)
+      state #71 PostGelatinization
+      #pragma diagram {"xy":"h-56562;v27381","wh":"38000;11200"} #end :
+        diagram
+          (#68 def fPhase
+          #pragma diagram {"xy":"h10000;v0","wh":"10000;3200"} #end)
+          (#69 expr 1
+          #pragma diagram {"xy":"h-11000;v0"} #end)
+          
+          (#70 wire #69 => #68)
+      :1: #45 until if (tempC >= TEMP_GEL_LOW_C)
+      restart #67
+      #pragma diagram {"tp":"h0;v5600|#45 v2266 v2266 h-48562;v-14081|#67"} #end;
+      :1: #67 until if (tempC >= TEMP_GEL_HIGH_C)
+      restart #71
+      #pragma diagram {"tp":"h-56562;v14081|#67 v1999 v1999 h0;v-5600|#71"} #end;
+    #pragma diagram {"xy":"H34388;V61676","wh":"159125;73358"} #end)
+}
+
+function ComputeHeight (volume: float32;
+                        unit: UNIT_VOL default=METERS_3;)
+  returns (heightCm: float32;)
+{
+  diagram
+    (#0 expr 3.14159265
+    #pragma diagram {"xy":"H-27500;V-21850","wh":"14000;3200"} #end)
+    (#1 expr DIAMETER_BOWL_CM * DIAMETER_BOWL_CM / 4
+    #pragma diagram {"xy":"H-41500;V-18050","wh":"42000;3200"} #end)
+    (#2 expr #3 * #4
+      where
+        (#3 group)
+        (#4 group)
+    #pragma diagram {"xy":"H1600;V-19950"} #end)
+    (#7 expr
+      (case #8 of
+        | LITERS : #9
+        | METERS_3 : #10
+        | CENTIMERS_3 : #11)
+      where
+        (#8 group)
+        (#9 group)
+        (#10 group)
+        (#11 group)
+    #pragma diagram {"xy":"H-29700;V-32450","wh":"16000;14600"} #end)
+    (#12 expr volume
+    #pragma diagram {"xy":"H-12550;V-38150","wh":"10000;3200"} #end)
+    (#13 expr unit
+    #pragma diagram {"xy":"H-39300;V-46550"} #end)
+    (#14 expr 1000
+    #pragma diagram {"xy":"H-49600;V-34350"} #end)
+    (#15 expr 1000000
+    #pragma diagram {"xy":"H-51600;V-30550","wh":"12000;3200"} #end)
+    (#16 expr 1
+    #pragma diagram {"xy":"H-49600;V-26750"} #end)
+    (#17 expr #18 * #19
+      where
+        (#18 group)
+        (#19 group)
+    #pragma diagram {"xy":"H1600;V-36250"} #end)
+    (#20 expr #21 / #22
+      where
+        (#21 group)
+        (#22 group)
+    #pragma diagram {"xy":"H20600;V-28750"} #end)
+    (#23 def heightCm
+    #pragma diagram {"xy":"H49300;V-28750","wh":"12000;3200"} #end)
+    
+    (#5 wire #0 => #3)
+    (#6 wire #1 => #4)
+    (#24 wire #13 => #8
+    #pragma diagram {"wp":"#13 h7100 #8"} #end)
+    (#25 wire #14 => #9)
+    (#26 wire #15 => #10)
+    (#27 wire #16 => #11)
+    (#28 wire #7 => #19)
+    (#29 wire #12 => #18)
+    (#30 wire #17 => #21
+    #pragma diagram {"wp":"#17 h6000 v5600 #21"} #end)
+    (#31 wire #2 => #22
+    #pragma diagram {"wp":"#2 h6000 v-6900 #22"} #end)
+    (#32 wire #20 => #23)
+}
+
+type UNIT_VOL = enum { LITERS, METERS_3, CENTIMERS_3 };
+
+const BOILING_POINT_C: float32 = 100;
+
+const TEMP_GEL_LOW_C: float32 = 60;
+
+const TEMP_GEL_HIGH_C: float32 = 80;
+
+const HEAT_LOSS_W_PER_K: float32 = 0.5;
+
+const LATENT_HEAT_VAPOR_J_PER_KG: float32 = 2257000;
+
+const C_P_ALU: float32 = 900;
+
+const C_P_WATER: float32 = 4184;
+
+const C_P_DRY_RICE: float32 = 1200;
+
+const DENSITY_RICE_KG_PER_M3: float32 = 900;
+
+const MASS_BOWL_KG: float32 = 0.160;
+
+const DIAMETER_BOWL_CM: float32 = 12.5;
+
+const FULL_POWER_COOKER_W: float32 = 300;
+
+const MAX_RATIO_WATER_ABSORB_BY_MASS: float32 = 2;
+
+const MAX_RATIO_WATER_ABSORB_BY_VOL: float32 = 3;
+
+const S0_BASELINE_SWELLING: float32 = 0.35;

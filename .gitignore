@@ -1,5 +1,10 @@
 # Files ignored for configuration management with Scade One
 *.spanel
+**/*.sproj.user
+**/jobs/**/out
+**/jobs/**/cg_log.json
+**/jobs/**/sim_log.json
+**/jobs/**/config.json
 
 # Files ignored for configuration management with SCADE
 *.log
@@ -26,6 +31,7 @@ __pycache__/
 
 # C extensions
 *.so
+*.a
 
 # Distribution / packaging
 .Python

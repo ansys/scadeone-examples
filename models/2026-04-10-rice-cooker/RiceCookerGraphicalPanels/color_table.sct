@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?dom version="19.0" ?>
+
+<colorTable backgroundIndex="-1" name="color_table" size="83">
+    <colorDefinition alpha="0xFF" index="8" name="rice_cooker" rgb="0xC8CABA"/>
+    <colorDefinition alpha="0xFF" index="9" name="background" rgb="0x373545"/>
+    <colorDefinition alpha="0xFF" index="10" name="light_gray" rgb="0xF9F9F9"/>
+    <colorDefinition alpha="0xFF" index="78" name="water" rgb="0xB5CDCF"/>
+    <colorDefinition alpha="0xFF" index="79" name="rice" rgb="0xF7F7F7"/>
+    <colorDefinition alpha="0xFF" index="80" name="yellow" rgb="0xF7FF3C"/>
+    <colorDefinition alpha="0xFF" index="81" name="green" rgb="0x008020"/>
+    <colorDefinition alpha="0xFF" index="82" name="red" rgb="0xE9383F"/>
+</colorTable>
+
+<!-- crc32 : 868545039 -->
+

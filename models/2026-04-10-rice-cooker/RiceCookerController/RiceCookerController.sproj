@@ -1,0 +1,22 @@
+{
+  "Version": "1.0",
+  "Name": "RiceCookerController",
+  "Dependencies": [
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Sources\\Sources.sproj",
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Math\\Math.sproj",
+    "..\\VisualizationPanel\\VisualizationPanel.sproj",
+    "..\\RiceCookerPanel\\RiceCookerPanel.sproj"
+  ],
+  "Resources": [
+    {
+      "Kind": "HeaderFile",
+      "Path": "resources\\int2char.h",
+      "Key": ""
+    },
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\MainControl_inputs.sd",
+      "Key": "MainControl_inputs"
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+-- version swan: 2025.2 graph: 2.1 swant: 1.1
+use Controller;
+
+use PlantModel;
+
+use Clock::Utils as Clk;
+
+_harness TestsController
+{
+  diagram
+    (#0 block (_source MainControl_inputs)
+    #pragma diagram {"xy":"H-3350;V0","wh":"12000;7000"} #end)
+    (#1 block Controller::MainControl
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H31650;V0","wh":"20000;14000"} #end)
+    (#3 def _
+    #pragma diagram {"xy":"H70550;V4800"} #end)
+    (#4 def _
+    #pragma diagram {"xy":"H70550;V-4800"} #end)
+    (#5 def _
+    #pragma diagram {"xy":"H70550;V0"} #end)
+    
+    (#2 wire #0 => #1
+    #pragma diagram {"wp":"v0|#0 #1"} #end)
+    (#6 wire #1 .(colorLED) => #3
+    #pragma diagram {"wp":"v4800|#1 #3"} #end)
+    (#7 wire #1 .(displayText) => #4
+    #pragma diagram {"wp":"v-4800|#1 #4"} #end)
+    (#8 wire #1 .(heaterPowerPct) => #5
+    #pragma diagram {"wp":"v0|#1 #5"} #end)
+}
+
+_harness TestPhysicalModel
+{
+  diagram
+    (#0 block PlantModel::PhysicalModel
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H0;V2750","wh":"20000;19500"} #end)
+    (#1 expr 100
+    #pragma diagram {"xy":"H-40450;V-1250"} #end)
+    (#2 expr 0.32
+    #pragma diagram {"xy":"H-40450;V7050"} #end)
+    (#5 expr 20
+    #pragma diagram {"xy":"H-40450;V2250"} #end)
+    (#7 def _stop_condition
+    #pragma diagram {"xy":"H52750;V9000","wh":"20000;3200"} #end)
+    (#8 expr #9 >= #10
+      where
+        (#9 group)
+        (#10 group)
+    #pragma diagram {"xy":"H31150;V9000"} #end)
+    (#11 expr 105
+    #pragma diagram {"xy":"H19775;V10900"} #end)
+    (#12 def _
+    #pragma diagram {"xy":"H46750;V-1750"} #end)
+    
+    (#3 wire #1 => #0 .(powerPct))
+    (#4 wire #2 => #0 .(volWaterInit), #0 .(volRiceInit)
+    #pragma diagram {"wp":"#2 h3250[#0, v1733 #0]"} #end)
+    (#6 wire #5 => #0 .(tempExt))
+    (#13 wire #8 => #7)
+    (#14 wire #11 => #10)
+    (#15 wire #0 .(tempC) => #9
+    #pragma diagram {"wp":"v4350|#0 #9"} #end)
+    (#16 wire #0 .(massWaterKg) => #12
+    #pragma diagram {"wp":"v-4500|#0 #12"} #end)
+}
+
+_harness TestControllerWithPhysics
+{
+  diagram
+    (#1 expr Controller::YELLOW
+    #pragma diagram {"xy":"H-72700;V38097","wh":"22000;3200"} #end)
+    (#4 expr 0.33
+    #pragma diagram {"xy":"H-28725;V28197"} #end)
+    (#5 $PlantModel block PlantModel::PhysicalModel
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H11725;V23897","wh":"20000;19500"} #end)
+    (#6 expr 20
+    #pragma diagram {"xy":"H-28725;V23397"} #end)
+    (#7 expr 0
+    #pragma diagram {"xy":"H-48475;V14133"} #end)
+    (#2 expr #3 = #8
+      where
+        (#3 group)
+        (#8 group)
+    #pragma diagram {"xy":"H-52200;V36197"} #end)
+    (#9 def _
+    #pragma diagram {"xy":"H58475;V19397"} #end)
+    (#38 expr false
+    #pragma diagram {"xy":"H-140740;V23272","wh":"10000;3200"} #end)
+    (#11 $Controller block Controller::MainControl
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-90100;V23272","wh":"20000;16850"} #end)
+    (#12 def _
+    #pragma diagram {"xy":"H-51200;V24697"} #end)
+    (#13 def _
+    #pragma diagram {"xy":"H-51200;V29497"} #end)
+    (#10 _sensor Controller::tempPot
+    #pragma diagram {"xy":"H48475;V26647","wh":"28000;3200"} #end)
+    (#14 def isCooked
+    #pragma diagram {"xy":"H-30725;V36197","wh":"12000;3200"} #end)
+    (#26 expr #27 pre #28
+      where
+        (#27 group)
+        (#28 group)
+    #pragma diagram {"xy":"H-30725;V16033"} #end)
+    (#39 expr false pre false pre true pre false
+    #pragma diagram {"xy":"H-127950;V17919","wh":"36000;3200"} #end)
+    (#40 expr false
+    #pragma diagram {"xy":"H-140740;V28722","wh":"10000;3200"} #end)
+    (#44 _sensor Controller::isLidOpen
+    #pragma diagram {"xy":"H49475;V40600","wh":"30000;3200"} #end)
+    (#45 expr false
+    #pragma diagram {"xy":"H12650;V40600","wh":"10000;3200"} #end)
+    
+    (#29 wire #5 .(tempC) => #10
+    #pragma diagram {"wp":"v2750|#5 #10"} #end)
+    (#30 wire #2 => #14)
+    (#16 wire #6 => #5 .(tempExt))
+    (#17 wire #5 .(massWaterKg) => #9
+    #pragma diagram {"wp":"v-4500|#5 #9"} #end)
+    (#31 wire #1 => #8)
+    (#32 wire #26 => #5 .(powerPct))
+    (#20 wire #4 => #5 .(volWaterInit), #5 .(volRiceInit)
+    #pragma diagram {"wp":"#4 h3250[#5, v1733 #5]"} #end)
+    (#21 wire #11 .(colorLED) => #13, #3
+    #pragma diagram {"wp":"v4425|#11 h8300[h12600 v1800 #13, v6600 #3]"} #end)
+    (#22 wire #11 .(displayText) => #12
+    #pragma diagram {"wp":"v1425|#11 #12"} #end)
+    (#33 wire #11 .(heaterPowerPct) => #28
+    #pragma diagram {"wp":"v-5339|#11 #28"} #end)
+    (#37 wire #7 => #27)
+    (#41 wire #39 => #11 .(btnStartStop))
+    (#42 wire #38 => #11 .(btnDelay))
+    (#43 wire #40 => #11 .(btnSetTime))
+    (#46 wire #45 => #44)
+    
+    (var
+        isCooked;)
+    (activate #0
+      if isCooked
+      then
+        {
+          diagram
+            (#15 expr Clk::MsElapsed() >= 30 * 60 * 1000
+            #pragma diagram {"xy":"h-13275;v0","wh":"36000;3200"} #end)
+            (#18 def _stop_condition
+            #pragma diagram {"xy":"h21275;v0","wh":"20000;3200"} #end)
+            
+            (#19 wire #15 => #18)
+        #pragma diagram {"xy":"h0;v-3600","wh":"66550;7200"} #end
+        }
+      else
+        {
+          diagram
+            (#23 def _stop_condition
+            #pragma diagram {"xy":"h21275;v0","wh":"20000;3200"} #end)
+            (#24 expr false
+            #pragma diagram {"xy":"h-15725;v0","wh":"10000;3200"} #end)
+            
+            (#25 wire #24 => #23)
+        #pragma diagram {"xy":"h0;v7459","wh":"66550;7200"} #end
+        }
+    #pragma diagram {"xy":"H-48750;V-9485","wh":"66550;22119"} #end)
+}

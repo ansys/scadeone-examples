@@ -1,0 +1,33 @@
+-- version swan: 2025.2 graph: 2.1
+node #pragma doc Returns the number of milliseconds passed since the application has started. #end millis ()
+  returns (ms: uint32;)
+{
+  diagram
+    (#0 def ms
+    #pragma diagram {"xy":"H-95125;V-52700"} #end)
+    (#2 expr ACCELERATION * T_CYCLE
+    #pragma diagram {"xy":"H-125125;V-32625","wh":"26000;3200"} #end)
+    (#3 expr #4 + #5
+      where
+        (#4 group)
+        (#5 group)
+    #pragma diagram {"xy":"H-95125;V-34525"} #end)
+    (#1 expr #7 pre #9
+      where
+        (#7 group)
+        (#9 group)
+    #pragma diagram {"dir":"nw","xy":"H-95125;V-42925"} #end)
+    (#10 expr 0
+    #pragma diagram {"dir":"nw","xy":"H-83000;V-44825"} #end)
+    
+    (#6 wire #3 => #9
+    #pragma diagram {"wp":"#3 h4500 v-6500 #9"} #end)
+    (#8 wire #2 => #5)
+    (#11 wire #10 => #7)
+    (#12 wire #1 => #4, #0
+    #pragma diagram {"wp":"#1 h-3500[v6500 #4, h-1000 v-9775 #0]"} #end)
+}
+
+const #pragma doc The duration of a cycle (e.g. during DEBUG) #end T_CYCLE: uint32 = 200;
+
+const ACCELERATION: uint32 = 50;

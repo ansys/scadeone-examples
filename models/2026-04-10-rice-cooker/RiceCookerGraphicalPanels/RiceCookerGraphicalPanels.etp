@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project id="1" oid_count="91" defaultConfiguration="2">
+	<props>
+		<Prop id="3" name="@STUDIO:PRODUCT">
+			<value>RAPIDPROTO</value>
+		</Prop>
+		<Prop id="4" name="@RAPIDPROTO:RELEASE">
+			<value>25.2</value>
+		</Prop>
+		<Prop id="8" name="@RAPIDPROTO:CONFTARGET">
+			<value>Windows</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="9" name="CONFIGURATIONS">
+			<value>7</value>
+			<value>48</value>
+		</Prop>
+		<Prop id="10" name="@RAPIDPROTO:CONFSOURCE">
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="11" name="@RAPIDPROTO:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="12" name="@RAPIDPROTO:KCGTEMPLATE">
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="13" name="@RAPIDPROTO:CONFOUTPUT">
+			<value>%ModelName%_Exe</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="14" name="@RAPIDPROTO:APPPERIODICITY">
+			<value>33</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="15" name="@RAPIDPROTO:POINTERID">
+			<value>0</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="16" name="@RAPIDPROTO:KEYBOARDID">
+			<value>0</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="49" name="@RAPIDPROTO:CONFTARGET">
+			<value>ScadeOneCosimulation</value>
+			<configuration>48</configuration>
+		</Prop>
+		<Prop id="50" name="@RAPIDPROTO:CONFSOURCE">
+			<configuration>48</configuration>
+		</Prop>
+		<Prop id="51" name="@RAPIDPROTO:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>48</configuration>
+		</Prop>
+		<Prop id="52" name="@RAPIDPROTO:KCGTEMPLATE">
+			<configuration>48</configuration>
+		</Prop>
+		<Prop id="53" name="@RAPIDPROTO:INTEGRATIONMODE">
+			<value>synchronous</value>
+			<configuration>48</configuration>
+		</Prop>
+		<Prop id="54" name="@RAPIDPROTO:POINTERID">
+			<value>0</value>
+			<configuration>48</configuration>
+		</Prop>
+		<Prop id="55" name="@RAPIDPROTO:KEYBOARDID">
+			<value>0</value>
+			<configuration>48</configuration>
+		</Prop>
+		<Prop id="56" name="@RAPIDPROTO:CONFOUTPUT">
+			<value>..\%ModelName%</value>
+			<configuration>48</configuration>
+		</Prop>
+		<Prop id="57" name="@RAPIDPROTO:CONFPANELNAME">
+			<value>%ModelName%</value>
+			<configuration>48</configuration>
+		</Prop>
+		<Prop id="82" name="@RAPIDPROTO:FORCEMOUSEUSAGE">
+			<value>true</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="85" name="@RAPIDPROTO:DEFAULTCOLORTABLE">
+			<value>color_table.sct</value>
+			<value>Widgets_colors.sct</value>
+			<value>Styles_colors.sct</value>
+		</Prop>
+		<Prop id="86" name="@RAPIDPROTO:DEFAULTLWTABLE">
+			<value>line_width_table.swt</value>
+			<value>Widgets_line_width.swt</value>
+		</Prop>
+		<Prop id="87" name="@RAPIDPROTO:DEFAULTLSTABLE">
+			<value>Widgets_line_stipple.sst</value>
+		</Prop>
+		<Prop id="88" name="@RAPIDPROTO:TEXTURETABLE">
+			<value>Widgets_textures.stt</value>
+		</Prop>
+		<Prop id="89" name="@RAPIDPROTO:GRADIENTTABLE"/>
+		<Prop id="90" name="@RAPIDPROTO:FONTTABLE">
+			<value>font_table.sft</value>
+			<value>Widgets_fonts.sft</value>
+		</Prop>
+		<Prop id="91" name="@RAPIDPROTO:GLOBALDEFS"/>
+	</props>
+	<roots>
+		<FileRef id="5" persistAs="$(RAPID_PROTOTYPER)\Widgets_behavior\libWidgets.etp"/>
+		<Folder id="17" extensions="asfx;pgfx;rgfx;wgfx" name="Model Files">
+			<elements>
+				<FileRef id="37" persistAs="RiceCookerPanel.rgfx">
+					<props>
+						<Prop id="39" name="@RAPIDPROTO:MODELLWTABLE">
+							<value>line_width_table.swt</value>
+							<value>Widgets_line_width.swt</value>
+						</Prop>
+						<Prop id="41" name="@RAPIDPROTO:MODELCOLORTABLE">
+							<value>color_table.sct</value>
+							<value>Widgets_colors.sct</value>
+							<value>Styles_colors.sct</value>
+						</Prop>
+						<Prop id="43" name="@RAPIDPROTO:SVGFILE">
+							<value>RiceCookerBearPlain.svg</value>
+						</Prop>
+						<Prop id="44" name="@RAPIDPROTO:SVGNODE">
+							<value>svg</value>
+						</Prop>
+						<Prop id="45" name="@RAPIDPROTO:SVGNODEPATH">
+							<value>[]</value>
+						</Prop>
+						<Prop id="46" name="@RAPIDPROTO:SVGBIND">
+							<value>true</value>
+						</Prop>
+						<Prop id="58" name="@RAPIDPROTO:MODELDEFINITIONS"/>
+						<Prop id="59" name="@RAPIDPROTO:MODELEXTINCLUDES"/>
+						<Prop id="60" name="@RAPIDPROTO:MODELEXTSOURCES"/>
+						<Prop id="61" name="@RAPIDPROTO:MODELEXTLIBRARIES"/>
+						<Prop id="76" name="@RAPIDPROTO:MODELLSTABLE"/>
+					</props>
+				</FileRef>
+				<FileRef id="66" persistAs="VisualizationPanel.rgfx">
+					<props>
+						<Prop id="67" name="@RAPIDPROTO:MODELCOLORTABLE">
+							<value>color_table.sct</value>
+							<value>Widgets_colors.sct</value>
+							<value>Styles_colors.sct</value>
+						</Prop>
+						<Prop id="68" name="@RAPIDPROTO:MODELLWTABLE">
+							<value>line_width_table.swt</value>
+							<value>Widgets_line_width.swt</value>
+						</Prop>
+						<Prop id="69" name="@RAPIDPROTO:MODELLSTABLE">
+							<value>Widgets_line_stipple.sst</value>
+						</Prop>
+					</props>
+				</FileRef>
+				<FileRef id="78" persistAs="CustomPushButton.wgfx">
+					<props>
+						<Prop id="79" name="@RAPIDPROTO:MODELCOLORTABLE">
+							<value>color_table.sct</value>
+							<value>Widgets_colors.sct</value>
+							<value>Styles_colors.sct</value>
+						</Prop>
+						<Prop id="80" name="@RAPIDPROTO:MODELLWTABLE">
+							<value>line_width_table.swt</value>
+							<value>Widgets_line_width.swt</value>
+						</Prop>
+						<Prop id="81" name="@RAPIDPROTO:MODELLSTABLE">
+							<value>Widgets_line_stipple.sst</value>
+						</Prop>
+					</props>
+				</FileRef>
+			</elements>
+		</Folder>
+		<Folder id="19" extensions="sct;sft;sgt;sst;stt;swt" name="Resource Files">
+			<elements>
+				<FileRef id="20" persistAs="line_width_table.swt"/>
+				<FileRef id="22" persistAs="color_table.sct"/>
+				<FileRef id="83" persistAs="font_table.sft"/>
+			</elements>
+		</Folder>
+		<FileRef id="77" persistAs="$(RAPID_PROTOTYPER)\Widgets_behavior\Suite\PushButton\PushButton.etp"/>
+	</roots>
+	<configurations>
+		<Configuration id="2" name="Default"/>
+		<Configuration id="7" name="Windows"/>
+		<Configuration id="48" name="ScadeOneCosimulation"/>
+	</configurations>
+</Project>
