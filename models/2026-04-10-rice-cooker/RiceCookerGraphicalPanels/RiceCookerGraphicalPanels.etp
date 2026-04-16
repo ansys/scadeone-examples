@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Project id="1" oid_count="91" defaultConfiguration="2">
+<Project id="1" oid_count="97" defaultConfiguration="2">
 	<props>
 		<Prop id="3" name="@STUDIO:PRODUCT">
 			<value>RAPIDPROTO</value>
@@ -102,7 +102,7 @@
 		<Prop id="91" name="@RAPIDPROTO:GLOBALDEFS"/>
 	</props>
 	<roots>
-		<FileRef id="5" persistAs="$(RAPID_PROTOTYPER)\Widgets_behavior\libWidgets.etp"/>
+		<FileRef id="5" persistAs="$(RAPID_PROTOTYPER)\Widgets\libWidgets.etp"/>
 		<Folder id="17" extensions="asfx;pgfx;rgfx;wgfx" name="Model Files">
 			<elements>
 				<FileRef id="37" persistAs="RiceCookerPanel.rgfx">
@@ -165,6 +165,15 @@
 						<Prop id="81" name="@RAPIDPROTO:MODELLSTABLE">
 							<value>Widgets_line_stipple.sst</value>
 						</Prop>
+						<Prop id="93" name="@RAPIDPROTO:MODELDEFINITIONS"/>
+						<Prop id="94" name="@RAPIDPROTO:MODELEXTINCLUDES">
+							<value>$(RAPID_PROTOTYPER)\Widgets\include</value>
+						</Prop>
+						<Prop id="95" name="@RAPIDPROTO:MODELEXTSOURCES"/>
+						<Prop id="96" name="@RAPIDPROTO:MODELEXTLIBRARIES">
+							<value>$(RAPID_PROTOTYPER)\Widgets\lib\libwidgetsWin.a</value>
+						</Prop>
+						<Prop id="97" name="@RAPIDPROTO:MODELDYNAMICLIBRARY"/>
 					</props>
 				</FileRef>
 			</elements>
@@ -176,7 +185,6 @@
 				<FileRef id="83" persistAs="font_table.sft"/>
 			</elements>
 		</Folder>
-		<FileRef id="77" persistAs="$(RAPID_PROTOTYPER)\Widgets_behavior\Suite\PushButton\PushButton.etp"/>
 	</roots>
 	<configurations>
 		<Configuration id="2" name="Default"/>

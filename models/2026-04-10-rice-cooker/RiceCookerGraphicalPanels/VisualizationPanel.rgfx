@@ -4,7 +4,7 @@
 
 <specification>
     <IDE>
-        <project path="RiceCookerPanel.etp"/>
+        <project path="RiceCookerGraphicalPanels.etp"/>
         <ratio horizontal="1" vertical="1"/>
     </IDE>
     <symbology>
@@ -624,7 +624,7 @@
                             </angle>
                         </rotate>
                         <orientation clockwise="false"/>
-                        <static editorLinked="true" generateStaticSequence="true" maxX="161.0" maxY="105.0" minX="-145.0" minY="-195.5">
+                        <static editorLinked="true" generateStaticSequence="true" maxX="161.0" maxY="105.0" minX="-144.5" minY="-195.0">
                             <init>false</init>
                         </static>
                     </properties>
@@ -693,13 +693,13 @@
                                             </angle>
                                         </rotate>
                                         <orientation clockwise="false"/>
-                                        <file name="Gauge.wgfx" path="$(RAPID_PROTOTYPER)\Widgets_behavior"/>
+                                        <file name="Gauge.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
                                         <crc value="1929459002"/>
                                         <inputParameters>
-                                            <parameter control="false" name="SizeX" oid="6155a022-c4b5-496b-90e0-23e66a70a071" type="real">
+                                            <parameter control="true" name="SizeX" oid="6155a022-c4b5-496b-90e0-23e66a70a071" type="real">
                                                 <init>44.5</init>
                                             </parameter>
-                                            <parameter control="false" name="SizeY" oid="bcd0e24d-d81d-4d91-8788-f0195fa6a713" type="real">
+                                            <parameter control="true" name="SizeY" oid="bcd0e24d-d81d-4d91-8788-f0195fa6a713" type="real">
                                                 <init>17.0</init>
                                             </parameter>
                                             <parameter control="false" name="Style" oid="7877d93b-ba6d-45bc-aeb9-5e3d81a57d51" representation="index" type="int">
@@ -862,7 +862,7 @@
                                     </angle>
                                 </rotate>
                                 <orientation clockwise="false"/>
-                                <file name="NumericDisplay.wgfx" path="$(RAPID_PROTOTYPER)\Widgets_behavior"/>
+                                <file name="NumericDisplay.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
                                 <crc value="1403237424"/>
                                 <inputParameters>
                                     <parameter control="false" name="Value" oid="a3a5f970-1420-4fe1-9bd8-e35a8f306807" type="real">
@@ -893,7 +893,7 @@
                                     <parameter control="false" name="Font" oid="b4a39410-bf6a-4c05-8956-31515a1c7ee6" representation="font" type="int">
                                         <init>0</init>
                                     </parameter>
-                                    <parameter control="false" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
+                                    <parameter control="true" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
                                         <init>55.5</init>
                                     </parameter>
                                 </inputParameters>
@@ -928,7 +928,7 @@
                                     </angle>
                                 </rotate>
                                 <orientation clockwise="false"/>
-                                <file name="NumericDisplay.wgfx" path="$(RAPID_PROTOTYPER)\Widgets_behavior"/>
+                                <file name="NumericDisplay.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
                                 <crc value="1403237424"/>
                                 <inputParameters>
                                     <parameter control="false" name="Value" oid="a3a5f970-1420-4fe1-9bd8-e35a8f306807" type="real">
@@ -959,7 +959,7 @@
                                     <parameter control="false" name="Font" oid="b4a39410-bf6a-4c05-8956-31515a1c7ee6" representation="font" type="int">
                                         <init>0</init>
                                     </parameter>
-                                    <parameter control="false" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
+                                    <parameter control="true" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
                                         <init>55.5</init>
                                     </parameter>
                                 </inputParameters>
@@ -994,7 +994,7 @@
                                     </angle>
                                 </rotate>
                                 <orientation clockwise="false"/>
-                                <file name="NumericDisplay.wgfx" path="$(RAPID_PROTOTYPER)\Widgets_behavior"/>
+                                <file name="NumericDisplay.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
                                 <crc value="1403237424"/>
                                 <inputParameters>
                                     <parameter control="false" name="Value" oid="a3a5f970-1420-4fe1-9bd8-e35a8f306807" type="real">
@@ -1025,7 +1025,7 @@
                                     <parameter control="false" name="Font" oid="b4a39410-bf6a-4c05-8956-31515a1c7ee6" representation="font" type="int">
                                         <init>0</init>
                                     </parameter>
-                                    <parameter control="false" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
+                                    <parameter control="true" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
                                         <init>55.5</init>
                                     </parameter>
                                 </inputParameters>
@@ -1060,13 +1060,13 @@
                                     </angle>
                                 </rotate>
                                 <orientation clockwise="false"/>
-                                <file name="Graph_F_T.wgfx" path="$(RAPID_PROTOTYPER)\Widgets_behavior"/>
+                                <file name="Graph_F_T.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
                                 <crc value="1041320290"/>
                                 <inputParameters>
-                                    <parameter control="false" name="SizeX" oid="357e94ac-dc05-4a5d-80f0-0cc55c1804e1" type="real">
+                                    <parameter control="true" name="SizeX" oid="357e94ac-dc05-4a5d-80f0-0cc55c1804e1" type="real">
                                         <init>180.0</init>
                                     </parameter>
-                                    <parameter control="false" name="SizeY" oid="24803017-818d-41f0-95d8-f7ef8f27046f" type="real">
+                                    <parameter control="true" name="SizeY" oid="24803017-818d-41f0-95d8-f7ef8f27046f" type="real">
                                         <init>100.0</init>
                                     </parameter>
                                     <parameter control="false" name="Font" oid="10d13da3-f6b4-49d9-8e5b-31d302d0540c" representation="font" type="int">
@@ -1173,10 +1173,10 @@
                                     <parameter control="false" name="LabelY" oid="01aecdb3-e647-4f71-addd-86557c179be3" representation="as_string" type="char^20">
                                         <init>[0]</init>
                                     </parameter>
-                                    <parameter control="false" name="LegendPosX" oid="c86c6333-9d9e-4fc4-a7d4-75203967e7e6" type="real">
+                                    <parameter control="true" name="LegendPosX" oid="c86c6333-9d9e-4fc4-a7d4-75203967e7e6" type="real">
                                         <init>0.0</init>
                                     </parameter>
-                                    <parameter control="false" name="LegendPosY" oid="3a9d735f-27d8-404f-bf86-04a376d7ac5b" type="real">
+                                    <parameter control="true" name="LegendPosY" oid="3a9d735f-27d8-404f-bf86-04a376d7ac5b" type="real">
                                         <init>-40.0</init>
                                     </parameter>
                                     <parameter control="false" name="ColorStyle" oid="7c4e7a99-e05e-4eae-b3ad-4e20ea43eb30" type="int">
@@ -1193,5 +1193,5 @@
     </children>
 </specification>
 
-<!-- crc32 : 601880886 -->
+<!-- crc32 : 101972934 -->
 
