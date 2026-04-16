@@ -4,7 +4,7 @@
 
 <specification>
     <IDE>
-        <project path="RiceCookerPanel.etp"/>
+        <project path="RiceCookerGraphicalPanels.etp"/>
         <ratio horizontal="1" vertical="1"/>
     </IDE>
     <symbology>
@@ -1799,7 +1799,7 @@
                                         </rotate>
                                         <orientation clockwise="false"/>
                                         <file name="CustomPushButton.wgfx" path="."/>
-                                        <crc value="2981880692"/>
+                                        <crc value="946344985"/>
                                         <constantParameters>
                                             <parameter control="false" name="TwoLabels" oid="ed3cb614-c924-43b0-8ef2-63c9f84b402b" type="bool">
                                                 <init>true</init>
@@ -1815,6 +1815,7 @@
                                             <parameter name="ButtonPressed" oid="61967479-b134-420c-aff9-c49a1595c3f0" type="bool">
                                                 <expr>Button1Pressed</expr>
                                             </parameter>
+                                            <parameter name="Selection" oid="5e39d772-0a3e-467d-9fe6-65a6f95bec02" type="bool"/>
                                         </outputParameters>
                                     </properties>
                                     <children/>
@@ -1848,7 +1849,7 @@
                                         </rotate>
                                         <orientation clockwise="false"/>
                                         <file name="CustomPushButton.wgfx" path="."/>
-                                        <crc value="2981880692"/>
+                                        <crc value="946344985"/>
                                         <constantParameters>
                                             <parameter control="false" name="TwoLabels" oid="ed3cb614-c924-43b0-8ef2-63c9f84b402b" type="bool">
                                                 <init>false</init>
@@ -1864,6 +1865,7 @@
                                             <parameter name="ButtonPressed" oid="61967479-b134-420c-aff9-c49a1595c3f0" type="bool">
                                                 <expr>Button2Pressed</expr>
                                             </parameter>
+                                            <parameter name="Selection" oid="5e39d772-0a3e-467d-9fe6-65a6f95bec02" type="bool"/>
                                         </outputParameters>
                                     </properties>
                                     <children/>
@@ -1897,7 +1899,7 @@
                                         </rotate>
                                         <orientation clockwise="false"/>
                                         <file name="CustomPushButton.wgfx" path="."/>
-                                        <crc value="2981880692"/>
+                                        <crc value="946344985"/>
                                         <constantParameters>
                                             <parameter control="false" name="TwoLabels" oid="ed3cb614-c924-43b0-8ef2-63c9f84b402b" type="bool">
                                                 <init>false</init>
@@ -1913,6 +1915,7 @@
                                             <parameter name="ButtonPressed" oid="61967479-b134-420c-aff9-c49a1595c3f0" type="bool">
                                                 <expr>Button3Pressed</expr>
                                             </parameter>
+                                            <parameter name="Selection" oid="5e39d772-0a3e-467d-9fe6-65a6f95bec02" type="bool"/>
                                         </outputParameters>
                                     </properties>
                                     <children/>
@@ -1990,13 +1993,13 @@
                                             </angle>
                                         </rotate>
                                         <orientation clockwise="false"/>
-                                        <file name="LED.wgfx" path="$(RAPID_PROTOTYPER)\Widgets_behavior"/>
+                                        <file name="LED.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
                                         <crc value="1191490682"/>
                                         <inputParameters>
-                                            <parameter control="false" name="SizeX" oid="b50c0fdc-f138-44d2-a60a-01cf4040c145" type="real">
+                                            <parameter control="true" name="SizeX" oid="b50c0fdc-f138-44d2-a60a-01cf4040c145" type="real">
                                                 <init>9.5</init>
                                             </parameter>
-                                            <parameter control="false" name="SizeY" oid="df2255be-4190-4ff1-a16e-b49ba5ab9a70" type="real">
+                                            <parameter control="true" name="SizeY" oid="df2255be-4190-4ff1-a16e-b49ba5ab9a70" type="real">
                                                 <init>4.4375</init>
                                             </parameter>
                                             <parameter control="false" name="Style" oid="b92b8804-3d1c-46c9-90c2-9ae4fe1933fd" representation="index" type="int">
@@ -2052,13 +2055,13 @@
                                             </angle>
                                         </rotate>
                                         <orientation clockwise="false"/>
-                                        <file name="LED.wgfx" path="$(RAPID_PROTOTYPER)\Widgets_behavior"/>
+                                        <file name="LED.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
                                         <crc value="1191490682"/>
                                         <inputParameters>
-                                            <parameter control="false" name="SizeX" oid="b50c0fdc-f138-44d2-a60a-01cf4040c145" type="real">
+                                            <parameter control="true" name="SizeX" oid="b50c0fdc-f138-44d2-a60a-01cf4040c145" type="real">
                                                 <init>9.5</init>
                                             </parameter>
-                                            <parameter control="false" name="SizeY" oid="df2255be-4190-4ff1-a16e-b49ba5ab9a70" type="real">
+                                            <parameter control="true" name="SizeY" oid="df2255be-4190-4ff1-a16e-b49ba5ab9a70" type="real">
                                                 <init>4.4375</init>
                                             </parameter>
                                             <parameter control="false" name="Style" oid="b92b8804-3d1c-46c9-90c2-9ae4fe1933fd" representation="index" type="int">
@@ -2114,13 +2117,13 @@
                                             </angle>
                                         </rotate>
                                         <orientation clockwise="false"/>
-                                        <file name="LED.wgfx" path="$(RAPID_PROTOTYPER)\Widgets_behavior"/>
+                                        <file name="LED.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
                                         <crc value="1191490682"/>
                                         <inputParameters>
-                                            <parameter control="false" name="SizeX" oid="b50c0fdc-f138-44d2-a60a-01cf4040c145" type="real">
+                                            <parameter control="true" name="SizeX" oid="b50c0fdc-f138-44d2-a60a-01cf4040c145" type="real">
                                                 <init>9.5</init>
                                             </parameter>
-                                            <parameter control="false" name="SizeY" oid="df2255be-4190-4ff1-a16e-b49ba5ab9a70" type="real">
+                                            <parameter control="true" name="SizeY" oid="df2255be-4190-4ff1-a16e-b49ba5ab9a70" type="real">
                                                 <init>4.4375</init>
                                             </parameter>
                                             <parameter control="false" name="Style" oid="b92b8804-3d1c-46c9-90c2-9ae4fe1933fd" representation="index" type="int">
@@ -2176,13 +2179,13 @@
                                             </angle>
                                         </rotate>
                                         <orientation clockwise="false"/>
-                                        <file name="LED.wgfx" path="$(RAPID_PROTOTYPER)\Widgets_behavior"/>
+                                        <file name="LED.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
                                         <crc value="1191490682"/>
                                         <inputParameters>
-                                            <parameter control="false" name="SizeX" oid="b50c0fdc-f138-44d2-a60a-01cf4040c145" type="real">
+                                            <parameter control="true" name="SizeX" oid="b50c0fdc-f138-44d2-a60a-01cf4040c145" type="real">
                                                 <init>9.5</init>
                                             </parameter>
-                                            <parameter control="false" name="SizeY" oid="df2255be-4190-4ff1-a16e-b49ba5ab9a70" type="real">
+                                            <parameter control="true" name="SizeY" oid="df2255be-4190-4ff1-a16e-b49ba5ab9a70" type="real">
                                                 <init>4.4375</init>
                                             </parameter>
                                             <parameter control="false" name="Style" oid="b92b8804-3d1c-46c9-90c2-9ae4fe1933fd" representation="index" type="int">
@@ -2219,5 +2222,5 @@
     </children>
 </specification>
 
-<!-- crc32 : 344018586 -->
+<!-- crc32 : 1987858107 -->
 

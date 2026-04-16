@@ -5,7 +5,7 @@
 <object>
     <IDE>
         <ratio horizontal="0.5" vertical="0.5"/>
-        <project path="RiceCookerPanel.etp"/>
+        <project path="RiceCookerGraphicalPanels.etp"/>
         <preview height="99" width="128">
             <raw numberOfBytes="3029">
 -119,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,-128,0,0,0,99,8,2,0,0,0,-36,-116,-97,-80,0,0,11,-100,73,68,65,84,120,94,-19,-99,123,91,-38,74,16,-58,-15,-126,-11,2,-43,90,-85,120,43,22,-60,42,40,-34,41,-83,-40,-13,-3,-65,-43,-7,-99,121,31,-9,-60,-123,-60,-128,81,18,-36,-9,15,-97,-72,-39,108,102,-25,-99,-99,-103,-35,108,66,-87,20,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,-16,-124,-19,-19,-19,-109,-109,-109,-85,33,-76,90,-83,118,-69,-83,-29,78,-89,-45,50,80,-39,-65,62,96,92,44,44,44,-84,27,-86,-43,42,-1,-18,-20,-20,-96,-39,-53,-53,-53,94,-81,-9,16,1,122,-65,-65,-65,-41,-15,-11,-11,-11,-79,-127,-54,92,-78,-70,-70,90,49,-52,-49,-49,-5,-83,7,-68,8,20,-9,-113,1,-3,70,-53,-9,-9,-9,-97,13,-127,8,56,21,-83,121,118,118,-90,-14,-107,-107,-107,104,121,64,44,-102,-51,-26,-123,1,-85,103,4,124,-7,-14,5,-11,13,6,3,74,56,86,-99,-27,-27,-27,106,12,56,69,-123,122,-67,-34,52,116,-69,93,71,0,-93,65,-123,123,123,123,-49,110,25,0,62,125,-6,36,119,-127,-51,-30,97,-80,122,108,121,109,
@@ -38,6 +38,9 @@
         </constants>
         <outputs>
             <output memory="true" name="ButtonPressed" oid="61967479-b134-420c-aff9-c49a1595c3f0" type="bool">
+                <init>false</init>
+            </output>
+            <output memory="true" name="Selection" oid="5e39d772-0a3e-467d-9fe6-65a6f95bec02" type="bool">
                 <init>false</init>
             </output>
         </outputs>
@@ -241,7 +244,7 @@
                                     </angle>
                                 </rotate>
                                 <orientation clockwise="false"/>
-                                <static editorLinked="true" generateStaticSequence="true" maxX="21.0" maxY="10.250001" minX="-21.0" minY="-8.249999">
+                                <static editorLinked="true" generateStaticSequence="true" maxX="3.0" maxY="4.0" minX="-3.0" minY="-2.0">
                                     <init>false</init>
                                 </static>
                             </properties>
@@ -495,17 +498,22 @@
                         </output>
                     </properties>
                 </circleArea>
-                <behavior oid="dea24843-5621-4031-a4e7-8b3fe64eeb30">
+                <imported oid="35af18dc-f5a9-4e53-8470-dce382b9aa83">
                     <pathFromRoot value="4,0"/>
-                    <properties name="PushButton">
-                        <file name="PushButton.etp" path="N/A"/>
-                        <function isNode="true" name="PushButton"/>
+                    <properties name="wrapper_PushButton">
+                        <function name="wrapper_PushButton"/>
                         <enable>
                             <init>true</init>
                         </enable>
+                        <restoreStates>
+                            <init>false</init>
+                        </restoreStates>
+                        <memory>
+                            <init>true</init>
+                        </memory>
                         <inputParameters>
                             <parameter name="EmitCondition" oid="!ed/3a1/6C88/5F0/505b087c736e" type="int32">
-                                <init>2</init>
+                                <init>0</init>
                             </parameter>
                             <parameter name="MouseInside" oid="!ed/474/3906/1564/505083a67b91" type="bool">
                                 <expr>InsideButton</expr>
@@ -530,17 +538,19 @@
                             </parameter>
                         </inputParameters>
                         <outputParameters>
-                            <parameter name="Selection" oid="!ed/2d0c/25F9/111C/505c23af5d1" type="bool"/>
+                            <parameter name="Selection" oid="!ed/2d0c/25F9/111C/505c23af5d1" type="bool">
+                                <expr>Selection</expr>
+                            </parameter>
                             <parameter name="ButtonPressed" oid="!ed/44e4/7E6/171C/5062ba8276fb" type="bool">
                                 <expr>ButtonPressed</expr>
                             </parameter>
                         </outputParameters>
                     </properties>
-                </behavior>
+                </imported>
             </children>
         </container>
     </children>
 </object>
 
-<!-- crc32 : 3173323352 -->
+<!-- crc32 : 2556196614 -->
 
