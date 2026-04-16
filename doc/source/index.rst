@@ -4,7 +4,7 @@ Scade One example models
 This repository hosts a collection of example models demonstrating Ansys Scade One.
 
 These models are often related to external content, for instance
-`Embedded Software Technical Blog <https://innovationspace.ansys.com/knowledge/forums/forum/additional-products/embedded-software/>`__ articles,
+`Embedded Software Technical Blog <https://innovationspace.ansys.com/knowledge/forums/forum/digital-engineering/embedded-software/>`__ articles,
 or `Embedded Software Courses <https://courses.ansys.com/index.php/embedded-software/>`__.
 
 .. toctree::
