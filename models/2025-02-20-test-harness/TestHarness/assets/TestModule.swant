@@ -1,0 +1,362 @@
+-- version swan: 2025.0 graph: 2.0 swant: 1.1
+use Matrix;
+
+use Vector;
+
+use Float;
+
+use Harness::Check;
+
+use Math::Trigo::Cordic as Trigo;
+
+use Math::Trigo::StdC as TrigoC;
+
+use Math::Common as Math;
+
+use Harness::Sources::N as Sources;
+
+use Flows;
+
+_harness TestInv3x3
+{
+  diagram
+    (#0 #pragma swt under_test #end block (Matrix::Inv3x3 \ epsilon: 1.0e-6)
+                                          #pragma diagram {"xy":"H-6152;V0","wh":"13645;9243"} #end)
+    (#1 #pragma swt under_test #end block (Matrix::Eye <<3>>  \ dummy: 0.0_f32)
+                                          #pragma diagram {"xy":"H-27950;V0","wh":"12942;9243"} #end)
+    (#2 expr #3 and #4
+      where
+        (#3 group)
+        (#4 group)
+    #pragma diagram {"xy":"H42600;V188"} #end)
+    (#5 expr #6 = #7
+      where
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H25650;V-4825"} #end)
+    (#8 expr 0.0_f32^3^3
+    #pragma diagram {"xy":"H-29479;V16192","wh":"16000;3200"} #end)
+    (#9 expr #10 = #11
+      where
+        (#10 group)
+        (#11 group)
+    #pragma diagram {"xy":"H25650;V12159"} #end)
+    (#12 expr not #13
+      where
+        (#13 group)
+    #pragma diagram {"xy":"H14175;V2088"} #end)
+    (#14 #pragma swt under_test #end block (Matrix::Inv3x3 \ epsilon: 1.0e-6)
+                                           #pragma diagram {"xy":"H-6152;V16192","wh":"13645;9243"} #end)
+    (#15 expr [[3, 0, 2],
+               [2, 0, -2],
+               [0, 1, 1]]
+    #pragma diagram {"xy":"H-27707;V32384","wh":"16000;6078"} #end)
+    (#16 expr #17 and #18
+      where
+        (#17 group)
+        (#18 group)
+    #pragma diagram {"xy":"H42600;V16379"} #end)
+    (#19 expr #20 = #21
+      where
+        (#20 group)
+        (#21 group)
+    #pragma diagram {"xy":"H40600;V44782"} #end)
+    (#22 #pragma swt under_test #end block (Matrix::Inv3x3 \ epsilon: 1.0e-6_f32)
+                                           #pragma diagram {"xy":"H-6152;V32384","wh":"16457;7849"} #end)
+    (#23 expr #24 = #25
+      where
+        (#24 group)
+        (#25 group)
+    #pragma diagram {"xy":"H40600;V30581"} #end)
+    (#26 expr [[0.2, 0.2, 0],
+               [-0.2, 0.3, 1],
+               [0.2, -0.3, 0]]
+    #pragma diagram {"xy":"H18135;V28681","wh":"20000;6078"} #end)
+    (#27 expr [[-24, 18, 5],
+               [20, -15, -4],
+               [-5, 4, 1]]
+    #pragma diagram {"xy":"H18135;V42882","wh":"20000;6078"} #end)
+    (#28 expr [[1, 2, 3],
+               [0, 1, 4],
+               [5, 6, 0]]
+    #pragma diagram {"xy":"H-28440;V45610","wh":"16000;6078"} #end)
+    (#29 #pragma swt under_test #end block (Matrix::Inv3x3 \ epsilon: 1.0e-6_f32)
+                                           #pragma diagram {"xy":"H-6152;V46495","wh":"16457;7849"} #end)
+    (#30 expr [[2, 1, -1],
+               [1, 0, 1],
+               [2, 1, -1]]
+    #pragma diagram {"xy":"H-27707;V60605","wh":"16000;6078"} #end)
+    (#31 #pragma swt under_test #end block (Matrix::Inv3x3 \ epsilon: 1.0e-6_f32)
+                                           #pragma diagram {"xy":"H-6152;V60605","wh":"16457;7849"} #end)
+    (#32 block Matrix::Det3x3
+               #pragma diagram {"xy":"H-6152;V71365","wh":"12000;7000"} #end)
+    (#33 block ({op_expr%function x => x = 0%op_expr})
+               #pragma diagram {"xy":"H19135;V71365","wh":"12000;7000"} #end)
+    (#34 expr #35 and #36
+      where
+        (#35 group)
+        (#36 group)
+    #pragma diagram {"xy":"H40600;V60793"} #end)
+    (#37 def _stop_condition
+    #pragma diagram {"xy":"H-2975;V-18368","wh":"20000;3200"} #end)
+    (#38 expr _current_cycle=1
+    #pragma diagram {"xy":"H-29150;V-18368","wh":"20000;3200"} #end)
+    (assert $TestInv1: #40 ; 
+      where
+        (#40 group)
+    #pragma diagram {"xy":"H60550;V30581"} #end)
+    (assert $TestDetZero: #42 ; 
+      where
+        (#42 group)
+    #pragma diagram {"xy":"H60550;V60793"} #end)
+    (assert $TestZero: #44 ; 
+      where
+        (#44 group)
+    #pragma diagram {"xy":"H60550;V16379"} #end)
+    (assert $TestEye: #46 ; 
+      where
+        (#46 group)
+    #pragma diagram {"xy":"H60550;V188"} #end)
+    (assert $TestInv2: #48 ; 
+      where
+        (#48 group)
+    #pragma diagram {"xy":"H60550;V44782"} #end)
+    
+    (#49 wire #1 => #0 .(A)
+    #pragma diagram {"wp":"v0|#1 #0"} #end)
+    (#50 wire #0 .(error) => #13
+    #pragma diagram {"wp":"v2088|#0 #13"} #end)
+    (#51 wire #0 .(invA) => #7
+    #pragma diagram {"wp":"v-2925|#0 #7"} #end)
+    (#52 wire #1 => #6
+    #pragma diagram {"wp":"v-2414|#1 h3165 v-4311 #6"} #end)
+    (#53 wire #5 => #3
+    #pragma diagram {"wp":"#5 h3975 v3113 #3"} #end)
+    (#54 wire #12 => #4)
+    (#55 wire #14 .(error) => #18
+    #pragma diagram {"wp":"v2088|#14 #18"} #end)
+    (#56 wire #29 .(invA) => #21
+    #pragma diagram {"wp":"v2212|#29 h29792 v-2025 #21"} #end)
+    (#57 wire #8 => #14, #10
+    #pragma diagram {"wp":"#8 h6917[#14, v-5933 #10]"} #end)
+    (#58 wire #14 .(invA) => #11
+    #pragma diagram {"wp":"v-2133|#14 #11"} #end)
+    (#59 wire #9 => #17
+    #pragma diagram {"wp":"#9 h3975 v2320 #17"} #end)
+    (#60 wire #15 => #22 .(A))
+    (#61 wire #22 .(invA) => #25
+    #pragma diagram {"wp":"v97|#22 #25"} #end)
+    (#62 wire #26 => #24)
+    (#63 wire #27 => #20)
+    (#64 wire #28 => #29 .(A))
+    (#65 wire #30 => #31 .(A), #32
+    #pragma diagram {"wp":"#30 h4163[#31, v10760 #32]"} #end)
+    (#66 wire #32 => #33 .(x)
+    #pragma diagram {"wp":"v0|#32 #33"} #end)
+    (#67 wire #31 .(error) => #35
+    #pragma diagram {"wp":"v-1712|#31 #35"} #end)
+    (#68 wire #33 => #36
+    #pragma diagram {"wp":"v0|#33 h4233 v-8672 #36"} #end)
+    (#69 wire #38 => #37)
+    (#70 wire #34 => #42)
+    (#71 wire #19 => #48)
+    (#72 wire #23 => #40)
+    (#73 wire #2 => #46)
+    (#74 wire #16 => #44)
+}
+
+_harness TestNormVector
+{
+  diagram
+    (#0 #pragma swt under_test #end block Vector::NormVector <<3>> 
+                                          #pragma diagram {"xy":"H0;V0","wh":"12000;7000"} #end)
+    (#1 expr [0.0_f32, 0.0, 0.0]
+    #pragma diagram {"xy":"H-24133;V0","wh":"22000;3200"} #end)
+    (#2 block ({op_expr%function v => v = [0.0_f32, 0.0, 0.0]%op_expr})
+              #pragma diagram {"xy":"H24962;V0","wh":"23659;7000"} #end)
+    (#3 #pragma swt under_test #end block Vector::NormVector <<3>> 
+                                          #pragma diagram {"xy":"H0;V11950","wh":"12000;7000"} #end)
+    (#4 block (Float::EQ \ e: 1.0e-6)
+              #pragma diagram {"xy":"H43184;V11950","wh":"12000;7000"} #end)
+    (#5 expr [2.0_f32, 2.0, 2.0]
+    #pragma diagram {"xy":"H-24133;V11950","wh":"22000;3200"} #end)
+    (#6 expr [2.0_f32, 0.0, 0.0]
+    #pragma diagram {"xy":"H-24133;V39000","wh":"22000;3200"} #end)
+    (#7 block ({op_expr%function v => v = [1.0_f32, 0.0, 0.0]%op_expr})
+              #pragma diagram {"xy":"H24962;V39000","wh":"23659;7000"} #end)
+    (#8 #pragma swt under_test #end block Vector::NormVector <<3>> 
+                                          #pragma diagram {"xy":"H0;V39000","wh":"12000;7000"} #end)
+    (#9 block Vector::Norm <<3>> 
+              #pragma diagram {"xy":"H19133;V11950","wh":"12000;7000"} #end)
+    (#10 expr 1.0
+    #pragma diagram {"xy":"H31158;V13850"} #end)
+    (#11 expr 1.0
+    #pragma diagram {"xy":"H31158;V28325"} #end)
+    (#12 block (Float::EQ \ e: 1.0e-6)
+               #pragma diagram {"xy":"H43184;V26425","wh":"12000;7000"} #end)
+    (#13 expr [0.244_f32, 0.1230, 0.2843]
+    #pragma diagram {"xy":"H-28133;V26425","wh":"30000;3200"} #end)
+    (#14 block Vector::Norm <<3>> 
+               #pragma diagram {"xy":"H19133;V26425","wh":"12000;7000"} #end)
+    (#15 #pragma swt under_test #end block Vector::NormVector <<3>> 
+                                           #pragma diagram {"xy":"H0;V26425","wh":"12000;7000"} #end)
+    (#16 expr [1.0_f32, 0.0, 0.0]
+    #pragma diagram {"xy":"H-24133;V51575","wh":"22000;3200"} #end)
+    (#17 #pragma swt under_test #end block Vector::NormVector <<3>> 
+                                           #pragma diagram {"xy":"H0;V51575","wh":"12000;7000"} #end)
+    (#18 block ({op_expr%function v => v = [2.0_f32, 0.0, 0.0]%op_expr})
+               #pragma diagram {"xy":"H24962;V51575","wh":"23659;7000"} #end)
+    (#19 def _stop_condition
+    #pragma diagram {"xy":"H4000;V-12262","wh":"20000;3200"} #end)
+    (#20 expr _current_cycle=1
+    #pragma diagram {"xy":"H-22175;V-12262","wh":"20000;3200"} #end)
+    (assert $TestVec4: #22 ; 
+      where
+        (#22 group)
+    #pragma diagram {"xy":"H60234;V51575"} #end)
+    (assert $TestVec3: #24 ; 
+      where
+        (#24 group)
+    #pragma diagram {"xy":"H60234;V39000"} #end)
+    (assert $TestZero: #26 ; 
+      where
+        (#26 group)
+    #pragma diagram {"xy":"H60234;V0"} #end)
+    (assert $TestVec1: #28 ; 
+      where
+        (#28 group)
+    #pragma diagram {"xy":"H60234;V11950"} #end)
+    (assert $TestVec2: #30 ; 
+      where
+        (#30 group)
+    #pragma diagram {"xy":"H60234;V26425"} #end)
+    
+    (#31 wire #1 => #0)
+    (#32 wire #0 => #2 .(v)
+    #pragma diagram {"wp":"v0|#0 #2"} #end)
+    (#33 wire #5 => #3)
+    (#34 wire #10 => #4 .(b))
+    (#35 wire #3 => #9 .(a)
+    #pragma diagram {"wp":"v0|#3 #9"} #end)
+    (#36 wire #8 => #7 .(v)
+    #pragma diagram {"wp":"v0|#8 #7"} #end)
+    (#37 wire #6 => #8)
+    (#38 wire #9 => #4 .(a)
+    #pragma diagram {"wp":"v-1600|#9 #4"} #end)
+    (#39 wire #13 => #15)
+    (#40 wire #11 => #12 .(b))
+    (#41 wire #14 => #12 .(a)
+    #pragma diagram {"wp":"v-1600|#14 #12"} #end)
+    (#42 wire #15 => #14 .(a)
+    #pragma diagram {"wp":"v0|#15 #14"} #end)
+    (#43 wire #16 => #17)
+    (#44 wire #17 => #18 .(v)
+    #pragma diagram {"wp":"v0|#17 #18"} #end)
+    (#45 wire #20 => #19)
+    (#46 wire #2 => #26
+    #pragma diagram {"wp":"v0|#2 #26"} #end)
+    (#47 wire #7 => #24
+    #pragma diagram {"wp":"v0|#7 #24"} #end)
+    (#48 wire #4 .(comp) => #28
+    #pragma diagram {"wp":"v0|#4 #28"} #end)
+    (#49 wire #12 .(comp) => #30
+    #pragma diagram {"wp":"v0|#12 #30"} #end)
+    (#50 wire #18 => #22
+    #pragma diagram {"wp":"v0|#18 #22"} #end)
+}
+
+_harness TestImplies
+{
+  diagram
+    (#0 #pragma swt under_test #end block Check::Implies
+                                          #pragma diagram {"xy":"H4800;V12450","wh":"20000;14000"} #end)
+    (#1 block (_source TestImplies)
+    #pragma diagram {"xy":"H-26900;V12450","wh":"12000;9200"} #end)
+    (#4 block (_oracle TestImpliesExpected)
+    #pragma diagram {"xy":"H36500;V12450","wh":"12000;7000"} #end)
+    (#6 expr _current_cycle=4
+    #pragma diagram {"xy":"H-10538;V-11700","wh":"20000;3200"} #end)
+    (#7 def _stop_condition
+    #pragma diagram {"xy":"H15638;V-11700","wh":"20000;3200"} #end)
+    
+    (#2 wire #1 .(p) => #0 .(p)
+    #pragma diagram {"wp":"v1800|#1 #0"} #end)
+    (#3 wire #1 .(q) => #0 .(q)
+    #pragma diagram {"wp":"v-1800|#1 #0"} #end)
+    (#5 wire #0 .(prop) => #4 .(prop)
+    #pragma diagram {"wp":"v0|#0 #4"} #end)
+    (#8 wire #6 => #7)
+}
+
+_harness TestSine
+{
+  diagram
+    (#0 #pragma swt under_test #end block Trigo::Sine
+                                          #pragma diagram {"xy":"H7200;V28975","wh":"20000;14000"} #end)
+    (#1 block (_source TestSin)
+    #pragma diagram {"xy":"H-20600;V28975","wh":"12000;7000"} #end)
+    (#2 block (_oracle TestSinExpected)
+    #pragma diagram {"xy":"H35000;V28975","wh":"12000;7000"} #end)
+    (#5 expr _current_cycle=100
+    #pragma diagram {"xy":"H-6438;V10325","wh":"22000;3200"} #end)
+    (#6 def _stop_condition
+    #pragma diagram {"xy":"H18738;V10325","wh":"20000;3200"} #end)
+    
+    (#3 wire #1 => #0
+    #pragma diagram {"wp":"v0|#1 #0"} #end)
+    (#4 wire #0 => #2
+    #pragma diagram {"wp":"v0|#0 #2"} #end)
+    (#7 wire #5 => #6)
+}
+
+_harness TestSineC
+{
+  diagram
+    (#0 #pragma swt under_test #end block Trigo::Sine
+                                          #pragma diagram {"xy":"H-4450;V-11100","wh":"20000;8700"} #end)
+    (#1 block TrigoC::Sine
+              #pragma diagram {"xy":"H-4450;V50","wh":"20000;8700"} #end)
+    (#2 block (Sources::Ramp \ cycles: 100_ui32, amplitude: Math::TWO_PI, offset: 0.0)
+              #pragma diagram {"xy":"H-32700;V-8175","wh":"20000;14000"} #end)
+    (#3 block (Float::EQ \ e: 1.0e-5)
+              #pragma diagram {"xy":"H23800;V-5525","wh":"20000;8700"} #end)
+    (assert $TestC: #5 ; 
+      where
+        (#5 group)
+    #pragma diagram {"xy":"H48050;V-5525"} #end)
+    (#10 def _stop_condition
+    #pragma diagram {"xy":"H12513;V-29475","wh":"20000;3200"} #end)
+    (#11 expr _current_cycle=100
+    #pragma diagram {"xy":"H-12663;V-29475","wh":"22000;3200"} #end)
+    
+    (#6 wire #2 => #0 .(x), #1 .(x)
+    #pragma diagram {"wp":"v2650|#2 h3062[v-5575 #0, h2126 v5575 #1]"} #end)
+    (#7 wire #0 .(v) => #3 .(a)
+    #pragma diagram {"wp":"v2788|#0 #3"} #end)
+    (#8 wire #1 .(v) => #3 .(b)
+    #pragma diagram {"wp":"v-2788|#1 #3"} #end)
+    (#9 wire #3 .(comp) => #5
+    #pragma diagram {"wp":"v0|#3 #5"} #end)
+    (#12 wire #11 => #10)
+}
+
+_harness TestDelay
+{
+  diagram
+    (#0 #pragma swt under_test #end block Flows::Delay <<5>> 
+                                          #pragma diagram {"xy":"H-9150;V-15150","wh":"20000;14000"} #end)
+    (#1 block (_oracle TestDelayExp1)
+    #pragma diagram {"xy":"H17950;V-15150","wh":"12000;7000"} #end)
+    (#2 block (_source TestDelay1)
+    #pragma diagram {"xy":"H-36250;V-15150","wh":"12000;7000"} #end)
+    (#5 def _stop_condition
+    #pragma diagram {"xy":"H3238;V-30450","wh":"20000;3200"} #end)
+    (#6 expr _current_cycle=10
+    #pragma diagram {"xy":"H-22938;V-30450","wh":"20000;3200"} #end)
+    
+    (#3 wire #0 => #1
+    #pragma diagram {"wp":"v0|#0 #1"} #end)
+    (#4 wire #2 => #0
+    #pragma diagram {"wp":"v0|#2 #0"} #end)
+    (#7 wire #6 => #5)
+}

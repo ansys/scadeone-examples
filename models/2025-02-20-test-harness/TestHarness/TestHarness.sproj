@@ -1,0 +1,43 @@
+{
+  "Version": "1.0",
+  "Name": "TestHarness",
+  "Dependencies": [
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Check\\Check.sproj",
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Matrix\\Matrix.sproj",
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Vector\\Vector.sproj",
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Sources\\Sources.sproj",
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Flows\\Flows.sproj"
+  ],
+  "Resources": [
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\TestImplies.sd",
+      "Key": "TestImplies"
+    },
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\TestImpliesExpected.sd",
+      "Key": "TestImpliesExpected"
+    },
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\TestSinExpected.sd",
+      "Key": "TestSinExpected"
+    },
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\TestSin.sd",
+      "Key": "TestSin"
+    },
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\TestDelayExp1.sd",
+      "Key": "TestDelayExp1"
+    },
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\TestDelay1.sd",
+      "Key": "TestDelay1"
+    }
+  ]
+}

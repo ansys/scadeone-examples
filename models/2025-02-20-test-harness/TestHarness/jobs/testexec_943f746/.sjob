@@ -1,0 +1,16 @@
+{
+  "Version": "2.0",
+  "Kind": "TestExecution",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "TestExecutionJob0",
+    "CustomArguments": "{\"float32_relative_tolerance\": 1E-4}",
+    "TestHarness": "",
+    "TestResultFile": "testResults.json"
+  },
+  "InputPaths": [
+    "assets/TestModule.swant"
+  ]
+}
