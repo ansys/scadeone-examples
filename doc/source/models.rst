@@ -71,6 +71,16 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/jupyter-notebook-programming-with-the-scade-python-wrapper/>`__
 
+    .. grid-item-card:: Introducing PyScadeOne
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2025-02-05-pyscadeone-instance-tree.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2025-02-05-pyscadeone-instance-tree>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2025-02-05-pyscadeone-instance-tree>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/introducing-pyscadeone/>`__
+
     .. grid-item-card:: Image processing in Scade One with the pack operator
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2025-01-13-image-processing.jpg
