@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project id="1" oid_count="308" defaultConfiguration="2">
+	<props>
+		<Prop id="3" name="@STUDIO:PRODUCT">
+			<value>RAPIDPROTO</value>
+		</Prop>
+		<Prop id="4" name="@RAPIDPROTO:RELEASE">
+			<value>24.1</value>
+		</Prop>
+		<Prop id="8" name="@RAPIDPROTO:CONFTARGET">
+			<value>Windows</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="9" name="CONFIGURATIONS">
+			<value>7</value>
+			<value>299</value>
+		</Prop>
+		<Prop id="10" name="@RAPIDPROTO:CONFSOURCE">
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="11" name="@RAPIDPROTO:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="12" name="@RAPIDPROTO:KCGTEMPLATE">
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="13" name="@RAPIDPROTO:CONFOUTPUT">
+			<value>%ModelName%_Exe</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="14" name="@RAPIDPROTO:APPPERIODICITY">
+			<value>33</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="15" name="@RAPIDPROTO:POINTERID">
+			<value>0</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="16" name="@RAPIDPROTO:KEYBOARDID">
+			<value>0</value>
+			<configuration>7</configuration>
+		</Prop>
+		<Prop id="292" name="@RAPIDPROTO:DEFAULTCOLORTABLE">
+			<value>Widgets_colors.sct</value>
+			<value>Styles_colors.sct</value>
+		</Prop>
+		<Prop id="293" name="@RAPIDPROTO:DEFAULTLWTABLE">
+			<value>Widgets_line_width.swt</value>
+		</Prop>
+		<Prop id="294" name="@RAPIDPROTO:DEFAULTLSTABLE">
+			<value>Widgets_line_stipple.sst</value>
+		</Prop>
+		<Prop id="295" name="@RAPIDPROTO:TEXTURETABLE">
+			<value>pictures.stt</value>
+			<value>Widgets_textures.stt</value>
+		</Prop>
+		<Prop id="296" name="@RAPIDPROTO:GRADIENTTABLE"/>
+		<Prop id="297" name="@RAPIDPROTO:FONTTABLE">
+			<value>Widgets_fonts.sft</value>
+		</Prop>
+		<Prop id="298" name="@RAPIDPROTO:GLOBALDEFS"/>
+		<Prop id="300" name="@RAPIDPROTO:CONFTARGET">
+			<value>ScadeOneCosimulation</value>
+			<configuration>299</configuration>
+		</Prop>
+		<Prop id="301" name="@RAPIDPROTO:CONFSOURCE">
+			<value>SantaMonitor.rgfx</value>
+			<configuration>299</configuration>
+		</Prop>
+		<Prop id="302" name="@RAPIDPROTO:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>299</configuration>
+		</Prop>
+		<Prop id="303" name="@RAPIDPROTO:KCGTEMPLATE">
+			<configuration>299</configuration>
+		</Prop>
+		<Prop id="304" name="@RAPIDPROTO:INTEGRATIONMODE">
+			<value>asynchronous</value>
+			<configuration>299</configuration>
+		</Prop>
+		<Prop id="305" name="@RAPIDPROTO:POINTERID">
+			<value>0</value>
+			<configuration>299</configuration>
+		</Prop>
+		<Prop id="306" name="@RAPIDPROTO:KEYBOARDID">
+			<value>0</value>
+			<configuration>299</configuration>
+		</Prop>
+		<Prop id="307" name="@RAPIDPROTO:CONFOUTPUT">
+			<value>%ModelName%_%Target%</value>
+			<configuration>299</configuration>
+		</Prop>
+		<Prop id="308" name="@RAPIDPROTO:CONFPANELNAME">
+			<value>%ModelName%</value>
+			<configuration>299</configuration>
+		</Prop>
+	</props>
+	<roots>
+		<FileRef id="5" persistAs="$(RAPID_PROTOTYPER)\Widgets\libWidgets.etp"/>
+		<Folder id="17" extensions="asfx;pgfx;rgfx;wgfx" name="Model Files">
+			<elements>
+				<FileRef id="24" persistAs="../bed-9-svgrepo-com.svg"/>
+				<FileRef id="33" persistAs="../christmas-reindeer-head-svgrepo-com.svg"/>
+				<FileRef id="41" persistAs="../elf-1087758.svg"/>
+				<FileRef id="60" persistAs="../elf-svgrepo-com.svg"/>
+				<FileRef id="66" persistAs="../santa-claus-face-svgrepo-com.svg"/>
+				<FileRef id="79" persistAs="../reindeer-elk-svgrepo-com.svg"/>
+				<FileRef id="87" persistAs="../reindeer-elk-svgrepo-com - split.svg"/>
+				<FileRef id="99" persistAs="../summer-svgrepo-com.svg"/>
+				<FileRef id="105" persistAs="../travel-svgrepo-com.svg"/>
+				<FileRef id="120" persistAs="../santa-claus-redrawn.svg"/>
+				<FileRef id="128" persistAs="../summer-svgrepo-com-split.svg"/>
+				<FileRef id="177" persistAs="../tools-svgrepo-com.svg"/>
+				<FileRef id="185" persistAs="../tools-spanner-svgrepo-com.svg"/>
+				<FileRef id="197" persistAs="../gift-svgrepo-com.svg"/>
+				<FileRef id="203" persistAs="../gift-box-heart-svgrepo-com.svg"/>
+				<FileRef id="213" persistAs="SantaMonitor.rgfx"/>
+				<FileRef id="221" persistAs="reindeer.wgfx">
+					<props>
+						<Prop id="222" name="@RAPIDPROTO:MODELCOLORTABLE"/>
+						<Prop id="223" name="@RAPIDPROTO:MODELLWTABLE"/>
+						<Prop id="224" name="@RAPIDPROTO:MODELLSTABLE"/>
+					</props>
+				</FileRef>
+				<FileRef id="225" persistAs="elf.wgfx"/>
+			</elements>
+		</Folder>
+		<Folder id="20" extensions="sct;sft;sgt;sst;stt;swt" name="Resource Files">
+			<elements>
+				<FileRef id="290" persistAs="pictures.stt"/>
+			</elements>
+		</Folder>
+	</roots>
+	<configurations>
+		<Configuration id="2" name="Default"/>
+		<Configuration id="7" name="Windows"/>
+		<Configuration id="299" name="ScadeOnePanel"/>
+	</configurations>
+</Project>

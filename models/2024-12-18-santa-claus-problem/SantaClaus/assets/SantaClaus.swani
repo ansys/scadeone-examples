@@ -1,0 +1,24 @@
+-- version swan: 2025.0 graph: 2.0
+type SantaStatus = enum { S_SLEEPING, S_DELIVERING, S_HELPING };
+
+type ReindeerStatus = enum { R_VACATION, R_READY, R_FLYING };
+
+type ElfStatus = enum { E_WORKING, E_ISSUE, E_SOLVING /* Problem */ };
+
+const NB_REINDEERS: int32 = 9;
+
+node NorthPole_1_1 (endVacation: bool;
+                    meetIssue: bool;
+                    stopDelivery : bool;
+                    stopFixing : bool;)
+  returns (status: SantaStatus;
+           statusReindeer: ReindeerStatus;
+           statusElf: ElfStatus;);
+
+node NorthPole <<NB_ELVES>> (endVacation: bool^NB_REINDEERS;
+                             meetIssue: bool^NB_ELVES;
+                             stopDelivery : bool;
+                             stopFixing : bool;)
+  returns (status: SantaStatus;
+           statusReindeer: ReindeerStatus^NB_REINDEERS;
+           statusElves: ElfStatus^NB_ELVES;);

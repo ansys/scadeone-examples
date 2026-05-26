@@ -1,0 +1,18 @@
+-- version swan: 2025.0 graph: 2.0
+function random_true (probability: int32;)
+  returns (out: bool;);
+
+function random (min: 'I;
+                 max: 'I;)
+  returns (o: 'I;)
+  where 'I integer;
+
+function random_c32 (min: int32;
+                     max: int32;)
+  returns (o: int32;)
+  specialize random;
+
+function random_c64 (min: int64;
+                     max: int64;)
+  returns (o: int64;)
+  specialize random;

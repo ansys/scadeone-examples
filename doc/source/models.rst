@@ -70,8 +70,18 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
         :fas:`fa-solid fa-code` :model_sources:`View sources <2025-02-26-python-wrapper>`
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/jupyter-notebook-programming-with-the-scade-python-wrapper/>`__
-        
-    .. grid-item-card:: Advent of Code – String parsing with Scade One state machines 
+
+    .. grid-item-card:: Helping Santa: concurrent resource management with Scade One 
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2024-12-18-santa-claus-problem.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2024-12-18-santa-claus-problem>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2024-12-18-santa-claus-problem>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/helping-santa-concurrent-resource-management-with-scade-one/>`__
+
+    .. grid-item-card:: Advent of Code – String parsing with Scade One state machines
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2024-12-11-advent-of-code-2024.jpg
 

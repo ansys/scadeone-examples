@@ -1,0 +1,329 @@
+-- version swan: 2025.2 graph: 2.1 swant: 1.1
+use random;
+
+use SantaClaus;
+
+use Conversions;
+
+_harness test_random
+{
+  diagram
+    (#0 def _
+    #pragma diagram {"xy":"H56519;V31208"} #end)
+    (#1 expr forward
+      <<1000>>
+      diagram
+        (activate #2 $ActivateIf0
+          if random::random_true(50)
+          then
+            {
+              diagram
+                (let nb_true = last 'nb_true + 1;
+                #pragma diagram {"xy":"h0;v0","wh":"36000;3200"} #end)
+            #pragma diagram {"xy":"h0;v-4100","wh":"43000;7200"} #end
+            }
+          else
+            {
+              diagram
+                (let nb_false = last 'nb_false + 1;
+                #pragma diagram {"xy":"h0;v0","wh":"36000;3200"} #end)
+            #pragma diagram {"xy":"h0;v7300","wh":"43000;7200"} #end
+            }
+        #pragma diagram {"xy":"h0;v0","wh":"43000;24800"} #end)
+      returns (nb_true: last = 0_i32,
+               nb_false: last = 0_i32)
+    #pragma diagram {"xy":"H10819;V17475","wh":"51600;41200"} #end)
+    (#4 def _
+    #pragma diagram {"xy":"H38781;V-12775"} #end)
+    (#5 expr 50
+    #pragma diagram {"xy":"H-20219;V-12775"} #end)
+    (#6 def _
+    #pragma diagram {"xy":"H56519;V17475"} #end)
+    (#7 block random::random_true
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H9281;V-12775","wh":"20000;14000"} #end)
+    
+    (#9 wire #1 .(2) => #0
+    #pragma diagram {"wp":"v13733|#1 #0"} #end)
+    (#10 wire #1 .(1) => #6
+    #pragma diagram {"wp":"v0|#1 #6"} #end)
+    (#11 wire #7 => #4
+    #pragma diagram {"wp":"v0|#7 #4"} #end)
+    (#13 wire #5 => #7)
+}
+
+{text%
+      node #pragma harness data_source="../resources/SantaMonitor.spanel" #end SantaMonitor(
+        reindeers_states: int32^9;
+        santa_state: int32;
+        elves_states: int32^9;
+        santa_is_flying: bool
+      ) returns (
+      
+      );
+      %text}
+
+node SantaDashboard (status: SantaClaus::SantaStatus;
+                     statusElves: SantaClaus::ElfStatus^NB_ELVES;
+                     statusReindeer: SantaClaus::ReindeerStatus^SantaClaus::NB_REINDEERS;)
+  returns ()
+{
+  diagram
+    (#0 block ({op_expr%function status => status = SantaClaus::S_DELIVERING%op_expr})
+    #pragma diagram {"xy":"H-17875;V-43462","wh":"36000;14000"} #end)
+    (#1 block SantaMonitor
+    #pragma diagram {"xy":"H43025;V-35412","wh":"20000;65400"} #end)
+    (#2 block (map Conversions::reindeerStatus2Int) <<SantaClaus::NB_REINDEERS>>
+    #pragma diagram {"xy":"H-17875;V-59938","wh":"36000;17950"} #end)
+    (#4 block (map Conversions::elfStatus2Int) <<NB_ELVES>>
+    #pragma diagram {"xy":"H-17875;V-10888","wh":"36000;17900"} #end)
+    (#6 block Conversions::santaStatus2Int
+    #pragma diagram {"xy":"H-17875;V-27338","wh":"36000;14000"} #end)
+    (#7 expr statusElves
+    #pragma diagram {"xy":"H-59375;V-10888","wh":"16000;3200"} #end)
+    (#8 expr status
+    #pragma diagram {"xy":"H-56375;V-43462","wh":"10000;3200"} #end)
+    (#9 expr statusReindeer
+    #pragma diagram {"xy":"H-62375;V-59938","wh":"18000;3200"} #end)
+    
+    (#10 wire #9 => #2)
+    (#11 wire #4 => #1 .(elves_states)
+    #pragma diagram {"wp":"v-388|#4 #1"} #end)
+    (#12 wire #0 => #1 .(santa_is_flying)
+    #pragma diagram {"wp":"v0|#0 #1"} #end)
+    (#13 wire #2 => #1 .(reindeers_states)
+    #pragma diagram {"wp":"v0|#2 #1"} #end)
+    (#14 wire #6 => #1 .(santa_state)
+    #pragma diagram {"wp":"v0|#6 #1"} #end)
+    (#15 wire #7 => #4)
+    (#16 wire #8 => #6, #0
+    #pragma diagram {"wp":"#8 h9250[v16124 #6, #0]"} #end)
+}
+
+node TimesBomb (count: 't;
+                in: bool;)
+  returns (out: bool;)
+  where 't signed
+{
+  diagram
+    (#0 expr in and n=0
+    #pragma diagram {"xy":"H-68600;V-21700","wh":"14000;3200"} #end)
+    (#1 def out
+    #pragma diagram {"xy":"H-45600;V-21700"} #end)
+    
+    (#2 wire #0 => #1)
+    
+    (var
+        n: 't last=count;)
+    (activate #3 $ActivateIf0
+      if in
+      then
+        {
+          diagram
+            (let n = if last'n > 0 then last'n - 1 else count;
+            #pragma diagram {"xy":"h-1000;v0","wh":"50000;3200"} #end)
+        #pragma diagram {"xy":"h0;v-4100","wh":"59000;7200"} #end
+        }
+      else
+        {
+          diagram
+            (let n = 0;
+            #pragma diagram {"xy":"h0;v0","wh":"14000;3200"} #end)
+        #pragma diagram {"xy":"h0;v7300","wh":"59000;7200"} #end
+        }
+    #pragma diagram {"xy":"H-58400;V-40950","wh":"59000;24800"} #end)
+}
+
+_harness test_NorthPole_1_1
+{
+  diagram
+    (#0 block SantaClaus::NorthPole_1_1
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-230769;V48910","wh":"20000;44950"} #end)
+    (#31 expr durationVacation
+    #pragma diagram {"xy":"H-346219;V65766","wh":"20000;3200"} #end)
+    (#2 expr #4 pre #6
+      where
+        (#4 group)
+        (#6 group)
+    #pragma diagram {"dir":"sw","xy":"H-281618;V75334"} #end)
+    (#1 block ({op_expr%node s =>
+                        _current_cycle > 0
+                        and TimesBomb(10_i32, s = SantaClaus::S_DELIVERING)%op_expr})
+    #pragma diagram {"xy":"H-301075;V32053","wh":"52075;7000"} #end)
+    (#7 expr SantaClaus::R_VACATION
+    #pragma diagram {"dir":"sw","xy":"H-256641;V77234","wh":"26000;3200"} #end)
+    (#10 expr SantaClaus::E_WORKING
+    #pragma diagram {"dir":"sw","xy":"H-256641;V86802","wh":"24000;3200"} #end)
+    (#11 block ({op_expr%node s, d =>
+                         _current_cycle > 0
+                         and TimesBomb(d, s = SantaClaus::R_VACATION)%op_expr})
+    #pragma diagram {"xy":"H-301075;V65766","wh":"52075;7000"} #end)
+    (#3 expr SantaClaus::S_SLEEPING
+    #pragma diagram {"dir":"sw","xy":"H-256641;V18102","wh":"26000;3200"} #end)
+    (#12 block ({op_expr%node s, d =>
+                         _current_cycle > 0
+                         and TimesBomb(d, s = SantaClaus::E_WORKING)%op_expr})
+    #pragma diagram {"xy":"H-301075;V53235","wh":"52075;7000"} #end)
+    (#5 block ({op_expr%node s =>
+                        _current_cycle > 0
+                        and TimesBomb(5_i32, s = SantaClaus::S_HELPING)%op_expr})
+    #pragma diagram {"xy":"H-301075;V42644","wh":"52075;7000"} #end)
+    (#32 expr durationNoIssue
+    #pragma diagram {"xy":"H-346219;V51335","wh":"20000;3200"} #end)
+    (#13 expr #15 pre #17
+      where
+        (#15 group)
+        (#17 group)
+    #pragma diagram {"dir":"sw","xy":"H-281618;V84902"} #end)
+    (#8 expr #9 pre #14
+      where
+        (#9 group)
+        (#14 group)
+    #pragma diagram {"dir":"nw","xy":"H-281618;V20002"} #end)
+    
+    (#16 wire #5 => #0 .(stopFixing)
+    #pragma diagram {"wp":"v0|#5 #0"} #end)
+    (#26 wire #1 => #0 .(stopDelivery)
+    #pragma diagram {"wp":"v0|#1 #0"} #end)
+    (#27 wire #0 .(status) => #14
+    #pragma diagram {"wp":"v-12909|#0 h2000 v-14099 #14"} #end)
+    (#18 wire #0 .(statusReindeer) => #6
+    #pragma diagram {"wp":"v21356|#0 h3000 v3168 #6"} #end)
+    (#19 wire #0 .(statusElf) => #17
+    #pragma diagram {"wp":"v4223|#0 h4000 v29869 #17"} #end)
+    (#20 wire #11 => #0 .(endVacation)
+    #pragma diagram {"wp":"v0|#11 #0"} #end)
+    (#21 wire #12 => #0 .(meetIssue)
+    #pragma diagram {"wp":"v0|#12 #0"} #end)
+    (#22 wire #2 => #11 .(s)
+    #pragma diagram {"wp":"#2 h-42994 v-7902 #11"} #end)
+    (#23 wire #7 => #4)
+    (#24 wire #10 => #15)
+    (#25 wire #13 => #12 .(s)
+    #pragma diagram {"wp":"#13 h-71101 v-30067 #12"} #end)
+    (#28 wire #3 => #9)
+    (#29 wire #8 => #1 .(s), #5 .(s)
+    #pragma diagram {"wp":"#8 h-42994[v12051 #1, h-1000 v22642 #5]"} #end)
+    (#33 wire #32 => #12 .(d))
+    (#34 wire #31 => #11 .(d))
+    
+    (var
+        durationVacation: int32 last = 0;
+        durationNoIssue: int32 last = 0;)
+    (activate #30 $ActivateIf0
+      if _current_cycle = 1
+      then
+        {
+          diagram
+            (let durationVacation = random::random(5, 20);
+                 durationNoIssue = random::random(5, 10);
+            #pragma diagram {"xy":"h0;v0","wh":"48000;4219"} #end)
+        #pragma diagram {"xy":"h0;v-3700","wh":"55000;8219"} #end
+        }
+      else
+        {
+        #pragma diagram {"xy":"h0;v7809","wh":"55000;6400"} #end
+        }
+    #pragma diagram {"xy":"H-281618;V-14300","wh":"55000;25019"} #end)
+}
+
+const NB_ELVES: int32 = 9;
+
+node ControlTeam <<NB_ELVES>> (status: SantaClaus::SantaStatus;
+                               statusReindeer: SantaClaus::ReindeerStatus^SantaClaus::NB_REINDEERS;
+                               statusElves: SantaClaus::ElfStatus^NB_ELVES;)
+  returns (endVacation: bool^SantaClaus::NB_REINDEERS;
+           meetIssue: bool^NB_ELVES;
+           stopDelivery : bool;
+           stopFixing : bool;)
+{
+  diagram
+    (#0 expr statusReindeer
+    #pragma diagram {"xy":"H-132361;V-12174","wh":"18000;3200"} #end)
+    (#10 block ({op_expr%node s =>
+                         n_cycle > 0
+                         and TimesBomb(5_i32, s = SantaClaus::S_HELPING)%op_expr})
+    #pragma diagram {"xy":"H-51461;V-58787","wh":"55125;7000"} #end)
+    (#12 block ({op_expr%node s =>
+                         n_cycle > 0
+                         and TimesBomb(10_i32, s = SantaClaus::S_DELIVERING)%op_expr})
+    #pragma diagram {"xy":"H-51461;V-51287","wh":"55125;7000"} #end)
+    (#1 expr statusElves
+    #pragma diagram {"xy":"H-133361;V-32249","wh":"16000;3200"} #end)
+    (#19 def endVacation
+    #pragma diagram {"xy":"H15456;V-12187","wh":"16000;3200"} #end)
+    (#26 def stopDelivery
+    #pragma diagram {"xy":"H15456;V-51287","wh":"16000;3200"} #end)
+    (#27 def meetIssue
+    #pragma diagram {"xy":"H15456;V-32249","wh":"14000;3200"} #end)
+    (#28 def stopFixing
+    #pragma diagram {"xy":"H15456;V-58787","wh":"14000;3200"} #end)
+    (#29 expr status
+    #pragma diagram {"xy":"H-133361;V-49387","wh":"10000;3200"} #end)
+    (#2 block (map ({op_expr%node s =>
+                             n_cycle > 0
+                             and TimesBomb(random::random(5_i32, 10), s = SantaClaus::E_WORKING)%op_expr})) <<NB_ELVES>>
+    #pragma diagram {"xy":"H-51461;V-34249","wh":"68475;17975"} #end)
+    (#3 block (map ({op_expr%node s =>
+                             n_cycle > 0
+                             and TimesBomb(random::random(5_i32, 20), s = SantaClaus::R_VACATION)%op_expr})) <<SantaClaus::NB_REINDEERS>>
+    #pragma diagram {"xy":"H-51223;V-14174","wh":"68475;17975"} #end)
+    (let n_cycle = last'n_cycle + 1;
+    #pragma diagram {"xy":"H-51461;V-66900","wh":"34000;3200"} #end)
+    
+    (#31 wire #2 => #27
+    #pragma diagram {"wp":"v0|#2 #27"} #end)
+    (#4 wire #1 => #2 .(s))
+    (#5 wire #0 => #3 .(s))
+    (#32 wire #10 => #28
+    #pragma diagram {"wp":"v0|#10 #28"} #end)
+    (#33 wire #12 => #26
+    #pragma diagram {"wp":"v0|#12 #26"} #end)
+    (#34 wire #3 => #19
+    #pragma diagram {"wp":"v-13|#3 #19"} #end)
+    (#35 wire #29 => #12 .(s), #10 .(s)
+    #pragma diagram {"wp":"#29 h43219[#12, v-9400 #10]"} #end)
+    
+    (var
+        n_cycle: int64 last=0;)
+}
+
+_harness test_NorthPole
+{
+  diagram
+    (#0 block SantaClaus::NorthPole <<NB_ELVES>> 
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-201659;V-5430","wh":"20000;23625"} #end)
+    (#6 group byname
+    #pragma diagram {"xy":"H-174428;V-5430"} #end)
+    (#3 block SantaDashboard
+    #pragma diagram {"xy":"H-147197;V-5430","wh":"20000;23625"} #end)
+    (#1 expr #2 pre #10
+      where
+        (#2 group)
+        (#10 group)
+    #pragma diagram {"dir":"sw","xy":"H-231859;V10937"} #end)
+    (#13 expr (
+              status: SantaClaus::S_SLEEPING,
+              statusElves: SantaClaus::E_WORKING^NB_ELVES,
+              statusReindeer: SantaClaus::R_VACATION^SantaClaus::NB_REINDEERS
+              )
+    #pragma diagram {"dir":"sw","xy":"H-183297;V16589","wh":"64000;9797"} #end)
+    (#4 block ControlTeam <<NB_ELVES>> 
+    #pragma diagram {"xy":"H-256122;V-5430","wh":"20000;23625"} #end)
+    (#5 group byname
+    #pragma diagram {"xy":"H-228891;V-5430"} #end)
+    
+    (#7 wire #0 => #6
+    #pragma diagram {"wp":"v0|#0 #6"} #end)
+    (#8 wire #6 => #3, #10
+    #pragma diagram {"wp":"#6 h3500[#3, v14467 #10]"} #end)
+    (#9 wire #5 => #0)
+    (#16 wire #13 => #2
+    #pragma diagram {"wp":"#13 h-6781 v-3752 #2"} #end)
+    (#11 wire #4 => #5
+    #pragma diagram {"wp":"v0|#4 #5"} #end)
+    (#12 wire #1 => #4
+    #pragma diagram {"wp":"#1 h-31763 v-16367 #4"} #end)
+}

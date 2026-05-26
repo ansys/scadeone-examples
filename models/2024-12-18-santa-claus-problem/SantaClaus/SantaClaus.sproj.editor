@@ -1,0 +1,10 @@
+{
+  "JobsOrder": [],
+  "ModulesOrder": [
+    "assets\\SantaClaus.swani",
+    "assets\\SantaClaus.swan",
+    "assets\\Tests.swant",
+    "assets\\random.swani",
+    "assets\\Conversions.swan"
+  ]
+}
