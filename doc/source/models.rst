@@ -71,7 +71,7 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/jupyter-notebook-programming-with-the-scade-python-wrapper/>`__
         
-    .. grid-item-card:: Message decoding using the forward block and variant types 
+    .. grid-item-card:: Message decoding using the forward block and variant types
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2024-09-18-message-decoding.jpg
 
@@ -81,7 +81,18 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/message-decoding-using-the-forward-block-and-variant-types/>`__
 
-    .. grid-item-card:: Message decoding using the forward block and variant types 
+    .. grid-item-card:: Boyer-Moore voting in Scade One: unlock the power of streaming algorithms
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2024-08-21-boyer-moore-majority.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2024-08-21-boyer-moore-majority>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2024-08-21-boyer-moore-majority>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/boyer-moore-voting-in-scade-one-unlock-the-power-of-streaming-algorithms/>`__
+
+
+    .. grid-item-card:: Message decoding using the forward block and variant types
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2024-07-15-matrix-operators.jpg
 
