@@ -23,6 +23,7 @@
 models/**/Standalone/
 models/**/GCS_Exe/
 models/**/kcgdisplay/
+*_ScadeOneCoSimulation/
 
 ### Python #### Byte-compiled / optimized / DLL files
 __pycache__/
