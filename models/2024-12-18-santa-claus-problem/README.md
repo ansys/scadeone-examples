@@ -1,12 +1,13 @@
 ## Requirements
-* Ansys Scade One 2025 R1 or later
-* Ansys SCADE Rapid Prototyper 2025 R1 or later
+* Ansys Scade One 2025 R2 or later
+* Ansys SCADE Rapid Prototyper 2025 R2 or later
 
 ## Instructions
 1. Open project `SantaPanel/SantaPanel.etp` in SCADE Rapid Prototyper.
-2. Run build configuration `ScadeOnePanel` to (re)build `SantaClaus/resources/SantaMonitor.spanel`.
-3. Open project `SantaClaus/SantaClaus.sproj` in Scade One.
-4. Run a debug session on test harness `Tests::test_NorthPole`.
+2. Run build configuration `ScadeOnePanel` to (re)build `SantaPanel/SantaMonitor_ScadeOneCosimulation/SantaMonitor.sproj`.
+3. Copy the newly-built `SantaPanel/SantaMonitor_ScadeOneCosimulation/SantaMonitor.sproj` to `SantaClaus/resources/SantaMonitor.spanel`. 
+4. Open project `SantaClaus/SantaClaus.sproj` in Scade One.
+5. Run a debug session on test harness `Tests::test_NorthPole`.
 
 ## Model details
 The Santa Claus Problem is a synchronization problem in concurrent programming.

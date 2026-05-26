@@ -53,15 +53,15 @@ _harness test_random
 }
 
 {text%
-      node #pragma harness data_source="../resources/SantaMonitor.spanel" #end SantaMonitor(
-        reindeers_states: int32^9;
-        santa_state: int32;
-        elves_states: int32^9;
-        santa_is_flying: bool
-      ) returns (
-      
-      );
-      %text}
+node #pragma cg keep #end #pragma swt data_source="../resources/SantaMonitor.spanel" #end SantaMonitor(
+  reindeers_states: int32^9;
+  santa_state: int32;
+  elves_states: int32^9;
+  santa_is_flying: bool
+) returns (
+
+);
+%text}
 
 node SantaDashboard (status: SantaClaus::SantaStatus;
                      statusElves: SantaClaus::ElfStatus^NB_ELVES;

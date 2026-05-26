@@ -5,7 +5,7 @@
 			<value>RAPIDPROTO</value>
 		</Prop>
 		<Prop id="4" name="@RAPIDPROTO:RELEASE">
-			<value>24.1</value>
+			<value>25.2</value>
 		</Prop>
 		<Prop id="8" name="@RAPIDPROTO:CONFTARGET">
 			<value>Windows</value>
