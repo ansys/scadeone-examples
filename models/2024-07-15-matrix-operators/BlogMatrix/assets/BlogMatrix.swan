@@ -1,0 +1,212 @@
+-- version swan: 2025.0 graph: 2.0
+function Dot <<N>> (a: 'T^N;
+                    b: 'T^N;)
+  returns (v: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#0 expr forward
+      <<N>> with <<i>>
+      diagram
+        (#1 expr #2 * #3
+          where
+            (#2 group)
+            (#3 group)
+        #pragma diagram {"xy":"h-10000;v1850"} #end)
+        (#4 expr #5 + #6
+          where
+            (#5 group)
+            (#6 group)
+        #pragma diagram {"xy":"h10000;v-1850"} #end)
+        (#7 def s
+        #pragma diagram {"xy":"h29000;v-1850"} #end)
+        (#8 expr last's
+        #pragma diagram {"xy":"h-10000;v-3750","wh":"10000;3200"} #end)
+        (#9 expr a[i]
+        #pragma diagram {"xy":"h-29000;v-50"} #end)
+        (#10 expr b[i]
+        #pragma diagram {"xy":"h-29000;v3750"} #end)
+        
+        (#11 wire #4 => #7)
+        (#12 wire #1 => #6
+        #pragma diagram {"wp":"#1 h6500 v-1800 #6"} #end)
+        (#13 wire #8 => #5)
+        (#14 wire #9 => #2)
+        (#15 wire #10 => #3)
+      returns (s: last=0)
+      #pragma diagram {"xy":"H-11700;V-6150","wh":"74600;27100"} #end)
+    (#16 def v
+    #pragma diagram {"xy":"H37250;V-5900"} #end)
+    
+    (#17 wire #0 => #16
+    #pragma diagram {"wp":"v250|#0 #16"} #end)
+}
+
+function Dot2 <<N>> (a: 'T^N;
+                     b: 'T^N;)
+  returns (v: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#0 expr forward
+      <<N>> with [ai] = a; [bi] = b;
+      diagram
+        (#1 expr #2 * #3
+          where
+            (#2 group)
+            (#3 group)
+        #pragma diagram {"xy":"h-10000;v1850"} #end)
+        (#4 expr #5 + #6
+          where
+            (#5 group)
+            (#6 group)
+        #pragma diagram {"xy":"h10000;v-1850"} #end)
+        (#7 def s
+        #pragma diagram {"xy":"h29000;v-1850"} #end)
+        (#8 expr last's
+        #pragma diagram {"xy":"h-10000;v-3750","wh":"10000;3200"} #end)
+        (#9 expr ai
+        #pragma diagram {"xy":"h-29000;v-50"} #end)
+        (#10 expr bi
+        #pragma diagram {"xy":"h-29000;v3750"} #end)
+        
+        (#11 wire #4 => #7)
+        (#12 wire #1 => #6
+        #pragma diagram {"wp":"#1 h6500 v-1800 #6"} #end)
+        (#13 wire #8 => #5)
+        (#14 wire #9 => #2)
+        (#15 wire #10 => #3)
+      returns (s: last=0)
+      #pragma diagram {"xy":"H-11700;V-6150","wh":"74600;27100"} #end)
+    (#16 def v
+    #pragma diagram {"xy":"H37250;V-5900"} #end)
+    
+    (#17 wire #0 => #16
+    #pragma diagram {"wp":"v250|#0 #16"} #end)
+}
+
+function GetDiagonal <<N>> (A: 'T^N^N;)
+  returns (v: 'T^N;)
+  where 'T numeric
+{
+  diagram
+    (#0 def v
+    #pragma diagram {"xy":"H7850;V11050"} #end)
+    (#1 expr forward
+      <<N>> with <<i>>
+      diagram
+        (let vi = A[i][i];
+        #pragma diagram {"xy":"h-1000;v0","wh":"20000;3200"} #end)
+      returns ([vi])
+      #pragma diagram {"xy":"H-22950;V11050","wh":"30600;19600"} #end)
+    
+    (#3 wire #1 => #0
+    #pragma diagram {"wp":"v0|#1 #0"} #end)
+}
+
+function MatMatProd <<M, N, P>> (A: 'T^M^N;
+                                 B : 'T^P^M;)
+  returns (C: 'T^P^N;)
+  where 'T numeric
+{
+  diagram
+    (#0 expr forward
+      <<N>> with <<i>>
+      <<P>> with <<j>>
+      diagram
+        (#1 expr forward
+          <<M>> with <<k>>
+          diagram
+            (#2 expr #3 * #4
+              where
+                (#3 group)
+                (#4 group)
+            #pragma diagram {"xy":"h-14400;v950"} #end)
+            (#5 expr #6 + #7
+              where
+                (#6 group)
+                (#7 group)
+            #pragma diagram {"xy":"h13517;v-950"} #end)
+            (#8 expr A[i][k]
+            #pragma diagram {"xy":"h-28634;v-950","wh":"12000;3200"} #end)
+            (#9 expr B[k][j]
+            #pragma diagram {"xy":"h-28634;v2850","wh":"12000;3200"} #end)
+            (#10 expr last 'sum
+            #pragma diagram {"xy":"h-441;v-2850","wh":"14000;3200"} #end)
+            (#11 def sum
+            #pragma diagram {"xy":"h30634;v-950"} #end)
+            
+            (#12 wire #8 => #3)
+            (#13 wire #9 => #4)
+            (#14 wire #2 => #7)
+            (#15 wire #10 => #6)
+            (#16 wire #5 => #11)
+          returns (sum: last=0)
+          #pragma diagram {"xy":"h-7253;v0","wh":"77868;25300"} #end)
+        (#17 def Cij
+        #pragma diagram {"xy":"h40588;v-750"} #end)
+        
+        (#18 wire #1 => #17
+        #pragma diagram {"wp":"v-750|#1 #17"} #end)
+      returns ([[Cij]])
+      #pragma diagram {"xy":"H-118338;V-60400","wh":"97775;43900"} #end)
+    (#19 def C
+    #pragma diagram {"xy":"H-60543;V-59850"} #end)
+    
+    (#20 wire #0 => #19
+    #pragma diagram {"wp":"v550|#0 #19"} #end)
+}
+
+function KroneckerProd <<N, M, Q, P>> (A: 'T^N^M;
+                                       B: 'T^Q^P;)
+  returns (C: 'T^(Q*N)^(P*M);)
+  where 'T numeric
+{
+  diagram
+    (#0 def C
+    #pragma diagram {"xy":"H22250;V4750"} #end)
+    (#1 expr forward
+      <<P*M>> with <<i>>
+      <<Q*N>> with <<j>>
+      diagram
+        (#2 def Cij
+        #pragma diagram {"xy":"h23100;v0"} #end)
+        (#3 expr #4 * #5
+          where
+            (#4 group)
+            (#5 group)
+        #pragma diagram {"xy":"h7000;v0"} #end)
+        (#6 expr A[i/P][j/Q]
+        #pragma diagram {"xy":"h-13100;v-1900","wh":"16000;3200"} #end)
+        (#7 expr B[i mod P][j mod Q]
+        #pragma diagram {"xy":"h-16100;v1900","wh":"22000;3200"} #end)
+        
+        (#8 wire #3 => #2)
+        (#9 wire #6 => #4)
+        (#10 wire #7 => #5)
+      returns ([[Cij]])
+      #pragma diagram {"xy":"H-21650;V3450","wh":"62800;25600"} #end)
+    
+    (#11 wire #1 => #0
+    #pragma diagram {"wp":"v1300|#1 #0"} #end)
+}
+
+function Scale <<N, M>> (A: 'T^N^M;
+                         x : 'T;)
+  returns (B: 'T^N^M;)
+  where 'T numeric
+{
+  diagram
+    (#0 block (map 
+                (map ({op_expr%function ai => ai * x%op_expr})) <<N>>)
+               <<M>>
+    #pragma diagram {"xy":"H-26350;V-11675","wh":"24000;21000"} #end)
+    (#2 expr A
+    #pragma diagram {"xy":"H-50850;V-8175"} #end)
+    (#3 def B
+    #pragma diagram {"xy":"H-1850;V-8175"} #end)
+    
+    (#4 wire #2 => #0 .(ai))
+    (#5 wire #0 => #3
+    #pragma diagram {"wp":"v0|#0 #3"} #end)
+}

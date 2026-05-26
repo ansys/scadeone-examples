@@ -80,3 +80,13 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
         :fas:`fa-solid fa-code` :model_sources:`View sources <2024-09-18-message-decoding>`
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/message-decoding-using-the-forward-block-and-variant-types/>`__
+
+    .. grid-item-card:: Message decoding using the forward block and variant types 
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2024-07-15-matrix-operators.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2024-07-15-matrix-operators>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2024-07-15-matrix-operators>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/matrix-operators-using-scade-ones-forward-block/>`__
