@@ -30,7 +30,8 @@ def str_to_char_array(line):
     -------
         A Swan array literal, e.g. ``['a','b','c','d','e','f']``.
     """
-    return f"['{"','".join(list(line))}']"
+    # No f-string for Python 3.11 compatibility
+    return "['" + "','".join(list(line)) + "']"
 
 
 def input_to_swan(base_name):
