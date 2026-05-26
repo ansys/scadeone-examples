@@ -1,0 +1,9 @@
+{
+  "JobsOrder": [],
+  "ModulesOrder": [
+    "assets\\Message.swan",
+    "assets\\QuadTypes.swani",
+    "assets\\RadioControl.swan",
+    "assets\\SimRadioControl.swant"
+  ]
+}

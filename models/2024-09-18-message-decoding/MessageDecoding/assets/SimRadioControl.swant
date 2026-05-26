@@ -1,0 +1,142 @@
+-- version swan: 2025.0 graph: 2.0 swant: 1.1
+use RadioControl;
+
+use Message as M;
+
+_harness SimDecodeBuffer
+{
+  diagram
+    (#0 #pragma swt under_test #end block RadioControl::DecodeBuffer
+                                          #pragma diagram {"xy":"H-9975;V0","wh":"20000;14000"} #end)
+    (#1 expr [M::HEADER, M::MSG_RESET, 0x00, M::FOOTER, M::END,
+              M::END, M::END, M::END, M::END, M::END, M::END, 
+              M::END, M::END, M::END, M::END, M::END, M::END,
+              M::END, M::END, M::END, M::END]
+    #pragma diagram {"xy":"H-94450;V-12600","wh":"52000;7938"} #end)
+    (#3 def _
+    #pragma diagram {"xy":"H13000;V-3800"} #end)
+    (#4 def _
+    #pragma diagram {"xy":"H13000;V3750"} #end)
+    (#16 expr [M::HEADER, M::MSG_UPDT_ATTITUDE, 0x01, 0x02, 0x03, M::FOOTER, 
+               M::HEADER, M::MSG_SET_ACCEL, 0x08, M::FOOTER, M::END,
+               M::END, M::END, M::END, M::END, M::END, M::END, 
+               M::END, M::END, M::END, M::END]
+    #pragma diagram {"xy":"H-118955;V26380","wh":"64000;7938"} #end)
+    (#19 expr #20 pre #21
+      where
+        (#20 group)
+        (#21 group)
+    #pragma diagram {"xy":"H-62630;V12619"} #end)
+    (#22 expr #25 pre #26
+      where
+        (#25 group)
+        (#26 group)
+    #pragma diagram {"xy":"H-74030;V32130"} #end)
+    (#10 expr [M::HEADER, M::MSG_SET_ACCEL, 0x00, M::FOOTER, M::END,
+               M::END, M::END, M::END, M::END, M::END, M::END, 
+               M::END, M::END, M::END, M::END, M::END, M::END,
+               M::END, M::END, M::END, M::END]
+    #pragma diagram {"xy":"H-98450;V69","wh":"56000;7938"} #end)
+    (#2 expr #7 pre #8
+      where
+        (#7 group)
+        (#8 group)
+    #pragma diagram {"xy":"H-34950;V-1900"} #end)
+    (#9 expr [M::HEADER, M::MSG_UPDT_ATTITUDE, 0x01, 0x02, 0x03, M::FOOTER, M::END,
+              M::END, M::END, M::END, M::END, M::END, M::END, 
+              M::END, M::END, M::END, M::END, M::END, M::END,
+              M::END, M::END]
+    #pragma diagram {"xy":"H-109900;V14132","wh":"70000;7938"} #end)
+    (#11 expr #12 pre #13
+      where
+        (#12 group)
+        (#13 group)
+    #pragma diagram {"xy":"H-48810;V8244"} #end)
+    (#27 expr [M::HEADER, M::MSG_UPDT_ATTITUDE, 0x01, 0x02, 0x03, M::FOOTER, 
+               M::HEADER, M::MSG_SET_ACCEL, 0x08, M::FOOTER,
+               M::HEADER, M::MSG_RESET, 0x00, M::FOOTER, M::END,
+               M::END, M::END, M::END, M::END, M::END, M::END]
+    #pragma diagram {"xy":"H-118955;V41175","wh":"64000;7938"} #end)
+    
+    (#14 wire #1 => #7
+    #pragma diagram {"wp":"#1 h4247 v8800 #7"} #end)
+    (#5 wire #0 .(msgs) => #3
+    #pragma diagram {"wp":"v-3800|#0 #3"} #end)
+    (#6 wire #0 .(msgCount) => #4
+    #pragma diagram {"wp":"v3750|#0 #4"} #end)
+    (#28 wire #16 => #25
+    #pragma diagram {"wp":"#16 h4962 v3850 #25"} #end)
+    (#23 wire #19 => #13
+    #pragma diagram {"wp":"#19 h3000 v-2475 #13"} #end)
+    (#15 wire #10 => #12
+    #pragma diagram {"wp":"#10 h5247 v6275 #12"} #end)
+    (#24 wire #9 => #20
+    #pragma diagram {"wp":"#9 h4635 v-3413 #20"} #end)
+    (#17 wire #11 => #8
+    #pragma diagram {"wp":"#11 h3000 v-8244 #8"} #end)
+    (#18 wire #2 => #0)
+    (#29 wire #22 => #21
+    #pragma diagram {"wp":"#22 h3500 v-7609 h-4600 v-10002 #21"} #end)
+    (#30 wire #27 => #26
+    #pragma diagram {"wp":"#27 h4962 v-7145 #26"} #end)
+}
+
+_harness SimDecodeBufferError
+{
+  diagram
+    (#0 #pragma swt under_test #end block RadioControl::DecodeBuffer
+                                          #pragma diagram {"xy":"H-9975;V0","wh":"20000;14000"} #end)
+    (#1 def _
+    #pragma diagram {"xy":"H13000;V-3800"} #end)
+    (#2 def _
+    #pragma diagram {"xy":"H13000;V3750"} #end)
+    (#3 expr [M::HEADER, M::MSG_UPDT_ATTITUDE, 0x01, 0x02, M::FOOTER, M::END,
+              M::END, M::END, M::END, M::END, M::END, M::END, 
+              M::END, M::END, M::END, M::END, M::END, M::END,
+              M::END, M::END, M::END]
+    #pragma diagram {"xy":"H-70000;V0","wh":"66000;7938"} #end)
+    
+    (#4 wire #0 .(msgs) => #1
+    #pragma diagram {"wp":"v-3800|#0 #1"} #end)
+    (#5 wire #0 .(msgCount) => #2
+    #pragma diagram {"wp":"v3750|#0 #2"} #end)
+    (#6 wire #3 => #0)
+}
+
+_harness SimDecodeBufferLong
+{
+  diagram
+    (#0 #pragma swt under_test #end block RadioControl::DecodeBufferLong
+                                          #pragma diagram {"xy":"H-11500;V1803","wh":"20000;17605"} #end)
+    (#1 expr [M::HEADER, M::MSG_UPDT_ATTITUDE, 0x01]
+               pre [0x02, 0x03, M::FOOTER]
+               pre [M::HEADER, M::MSG_SET_ACCEL, 0x08]
+               pre [M::FOOTER, M::HEADER, M::MSG_RESET]
+               pre [0x00, M::FOOTER, M::END]
+    #pragma diagram {"xy":"H-51250;V1803","wh":"44000;9797"} #end)
+    (#2 def _
+    #pragma diagram {"xy":"H13000;V-3800"} #end)
+    (#3 def _
+    #pragma diagram {"xy":"H13000;V2603"} #end)
+    (#7 def _
+    #pragma diagram {"xy":"H13000;V9005"} #end)
+    
+    (#8 wire #0 .(done) => #7
+    #pragma diagram {"wp":"v7202|#0 #7"} #end)
+    (#4 wire #0 .(msgs) => #2
+    #pragma diagram {"wp":"v-5603|#0 #2"} #end)
+    (#5 wire #0 .(msgCount) => #3
+    #pragma diagram {"wp":"v800|#0 #3"} #end)
+    (#6 wire #1 => #0)
+}
+
+_harness SimDecodeUpdateAttitude
+{
+  diagram
+    (#0 #pragma swt under_test #end block RadioControl::DecodeUpdateAttitude
+                                          #pragma diagram {"xy":"H0;V0","wh":"20847;7000"} #end)
+    (#1 expr 0x01 pre 0x02 pre 0x03 pre M::FOOTER
+    #pragma diagram {"xy":"H-40750;V0","wh":"38000;3200"} #end)
+    
+    (#2 wire #1 => #0)
+}
