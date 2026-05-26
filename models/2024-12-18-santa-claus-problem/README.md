@@ -1,6 +1,6 @@
 ## Requirements
-* Ansys Scade One 2025 R2 or later
-* Ansys SCADE Rapid Prototyper 2025 R2 or later
+* Ansys Scade One 2026 R1 or later
+* Ansys SCADE Rapid Prototyper 2026 R1 or later
 
 ## Instructions
 1. Open project `SantaPanel/SantaPanel.etp` in SCADE Rapid Prototyper.
