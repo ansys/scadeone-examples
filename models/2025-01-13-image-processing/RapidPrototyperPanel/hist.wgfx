@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?dom version="19.0" ?>
+
+<object>
+    <IDE>
+        <ratio horizontal="1" vertical="1"/>
+        <project path="RapidPrototyperPanel.etp"/>
+        <preview height="128" width="11">
+            <raw numberOfBytes="140">
+-119,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,11,0,0,0,-128,8,2,0,0,0,82,-71,4,106,0,0,0,83,73,68,65,84,120,94,-19,-54,-95,21,-64,48,12,-60,-48,32,-61,-20,-31,109,60,67,22,-51,106,53,-22,-117,66,74,11,-12,-63,1,91,99,28,-86,106,-17,-35,123,30,-63,-126,44,-56,-126,44,-56,-126,44,-56,-126,44,-56,-126,44,-56,-126,44,-56,-126,44,-56,-126,-66,-117,-52,92,107,-11,-34,-113,87,68,-52,57,123,-17,-57,31,60,58,-118,-8,76,-97,-64,-66,25,0,0,0,0,73,69,78,68,-82,66,96,-126</raw>
+        </preview>
+    </IDE>
+    <symbology>
+        <dimension height="256" width="256"/>
+    </symbology>
+    <declaration>
+        <inputs>
+            <input name="pos" oid="9fd1f9e5-8183-4eca-a713-3a6a18862c99" type="float32">
+                <init>0.0</init>
+            </input>
+            <input name="val" oid="c3b9b343-0bf0-4bab-80b4-7268b677d59b" type="uint8">
+                <init>255</init>
+            </input>
+            <input name="sizey" oid="e8650ba5-cbd7-47bd-bcc6-76dd397881f9" type="float32">
+                <init>80.0</init>
+            </input>
+        </inputs>
+    </declaration>
+    <children>
+        <container oid="c77ee991-3a5e-4445-8c57-33a7c88d3651">
+            <pathFromRoot value="0"/>
+            <properties name="group">
+                <visible>
+                    <init>true</init>
+                </visible>
+                <origin>
+                    <x>
+                        <init>0.0</init>
+                        <expr>real pos</expr>
+                    </x>
+                    <y>
+                        <init>0.0</init>
+                    </y>
+                </origin>
+                <priority>
+                    <init>-1</init>
+                </priority>
+                <scale>
+                    <x>
+                        <init>1.0</init>
+                    </x>
+                    <y>
+                        <init>1.0</init>
+                    </y>
+                </scale>
+                <rotate>
+                    <angle>
+                        <init>0.0</init>
+                    </angle>
+                </rotate>
+                <orientation clockwise="false"/>
+                <static editorLinked="true" generateStaticSequence="true" maxX="6.0" maxY="261.0" minX="-6.0" minY="-6.0">
+                    <init>false</init>
+                </static>
+            </properties>
+            <children>
+                <line oid="45cfb7eb-f3f1-4241-8fe5-13903ebb70db">
+                    <pathFromRoot value="0,0"/>
+                    <properties name="line">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <points>
+                            <point>
+                                <x>
+                                    <init>0.0</init>
+                                </x>
+                                <y>
+                                    <init>0.0</init>
+                                </y>
+                            </point>
+                            <point>
+                                <x>
+                                    <init>0.0</init>
+                                </x>
+                                <y>
+                                    <init>255.0</init>
+                                    <expr>(sizey * (real val)) / 255.0</expr>
+                                </y>
+                            </point>
+                        </points>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <lineStipple>
+                            <init>0</init>
+                        </lineStipple>
+                        <lineCap>
+                            <init>round</init>
+                        </lineCap>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <outlineOpacity>
+                            <init>255</init>
+                        </outlineOpacity>
+                    </properties>
+                </line>
+            </children>
+        </container>
+    </children>
+</object>
+
+<!-- crc32 : 4192464051 -->

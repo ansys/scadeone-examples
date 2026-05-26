@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?dom version="19.0" ?>
+
+<object>
+    <IDE>
+        <ratio horizontal="1" vertical="1"/>
+        <project path="RapidPrototyperPanel.etp"/>
+        <preview height="128" width="21">
+            <raw numberOfBytes="153">
+-119,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,21,0,0,0,-128,8,2,0,0,0,107,-34,-75,49,0,0,0,96,73,68,65,84,120,94,-19,-39,49,17,0,33,12,69,65,-68,80,-30,39,34,-80,-124,24,-84,65,77,115,76,-104,-21,-10,21,-65,-55,-84,-126,-108,34,-3,83,-83,-75,-75,-74,-9,60,92,22,17,-67,-9,-67,-25,-31,-78,49,-58,-100,115,-17,121,-72,-116,-25,121,-98,-49,-59,-13,60,-49,-25,-30,121,-98,-25,115,-15,60,-49,-13,-71,120,-98,-25,-7,92,-81,-1,-85,-41,-1,-103,-12,-43,2,112,38,119,-97,6,106,-19,-115,0,0,0,0,73,69,78,68,-82,66,96,-126</raw>
+        </preview>
+    </IDE>
+    <symbology>
+        <dimension height="256" width="256"/>
+    </symbology>
+    <declaration>
+        <constants>
+            <constant name="n" oid="f2579c5f-d989-4d2c-94bd-a458a34d3ad9" type="int">
+                <init>80</init>
+            </constant>
+        </constants>
+        <inputs>
+            <input name="val" oid="a3e8a2c9-87c2-462e-8e08-26fb95114949" representation="as_int_array" type="uint8^n">
+                <init>[255]</init>
+            </input>
+            <input name="sizex" oid="91b85a80-e5eb-4759-87d7-e91f7d19b17d" type="float32">
+                <init>80.0</init>
+            </input>
+            <input name="sizey" oid="42c4cd3e-d00f-4330-ab21-0a52b8259db4" type="float32">
+                <init>80.0</init>
+            </input>
+        </inputs>
+        <locals>
+            <local memory="true" name="pos" oid="f5f568ee-a888-47fa-8a71-028197f74e89" type="float32^n">
+                <init>[0.0]</init>
+            </local>
+            <local memory="true" name="init" oid="826a811e-c7d3-4637-b6eb-5a3a8024f120" type="bool">
+                <init>true</init>
+            </local>
+        </locals>
+    </declaration>
+    <children>
+        <container oid="d0782b4d-a52e-406e-8aea-cd246d70ff1c">
+            <pathFromRoot value="0"/>
+            <properties name="group">
+                <visible>
+                    <init>true</init>
+                </visible>
+                <origin>
+                    <x>
+                        <init>0.0</init>
+                    </x>
+                    <y>
+                        <init>0.0</init>
+                    </y>
+                </origin>
+                <priority>
+                    <init>-1</init>
+                </priority>
+                <scale>
+                    <x>
+                        <init>1.0</init>
+                    </x>
+                    <y>
+                        <init>1.0</init>
+                    </y>
+                </scale>
+                <rotate>
+                    <angle>
+                        <init>0.0</init>
+                    </angle>
+                </rotate>
+                <orientation clockwise="false"/>
+                <static editorLinked="true" generateStaticSequence="true" maxX="8.0" maxY="88.0" minX="-8.0" minY="-8.0">
+                    <init>false</init>
+                </static>
+            </properties>
+            <children>
+                <imported oid="4e8b8f02-c34d-4b1f-ad17-73442843597c">
+                    <pathFromRoot value="0,0"/>
+                    <properties name="posIndex">
+                        <function name="posIndex80"/>
+                        <enable>
+                            <init>true</init>
+                            <expr>init</expr>
+                        </enable>
+                        <restoreStates>
+                            <init>true</init>
+                        </restoreStates>
+                        <memory>
+                            <init>false</init>
+                        </memory>
+                        <inputParameters>
+                            <parameter name="n" oid="" type="int">
+                                <expr>n</expr>
+                                <init>80</init>
+                            </parameter>
+                            <parameter name="size" oid="" type="float32">
+                                <expr>sizex</expr>
+                                <init>0.0</init>
+                            </parameter>
+                        </inputParameters>
+                        <outputParameters>
+                            <parameter name="pos" oid="" type="float32^n">
+                                <expr>pos</expr>
+                            </parameter>
+                        </outputParameters>
+                    </properties>
+                </imported>
+                <nplicatorContainer oid="21250aef-f7f0-47ea-b068-7cdebb4c6991">
+                    <pathFromRoot value="1,0"/>
+                    <properties modular="false" name="hist_np">
+                        <replication>
+                            <init>80</init>
+                            <expr>n</expr>
+                        </replication>
+                        <file name="hist.wgfx" path="."/>
+                        <crc value="2172233441"/>
+                        <visible>
+                            <init>[true]</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>[0.0]</init>
+                            </x>
+                            <y>
+                                <init>[0.0]</init>
+                            </y>
+                        </origin>
+                        <rotate>
+                            <angle>
+                                <init>[0.0]</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <scale>
+                            <x>
+                                <init>[1.0]</init>
+                            </x>
+                            <y>
+                                <init>[1.0]</init>
+                            </y>
+                        </scale>
+                        <inputParameters>
+                            <parameter control="false" name="pos" oid="9fd1f9e5-8183-4eca-a713-3a6a18862c99" type="float32^n">
+                                <expr>pos</expr>
+                                <init>[0.0]</init>
+                            </parameter>
+                            <parameter control="false" name="val" oid="c3b9b343-0bf0-4bab-80b4-7268b677d59b" type="uint8^n">
+                                <expr>val</expr>
+                                <init>[255]</init>
+                            </parameter>
+                            <parameter control="false" name="sizey" oid="e8650ba5-cbd7-47bd-bcc6-76dd397881f9" type="float32^n">
+                                <expr>[sizey]</expr>
+                                <init>[80.0]</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </nplicatorContainer>
+                <assignment oid="abc95f94-4c1b-483e-8c3e-d3b9268d83a1">
+                    <pathFromRoot value="2,0"/>
+                    <properties name="assignment">
+                        <enable>
+                            <init>true</init>
+                        </enable>
+                        <input>
+                            <init>false</init>
+                            <expr>false</expr>
+                        </input>
+                        <output>
+                            <expr>init</expr>
+                        </output>
+                    </properties>
+                </assignment>
+            </children>
+        </container>
+    </children>
+</object>
+
+<!-- crc32 : 1930828656 -->

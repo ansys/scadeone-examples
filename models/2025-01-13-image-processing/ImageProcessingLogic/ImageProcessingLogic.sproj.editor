@@ -1,0 +1,9 @@
+{
+  "JobsOrder": [],
+  "ModulesOrder": [
+    "assets\\IntroPack.swan",
+    "assets\\Convolution.swan",
+    "assets\\test.swant",
+    "assets\\TestConv2dRP.swant"
+  ]
+}
