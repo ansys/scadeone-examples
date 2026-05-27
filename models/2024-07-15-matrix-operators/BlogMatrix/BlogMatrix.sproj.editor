@@ -1,0 +1,7 @@
+{
+  "JobsOrder": [],
+  "ModulesOrder": [
+    "assets\\BlogMatrix.swan",
+    "assets\\SimBlogMatrix.swant"
+  ]
+}

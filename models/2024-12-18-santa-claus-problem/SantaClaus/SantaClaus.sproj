@@ -1,0 +1,17 @@
+{
+  "Version": "1.0",
+  "Name": "SantaClaus",
+  "Dependencies": [],
+  "Resources": [
+    {
+      "Kind": "SourceFile",
+      "Path": "resources\\random.c",
+      "Key": ""
+    },
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\santa_simulation.sd",
+      "Key": "santa"
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+-- version swan: 2025.0 graph: 2.0 swant: 1.1
+use Logic;
+
+use Sample;
+
+use Input;
+
+_harness Part1Sample
+{
+  diagram
+    (#0 #pragma swt under_test #end block Logic::ParseStringPart1
+                                          #pragma diagram {"xy":"H-42825;V4600","wh":"20000;14000"} #end)
+    (#2 expr 'm' pre 'u' pre 'l' pre '(' pre '2' pre ',' pre '3' pre ')'
+    #pragma diagram {"xy":"H-99175;V-22562","wh":"60000;3200"} #end)
+    (#1 def _stop_condition
+    #pragma diagram {"xy":"H-42825;V-8787","wh":"20000;3200"} #end)
+    (#5 expr ['m', 'u', 'l', '(', '2', ',', '3', ')']
+    #pragma diagram {"xy":"H-90175;V-31325","wh":"42000;3200"} #end)
+    (#6 block Logic::CharArrayToFlow <<8>> 
+              #pragma diagram {"xy":"H-52475;V-29425","wh":"21800;7000"} #end)
+    (#7 expr #8 = #9
+      where
+        (#8 group)
+        (#9 group)
+    #pragma diagram {"xy":"H-29775;V-27925"} #end)
+    (assert $char_array_to_flow: #11 ; 
+      where
+        (#11 group)
+    #pragma diagram {"xy":"H-14825;V-27925"} #end)
+    (#15 expr Sample::SAMPLE_STRING
+    #pragma diagram {"xy":"H-112819;V3550","wh":"24000;3200"} #end)
+    (#16 block Logic::CharArrayToFlow <<Sample::SAMPLE_STRING_LENGTH>> 
+               #pragma diagram {"xy":"H-82188;V3550","wh":"21800;7000"} #end)
+    (#4 expr #19 = #20
+      where
+        (#19 group)
+        (#20 group)
+    #pragma diagram {"xy":"H-18775;V13450"} #end)
+    (#21 expr 161_i32
+    #pragma diagram {"xy":"H-38825;V15350","wh":"12000;3200"} #end)
+    (#22 expr (_current_cycle :> int32) = Sample::SAMPLE_STRING_LENGTH + 1
+    #pragma diagram {"xy":"H-90050;V-8787","wh":"62000;3200"} #end)
+    (assert $part1: #24 ; 
+      where
+        (#24 group)
+    #pragma diagram {"xy":"H13375;V17250"} #end)
+    (#28 expr not _stop_condition
+    #pragma diagram {"xy":"H-43825;V19150","wh":"22000;3200"} #end)
+    (#29 expr #30 or #31
+      where
+        (#30 group)
+        (#31 group)
+    #pragma diagram {"xy":"H-3200;V17250"} #end)
+    
+    (#3 wire #2 => #9
+    #pragma diagram {"wp":"#2 h32500 v-3463 #9"} #end)
+    (#25 wire #0 => #19
+    #pragma diagram {"wp":"v-1683|#0 h4525 v8633 #19"} #end)
+    (#12 wire #5 => #6)
+    (#13 wire #6 .(c) => #8
+    #pragma diagram {"wp":"v-400|#6 #8"} #end)
+    (#14 wire #7 => #11)
+    (#17 wire #15 => #16)
+    (#18 wire #16 .(c) => #0
+    #pragma diagram {"wp":"v0|#16 #0"} #end)
+    (#26 wire #22 => #1)
+    (#27 wire #21 => #20)
+    (#32 wire #4 => #30
+    #pragma diagram {"wp":"#4 h3075 v1900 #30"} #end)
+    (#33 wire #28 => #31)
+    (#34 wire #29 => #24)
+}
+
+_harness Part1
+{
+  diagram
+    (#0 #pragma swt under_test #end block Logic::ParseStringPart1
+                                          #pragma diagram {"xy":"H-13833;V-22533","wh":"20000;8600"} #end)
+    (#1 expr Input::INPUT_STRING
+    #pragma diagram {"xy":"H-97333;V-22533","wh":"22000;3200"} #end)
+    (#2 block Logic::CharArrayToFlow <<Input::INPUT_STRING_LENGTH>> 
+              #pragma diagram {"xy":"H-53233;V-22533","wh":"20000;8600"} #end)
+    (#3 def _
+    #pragma diagram {"xy":"H15667;V-22533"} #end)
+    (#4 expr (_current_cycle :> int32) >= Input::INPUT_STRING_LENGTH + 1
+    #pragma diagram {"xy":"H-69908;V-39725","wh":"60000;3200"} #end)
+    (#5 def _stop_condition
+    #pragma diagram {"xy":"H-15908;V-39725","wh":"20000;3200"} #end)
+    (-- The INPUT_STRING constant has been removed
+     -- from the model as Advent of Code inputs are
+     -- personalized and copyrighted.
+     -- To run this harness, please:
+     -- 1. Go to https://adventofcode.com/2024/day/3
+     -- 2. Download your personalized input under resources/input.txt
+     -- 3. Launch Python script resources/input_to_swan_consts.py
+     -- 4. Reload the project in the Scade One IDE
+     let
+    #pragma diagram {"xy":"H-97333;V-7387","wh":"66000;17235"} #end)
+    
+    (#6 wire #2 .(c) => #0
+    #pragma diagram {"wp":"v0|#2 #0"} #end)
+    (#7 wire #1 => #2)
+    (#8 wire #0 .(result) => #3
+    #pragma diagram {"wp":"v0|#0 #3"} #end)
+    (#9 wire #4 => #5)
+}
+
+_harness Part2Sample
+{
+  diagram
+    (#0 #pragma swt under_test #end block Logic::ParseStringPart2
+                                          #pragma diagram {"xy":"H-42825;V4600","wh":"20000;14000"} #end)
+    (#1 def _stop_condition
+    #pragma diagram {"xy":"H-42825;V-8787","wh":"20000;3200"} #end)
+    (#2 expr Sample::SAMPLE_STRING
+    #pragma diagram {"xy":"H-112819;V3550","wh":"24000;3200"} #end)
+    (#3 block Logic::CharArrayToFlow <<Sample::SAMPLE_STRING_LENGTH>> 
+              #pragma diagram {"xy":"H-82188;V3550","wh":"21800;7000"} #end)
+    (#4 expr #5 = #6
+      where
+        (#5 group)
+        (#6 group)
+    #pragma diagram {"xy":"H-18775;V13450"} #end)
+    (#7 expr 48_i32
+    #pragma diagram {"xy":"H-37825;V15350","wh":"10000;3200"} #end)
+    (#8 expr (_current_cycle :> int32) = Sample::SAMPLE_STRING_LENGTH + 1
+    #pragma diagram {"xy":"H-91850;V-8787","wh":"62000;3200"} #end)
+    (assert $part2: #10 ; 
+      where
+        (#10 group)
+    #pragma diagram {"xy":"H12950;V16950"} #end)
+    (#16 expr not _stop_condition
+    #pragma diagram {"xy":"H-43825;V18850","wh":"22000;3200"} #end)
+    (#17 expr #18 or #19
+      where
+        (#18 group)
+        (#19 group)
+    #pragma diagram {"xy":"H-350;V16950"} #end)
+    
+    (#11 wire #0 .(result) => #5
+    #pragma diagram {"wp":"v-1683|#0 h4525 v8633 #5"} #end)
+    (#12 wire #2 => #3)
+    (#13 wire #3 .(c) => #0
+    #pragma diagram {"wp":"v0|#3 #0"} #end)
+    (#14 wire #8 => #1)
+    (#15 wire #7 => #6)
+    (#20 wire #17 => #10)
+    (#21 wire #16 => #19)
+    (#22 wire #4 => #18
+    #pragma diagram {"wp":"#4 h4713 v1600 #18"} #end)
+}
+
+_harness Part2
+{
+  diagram
+    (#0 #pragma swt under_test #end block Logic::ParseStringPart2
+                                          #pragma diagram {"xy":"H-13833;V-22533","wh":"20000;8600"} #end)
+    (#1 expr Input::INPUT_STRING
+    #pragma diagram {"xy":"H-97333;V-22533","wh":"22000;3200"} #end)
+    (#2 block Logic::CharArrayToFlow <<Input::INPUT_STRING_LENGTH>> 
+              #pragma diagram {"xy":"H-53233;V-22533","wh":"20000;8600"} #end)
+    (#3 def _
+    #pragma diagram {"xy":"H15667;V-22533"} #end)
+    (#7 expr (_current_cycle :> int32) >= Input::INPUT_STRING_LENGTH + 1
+    #pragma diagram {"xy":"H-69908;V-39725","wh":"60000;3200"} #end)
+    (#8 def _stop_condition
+    #pragma diagram {"xy":"H-15908;V-39725","wh":"20000;3200"} #end)
+    (-- The INPUT_STRING constant has been removed
+     -- from the model as Advent of Code inputs are
+     -- personalized and copyrighted.
+     -- To run this harness, please:
+     -- 1. Go to https://adventofcode.com/2024/day/3
+     -- 2. Download your personalized input under resources/input.txt
+     -- 3. Launch Python script resources/input_to_swan_consts.py
+     -- 4. Reload the project in the Scade One IDE
+     let
+    #pragma diagram {"xy":"H-97333;V-6582","wh":"66000;17235"} #end)
+    
+    (#4 wire #2 .(c) => #0
+    #pragma diagram {"wp":"v0|#2 #0"} #end)
+    (#5 wire #1 => #2)
+    (#6 wire #0 .(result) => #3
+    #pragma diagram {"wp":"v0|#0 #3"} #end)
+    (#10 wire #7 => #8)
+}

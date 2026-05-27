@@ -1,0 +1,72 @@
+-- version swan: 2025.0 graph: 2.0
+function GetMajorityVote <<N>> (votes: 'T ^ N;)
+  returns (candidate: 'T;
+           hasMajority : bool;)
+{
+  diagram
+    (#0 expr forward
+      <<N>> with [x] = votes;
+      diagram
+        (var
+            c: int32 last = 0;)
+        (activate $VoteCounter
+          if last 'c = 0
+          then
+            {
+              diagram
+                (let m = x; 
+                    c = 1;
+                #pragma diagram {"xy":"h0;v0","wh":"16000;4219"} #end)
+            #pragma diagram {"xy":"h0;v-9800","wh":"28000;8219"} #end
+            }
+          elsif m = x
+          then
+            {
+              diagram
+                (let c = last 'c + 1;
+                #pragma diagram {"xy":"h0;v0","wh":"24000;3200"} #end)
+            #pragma diagram {"xy":"h0;v2110","wh":"28000;7200"} #end
+            }
+          else
+            {
+              diagram
+                (let c = last 'c - 1;
+                #pragma diagram {"xy":"h0;v0","wh":"24000;3200"} #end)
+            #pragma diagram {"xy":"h0;v13510","wh":"28000;7200"} #end
+            }
+        #pragma diagram {"xy":"h0;v0","wh":"31000;37219"} #end)
+      returns (m: last = votes[0])
+      #pragma diagram {"xy":"H-65450;V12130","wh":"39600;53619"} #end)
+    (#6 def candidate
+    #pragma diagram {"xy":"H-30869;V12440","wh":"14000;3200"} #end)
+    (#7 expr forward
+      <<N>> with [x]=votes;
+      diagram
+        (activate $CandidateCounter
+          if x = candidate
+          then
+            {
+              diagram
+                (let n = last 'n + 1;
+                #pragma diagram {"xy":"h0;v0","wh":"24000;3200"} #end)
+            #pragma diagram {"xy":"h0;v-3700","wh":"28000;7200"} #end
+            }
+          else
+            {
+            #pragma diagram {"xy":"h0;v7300","wh":"28000;6400"} #end
+            }
+        #pragma diagram {"xy":"h0;v0","wh":"31000;24000"} #end)
+      returns (n: last = 0)
+      #pragma diagram {"xy":"H-65450;V61900","wh":"39600;40400"} #end)
+    (#11 def hasMajority
+    #pragma diagram {"xy":"H-8088;V62100","wh":"16000;3200"} #end)
+    (#12 block ({op_expr%function n => n * 2 > N%op_expr})
+               #pragma diagram {"xy":"H-30869;V62100","wh":"18300;10000"} #end)
+    
+    (#13 wire #0 => #6
+    #pragma diagram {"wp":"v310|#0 #6"} #end)
+    (#14 wire #7 => #12
+    #pragma diagram {"wp":"v200|#7 #12"} #end)
+    (#15 wire #12 => #11
+    #pragma diagram {"wp":"v0|#12 #11"} #end)
+}

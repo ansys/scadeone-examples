@@ -1,0 +1,8 @@
+{
+  "ModulesOrder": [
+    "assets\\Sample.swan",
+    "assets\\Input.swan",
+    "assets\\Logic.swan",
+    "assets\\Tests.swant"
+  ]
+}

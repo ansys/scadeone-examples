@@ -1,0 +1,377 @@
+-- version swan: 2025.2 graph: 2.1
+type Message = Nothing {} | ToReindeer { ReindeerStatus } | ToElf { ElfStatus };
+
+node Reindeer (endVacation: bool;
+               message: Message;)
+  returns (status: ReindeerStatus;)
+{
+  diagram
+    (automaton #0 $Reindeer
+      initial state #3 inVacation
+      #pragma diagram {"xy":"h33628;v12507","wh":"44000;11200"} #end :
+        diagram
+          (#2 expr R_VACATION
+          #pragma diagram {"xy":"h-11000;v0","wh":"14000;3200"} #end)
+          (#4 def status
+          #pragma diagram {"xy":"h13000;v0","wh":"10000;3200"} #end)
+          
+          (#5 wire #2 => #4)
+      state #7 backFromVacation
+      #pragma diagram {"xy":"h-34828;v5073","wh":"41600;13067"} #end :
+        diagram
+          (#6 expr R_READY
+          #pragma diagram {"xy":"h-10800;v934","wh":"12000;3200"} #end)
+          (#8 def status
+          #pragma diagram {"xy":"h11800;v934","wh":"10000;3200"} #end)
+          
+          (#9 wire #6 => #8)
+      state #1 flyingWithSanta
+      #pragma diagram {"xy":"h30875;v-12108","wh":"46495;12000"} #end :
+        diagram
+          (#10 def status
+          #pragma diagram {"xy":"h11753;v400","wh":"10000;3200"} #end)
+          (#11 expr R_FLYING
+          #pragma diagram {"xy":"h-13247;v400","wh":"12000;3200"} #end)
+          
+          (#12 wire #11 => #10)
+      :1: #3 unless if (endVacation)
+      restart #7
+      #pragma diagram {"tp":"h-22000;v-3250|#3 h-8552 h-8552 h20800;v4184|#7"} #end;
+      :1: #1 unless if (message = ToReindeer { last 'status })
+      restart #3
+      #pragma diagram {"tp":"h2000;v6000|#1 v4339 v4339 h-753;v-5600|#3"} #end;
+      :2: #7 unless if (message = ToReindeer { last 'status })
+      restart #1
+      #pragma diagram {"tp":"h11144;v-6533|#7 v-500 v-500 v-500 v-4574 h7328;v-4574 h7328 h4885 h11104 h-23248;v0|#1"} #end;
+    #pragma diagram {"xy":"H-13316;V-22504","wh":"119256;44217"} #end)
+}
+
+node Elf (meetIssue : bool;
+          message: Message;)
+  returns (status: ElfStatus;)
+{
+  diagram
+    (automaton #13 $Elf
+      initial state #0 working
+      #pragma diagram {"xy":"h34300;v10600","wh":"44000;11200"} #end :
+        diagram
+          (#7 expr E_WORKING
+          #pragma diagram {"xy":"h-11000;v0","wh":"14000;3200"} #end)
+          (#8 def status
+          #pragma diagram {"xy":"h13000;v0","wh":"10000;3200"} #end)
+          
+          (#9 wire #7 => #8)
+      state #4 hasIssue
+      #pragma diagram {"xy":"h-32300;v4100","wh":"42000;11200"} #end :
+        diagram
+          (#1 def status
+          #pragma diagram {"xy":"h12000;v0","wh":"10000;3200"} #end)
+          (#2 expr E_ISSUE
+          #pragma diagram {"xy":"h-11000;v0","wh":"12000;3200"} #end)
+          
+          (#3 wire #2 => #1)
+      state #6 isHelped
+      #pragma diagram {"xy":"h34300;v-12200","wh":"44000;11200"} #end :
+        diagram
+          (#10 expr E_SOLVING
+          #pragma diagram {"xy":"h-11000;v0","wh":"14000;3200"} #end)
+          (#11 def status
+          #pragma diagram {"xy":"h13000;v0","wh":"10000;3200"} #end)
+          
+          (#12 wire #10 => #11)
+      :1: #0 unless if (meetIssue)
+      restart #4
+      #pragma diagram {"tp":"h-22000;v-3250|#0 h-7867 h-7867 h21000;v3250|#4"} #end;
+      :1: #4 unless if (message = ToElf { last 'status })
+      restart #6
+      #pragma diagram {"tp":"h20500;v-5600|#4 v-500 v-500 v-500 v-4600 h5525;v-4600 h5525 h3683 h8700 h-22000;v0|#6"} #end;
+      :1: #6 unless if (message = ToElf { last 'status })
+      restart #0
+      #pragma diagram {"tp":"h0;v5600|#6 v3867 v3867 h0;v-5600|#0"} #end;
+    #pragma diagram {"xy":"H-20200;V-18988","wh":"120600;42000"} #end)
+}
+
+node Santa (allReindeersReady: bool;
+            elvesNeedHelp: bool;
+            stopDelivery : bool;
+            stopFixing : bool;)
+  returns (status: SantaStatus;
+           message : Message default = Nothing;)
+{
+  diagram
+    (automaton #1 $SantaClaus
+      initial state #36 sleeping
+      #pragma diagram {"xy":"h-44672;v1712","wh":"44150;24788"} #end :
+        diagram
+          (#33 def status
+          #pragma diagram {"xy":"h12925;v1740","wh":"10000;3200"} #end)
+          (#34 expr S_SLEEPING
+          #pragma diagram {"xy":"h-10709;v1740","wh":"14000;3200"} #end)
+          
+          (#35 wire #34 => #33)
+      state #40 deliveringGifts
+      #pragma diagram {"xy":"h43746;v-12631","wh":"46000;14000"} #end :
+        diagram
+          (#37 def status
+          #pragma diagram {"xy":"h13650;v575","wh":"10000;3200"} #end)
+          (#38 expr S_DELIVERING
+          #pragma diagram {"xy":"h-12000;v575","wh":"16000;3200"} #end)
+          
+          (#39 wire #38 => #37)
+      state #44 helpingEvles
+      #pragma diagram {"xy":"h43746;v13631","wh":"44000;12000"} #end :
+        diagram
+          (#41 def status
+          #pragma diagram {"xy":"h12200;v2375","wh":"10000;3200"} #end)
+          (#42 expr S_HELPING
+          #pragma diagram {"xy":"h-11000;v2375","wh":"14000;3200"} #end)
+          
+          (#43 wire #42 => #41)
+      :1: #36 until if (allReindeersReady)
+      {
+        let message = ToReindeer { R_READY };
+      }
+      restart #40
+      #pragma diagram {"tp":"h22075;v-9869|#36 h14448 h14448 h-23000;v4475|#40"} #end;
+      :2: #36 until if (elvesNeedHelp)
+      {
+        let message = ToElf { E_ISSUE };
+      }
+      restart #44
+      #pragma diagram {"tp":"h22075;v9157|#36 h14781 h14781 h-22000;v-2763|#44"} #end;
+      :1: #40 until if (stopDelivery)
+      {
+        let message = ToReindeer { R_FLYING };
+      }
+      restart #36
+      #pragma diagram {"tp":"h-23000;v-6316|#40 h-500 h-35258 h-17129 h-6265 h-6265;v3133 v3133 v667 v667 h0;v-12394|#36"} #end;
+      :1: #44 until if (stopFixing)
+      {
+        let message = ToElf { E_SOLVING };
+      }
+      restart #36
+      #pragma diagram {"tp":"h-22000;v4816|#44 h-500 h-41157 h-20078 h-2342 h-2342;v-1171 v-1171 v-667 v-667 h0;v12394|#36"} #end;
+    #pragma diagram {"xy":"H-19356;V-35398","wh":"141493;47262"} #end)
+}
+
+node NorthPole_1_1 (endVacation: bool;
+                    meetIssue: bool;
+                    stopDelivery : bool;
+                    stopFixing : bool;)
+  returns (status: SantaStatus;
+           statusReindeer: ReindeerStatus;
+           statusElf: ElfStatus;)
+{
+  diagram
+    (#0 expr meetIssue
+    #pragma diagram {"xy":"H-225398;V248740","wh":"14000;3200"} #end)
+    (#1 block ({op_expr%function s => s = R_READY%op_expr})
+    #pragma diagram {"xy":"H-150223;V220694","wh":"20000;14000"} #end)
+    (#2 def status
+    #pragma diagram {"xy":"H-76373;V230186","wh":"10000;3200"} #end)
+    (#3 block ({op_expr%function s => s = E_ISSUE%op_expr})
+    #pragma diagram {"xy":"H-150223;V239640","wh":"20000;14000"} #end)
+    (#4 def statusReindeer
+    #pragma diagram {"xy":"H-150223;V211221","wh":"18000;3200"} #end)
+    (#5 block (Santa \ stopDelivery: stopDelivery, stopFixing: stopFixing)
+    #pragma diagram {"xy":"H-102823;V232163","wh":"24000;26783"} #end)
+    (#6 block Reindeer
+    #pragma diagram {"xy":"H-191623;V221358","wh":"24000;17325"} #end)
+    (#7 def statusElf
+    #pragma diagram {"xy":"H-147223;V248740","wh":"14000;3200"} #end)
+    (#8 expr endVacation
+    #pragma diagram {"xy":"H-224398;V221358","wh":"16000;3200"} #end)
+    (#9 block Elf
+    #pragma diagram {"xy":"H-191623;V248740","wh":"24000;17325"} #end)
+    (#10 expr pre #11
+      where
+        (#11 group)
+    #pragma diagram {"dir":"sw","xy":"H-175873;V266783"} #end)
+    
+    (#12 wire #6 => #4, #1 .(s)
+    #pragma diagram {"wp":"v-664|#6 h9700[v-9473 #4, #1]"} #end)
+    (#13 wire #1 => #5 .(allReindeersReady)
+    #pragma diagram {"wp":"v2539|#1 #5"} #end)
+    (#14 wire #5 .(status) => #2
+    #pragma diagram {"wp":"v-1977|#5 #2"} #end)
+    (#15 wire #10 => #6 .(message), #9 .(message)
+    #pragma diagram {"wp":"#10 h-25250[h-31775 v-37926 #6, v-12934 #9]"} #end)
+    (#16 wire #8 => #6 .(endVacation))
+    (#17 wire #9 => #7, #3 .(s)
+    #pragma diagram {"wp":"v0|#9 h9700[#7, v-9100 #3]"} #end)
+    (#18 wire #3 => #5 .(elvesNeedHelp)
+    #pragma diagram {"wp":"v-543|#3 #5"} #end)
+    (#19 wire #5 .(message) => #11
+    #pragma diagram {"wp":"v8470|#5 h2000 v26150 #11"} #end)
+    (#20 wire #0 => #9 .(meetIssue))
+}
+
+node selectElves <<NB_ELVES>> (message : Message;
+                               statusElves: ElfStatus^NB_ELVES;)
+  returns (messageElves: Message^NB_ELVES default=Nothing^NB_ELVES;)
+{
+  diagram
+    (activate #4 $sendMessageToElves when message match
+      | ToElf { status } :
+        {
+          diagram
+            (activate #5 $ActivateIf0
+              if status = E_ISSUE
+              then
+                {
+                  diagram
+                    (/* Whether the elf is selected,
+                     starting from index `startIdx` */
+                     let
+                    #pragma diagram {"xy":"h47261;v2464","wh":"36000;6078"} #end)
+                    (#1 def selectedElves
+                    #pragma diagram {"xy":"h47261;v-3850","wh":"18000;3200"} #end)
+                    (#2 def messageElves
+                    #pragma diagram {"xy":"h47261;v13019","wh":"16000;3200"} #end)
+                    (#3 expr forward
+                      <<NB_ELVES>> with <<i>>
+                      diagram
+                        (let idx = (last'startIdx + i) mod NB_ELVES;
+                             selected = (statusElves.[idx] default E_WORKING) = E_ISSUE;
+                             nb = if selected then last'nb + 1 else last'nb;
+                        #pragma diagram {"xy":"h0;v0","wh":"64000;6078"} #end)
+                        
+                        (var
+                            nb: int32 last = 0;
+                            idx;)
+                      until nb >= 3
+                      returns ([selected: default=false])
+                    #pragma diagram {"xy":"h-28961;v-11889","wh":"72600;22878"} #end)
+                    (#16 expr forward
+                      <<NB_ELVES>> with <<i>>
+                      diagram
+                        (let idx = (NB_ELVES - last'startIdx + i) mod NB_ELVES;
+                             msg = if (selectedElves.[idx] default false) then message else Nothing;
+                        #pragma diagram {"xy":"h0;v0","wh":"76000;4219"} #end)
+                        
+                        (var
+                            idx;)
+                      returns ([msg])
+                    #pragma diagram {"xy":"h-22861;v13019","wh":"84600;20619"} #end)
+                    (#11 def startIdx
+                    #pragma diagram {"xy":"h47261;v-12509","wh":"12000;3200"} #end)
+                    (#0 block ({op_expr%function i => (i + 1 + last'startIdx)
+                                         mod NB_ELVES%op_expr})
+                    #pragma diagram {"xy":"h24300;v-12509","wh":"26123;7000"} #end)
+                    
+                    (#9 wire #3 .(2) => #1
+                    #pragma diagram {"wp":"v8040|#3 #1"} #end)
+                    (#8 wire #3 .(1) => #0 .(i)
+                    #pragma diagram {"wp":"v-619|#3 #0"} #end)
+                    (#10 wire #0 => #11
+                    #pragma diagram {"wp":"v0|#0 #11"} #end)
+                    (#18 wire #16 => #2
+                    #pragma diagram {"wp":"v0|#16 #2"} #end)
+                    
+                    (var
+                        startIdx last=0;
+                        selectedElves;)
+                #pragma diagram {"xy":"h0;v-4100","wh":"137523;50657"} #end
+                }
+              else
+                {
+                  diagram
+                    (#13 expr message ^ NB_ELVES
+                    #pragma diagram {"xy":"h-1800;v0","wh":"22000;3200"} #end)
+                    (#14 def messageElves
+                    #pragma diagram {"xy":"h29200;v0","wh":"16000;3200"} #end)
+                    
+                    (#15 wire #13 => #14)
+                #pragma diagram {"xy":"h0;v29028","wh":"137523;7200"} #end
+                }
+            #pragma diagram {"xy":"h50;v0","wh":"137523;68257"} #end)
+        #pragma diagram {"xy":"h0;v-7400","wh":"144623;72257"} #end
+        }
+      | ToReindeer :
+        {
+        #pragma diagram {"xy":"h0;v36128","wh":"144623;6400"} #end
+        }
+      | Nothing :
+        {
+        #pragma diagram {"xy":"h0;v46728","wh":"144623;6400"} #end
+        }
+    #pragma diagram {"xy":"H-219077;V-74301","wh":"144623;102857"} #end)
+}
+
+node NorthPole <<NB_ELVES>> (endVacation: bool^NB_REINDEERS;
+                             meetIssue: bool^NB_ELVES;
+                             stopDelivery : bool;
+                             stopFixing : bool;)
+  returns (status: SantaStatus;
+           statusReindeer: ReindeerStatus^NB_REINDEERS;
+           statusElves: ElfStatus^NB_ELVES;)
+{
+  diagram
+    (#0 block (map Reindeer) <<NB_REINDEERS>>
+    #pragma diagram {"xy":"H-166007;V76054","wh":"24000;21325"} #end)
+    (#2 def statusReindeer
+    #pragma diagram {"xy":"H-119511;V76054","wh":"18000;3200"} #end)
+    (#3 def statusElves
+    #pragma diagram {"xy":"H-118511;V131543","wh":"16000;3200"} #end)
+    (#4 def status
+    #pragma diagram {"xy":"H-21357;V105205","wh":"10000;3200"} #end)
+    (#5 block (fold ({op_expr%function all, s => all and s = R_READY%op_expr})) <<NB_REINDEERS>>
+    #pragma diagram {"xy":"H-118511;V91741","wh":"24000;18000"} #end)
+    (#7 block (map Elf) <<NB_ELVES>>
+    #pragma diagram {"xy":"H-166007;V134205","wh":"24000;21325"} #end)
+    (#9 expr meetIssue
+    #pragma diagram {"xy":"H-205836;V134205","wh":"14000;3200"} #end)
+    (#10 expr true
+    #pragma diagram {"xy":"H-147220;V93741"} #end)
+    (#11 $numberElvesWithIssue block (fold ({op_expr%function nb, s =>
+                                                     if s = E_ISSUE then nb+1 else nb %op_expr})) <<NB_ELVES>>
+    #pragma diagram {"xy":"H-118511;V113342","wh":"35550;18000"} #end)
+    (#13 expr endVacation
+    #pragma diagram {"xy":"H-204836;V82804","wh":"16000;3200"} #end)
+    (#14 block ({op_expr%function nb => nb >= 3%op_expr})
+    #pragma diagram {"xy":"H-88802;V115342","wh":"12000;7000"} #end)
+    (#15 expr 0_i32
+    #pragma diagram {"xy":"H-147220;V110766","wh":"10000;3200"} #end)
+    (#16 block (Santa \ stopDelivery: stopDelivery, stopFixing: stopFixing)
+    #pragma diagram {"xy":"H-56308;V105205","wh":"24000;34783"} #end)
+    (#18 block selectElves <<NB_ELVES>> 
+    #pragma diagram {"xy":"H-21357;V136205","wh":"20000;14000"} #end)
+    (#32 expr pre #33
+      where
+        (#33 group)
+    #pragma diagram {"dir":"sw","xy":"H-118511;V63674"} #end)
+    (#34 expr pre #35
+      where
+        (#35 group)
+    #pragma diagram {"dir":"sw","xy":"H-118511;V150130"} #end)
+    (#36 expr #37 ^ (NB_REINDEERS)
+      where
+        (#37 group)
+    #pragma diagram {"xy":"H-200006;V73754","wh":"20000;7000"} #end)
+    
+    (#20 wire #13 => #0 .(endVacation))
+    (#21 wire #10 => #5 .(all))
+    (#22 wire #0 => #2, #5 .(s)
+    #pragma diagram {"wp":"v-2000|#0 h18609[#2, v13687 #5]"} #end)
+    (#23 wire #5 => #16 .(allReindeersReady)
+    #pragma diagram {"wp":"v536|#5 #16"} #end)
+    (#24 wire #9 => #7 .(meetIssue))
+    (#25 wire #7 => #3, #11 .(s), #18 .(statusElves)
+    #pragma diagram {"wp":"v-4662|#7 h8861[#3, v-14189 #11, v7662 #18]"} #end)
+    (#26 wire #11 => #14 .(nb)
+    #pragma diagram {"wp":"v0|#11 #14"} #end)
+    (#27 wire #15 => #11 .(nb))
+    (#19 wire #34 => #7 .(message)
+    #pragma diagram {"wp":"#34 h-56996 v-9793 #7"} #end)
+    (#29 wire #14 => #16 .(elvesNeedHelp)
+    #pragma diagram {"wp":"v0|#14 #16"} #end)
+    (#30 wire #16 .(message) => #33, #18 .(message)
+    #pragma diagram {"wp":"v10928|#16 h6475[v-52459 #33, v17072 #18]"} #end)
+    (#31 wire #16 .(status) => #4
+    #pragma diagram {"wp":"v0|#16 #4"} #end)
+    (#38 wire #36 => #0 .(message))
+    (#39 wire #18 => #35
+    #pragma diagram {"wp":"v0|#18 h2000 v13925 #35"} #end)
+    (#40 wire #32 => #37
+    #pragma diagram {"wp":"#32 h-88995 v10080 #37"} #end)
+}

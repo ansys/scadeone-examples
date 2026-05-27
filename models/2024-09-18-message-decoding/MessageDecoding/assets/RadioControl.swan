@@ -1,0 +1,560 @@
+-- version swan: 2025.0 graph: 2.0
+use QuadTypes as T;
+
+use Message as M;
+
+node RadioControl (inBytes : uint8^M::BUFFER_SIZE;)
+  returns (desiredAttitude: T::AttitudeType last = INIT_ATTITUDE;
+           desiredVerticalAccel : float32 last = INIT_ACCEL;)
+{
+  diagram
+    (#0 def desiredAttitude
+    #pragma diagram {"xy":"H28650;V6250","wh":"20000;3200"} #end)
+    (#1 block DecodeBuffer
+              #pragma diagram {"xy":"H-125403;V17137","wh":"16700;11100"} #end)
+    (#2 def inMsgs
+    #pragma diagram {"xy":"H-105453;V17137","wh":"10000;3200"} #end)
+    (#3 expr inBytes
+    #pragma diagram {"xy":"H-146353;V17137","wh":"12000;3200"} #end)
+    (#4 expr forward
+      <<M::MAX_NUMBER_MSG>> with [msgi] = inMsgs;
+      diagram
+        (activate $ReadMsg when msgi match
+          | M::UpdateAttitude { att } :
+            {
+              diagram
+                (#12 def ldesiredAttitude
+                #pragma diagram {"xy":"h30653;v-1138","wh":"20000;3200"} #end)
+                (#13 expr att.pitch
+                #pragma diagram {"xy":"h-32003;v-9926","wh":"14000;3200"} #end)
+                (#14 expr {#15}: T::AttitudeType
+                  where
+                    (#15 group)
+                #pragma diagram {"xy":"h7850;v-1138","wh":"16000;25425"} #end)
+                (#23 block (M::Int8ToCmd \ max: MAX_PITCH)
+                           #pragma diagram {"xy":"h-14297;v-9926","wh":"12942;7849"} #end)
+                (#24 block (M::Int8ToCmd \ max: MAX_ROLL)
+                           #pragma diagram {"xy":"h-14297;v-1451","wh":"12942;7849"} #end)
+                (#25 expr att.roll
+                #pragma diagram {"xy":"h-33003;v-1451","wh":"12000;3200"} #end)
+                (#26 block (M::Int8ToCmd \ max: MAX_YAW)
+                           #pragma diagram {"xy":"h-14297;v7650","wh":"12942;7849"} #end)
+                (#27 expr att.yaw
+                #pragma diagram {"xy":"h-33003;v7650","wh":"12000;3200"} #end)
+                
+                (#16 wire #14 => #12)
+                (#28 wire #13 => #23)
+                (#29 wire #23 => #15 .(pitch)
+                #pragma diagram {"wp":"v0|#23 #15"} #end)
+                (#30 wire #25 => #24)
+                (#31 wire #24 => #15 .(roll)
+                #pragma diagram {"wp":"v0|#24 #15"} #end)
+                (#32 wire #27 => #26)
+                (#33 wire #26 => #15 .(yaw)
+                #pragma diagram {"wp":"v0|#26 #15"} #end)
+            #pragma diagram {"xy":"h0;v-18537","wh":"93444;30500"} #end
+            }
+          | M::SetVerticalAccel { v } :
+            {
+              diagram
+                (#34 def lverticalAccel
+                #pragma diagram {"xy":"h29653;v0","wh":"18000;3200"} #end)
+                (#35 block (M::Int8ToCmd \ max: MAX_ACCEL)
+                           #pragma diagram {"xy":"h4164;v0","wh":"12942;7849"} #end)
+                (#36 expr v
+                #pragma diagram {"xy":"h-20325;v0"} #end)
+                
+                (#37 wire #35 => #34
+                #pragma diagram {"wp":"v0|#35 #34"} #end)
+                (#38 wire #36 => #35)
+            #pragma diagram {"xy":"h0;v6837","wh":"93444;11849"} #end
+            }
+          | M::Reset :
+            {
+              diagram
+                (#17 def ldesiredAttitude
+                #pragma diagram {"xy":"h30653;v-2712","wh":"20000;3200"} #end)
+                (#18 def lverticalAccel
+                #pragma diagram {"xy":"h29653;v2713","wh":"18000;3200"} #end)
+                (#19 expr INIT_ATTITUDE
+                #pragma diagram {"xy":"h6828;v-2712","wh":"18000;3200"} #end)
+                (#20 expr INIT_ACCEL
+                #pragma diagram {"xy":"h8828;v2713","wh":"14000;3200"} #end)
+                
+                (#21 wire #19 => #17)
+                (#22 wire #20 => #18)
+            #pragma diagram {"xy":"h0;v23274","wh":"93444;12625"} #end
+            }
+          | M::UnknownMsg _ :
+            {
+            #pragma diagram {"xy":"h0;v36987","wh":"93444;6400"} #end
+            }
+          #pragma diagram {"xy":"h0;v0","wh":"96444;83374"} #end)
+      returns (ldesiredAttitude: last = last'desiredAttitude,
+               lverticalAccel: last = last'desiredVerticalAccel)
+      #pragma diagram {"xy":"H-39003;V16937","wh":"105044;99774"} #end)
+    (#6 def desiredVerticalAccel
+    #pragma diagram {"xy":"H30650;V16125","wh":"24000;3200"} #end)
+    
+    (#7 wire #1 .(msgs) => #2
+    #pragma diagram {"wp":"v0|#1 #2"} #end)
+    (#8 wire #3 => #1)
+    (#9 wire #4 .(1) => #0
+    #pragma diagram {"wp":"v-10687|#4 #0"} #end)
+    (#10 wire #4 .(2) => #6
+    #pragma diagram {"wp":"v-812|#4 #6"} #end)
+    
+    (var
+        inMsgs;)
+}
+
+function DecodeBuffer (bytes: uint8^M::BUFFER_SIZE;)
+  returns (msgs: M::RadioInMsg^M::MAX_NUMBER_MSG;
+           msgCount : uint8;)
+{
+  diagram
+    (#0 expr forward
+      <<M::BUFFER_SIZE>> with [byte] = bytes;
+      diagram
+        (var
+            msg last = M::UnknownMsg {};
+            msgId last = 0x00;
+            done;)
+        (automaton $automaton0
+          state #2 Header
+          #pragma diagram {"xy":"h-90446;v83","wh":"42419;12000"} #end :
+            diagram
+              (#5 expr M::UnknownMsg
+              #pragma diagram {"xy":"h-8209;v0","wh":"18000;3200"} #end)
+              (#6 def msg
+              #pragma diagram {"xy":"h13210;v0"} #end)
+              
+              (#7 wire #5 => #6)
+          state #3 Id
+          #pragma diagram {"xy":"h-91446;v23583","wh":"42419;12000"} #end :
+            diagram
+              (#8 def msgId
+              #pragma diagram {"xy":"h14210;v0","wh":"10000;3200"} #end)
+              (#9 expr byte
+              #pragma diagram {"xy":"h-13209;v0"} #end)
+              
+              (#10 wire #9 => #8)
+          state #14 Footer
+          #pragma diagram {"xy":"h75128;v-19854","wh":"75200;26926"} #end :
+            diagram
+              (#25 expr last'msgAcc
+              #pragma diagram {"xy":"h-21600;v4063","wh":"16000;3200"} #end)
+              (#26 def msgAcc
+              #pragma diagram {"xy":"h22600;v5963","wh":"10000;3200"} #end)
+              (#27 expr
+                (#28 with
+                  [last'msgCountAcc] = #29;)
+                    where
+                      (#28 group)
+                      (#29 group)
+                  #pragma diagram {"xy":"h4000;v5963","wh":"22000;7000"} #end)
+              (#30 def msgCountAcc
+              #pragma diagram {"xy":"h25600;v-5963","wh":"16000;3200"} #end)
+              (#31 expr last'msgCountAcc
+              #pragma diagram {"xy":"h-23600;v-5963","wh":"20000;3200"} #end)
+              (#32 block ({op_expr%function x => x + 1%op_expr})
+                         #pragma diagram {"xy":"h2000;v-5963","wh":"12000;7000"} #end)
+              (#33 expr msg
+              #pragma diagram {"xy":"h-17600;v7863"} #end)
+              
+              (#34 wire #31 => #32)
+              (#35 wire #32 => #30
+              #pragma diagram {"wp":"v0|#32 #30"} #end)
+              (#36 wire #25 => #28)
+              (#37 wire #27 => #26)
+              (#38 wire #33 => #29)
+          state #23 Payload
+          #pragma diagram {"xy":"h-14808;v2312","wh":"65000;66200"} #end :
+            diagram
+              (activate $CheckMsgKind
+                if msgId = M::MSG_UPDT_ATTITUDE
+                then
+                  {
+                    diagram
+                      (#12 expr byte
+                      #pragma diagram {"xy":"h-21000;v0"} #end)
+                      (#13 def msg
+                      #pragma diagram {"xy":"h21000;v0"} #end)
+                      (#15 block DecodeUpdateAttitude
+                                 #pragma diagram {"xy":"h0;v0","wh":"18035;7000"} #end)
+                      
+                      (#16 wire #15 => #13
+                      #pragma diagram {"wp":"v0|#15 #13"} #end)
+                      (#17 wire #12 => #15)
+                  #pragma diagram {"xy":"h0;v-18900","wh":"54000;11000"} #end
+                  }
+                elsif msgId = M::MSG_SET_ACCEL
+                then
+                  {
+                    diagram
+                      (#18 def msg
+                      #pragma diagram {"xy":"h21000;v0"} #end)
+                      (#19 expr byte
+                      #pragma diagram {"xy":"h-21000;v0"} #end)
+                      (#20 block DecodeSetAccel
+                                 #pragma diagram {"xy":"h0;v0","wh":"18035;7000"} #end)
+                      
+                      (#21 wire #19 => #20)
+                      (#22 wire #20 => #18
+                      #pragma diagram {"wp":"v0|#20 #18"} #end)
+                  #pragma diagram {"xy":"h0;v-3700","wh":"54000;11000"} #end
+                  }
+                elsif msgId = M::MSG_RESET
+                then
+                  {
+                    diagram
+                      (#24 def msg
+                      #pragma diagram {"xy":"h21000;v0"} #end)
+                      (#44 expr M::Reset {#45}
+                        where
+                          (#45 group)
+                      #pragma diagram {"xy":"h1017;v0","wh":"16000;7000"} #end)
+                      
+                      (#46 wire #44 => #24)
+                  #pragma diagram {"xy":"h0;v11500","wh":"54000;11000"} #end
+                  }
+                else
+                  {
+                  #pragma diagram {"xy":"h0;v24400","wh":"54000;6400"} #end
+                  }
+              #pragma diagram {"xy":"h0;v0","wh":"57000;58200"} #end)
+          initial state #39 Init
+          #pragma diagram {"xy":"h-90446;v-20788","wh":"12000;12000"} #end :
+          state #50 End
+          #pragma diagram {"xy":"h79128;v11912","wh":"24000;12000"} #end :
+            diagram
+              (emit 'done;
+              #pragma diagram {"xy":"h0;v0","wh":"16000;3200"} #end)
+          :1: #23 unless if (byte = M::FOOTER)
+          restart #14
+          #pragma diagram {"tp":"h32500;v-20901|#23 h6612 h6612 h-37600;v1265|#14"} #end;
+          :1: #3 unless 
+          restart #23
+          #pragma diagram {"tp":"h21210;v0|#3 h7642 h7643 h-32500;v21271|#23"} #end;
+          :1: #2 unless 
+          restart #3
+          #pragma diagram {"tp":"h-500;v6000|#2 v3834 v3833 h500;v-6000|#3"} #end;
+          :1: #14 unless if (byte = M::HEADER)
+          restart #2
+          #pragma diagram {"tp":"h-37600;v-12950|#14 h-500 h-69694 h-10714 h-10083 h-5042;v1754 v3508 v3727 v3727 v3728 v8222 h-4366;v8221 h-4365 h-667 h-667 h21210;v0|#2"} #end;
+          :1: #39 unless if (byte = M::HEADER)
+          restart #2
+          #pragma diagram {"tp":"h0;v6000|#39 v2957 v2957 h0;v-6000|#2"} #end;
+          :2: #14 unless if (byte = M::END)
+          restart #50
+          #pragma diagram {"tp":"h4000;v13463|#14 v4101 v4101 h0;v-6000|#50"} #end;
+          #pragma diagram {"xy":"h0;v0","wh":"233309;72567"} #end)
+      until done
+      returns (msgAcc: last = M::EMPTY_BUFFER,
+               msgCountAcc: last = 0)
+      #pragma diagram {"xy":"H22205;V-63696","wh":"241909;89367"} #end)
+    (#40 def msgs
+    #pragma diagram {"xy":"H153275;V-68175"} #end)
+    (#41 def msgCount
+    #pragma diagram {"xy":"H155275;V-56184","wh":"12000;3200"} #end)
+    
+    (#42 wire #0 .(3) => #41
+    #pragma diagram {"wp":"v7512|#0 #41"} #end)
+    (#43 wire #0 .(2) => #40
+    #pragma diagram {"wp":"v-4479|#0 #40"} #end)
+}
+
+node DecodeBufferLong (bytes: uint8^M::LONG_BUFFER_SIZE;)
+  returns (msgs: M::RadioInMsg^M::MAX_NUMBER_MSG last = M::EMPTY_BUFFER;
+           msgCount : uint8 last = 0;
+           done : bool default = false;)
+{
+  diagram
+    (#0 expr forward resume
+      <<M::LONG_BUFFER_SIZE>> with [byte] = bytes;
+      diagram
+        (var
+            msg last = M::UnknownMsg {};
+            msgId last = 0x00;)
+        (automaton $automaton0
+          state #6 Header
+          #pragma diagram {"xy":"h-88273;v-4132","wh":"42419;12000"} #end :
+            diagram
+              (#3 expr M::UnknownMsg
+              #pragma diagram {"xy":"h-8209;v0","wh":"18000;3200"} #end)
+              (#4 def msg
+              #pragma diagram {"xy":"h13210;v0"} #end)
+              
+              (#5 wire #3 => #4)
+          state #10 Id
+          #pragma diagram {"xy":"h-89273;v19368","wh":"42419;12000"} #end :
+            diagram
+              (#7 def msgId
+              #pragma diagram {"xy":"h14210;v0","wh":"10000;3200"} #end)
+              (#8 expr byte
+              #pragma diagram {"xy":"h-13209;v0"} #end)
+              
+              (#9 wire #8 => #7)
+          state #25 Footer
+          #pragma diagram {"xy":"h77227;v-25003","wh":"75200;26926"} #end :
+            diagram
+              (#11 expr last'msgAcc
+              #pragma diagram {"xy":"h-21600;v4063","wh":"16000;3200"} #end)
+              (#12 def msgAcc
+              #pragma diagram {"xy":"h22600;v5963","wh":"10000;3200"} #end)
+              (#13 expr
+                (#14 with
+                  [last'msgCountAcc] = #15;)
+                    where
+                      (#14 group)
+                      (#15 group)
+                  #pragma diagram {"xy":"h4000;v5963","wh":"22000;7000"} #end)
+              (#16 def msgCountAcc
+              #pragma diagram {"xy":"h25600;v-5963","wh":"16000;3200"} #end)
+              (#17 expr last'msgCountAcc
+              #pragma diagram {"xy":"h-23600;v-5963","wh":"20000;3200"} #end)
+              (#18 block ({op_expr%function x => x + 1%op_expr})
+                         #pragma diagram {"xy":"h2000;v-5963","wh":"12000;7000"} #end)
+              (#19 expr msg
+              #pragma diagram {"xy":"h-17600;v7863"} #end)
+              
+              (#20 wire #17 => #18)
+              (#21 wire #18 => #16
+              #pragma diagram {"wp":"v0|#18 #16"} #end)
+              (#22 wire #11 => #14)
+              (#23 wire #13 => #12)
+              (#24 wire #19 => #15)
+          state #41 Payload
+          #pragma diagram {"xy":"h-13323;v13456","wh":"65000;68826"} #end :
+            diagram
+              (activate $CheckMsgKind
+                if msgId = M::MSG_UPDT_ATTITUDE
+                then
+                  {
+                    diagram
+                      (#27 expr byte
+                      #pragma diagram {"xy":"h-21000;v0"} #end)
+                      (#28 def msg
+                      #pragma diagram {"xy":"h21000;v0"} #end)
+                      (#29 block DecodeUpdateAttitude
+                                 #pragma diagram {"xy":"h0;v0","wh":"18035;7000"} #end)
+                      
+                      (#30 wire #29 => #28
+                      #pragma diagram {"wp":"v0|#29 #28"} #end)
+                      (#31 wire #27 => #29)
+                  #pragma diagram {"xy":"h0;v-18900","wh":"54000;11000"} #end
+                  }
+                elsif msgId = M::MSG_SET_ACCEL
+                then
+                  {
+                    diagram
+                      (#32 def msg
+                      #pragma diagram {"xy":"h21000;v0"} #end)
+                      (#33 expr byte
+                      #pragma diagram {"xy":"h-21000;v0"} #end)
+                      (#34 block DecodeSetAccel
+                                 #pragma diagram {"xy":"h0;v0","wh":"18035;7000"} #end)
+                      
+                      (#35 wire #33 => #34)
+                      (#36 wire #34 => #32
+                      #pragma diagram {"wp":"v0|#34 #32"} #end)
+                  #pragma diagram {"xy":"h0;v-3700","wh":"54000;11000"} #end
+                  }
+                elsif msgId = M::MSG_RESET
+                then
+                  {
+                    diagram
+                      (#37 def msg
+                      #pragma diagram {"xy":"h21000;v0"} #end)
+                      (#38 expr M::Reset {#39}
+                        where
+                          (#39 group)
+                      #pragma diagram {"xy":"h1018;v0","wh":"16000;7000"} #end)
+                      
+                      (#40 wire #38 => #37)
+                  #pragma diagram {"xy":"h0;v11500","wh":"54000;11000"} #end
+                  }
+                else
+                  {
+                  #pragma diagram {"xy":"h0;v24400","wh":"54000;6400"} #end
+                  }
+              #pragma diagram {"xy":"h0;v1312","wh":"57000;58200"} #end)
+          initial state #48 Init
+          #pragma diagram {"xy":"h-90409;v-28735","wh":"50417;19463"} #end :
+            diagram
+              (#42 def msgCountAcc
+              #pragma diagram {"xy":"h13209;v3732","wh":"16000;3200"} #end)
+              (#43 expr M::EMPTY_BUFFER
+              #pragma diagram {"xy":"h-9500;v-2231","wh":"20000;3200"} #end)
+              (#44 def msgAcc
+              #pragma diagram {"xy":"h10209;v-2231","wh":"10000;3200"} #end)
+              (#45 expr 0
+              #pragma diagram {"xy":"h-3500;v3732"} #end)
+              
+              (#46 wire #43 => #44)
+              (#47 wire #45 => #42)
+          state #52 End
+          #pragma diagram {"xy":"h-20064;v-38442","wh":"35483;12000"} #end :
+            diagram
+              (#49 expr true
+              #pragma diagram {"xy":"h-9742;v0"} #end)
+              (#50 def doneAcc
+              #pragma diagram {"xy":"h7741;v0","wh":"12000;3200"} #end)
+              
+              (#51 wire #49 => #50)
+          :1: #41 unless if (byte = M::FOOTER)
+          restart #25
+          #pragma diagram {"tp":"h32500;v-29705|#41 h6817 h6817 h-37600;v8754|#25"} #end;
+          :1: #10 unless 
+          restart #41
+          #pragma diagram {"tp":"h21210;v0|#10 h7413 h7414 h-32500;v5912|#41"} #end;
+          :1: #6 unless 
+          restart #10
+          #pragma diagram {"tp":"h-500;v6000|#6 v3834 v3833 h500;v-6000|#10"} #end;
+          :1: #25 unless if (byte = M::HEADER)
+          restart #6
+          #pragma diagram {"tp":"h-37600;v-516|#25 h-500 h-66942 h-7130 h-14258 h-7129;v1782 v3565 v1782 v1782 v1783 v5347 h-4366;v5346 h-4365 h-667 h-667 h21210;v0|#6"} #end;
+          :1: #48 unless if (byte = M::HEADER)
+          restart #6
+          #pragma diagram {"tp":"h2136;v9732|#48 v2957 v2957 h0;v-6000|#6"} #end;
+          :2: #25 unless if (byte = M::END)
+          restart #52
+          #pragma diagram {"tp":"h-37600;v-10451|#25 h-13983 h-13983 h17741;v2988|#52"} #end;
+          :1: #52 unless 
+          restart #48
+          #pragma diagram {"tp":"h-17742;v2988|#52 h-9131 h-9132 h25209;v-6719|#48"} #end;
+          #pragma diagram {"xy":"h0;v-2306","wh":"239235;103737"} #end)
+      until doneAcc
+      returns (msgAcc: last = last'msgs,
+               msgCountAcc: last = last'msgCount,
+               doneAcc: last=false)
+      #pragma diagram {"xy":"H20032;V-57175","wh":"247835;125150"} #end)
+    (#53 def msgs
+    #pragma diagram {"xy":"H154416;V-69638"} #end)
+    (#54 def msgCount
+    #pragma diagram {"xy":"H156416;V-57175","wh":"12000;3200"} #end)
+    (#57 def done
+    #pragma diagram {"xy":"H154416;V-44712"} #end)
+    
+    (#55 wire #0 .(3) => #54
+    #pragma diagram {"wp":"v0|#0 #54"} #end)
+    (#56 wire #0 .(2) => #53
+    #pragma diagram {"wp":"v-12463|#0 #53"} #end)
+    (#58 wire #0 .(4) => #57
+    #pragma diagram {"wp":"v12463|#0 #57"} #end)
+}
+
+node DecodeUpdateAttitude (bytes: uint8;)
+  returns (msg: M::RadioInMsg default = M::UnknownMsg {};)
+{
+  diagram
+    (var
+        pitch last=0;
+        roll last = 0;
+        yaw last = 0;)
+    (automaton $DecodeUpdateAttitude
+      initial state #13 ReadPitch
+      #pragma diagram {"xy":"h-25643;v-28020","wh":"38000;11200"} #end :
+        diagram
+          (#12 def pitch
+          #pragma diagram {"xy":"h10000;v0","wh":"10000;3200"} #end)
+          (#1 expr bytes
+          #pragma diagram {"xy":"h-10000;v0","wh":"10000;3200"} #end)
+          
+          (#0 wire #1 => #12)
+      state #14 ReadRoll
+      #pragma diagram {"xy":"h-25643;v-9420","wh":"38000;11200"} #end :
+        diagram
+          (#5 expr bytes
+          #pragma diagram {"xy":"h-10000;v0","wh":"10000;3200"} #end)
+          (#6 def roll
+          #pragma diagram {"xy":"h9000;v0"} #end)
+          
+          (#2 wire #5 => #6)
+      state #19 ReadYaw
+      #pragma diagram {"xy":"h-24950;v18465","wh":"75500;30311"} #end :
+        diagram
+          (#4 expr (pitch :> int8)
+          #pragma diagram {"xy":"h-23750;v-907","wh":"20000;3200"} #end)
+          (#15 expr bytes
+          #pragma diagram {"xy":"h-9000;v-9556","wh":"10000;3200"} #end)
+          (#16 def yaw
+          #pragma diagram {"xy":"h10000;v-9556"} #end)
+          (#7 expr (roll :> int8)
+          #pragma diagram {"xy":"h-22750;v3918","wh":"18000;3200"} #end)
+          (#8 expr (yaw :> int8)
+          #pragma diagram {"xy":"h-22750;v8743","wh":"18000;3200"} #end)
+          (#9 expr M::UpdateAttitude {#17}
+            where
+              (#17 group)
+          #pragma diagram {"xy":"h6000;v3918","wh":"24000;14475"} #end)
+          (#18 def msg
+          #pragma diagram {"xy":"h29750;v3918"} #end)
+          
+          (#20 wire #4 => #17 .(pitch))
+          (#3 wire #15 => #16)
+          (#21 wire #7 => #17 .(roll))
+          (#22 wire #9 => #18)
+          (#23 wire #8 => #17 .(yaw))
+      state #31 Error
+      #pragma diagram {"xy":"h47950;v8909","wh":"29388;38575"} #end :
+      :1: #13 unless if (false pre true)
+      restart #14
+      #pragma diagram {"tp":"h0;v5600|#13 v2466 v2467 h0;v-5600|#14"} #end;
+      :1: #14 unless 
+      restart #19
+      #pragma diagram {"tp":"h0;v5600|#14 v2376 v2377 h-693;v-15156|#19"} #end;
+      :2: #13 unless if (bytes = M::FOOTER)
+      restart #31
+      #pragma diagram {"tp":"h19000;v-127|#13 h500 h18697 h8849 h13274 h13273;v7884 v7885 v667 v666 h0;v-19287|#31"} #end;
+      :2: #14 unless if (bytes = M::FOOTER)
+      restart #31
+      #pragma diagram {"tp":"h19000;v2321|#14 h13299 h13300 h-14694;v-16008|#31"} #end;
+      :2: #19 unless if (bytes = M::FOOTER)
+      restart #31
+      #pragma diagram {"tp":"h37750;v-2712|#19 h6819 h6818 h-14694;v6844|#31"} #end;
+      #pragma diagram {"xy":"H-55056;V48647","wh":"133287;75241"} #end)
+}
+
+node DecodeSetAccel (bytes: uint8;)
+  returns (msg: M::RadioInMsg default = M::UnknownMsg {};)
+{
+  diagram
+    (automaton $DecodeAccel
+      initial state #21 LastByte
+      #pragma diagram {"xy":"h-18212;v0","wh":"70688;22475"} #end :
+        diagram
+          (#18 expr (bytes :> int8)
+          #pragma diagram {"xy":"h-21344;v0","wh":"20000;3200"} #end)
+          (#16 expr M::SetVerticalAccel {#17}
+            where
+              (#17 group)
+          #pragma diagram {"xy":"h6000;v0","wh":"26000;14475"} #end)
+          (#19 def msg
+          #pragma diagram {"xy":"h27343;v0"} #end)
+          
+          (#23 wire #16 => #19)
+          (#2 wire #18 => #17)
+      state #30 Error
+      #pragma diagram {"xy":"h47557;v-1237","wh":"12000;12000"} #end :
+      :1: #21 unless if (bytes = M::FOOTER)
+      restart #30
+      #pragma diagram {"tp":"h35343;v-1237|#21 h8142 h8142 h-6000;v0|#30"} #end;
+      #pragma diagram {"xy":"H-119624;V46208","wh":"115113;30475"} #end)
+}
+
+const INIT_ACCEL: float32 = 0;
+
+const INIT_ATTITUDE = {
+  pitch: 0.0, 
+  roll: 0.0, 
+  yaw: 0.0
+}: T::AttitudeType;
+
+const MAX_PITCH: float32 = 1.0;
+
+const MAX_ROLL: float32 = 1.0;
+
+const MAX_YAW: float32 = 1.0;
+
+const MAX_ACCEL: float32 = 10.0;

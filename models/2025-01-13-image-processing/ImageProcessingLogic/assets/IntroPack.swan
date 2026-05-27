@@ -1,0 +1,38 @@
+-- version swan: 2025.0 graph: 2.0
+function SimplePack (stream : uint32^20;)
+  returns (packStream1: uint32^5^4;
+           packStream2: uint32^5^16;
+           packStream3: uint32^5^9;)
+{
+  diagram
+    (#0 expr stream
+    #pragma diagram {"xy":"H-89550;V-33050","wh":"10000;3200"} #end)
+    (#1 def packStream1
+    #pragma diagram {"xy":"H-13650;V-33050","wh":"16000;3200"} #end)
+    (#2 expr pack <<5, 4>>(#3)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H-40075;V-33050","wh":"20000;7000"} #end)
+    (#4 expr pack <<5, 16>>(#5)
+      where
+        (#5 group)
+    #pragma diagram {"xy":"H-40075;V-22950","wh":"20000;7000"} #end)
+    (#6 expr pack <<5, 9>>(#7)
+      where
+        (#7 group)
+    #pragma diagram {"xy":"H-40075;V-12850","wh":"20000;7000"} #end)
+    (#8 def packStream2
+    #pragma diagram {"xy":"H-13650;V-22950","wh":"16000;3200"} #end)
+    (#9 def packStream3
+    #pragma diagram {"xy":"H-13650;V-12850","wh":"16000;3200"} #end)
+    (#10 block ({op_expr%function s => s @ [s[19]]%op_expr})
+               #pragma diagram {"xy":"H-64925;V-12850","wh":"23300;8358"} #end)
+    
+    (#11 wire #0 => #3, #5, #10 .(s)
+    #pragma diagram {"wp":"#0 h5488[#3, v10100[#5, v10100 #10]]"} #end)
+    (#12 wire #2 => #1)
+    (#13 wire #4 => #8)
+    (#14 wire #6 => #9)
+    (#15 wire #10 => #7
+    #pragma diagram {"wp":"v0|#10 #7"} #end)
+}

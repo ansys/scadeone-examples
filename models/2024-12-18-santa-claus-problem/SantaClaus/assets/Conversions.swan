@@ -1,0 +1,89 @@
+-- version swan: 2025.2 graph: 2.1
+use SantaClaus;
+
+function santaStatus2Int (status: SantaClaus::SantaStatus;)
+  returns (statusInt: int32;)
+{
+  diagram
+    (activate #0 $ActivateWhen0 when status match
+      | SantaClaus::S_SLEEPING :
+        {
+          diagram
+            (let statusInt = 1;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v-8200","wh":"31000;7200"} #end
+        }
+      | SantaClaus::S_DELIVERING :
+        {
+          diagram
+            (let statusInt = 2;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v3200","wh":"31000;7200"} #end
+        }
+      | SantaClaus::S_HELPING :
+        {
+          diagram
+            (let statusInt = 3;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v14600","wh":"31000;7200"} #end
+        }
+    #pragma diagram {"xy":"H-95475;V-23475","wh":"31000;39400"} #end)
+}
+
+function elfStatus2Int (status: SantaClaus::ElfStatus;)
+  returns (statusInt: int32;)
+{
+  diagram
+    (activate #0 $ActivateWhen0 when status match
+      | SantaClaus::E_WORKING :
+        {
+          diagram
+            (let statusInt = 1;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v-8200","wh":"31000;7200"} #end
+        }
+      | SantaClaus::E_ISSUE :
+        {
+          diagram
+            (let statusInt = 2;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v3200","wh":"31000;7200"} #end
+        }
+      | SantaClaus::E_SOLVING :
+        {
+          diagram
+            (let statusInt = 3;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v14600","wh":"31000;7200"} #end
+        }
+    #pragma diagram {"xy":"H-95475;V-23475","wh":"31000;39400"} #end)
+}
+
+function reindeerStatus2Int (status: SantaClaus::ReindeerStatus;)
+  returns (statusInt: int32;)
+{
+  diagram
+    (activate #0 $ActivateWhen0 when status match
+      | SantaClaus::R_VACATION :
+        {
+          diagram
+            (let statusInt = 1;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v-8200","wh":"31000;7200"} #end
+        }
+      | SantaClaus::R_READY :
+        {
+          diagram
+            (let statusInt = 2;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v3200","wh":"31000;7200"} #end
+        }
+      | SantaClaus::R_FLYING :
+        {
+          diagram
+            (let statusInt = 3;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v14600","wh":"31000;7200"} #end
+        }
+    #pragma diagram {"xy":"H-135575;V-26775","wh":"31000;39400"} #end)
+}

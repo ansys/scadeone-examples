@@ -1,0 +1,119 @@
+-- version swan: 2025.0 graph: 2.0 swant: 1.1
+use BlogMatrix as M;
+
+_harness SimDot
+{
+  diagram
+    (#0 #pragma swt under_test #end block M::Dot <<5>> 
+                                          #pragma diagram {"xy":"H0;V0","wh":"20000;14000"} #end)
+    (#1 expr [1.0_f32, 2.0, 3.0, 4.0, 5.0]
+    #pragma diagram {"xy":"H-36050;V-1750","wh":"32000;3200"} #end)
+    (#2 expr [10.0, 0.0, 1.0, 2.0, 0.5]
+    #pragma diagram {"xy":"H-35050;V2850","wh":"30000;3200"} #end)
+    (#5 def _
+    #pragma diagram {"xy":"H26050;V0"} #end)
+    
+    (#3 wire #1 => #0 .(a))
+    (#4 wire #2 => #0 .(b))
+    (#6 wire #0 => #5
+    #pragma diagram {"wp":"v0|#0 #5"} #end)
+}
+
+_harness SimGetDiagonal
+{
+  diagram
+    (#0 #pragma swt under_test #end block M::GetDiagonal <<4>> 
+                                          #pragma diagram {"xy":"H0;V0","wh":"20000;14000"} #end)
+    (#1 expr [[8_i32,-9, -6, 5],
+              [1, -3, -4, 7],
+              [2, 8, -8, -3],
+              [1, 2, -5, -1]]
+    #pragma diagram {"xy":"H-31750;V0","wh":"22000;7938"} #end)
+    (#3 def _
+    #pragma diagram {"xy":"H26750;V0"} #end)
+    
+    (#2 wire #1 => #0)
+    (#4 wire #0 => #3
+    #pragma diagram {"wp":"v0|#0 #3"} #end)
+}
+
+_harness SimMatMatProd
+{
+  diagram
+    (#0 #pragma swt under_test #end block M::MatMatProd <<3, 4, 3>> 
+                                          #pragma diagram {"xy":"H0;V0","wh":"20000;14000"} #end)
+    (#1 expr [[1_i32, 0, 1],
+              [2, 1, 1],
+              [0, 1, 1],
+              [1, 1, 2]]
+    #pragma diagram {"xy":"H-37250;V-3031","wh":"20000;7938"} #end)
+    (#2 expr [[1, 2, 1],
+              [2, 3, 1],
+              [4, 2, 2]]
+    #pragma diagram {"xy":"H-35250;V6820","wh":"16000;6078"} #end)
+    (#5 def _
+    #pragma diagram {"xy":"H22350;V0"} #end)
+    
+    (#3 wire #1 => #0 .(A))
+    (#4 wire #2 => #0 .(B)
+    #pragma diagram {"wp":"#2 h10125 v-3255 #0"} #end)
+    (#6 wire #0 => #5
+    #pragma diagram {"wp":"v0|#0 #5"} #end)
+}
+
+_harness SimKroneckerProd
+{
+  diagram
+    (#0 #pragma swt under_test #end block M::KroneckerProd <<2, 2, 2, 2>> 
+                                          #pragma diagram {"xy":"H-9600;V0","wh":"20000;14000"} #end)
+    (#1 expr [[1_i32, 2],
+              [3, 4]]
+    #pragma diagram {"xy":"H-40550;V-2659","wh":"16000;4219"} #end)
+    (#2 expr [[0, 5],
+              [6, 7]]
+    #pragma diagram {"xy":"H-38550;V3659","wh":"12000;4219"} #end)
+    (#3 def _
+    #pragma diagram {"xy":"H17350;V350"} #end)
+    (#4 expr [[1_i32, -4, 7],
+              [-2, 3, 3]]
+    #pragma diagram {"xy":"H-42550;V17691","wh":"20000;4219"} #end)
+    (#5 expr [[8,-9, -6, 5],
+              [1, -3, -4, 7],
+              [2, 8, -8, -3],
+              [1, 2, -5, -1]]
+    #pragma diagram {"xy":"H-42550;V25869","wh":"20000;7938"} #end)
+    (#6 def _
+    #pragma diagram {"xy":"H17350;V20700"} #end)
+    (#7 #pragma swt under_test #end block M::KroneckerProd <<3, 2, 4, 4>> 
+                                          #pragma diagram {"xy":"H-9600;V20350","wh":"20000;14000"} #end)
+    
+    (#8 wire #2 => #0 .(B))
+    (#9 wire #1 => #0 .(A))
+    (#10 wire #0 => #3
+    #pragma diagram {"wp":"v350|#0 #3"} #end)
+    (#11 wire #7 => #6
+    #pragma diagram {"wp":"v350|#7 #6"} #end)
+    (#12 wire #4 => #7 .(A))
+    (#13 wire #5 => #7 .(B))
+}
+
+_harness SimScale
+{
+  diagram
+    (#0 #pragma swt under_test #end block M::Scale <<3, 4>> 
+                                          #pragma diagram {"xy":"H0;V0","wh":"20000;14000"} #end)
+    (#1 expr [[1_i32, 0, 1],
+              [2, 1, 1],
+              [0, 1, 1],
+              [1, 1, 2]]
+    #pragma diagram {"xy":"H-30750;V-3031","wh":"20000;7938"} #end)
+    (#2 expr 10
+    #pragma diagram {"xy":"H-24750;V5400"} #end)
+    (#3 def _
+    #pragma diagram {"xy":"H24750;V0"} #end)
+    
+    (#4 wire #1 => #0 .(A))
+    (#5 wire #2 => #0 .(x))
+    (#6 wire #0 => #3
+    #pragma diagram {"wp":"v0|#0 #3"} #end)
+}

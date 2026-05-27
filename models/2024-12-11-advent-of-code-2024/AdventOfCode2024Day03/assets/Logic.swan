@@ -1,0 +1,563 @@
+-- version swan: 2025.0 graph: 2.0
+const NAN: int32 = -1;
+
+node ParseStringPart1 (c: char;)
+  returns (result: int32 last=0;)
+{
+  diagram
+    (var
+        operandA: int32 last=0;
+        operandB: int32 last=0;
+        ok:bool;)
+    (automaton $ParserMul
+      initial state #0 idle
+      #pragma diagram {"xy":"h-54089;v-66572","wh":"12000;12000"} #end :
+      state #24 ParsingMul
+      #pragma diagram {"xy":"h0;v10160","wh":"120178;124825"} #end :
+        diagram
+          (automaton $automaton0
+            state #4 operandA
+            #pragma diagram {"xy":"h-7911;v29933","wh":"81275;12000"} #end :
+              diagram
+                (#1 def operandA
+                #pragma diagram {"xy":"h28438;v0","wh":"12000;3200"} #end)
+                (#2 expr (last 'operandA * 10) + CharToInt32(last 'c)
+                #pragma diagram {"xy":"h-13638;v0","wh":"46000;3200"} #end)
+                
+                (#3 wire #2 => #1)
+            state #8 operandB
+            #pragma diagram {"xy":"h-7879;v-8160","wh":"74500;12000"} #end :
+              diagram
+                (#5 def operandB
+                #pragma diagram {"xy":"h25050;v0","wh":"12000;3200"} #end)
+                (#6 expr (last 'operandB * 10) + CharToInt32(last 'c)
+                #pragma diagram {"xy":"h-10250;v0","wh":"46000;3200"} #end)
+                
+                (#7 wire #6 => #5)
+            initial state #9 m
+            #pragma diagram {"xy":"h-7911;v-48412","wh":"12000;12000"} #end :
+            state #10 u
+            #pragma diagram {"xy":"h19089;v-48412","wh":"12000;12000"} #end :
+            state #14 closedParen
+            #pragma diagram {"xy":"h-7879;v-28286","wh":"72000;12000"} #end :
+              diagram
+                (#11 def result
+                #pragma diagram {"xy":"h27000;v0","wh":"10000;3200"} #end)
+                (#12 expr (last 'result) + (operandA * operandB)
+                #pragma diagram {"xy":"h-12000;v0","wh":"40000;3200"} #end)
+                
+                (#13 wire #12 => #11)
+            state #18 openParen
+            #pragma diagram {"xy":"h-7911;v48413","wh":"37059;12000"} #end :
+              diagram
+                (#15 def operandA
+                #pragma diagram {"xy":"h6529;v0","wh":"12000;3200"} #end)
+                (#16 expr 0_i32
+                #pragma diagram {"xy":"h-9529;v0","wh":"10000;3200"} #end)
+                
+                (#17 wire #16 => #15)
+            state #22 comma
+            #pragma diagram {"xy":"h-7879;v11967","wh":"37122;12000"} #end :
+              diagram
+                (#19 def operandB
+                #pragma diagram {"xy":"h6561;v0","wh":"12000;3200"} #end)
+                (#20 expr 0_i32
+                #pragma diagram {"xy":"h-9561;v0","wh":"10000;3200"} #end)
+                
+                (#21 wire #20 => #19)
+            state #23 l
+            #pragma diagram {"xy":"h46089;v-48412","wh":"12000;12000"} #end :
+            :1: #23 until if (c = '(')
+            {
+              emit 'ok;
+            }
+            restart #18
+            #pragma diagram {"tp":"h-176;v6000|#23 v500 v30775 v14888 v30370 h-10654;v14292 h-22640 h-667 h-667 h18529;v0|#18"} #end;
+            :1: #14 until if (c = 'm')
+            {
+              emit 'ok;
+            }
+            restart #9
+            #pragma diagram {"tp":"h-32;v-6000|#14 v-2709 v-2709 h0;v6000|#9"} #end;
+            :1: #8 until if (CharToInt32(c) <> NAN
+                             and operandB <= 999)
+            {
+              emit 'ok;
+            }
+            restart #8
+            #pragma diagram {"tp":"h-37250;v-3322|#8 h-500 h-500 h-500 h-1213 h-1213;v554 v1107 v1107 h963;v554 h963 h667 h667 h-37250;v0|#8"} #end;
+            :1: #22 until if (CharToInt32(c) <> NAN)
+            {
+              emit 'ok;
+            }
+            restart #8
+            #pragma diagram {"tp":"h0;v-6000|#22 v-2709 v-2709 h0;v6000|#8"} #end;
+            :1: #10 until if (c = 'l')
+            {
+              emit 'ok;
+            }
+            restart #23
+            #pragma diagram {"tp":"h6000;v0|#10 h5000 h5000 h-6000;v0|#23"} #end;
+            :2: #8 until if (c = ')')
+            {
+              emit 'ok;
+            }
+            restart #14
+            #pragma diagram {"tp":"h0;v-6000|#8 v-2709 v-2709 h0;v6000|#14"} #end;
+            :1: #9 until if (c = 'u')
+            {
+              emit 'ok;
+            }
+            restart #10
+            #pragma diagram {"tp":"h6000;v0|#9 h5000 h5000 h-6000;v0|#10"} #end;
+            :1: #4 until if (CharToInt32(c) <> NAN
+                             and operandA <= 999)
+            {
+              emit 'ok;
+            }
+            restart #4
+            #pragma diagram {"tp":"h-40638;v-3483|#4 h-500 h-500 h-500 h-1020 h-1020;v580 v1161 v1161 h770;v580 h770 h667 h667 h-40638;v0|#4"} #end;
+            :1: #18 until if (CharToInt32(c) <> NAN)
+            {
+              emit 'ok;
+            }
+            restart #4
+            #pragma diagram {"tp":"h0;v-6000|#18 v-2160 v-2160 h0;v6000|#4"} #end;
+            :2: #4 until if (c = ',')
+            {
+              emit 'ok;
+            }
+            restart #22
+            #pragma diagram {"tp":"h32;v-6000|#4 v-1989 v-1989 h0;v6000|#22"} #end;
+            #pragma diagram {"xy":"h0;v0","wh":"112178;116825"} #end)
+      :1: #0 until if (c = 'm')
+      restart #24
+      #pragma diagram {"tp":"h0;v6000|#0 v2773 v2773 h-54089;v-62412|#24"} #end;
+      :1: #24 until if (not ok)
+      restart #0
+      #pragma diagram {"tp":"h-18587;v-62412|#24 v-500 v-500 v-500 v-6410 h-6876;v-6410 h-6875 h-4584 h-10501 h6000;v0|#0"} #end;
+      #pragma diagram {"xy":"H-77413;V-47086","wh":"128178;153145"} #end)
+}
+
+node ParseStringPart2 (c: char;)
+  returns (result: int32 last=0;
+           active : bool last=true;)
+{
+  diagram
+    (var
+        operandA: int32 last=0;
+        operandB: int32 last=0;
+        okMul: bool;
+        okDo: bool;)
+    (automaton $DoDontParser
+      initial state #0 idle
+      #pragma diagram {"xy":"h-36876;v-70572","wh":"12000;12000"} #end :
+      state #16 ParsingDoDont
+      #pragma diagram {"xy":"h0;v10160","wh":"86265;132825"} #end :
+        diagram
+          (automaton $automaton1
+            state #4 closedParenDont
+            #pragma diagram {"xy":"h15132;v52813","wh":"40000;11200"} #end :
+              diagram
+                (#1 expr false
+                #pragma diagram {"xy":"h-11000;v0","wh":"10000;3200"} #end)
+                (#2 def active
+                #pragma diagram {"xy":"h11000;v0","wh":"10000;3200"} #end)
+                
+                (#3 wire #1 => #2)
+            state #5 o
+            #pragma diagram {"xy":"h-17407;v-35567","wh":"12000;12000"} #end :
+            state #6 t
+            #pragma diagram {"xy":"h15132;v17861","wh":"12000;12000"} #end :
+            state #7 n
+            #pragma diagram {"xy":"h15132;v-17491","wh":"12000;12000"} #end :
+            state #8 apostrophe
+            #pragma diagram {"xy":"h15132;v185","wh":"12000;12000"} #end :
+            state #12 closedParen
+            #pragma diagram {"xy":"h-16132;v185","wh":"38000;11200"} #end :
+              diagram
+                (#9 def active
+                #pragma diagram {"xy":"h10000;v0","wh":"10000;3200"} #end)
+                (#10 expr true
+                #pragma diagram {"xy":"h-11000;v0"} #end)
+                
+                (#11 wire #10 => #9)
+            state #13 openParenDont
+            #pragma diagram {"xy":"h15132;v35537","wh":"12000;12000"} #end :
+            state #14 openParen
+            #pragma diagram {"xy":"h-17407;v-17491","wh":"12000;12000"} #end :
+            initial state #15 d
+            #pragma diagram {"xy":"h-17407;v-52412","wh":"12000;12000"} #end :
+            :1: #6 until if (c = '(')
+            {
+              emit 'okDo;
+            }
+            restart #13
+            #pragma diagram {"tp":"h0;v6000|#6 v1892 v1892 h0;v-6000|#13"} #end;
+            :1: #7 until if (c = ''')
+            {
+              emit 'okDo;
+            }
+            restart #8
+            #pragma diagram {"tp":"h0;v6000|#7 v1892 v1892 h0;v-6000|#8"} #end;
+            :1: #15 until if (c = 'o')
+            {
+              emit 'okDo;
+            }
+            restart #5
+            #pragma diagram {"tp":"h0;v6000|#15 v1615 v1615 h0;v-6000|#5"} #end;
+            :1: #13 until if (c = ')')
+            {
+              emit 'okDo;
+            }
+            restart #4
+            #pragma diagram {"tp":"h0;v6000|#13 v1892 v1892 h0;v-5600|#4"} #end;
+            :1: #12 until if (c = 'd')
+            restart #15
+            #pragma diagram {"tp":"h-15085;v-5600|#12 v-500 v-23584 v-11292 v-5811 h2906;v-5811 h2906 h667 h667 h-6000;v0|#15"} #end;
+            :1: #4 until if (c = 'd')
+            {
+              emit 'okDo;
+            }
+            restart #15
+            #pragma diagram {"tp":"h14650;v-5600|#4 v-500 v-33708 v-16354 v-24531 h-19594;v-24531 h-19594 h-667 h-667 h6000;v0|#15"} #end;
+            :1: #14 until if (c = ')')
+            {
+              emit 'okDo;
+            }
+            restart #12
+            #pragma diagram {"tp":"h0;v6000|#14 v2025 v2025 h-1274;v-5600|#12"} #end;
+            :1: #5 until if (c = '(')
+            {
+              emit 'okDo;
+            }
+            restart #14
+            #pragma diagram {"tp":"h0;v6000|#5 v2025 v2025 h0;v-6000|#14"} #end;
+            :2: #5 until if (c = 'n')
+            {
+              emit 'okDo;
+            }
+            restart #7
+            #pragma diagram {"tp":"h6000;v-54|#5 h500 h9346 h4173 h6260 h6260;v5065 v5065 v667 v667 h0;v-6000|#7"} #end;
+            :1: #8 until if (c = 't')
+            {
+              emit 'okDo;
+            }
+            restart #6
+            #pragma diagram {"tp":"h0;v6000|#8 v1892 v1892 h0;v-6000|#6"} #end;
+            #pragma diagram {"xy":"h0;v0","wh":"78265;124825"} #end)
+      :1: #0 until if (c = 'd')
+      restart #16
+      #pragma diagram {"tp":"h0;v6000|#0 v2773 v2773 h-36876;v-66412|#16"} #end;
+      :1: #16 until if (not okDo)
+      restart #0
+      #pragma diagram {"tp":"h-10718;v-66412|#16 v-500 v-500 v-500 v-6410 h-9079;v-6410 h-9079 h-667 h-667 h6000;v0|#0"} #end;
+      #pragma diagram {"xy":"H126218;V18883","wh":"94265;161145"} #end)
+    (automaton $MulParser
+      initial state #17 idle
+      #pragma diagram {"xy":"h-54089;v-66572","wh":"12000;12000"} #end :
+      state #41 ParsingMul
+      #pragma diagram {"xy":"h0;v10160","wh":"120178;124825"} #end :
+        diagram
+          (automaton $automaton0
+            state #21 operandA
+            #pragma diagram {"xy":"h-7911;v29933","wh":"81275;12000"} #end :
+              diagram
+                (#18 def operandA
+                #pragma diagram {"xy":"h28438;v0","wh":"12000;3200"} #end)
+                (#19 expr (last 'operandA * 10) + CharToInt32(last 'c)
+                #pragma diagram {"xy":"h-13638;v0","wh":"46000;3200"} #end)
+                
+                (#20 wire #19 => #18)
+            state #25 operandB
+            #pragma diagram {"xy":"h-7879;v-8160","wh":"74500;12000"} #end :
+              diagram
+                (#22 def operandB
+                #pragma diagram {"xy":"h25050;v0","wh":"12000;3200"} #end)
+                (#23 expr (last 'operandB * 10) + CharToInt32(last 'c)
+                #pragma diagram {"xy":"h-10250;v0","wh":"46000;3200"} #end)
+                
+                (#24 wire #23 => #22)
+            initial state #26 m
+            #pragma diagram {"xy":"h-7911;v-48412","wh":"12000;12000"} #end :
+            state #27 u
+            #pragma diagram {"xy":"h19089;v-48412","wh":"12000;12000"} #end :
+            state #31 closedParen
+            #pragma diagram {"xy":"h-7879;v-28286","wh":"72000;12000"} #end :
+              diagram
+                (#28 def result
+                #pragma diagram {"xy":"h27000;v0","wh":"10000;3200"} #end)
+                (#29 expr (last 'result) + (operandA * operandB)
+                #pragma diagram {"xy":"h-12000;v0","wh":"40000;3200"} #end)
+                
+                (#30 wire #29 => #28)
+            state #35 openParen
+            #pragma diagram {"xy":"h-7911;v48413","wh":"37059;12000"} #end :
+              diagram
+                (#32 def operandA
+                #pragma diagram {"xy":"h6529;v0","wh":"12000;3200"} #end)
+                (#33 expr 0_i32
+                #pragma diagram {"xy":"h-9529;v0","wh":"10000;3200"} #end)
+                
+                (#34 wire #33 => #32)
+            state #39 comma
+            #pragma diagram {"xy":"h-7879;v11967","wh":"37122;12000"} #end :
+              diagram
+                (#36 def operandB
+                #pragma diagram {"xy":"h6561;v0","wh":"12000;3200"} #end)
+                (#37 expr 0_i32
+                #pragma diagram {"xy":"h-9561;v0","wh":"10000;3200"} #end)
+                
+                (#38 wire #37 => #36)
+            state #40 l
+            #pragma diagram {"xy":"h46089;v-48412","wh":"12000;12000"} #end :
+            :1: #40 until if (c = '(')
+            {
+              emit 'okMul;
+            }
+            restart #35
+            #pragma diagram {"tp":"h-176;v6000|#40 v500 v30775 v14888 v30370 h-10654;v14292 h-22640 h-667 h-667 h18529;v0|#35"} #end;
+            :1: #31 until if (c = 'm')
+            {
+              emit 'okMul;
+            }
+            restart #26
+            #pragma diagram {"tp":"h-32;v-6000|#31 v-2709 v-2709 h0;v6000|#26"} #end;
+            :1: #25 until if (CharToInt32(c) <> NAN
+                              and operandB <= 999)
+            {
+              emit 'okMul;
+            }
+            restart #25
+            #pragma diagram {"tp":"h-37250;v-3322|#25 h-500 h-500 h-500 h-1213 h-1213;v554 v1107 v1107 h963;v554 h963 h667 h667 h-37250;v0|#25"} #end;
+            :1: #39 until if (CharToInt32(c) <> NAN)
+            {
+              emit 'okMul;
+            }
+            restart #25
+            #pragma diagram {"tp":"h0;v-6000|#39 v-2709 v-2709 h0;v6000|#25"} #end;
+            :1: #27 until if (c = 'l')
+            {
+              emit 'okMul;
+            }
+            restart #40
+            #pragma diagram {"tp":"h6000;v0|#27 h5000 h5000 h-6000;v0|#40"} #end;
+            :2: #25 until if (c = ')')
+            {
+              emit 'okMul;
+            }
+            restart #31
+            #pragma diagram {"tp":"h0;v-6000|#25 v-2709 v-2709 h0;v6000|#31"} #end;
+            :1: #26 until if (c = 'u')
+            {
+              emit 'okMul;
+            }
+            restart #27
+            #pragma diagram {"tp":"h6000;v0|#26 h5000 h5000 h-6000;v0|#27"} #end;
+            :1: #21 until if (CharToInt32(c) <> NAN
+                              and operandA <= 999)
+            {
+              emit 'okMul;
+            }
+            restart #21
+            #pragma diagram {"tp":"h-40638;v-3483|#21 h-500 h-500 h-500 h-1020 h-1020;v580 v1161 v1161 h770;v580 h770 h667 h667 h-40638;v0|#21"} #end;
+            :1: #35 until if (CharToInt32(c) <> NAN)
+            {
+              emit 'okMul;
+            }
+            restart #21
+            #pragma diagram {"tp":"h0;v-6000|#35 v-2160 v-2160 h0;v6000|#21"} #end;
+            :2: #21 until if (c = ',')
+            {
+              emit 'okMul;
+            }
+            restart #39
+            #pragma diagram {"tp":"h32;v-6000|#21 v-1989 v-1989 h0;v6000|#39"} #end;
+            #pragma diagram {"xy":"h0;v0","wh":"112178;116825"} #end)
+      :1: #17 until if (c = 'm'
+                        and active)
+      restart #41
+      #pragma diagram {"tp":"h0;v6000|#17 v2773 v2773 h-54089;v-62412|#41"} #end;
+      :1: #41 until if (not okMul)
+      restart #17
+      #pragma diagram {"tp":"h-18587;v-62412|#41 v-500 v-500 v-500 v-6410 h-6876;v-6410 h-6875 h-4584 h-10501 h6000;v0|#17"} #end;
+      #pragma diagram {"xy":"H8883;V16883","wh":"128178;153145"} #end)
+}
+
+function CharToInt32 (c: char;)
+  returns (output: int32;)
+{
+  diagram
+    (activate $ActivateIf0
+      if c = '0'
+      then
+        {
+          diagram
+            (#0 def output
+            #pragma diagram {"xy":"h11000;v0","wh":"10000;3200"} #end)
+            (#1 expr 0_i32
+            #pragma diagram {"xy":"h-11000;v0","wh":"10000;3200"} #end)
+            
+            (#2 wire #1 => #0)
+        #pragma diagram {"xy":"h0;v-55400","wh":"36000;7200"} #end
+        }
+      elsif c = '1'
+      then
+        {
+          diagram
+            (#3 expr 1_i32
+            #pragma diagram {"xy":"h-11000;v0","wh":"10000;3200"} #end)
+            (#4 def output
+            #pragma diagram {"xy":"h11000;v0","wh":"10000;3200"} #end)
+            
+            (#5 wire #3 => #4)
+        #pragma diagram {"xy":"h0;v-44000","wh":"36000;7200"} #end
+        }
+      elsif c = '2'
+      then
+        {
+          diagram
+            (#6 expr 2_i32
+            #pragma diagram {"xy":"h-11000;v0","wh":"10000;3200"} #end)
+            (#7 def output
+            #pragma diagram {"xy":"h11000;v0","wh":"10000;3200"} #end)
+            
+            (#8 wire #6 => #7)
+        #pragma diagram {"xy":"h0;v-32600","wh":"36000;7200"} #end
+        }
+      elsif c = '3'
+      then
+        {
+          diagram
+            (#9 expr 3_i32
+            #pragma diagram {"xy":"h-11000;v0","wh":"10000;3200"} #end)
+            (#10 def output
+            #pragma diagram {"xy":"h11000;v0","wh":"10000;3200"} #end)
+            
+            (#11 wire #9 => #10)
+        #pragma diagram {"xy":"h0;v-21200","wh":"36000;7200"} #end
+        }
+      elsif c = '4'
+      then
+        {
+          diagram
+            (#12 expr 4_i32
+            #pragma diagram {"xy":"h-11000;v0","wh":"10000;3200"} #end)
+            (#13 def output
+            #pragma diagram {"xy":"h11000;v0","wh":"10000;3200"} #end)
+            
+            (#14 wire #12 => #13)
+        #pragma diagram {"xy":"h0;v-9800","wh":"36000;7200"} #end
+        }
+      elsif c = '5'
+      then
+        {
+          diagram
+            (#15 expr 5_i32
+            #pragma diagram {"xy":"h-11000;v0","wh":"10000;3200"} #end)
+            (#16 def output
+            #pragma diagram {"xy":"h11000;v0","wh":"10000;3200"} #end)
+            
+            (#17 wire #15 => #16)
+        #pragma diagram {"xy":"h0;v1600","wh":"36000;7200"} #end
+        }
+      elsif c = '6'
+      then
+        {
+          diagram
+            (#18 expr 6_i32
+            #pragma diagram {"xy":"h-11000;v0","wh":"10000;3200"} #end)
+            (#19 def output
+            #pragma diagram {"xy":"h11000;v0","wh":"10000;3200"} #end)
+            
+            (#20 wire #18 => #19)
+        #pragma diagram {"xy":"h0;v13000","wh":"36000;7200"} #end
+        }
+      elsif c = '7'
+      then
+        {
+          diagram
+            (#21 expr 7_i32
+            #pragma diagram {"xy":"h-11000;v0","wh":"10000;3200"} #end)
+            (#22 def output
+            #pragma diagram {"xy":"h11000;v0","wh":"10000;3200"} #end)
+            
+            (#23 wire #21 => #22)
+        #pragma diagram {"xy":"h0;v24400","wh":"36000;7200"} #end
+        }
+      elsif c = '8'
+      then
+        {
+          diagram
+            (#24 expr 8_i32
+            #pragma diagram {"xy":"h-11000;v0","wh":"10000;3200"} #end)
+            (#25 def output
+            #pragma diagram {"xy":"h11000;v0","wh":"10000;3200"} #end)
+            
+            (#26 wire #24 => #25)
+        #pragma diagram {"xy":"h0;v35800","wh":"36000;7200"} #end
+        }
+      elsif c = '9'
+      then
+        {
+          diagram
+            (#27 expr 9_i32
+            #pragma diagram {"xy":"h-11000;v0","wh":"10000;3200"} #end)
+            (#28 def output
+            #pragma diagram {"xy":"h11000;v0","wh":"10000;3200"} #end)
+            
+            (#29 wire #27 => #28)
+        #pragma diagram {"xy":"h0;v47200","wh":"36000;7200"} #end
+        }
+      else
+        {
+          diagram
+            (#30 expr NAN
+            #pragma diagram {"xy":"h-11000;v0"} #end)
+            (#31 def output
+            #pragma diagram {"xy":"h10000;v0","wh":"10000;3200"} #end)
+            
+            (#32 wire #30 => #31)
+        #pragma diagram {"xy":"h0;v58600","wh":"36000;7200"} #end
+        }
+    #pragma diagram {"xy":"H-126913;V119833","wh":"39000;127400"} #end)
+}
+
+node CharArrayToFlow <<N>> (arr: char^N;)
+  returns (c: char;)
+{
+  diagram
+    (#0 expr #1 pre #2
+      where
+        (#1 group)
+        (#2 group)
+    #pragma diagram {"xy":"H-94485;V-107290"} #end)
+    (#3 def c
+    #pragma diagram {"xy":"H-72485;V-107290"} #end)
+    (#4 def cycle
+    #pragma diagram {"xy":"H-85485;V-121807","wh":"10000;3200"} #end)
+    (#5 expr arr[0]
+    #pragma diagram {"xy":"H-117485;V-109190","wh":"10000;3200"} #end)
+    (#6 expr last 'cycle + 1
+    #pragma diagram {"xy":"H-112485;V-121807","wh":"20000;3200"} #end)
+    (#7 expr (#9 .[#12] default arr[N-1])
+      where
+        (#9 group)
+        (#12 group)
+    #pragma diagram {"xy":"H-126485;V-103590","wh":"28000;7000"} #end)
+    (#13 expr arr
+    #pragma diagram {"xy":"H-156485;V-105490"} #end)
+    (#14 expr cycle
+    #pragma diagram {"xy":"H-157485;V-101690","wh":"10000;3200"} #end)
+    
+    (#8 wire #0 => #3)
+    (#10 wire #6 => #4)
+    (#11 wire #5 => #1)
+    (#15 wire #7 => #2
+    #pragma diagram {"wp":"#7 h7500 v-1800 #2"} #end)
+    (#16 wire #13 => #9)
+    (#17 wire #14 => #12)
+    
+    (var
+        cycle last=0_i32;)
+}

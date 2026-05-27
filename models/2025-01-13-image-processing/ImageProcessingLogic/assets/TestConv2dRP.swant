@@ -1,0 +1,163 @@
+-- version swan: 2025.0 graph: 2.0 swant: 1.1
+use Convolution;
+
+use specification;
+
+_harness harness_Conv2D
+{
+  diagram
+    (#0 block specification::specification
+              #pragma diagram {"xy":"H-104550;V-27100","wh":"20000;14000"} #end)
+    (#1 #pragma swt under_test #end block Convolution::Conv2D <<80, 60, 5>> 
+                                          #pragma diagram {"xy":"H-53081;V-27100","wh":"20000;14000"} #end)
+    (#2 block MinPos <<80>> 
+              #pragma diagram {"xy":"H23956;V-34175","wh":"20000;14000"} #end)
+    (#3 expr
+      (case #4 of
+        | 0 : #5
+        | default : #6)
+          where
+            (#4 group)
+            (#5 group)
+            (#6 group)
+        #pragma diagram {"xy":"H-80006;V-12900","wh":"16000;10800"} #end)
+    (#7 block (map MinPos <<60>> ) <<80>>
+    #pragma diagram {"xy":"H-3231;V-33200","wh":"24000;18000"} #end)
+    (#9 block MinPos <<60>> 
+              #pragma diagram {"xy":"H23956;V-12900","wh":"20000;14000"} #end)
+    (#10 expr CROSS
+    #pragma diagram {"xy":"H-97150;V-12900","wh":"10000;3200"} #end)
+    (#11 block (map MinPos <<80>> ) <<60>>
+    #pragma diagram {"xy":"H-3231;V-14900","wh":"24000;18000"} #end)
+    (#13 expr transpose  (#14)
+      where
+        (#14 group)
+    #pragma diagram {"xy":"H-29419;V-29300","wh":"14000;7000"} #end)
+    (#15 expr STAR
+    #pragma diagram {"xy":"H-98150;V-9100"} #end)
+    (#16 block (map ({op_expr%function x => (x /(80 :>uint32)  :> uint8) %op_expr})) <<80>>
+    #pragma diagram {"xy":"H25956;V-51700","wh":"24000;18000"} #end)
+    (#18 block (map ({op_expr%function x => (x / (60 :>uint32)  :> uint8) %op_expr})) <<60>>
+    #pragma diagram {"xy":"H25956;V4800","wh":"24000;18000"} #end)
+    (#20 group
+    #pragma diagram {"xy":"H60025;V-22812","wh":"800;34975"} #end)
+    (#21 group byname
+    #pragma diagram {"xy":"H71544;V-21212"} #end)
+    (#22 expr #23 pre #24
+      where
+        (#23 group)
+        (#24 group)
+    #pragma diagram {"dir":"sw","xy":"H-53081;V17890"} #end)
+    (#25 expr (histo_X: 0_ui8^80, histo_Y: 0_ui8^60,
+               posx: 0, posy: 0)
+    #pragma diagram {"dir":"nw","xy":"H-15115;V19790","wh":"40000;4219"} #end)
+    
+    (#26 wire #1 .(result) => #14, #11
+    #pragma diagram {"wp":"v-2200|#1 h3331[#14, v16400 #11]"} #end)
+    (#27 wire #13 => #7)
+    (#28 wire #3 => #1 .(shape)
+    #pragma diagram {"wp":"#3 h5962 v-11111 #1"} #end)
+    (#29 wire #11 .(min) => #9, #18
+    #pragma diagram {"wp":"v0|#11 h2593[#9, v19700 #18]"} #end)
+    (#30 wire #7 .(min) => #2, #16
+    #pragma diagram {"wp":"v-3000|#7 h2593[#2, v-15500 #16]"} #end)
+    (#31 wire #0 .(texPix) => #1 .(picture)
+    #pragma diagram {"wp":"v-2733|#0 #1"} #end)
+    (#32 wire #0 .(select) => #4
+    #pragma diagram {"wp":"v3089|#0 h14544 #4"} #end)
+    (#33 wire #10 => #5)
+    (#34 wire #15 => #6)
+    (#35 wire #16 => #20 .(histo_X)
+    #pragma diagram {"wp":"v0|#16 h10835 v12254 #20"} #end)
+    (#36 wire #2 .(minPos) => #20 .(posx)
+    #pragma diagram {"wp":"v437|#2 #20"} #end)
+    (#37 wire #9 .(minPos) => #20 .(posy)
+    #pragma diagram {"wp":"v0|#9 #20"} #end)
+    (#38 wire #18 => #20 .(histo_Y)
+    #pragma diagram {"wp":"v0|#18 h10835 v-15317 #20"} #end)
+    (#39 wire #20 => #21
+    #pragma diagram {"wp":"v1600|#20 #21"} #end)
+    (#40 wire #21 => #24
+    #pragma diagram {"wp":"#21 h3500 v37202 #24"} #end)
+    (#41 wire #22 => #0 .(histo_X:, histo_Y:, posx:, posy:)
+    #pragma diagram {"wp":"#22 h-58969 v-44990 #0"} #end)
+    (#42 wire #25 => #23)
+}
+
+const CROSS: uint8^5^5 = 
+[[0,0,255,0,0],
+[0,0,255,0,0],
+[255,255,255,255,255],
+[0,0,255,0,0],
+[0,0,255,0,0]];
+
+const STAR: uint8^5^5 = 
+[[0,255,0,255,0],
+[0,255,255,255,0],
+[255,255,0,255,255],
+[0,0,255,0,0],
+[0,0,255,0,0]];
+
+function MinPos <<N>> (stream: 'T^N;)
+  returns (min : 'T;
+           minPos : int32;)
+  where 'T numeric
+{
+  diagram
+    (#0 expr forward
+      <<N>> with <<i>>
+      diagram
+        (#1 expr stream[i]
+        #pragma diagram {"xy":"h-23794;v-2244","wh":"14000;3200"} #end)
+        (#2 expr last 'max
+        #pragma diagram {"xy":"h-23794;v1256","wh":"14000;3200"} #end)
+        (#3 expr if #4 then #5 else #6
+          where
+            (#4 group)
+            (#5 group)
+            (#6 group)
+        #pragma diagram {"xy":"h10206;v-644"} #end)
+        (#7 def max
+        #pragma diagram {"xy":"h29206;v-644"} #end)
+        (#8 def pos
+        #pragma diagram {"xy":"h53206;v12019"} #end)
+        (#9 expr last 'pos
+        #pragma diagram {"xy":"h206;v13919","wh":"14000;3200"} #end)
+        (#10 expr if #11 then #12 else #13
+          where
+            (#11 group)
+            (#12 group)
+            (#13 group)
+        #pragma diagram {"xy":"h34206;v12019"} #end)
+        (#14 expr i
+        #pragma diagram {"xy":"h1206;v9356"} #end)
+        (#15 expr #16 < #17
+          where
+            (#16 group)
+            (#17 group)
+        #pragma diagram {"xy":"h-6606;v-11682"} #end)
+        
+        (#18 wire #1 => #16, #5
+        #pragma diagram {"wp":"#1 h3830[v-11338 #16, h16264 v-300 #5]"} #end)
+        (#19 wire #2 => #17, #6
+        #pragma diagram {"wp":"#2 h4490[v-11038 #17, #6]"} #end)
+        (#20 wire #15 => #4, #11
+        #pragma diagram {"wp":"#15 h13312[#4, h24000 #11]"} #end)
+        (#21 wire #3 => #7)
+        (#22 wire #10 => #8)
+        (#23 wire #14 => #12
+        #pragma diagram {"wp":"#14 h18500 v762 #12"} #end)
+        (#24 wire #9 => #13)
+      returns (max: last = stream[0],
+               pos: last=0)
+      #pragma diagram {"xy":"H-76619;V-45000","wh":"123012;47438"} #end)
+    (#25 def min
+    #pragma diagram {"xy":"H2775;V-47344"} #end)
+    (#26 def minPos
+    #pragma diagram {"xy":"H3775;V-32782","wh":"10000;3200"} #end)
+    
+    (#27 wire #0 .(2) => #26
+    #pragma diagram {"wp":"v12218|#0 #26"} #end)
+    (#28 wire #0 .(1) => #25
+    #pragma diagram {"wp":"v-2344|#0 #25"} #end)
+}

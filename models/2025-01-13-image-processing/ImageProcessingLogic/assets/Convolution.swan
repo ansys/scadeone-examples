@@ -1,0 +1,227 @@
+-- version swan: 2025.0 graph: 2.0
+function Conv1D <<N, K>> (stream: 'T ^N;
+                          mask : 'T^K;)
+  returns (result: 'T^N;)
+  where 'T numeric
+{
+  diagram
+    (#0 expr #1 ^ ({text%K-1%text})
+      where
+        (#1 group)
+    #pragma diagram {"xy":"H-22600;V-4500","wh":"12000;7000"} #end)
+    (#2 def result
+    #pragma diagram {"xy":"H5800;V-13400","wh":"10000;3200"} #end)
+    (#3 expr #4 @ #5
+      where
+        (#4 group)
+        (#5 group)
+    #pragma diagram {"xy":"H-10400;V-13400"} #end)
+    (#6 expr forward
+      <<N-K+1>> with [chunk] = pack<<K,N-K+1>>(stream);
+      diagram
+        (#7 expr forward
+          <<K>> with [m] = mask; [c] = chunk;
+          diagram
+            (#8 expr c
+            #pragma diagram {"xy":"h-26288;v362"} #end)
+            (#9 expr m
+            #pragma diagram {"xy":"h-26288;v4162"} #end)
+            (#10 expr #11 - #12
+              where
+                (#11 group)
+                (#12 group)
+            #pragma diagram {"xy":"h-14400;v2262"} #end)
+            (#13 expr last 'sum
+            #pragma diagram {"xy":"h-3800;v-5838","wh":"14000;3200"} #end)
+            (#14 expr #15 + #16
+              where
+                (#15 group)
+                (#16 group)
+            #pragma diagram {"xy":"h12500;v362"} #end)
+            (#17 def sum
+            #pragma diagram {"xy":"h24400;v362"} #end)
+            (#18 expr #19 * #20
+              where
+                (#19 group)
+                (#20 group)
+            #pragma diagram {"xy":"h-100;v2262"} #end)
+            
+            (#21 wire #8 => #11)
+            (#22 wire #9 => #12)
+            (#23 wire #10 => #19, #20
+            #pragma diagram {"wp":"#10 h3583[v-1900 #19, v1900 #20]"} #end)
+            (#24 wire #13 => #15
+            #pragma diagram {"wp":"#13 h3650 v4300 #15"} #end)
+            (#25 wire #14 => #17)
+            (#26 wire #18 => #16)
+          returns (sum : last=0)
+          #pragma diagram {"xy":"h-4750;v0","wh":"72700;29600"} #end)
+        (#27 def sum
+        #pragma diagram {"xy":"h37100;v5200"} #end)
+        
+        (#28 wire #7 => #27
+        #pragma diagram {"wp":"v5200|#7 #27"} #end)
+      returns ([sum])
+      #pragma diagram {"xy":"H-92500;V-24900","wh":"90800;46000"} #end)
+    (#29 expr #30[N-K]
+      where
+        (#30 group)
+    #pragma diagram {"xy":"H-37850;V-4500","wh":"14000;7000"} #end)
+    
+    (#31 wire #0 => #5
+    #pragma diagram {"wp":"#0 h2700 v-7000 #5"} #end)
+    (#32 wire #3 => #2)
+    (#33 wire #6 => #4, #30
+    #pragma diagram {"wp":"v20400|#6 h2125[v-10800 #4, #30]"} #end)
+    (#34 wire #29 => #1)
+}
+
+function Conv2D <<COL, ROW, K>> (picture: uint8 ^COL^ROW;
+                                 shape : uint8 ^K^K;)
+  returns (result: uint32 ^COL ^ROW;)
+{
+  diagram
+    (#0 expr #1[ROW-K]
+      where
+        (#1 group)
+    #pragma diagram {"xy":"H17964;V-26700","wh":"16000;7000"} #end)
+    (#2 def result
+    #pragma diagram {"xy":"H62107;V-32500","wh":"10000;3200"} #end)
+    (#3 expr #4 @ #5
+      where
+        (#4 group)
+        (#5 group)
+    #pragma diagram {"xy":"H46170;V-32500"} #end)
+    (#6 expr forward
+      <<ROW-K+1>> with [rows] = pack<<K,ROW-K+1>>(picture);
+      diagram
+        (#7 expr #8[COL-K]
+          where
+            (#8 group)
+        #pragma diagram {"xy":"h42340;v7475","wh":"16000;7000"} #end)
+        (#9 def sum
+        #pragma diagram {"xy":"h86514;v3650"} #end)
+        (#10 expr forward
+          <<COL-K+1>> with [subrows] = pack<<K,COL-K+1>>(transpose(rows));
+          diagram
+            (#11 expr forward
+              <<K>>
+              <<K>> with [[s]] = shape; [[elt]] = transpose(subrows);
+              diagram
+                (#12 expr s
+                #pragma diagram {"xy":"h-43000;v-550"} #end)
+                (#13 expr elt
+                #pragma diagram {"xy":"h-43000;v4700"} #end)
+                (#17 expr last 'sum
+                #pragma diagram {"xy":"h2000;v-2900","wh":"14000;3200"} #end)
+                (#18 expr #19 + #20
+                  where
+                    (#19 group)
+                    (#20 group)
+                #pragma diagram {"xy":"h24000;v-1000"} #end)
+                (#21 def sum
+                #pragma diagram {"xy":"h43000;v-1000"} #end)
+                (#14 block Algo
+                           #pragma diagram {"xy":"h-21550;v900","wh":"20000;14000"} #end)
+                
+                (#15 wire #14 => #20
+                #pragma diagram {"wp":"v0|#14 #20"} #end)
+                (#16 wire #13 => #14 .(i1))
+                (#28 wire #17 => #19)
+                (#29 wire #18 => #21)
+                (#22 wire #12 => #14 .(i0))
+              returns (sum : last=0)
+              #pragma diagram {"xy":"h-3330;v-50","wh":"102600;31200"} #end)
+            (#31 def sum
+            #pragma diagram {"xy":"h54130;v250"} #end)
+            
+            (#32 wire #11 => #31
+            #pragma diagram {"wp":"v300|#11 #31"} #end)
+          returns ([sum])
+          #pragma diagram {"xy":"h-28580;v0","wh":"117860;47700"} #end)
+        (#33 expr #34 ^ ({text%K-1%text})
+          where
+            (#34 group)
+        #pragma diagram {"xy":"h56840;v7475","wh":"12000;7000"} #end)
+        (#35 expr #36 @ #37
+          where
+            (#36 group)
+            (#37 group)
+        #pragma diagram {"xy":"h76516;v3650"} #end)
+        
+        (#38 wire #35 => #9)
+        (#39 wire #7 => #34)
+        (#40 wire #33 => #37
+        #pragma diagram {"wp":"#33 h5838 v-1925 #37"} #end)
+        (#41 wire #10 => #36, #8
+        #pragma diagram {"wp":"v7475|#10 h2995[v-5725 #36, #8]"} #end)
+      returns ([sum])
+      #pragma diagram {"xy":"H-84448;V-43300","wh":"183619;64100"} #end)
+    (#42 expr #43 ^ ({text%K-1%text})
+      where
+        (#43 group)
+    #pragma diagram {"xy":"H32567;V-26700","wh":"12000;7000"} #end)
+    
+    (#44 wire #6 => #4, #1
+    #pragma diagram {"wp":"v16600|#6 h2301[v-7700 #4, #1]"} #end)
+    (#45 wire #42 => #5
+    #pragma diagram {"wp":"#42 h2103 v-3900 #5"} #end)
+    (#46 wire #0 => #43)
+    (#47 wire #3 => #2)
+}
+
+function Algo (i0: uint8;
+               i1 : uint8;)
+  returns (o0: uint32;)
+{
+  diagram
+    (#0 expr (i0 :> int32)
+    #pragma diagram {"xy":"H-92688;V-18900","wh":"18000;3200"} #end)
+    (#1 expr #2 * #3
+      where
+        (#2 group)
+        (#3 group)
+    #pragma diagram {"xy":"H-19062;V-25000"} #end)
+    (#4 def o0
+    #pragma diagram {"xy":"H51388;V-12800"} #end)
+    (#5 expr #6 < #7
+      where
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H-19062;V-37000"} #end)
+    (#8 expr 0
+    #pragma diagram {"xy":"H-38062;V-35100"} #end)
+    (#9 expr -1
+    #pragma diagram {"xy":"H-38062;V-23100"} #end)
+    (#10 expr #11 - #12
+      where
+        (#11 group)
+        (#12 group)
+    #pragma diagram {"xy":"H-50562;V-10900"} #end)
+    (#13 expr (i1 :> int32)
+    #pragma diagram {"xy":"H-92688;V-9000","wh":"18000;3200"} #end)
+    (#14 expr if #15 then #16 else #17
+      where
+        (#15 group)
+        (#16 group)
+        (#17 group)
+    #pragma diagram {"xy":"H8238;V-12800"} #end)
+    (#18 expr (#19 :> uint32)
+      where
+        (#19 group)
+    #pragma diagram {"xy":"H29812;V-12800","wh":"16000;7000"} #end)
+    
+    (#20 wire #13 => #12)
+    (#21 wire #0 => #11
+    #pragma diagram {"wp":"#0 h15563 v6100 #11"} #end)
+    (#22 wire #10 => #6, #2, #17
+    #pragma diagram {"wp":"#10 h3750[v-16000[v-12000 #6, #2], #17]"} #end)
+    (#23 wire #14 => #19)
+    (#24 wire #18 => #4)
+    (#25 wire #8 => #7)
+    (#26 wire #1 => #16
+    #pragma diagram {"wp":"#1 h10150 v10300 #16"} #end)
+    (#27 wire #9 => #3)
+    (#28 wire #5 => #15
+    #pragma diagram {"wp":"#5 h23800 #15"} #end)
+}

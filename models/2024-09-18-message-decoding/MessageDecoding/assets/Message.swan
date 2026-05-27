@@ -1,0 +1,95 @@
+-- version swan: 2025.0 graph: 2.0
+type RadioInMsg =
+    UpdateAttitude { pitch: int8, roll: int8, yaw: int8 }
+  | SetVerticalAccel { int8 }
+  | Reset {}
+  | UnknownMsg {};
+
+function Lerp (a: 'T;
+               b: 'T;
+               t : 'I;
+               max_t : 'I;)
+  returns (v: 'T;)
+  where 'T float
+  where 'I unsigned
+{
+  diagram
+    (#0 expr a
+    #pragma diagram {"xy":"H-52150;V-6050"} #end)
+    (#1 expr b - a
+    #pragma diagram {"xy":"H-53150;V1050","wh":"10000;3200"} #end)
+    (#2 expr (t :> 'T) / (max_t :> 'T)
+    #pragma diagram {"xy":"H-62150;V4850","wh":"28000;3200"} #end)
+    (#3 def v
+    #pragma diagram {"xy":"H-1150;V-4150"} #end)
+    (#4 expr #5 + #6
+      where
+        (#5 group)
+        (#6 group)
+    #pragma diagram {"xy":"H-17650;V-4150"} #end)
+    (#7 expr #8 * #9
+      where
+        (#8 group)
+        (#9 group)
+    #pragma diagram {"xy":"H-36550;V2950"} #end)
+    
+    (#10 wire #0 => #5)
+    (#11 wire #1 => #8)
+    (#12 wire #2 => #9)
+    (#13 wire #7 => #6
+    #pragma diagram {"wp":"#7 h5950 v-5200 #6"} #end)
+    (#14 wire #4 => #3)
+}
+
+const HEADER: uint8 = 0xf0;
+
+const FOOTER: uint8 = 0xf1;
+
+const END: uint8 = 0xff;
+
+const MSG_UPDT_ATTITUDE: uint8 = 0xf2;
+
+const MSG_SET_ACCEL: uint8 = 0xf3;
+
+const MSG_RESET: uint8 = 0xf4;
+
+const MSG_SIZE: int32 = 7;
+
+const MAX_NUMBER_MSG: int32 = 3;
+
+const EMPTY_BUFFER = UnknownMsg^MAX_NUMBER_MSG;
+
+const BUFFER_SIZE: int32 = MSG_SIZE * MAX_NUMBER_MSG;
+
+const LONG_BUFFER_SIZE: int32 = 3;
+
+function Int8ToCmd (i: int8;
+                    max : float32;)
+  returns (v: float32;)
+{
+  diagram
+    (#0 expr (i :> float32)
+    #pragma diagram {"xy":"H-50150;V-12650","wh":"18000;3200"} #end)
+    (#1 def v
+    #pragma diagram {"xy":"H11500;V-8850"} #end)
+    (#2 expr #3 / #4
+      where
+        (#3 group)
+        (#4 group)
+    #pragma diagram {"xy":"H-30950;V-10750"} #end)
+    (#5 expr 128.0
+    #pragma diagram {"xy":"H-46150;V-8850","wh":"10000;3200"} #end)
+    (#6 expr #7 * #8
+      where
+        (#7 group)
+        (#8 group)
+    #pragma diagram {"xy":"H-2650;V-8850"} #end)
+    (#9 expr max
+    #pragma diagram {"xy":"H-16800;V-6950"} #end)
+    
+    (#10 wire #0 => #3)
+    (#11 wire #5 => #4)
+    (#12 wire #6 => #1)
+    (#13 wire #9 => #8)
+    (#14 wire #2 => #7)
+}

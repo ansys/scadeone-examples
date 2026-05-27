@@ -70,4 +70,84 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
         :fas:`fa-solid fa-code` :model_sources:`View sources <2025-02-26-python-wrapper>`
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/jupyter-notebook-programming-with-the-scade-python-wrapper/>`__
-        
+
+    .. grid-item-card:: Test harness – A new approach to testing in Scade One 
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2025-02-20-test-harness.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2025-02-20-test-harness>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2025-02-20-test-harness>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/test-harness-a-new-approach-to-testing-in-scade-one/>`__
+
+    .. grid-item-card:: Introducing PyScadeOne
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2025-02-05-pyscadeone-instance-tree.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2025-02-05-pyscadeone-instance-tree>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2025-02-05-pyscadeone-instance-tree>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/introducing-pyscadeone/>`__
+
+    .. grid-item-card:: Image processing in Scade One with the pack operator
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2025-01-13-image-processing.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2025-01-13-image-processing>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2025-01-13-image-processing>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/image-processing-in-scade-one-with-the-pack-operator/>`__
+
+    .. grid-item-card:: Helping Santa: concurrent resource management with Scade One 
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2024-12-18-santa-claus-problem.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2024-12-18-santa-claus-problem>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2024-12-18-santa-claus-problem>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/helping-santa-concurrent-resource-management-with-scade-one/>`__
+
+    .. grid-item-card:: Advent of Code – String parsing with Scade One state machines
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2024-12-11-advent-of-code-2024.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2024-12-11-advent-of-code-2024>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2024-12-11-advent-of-code-2024>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/advent-of-code-string-parsing-with-scade-one-state-machines/>`__
+
+    .. grid-item-card:: Message decoding using the forward block and variant types
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2024-09-18-message-decoding.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2024-09-18-message-decoding>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2024-09-18-message-decoding>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/message-decoding-using-the-forward-block-and-variant-types/>`__
+
+    .. grid-item-card:: Boyer-Moore voting in Scade One: unlock the power of streaming algorithms
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2024-08-21-boyer-moore-majority.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2024-08-21-boyer-moore-majority>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2024-08-21-boyer-moore-majority>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/boyer-moore-voting-in-scade-one-unlock-the-power-of-streaming-algorithms/>`__
+
+
+    .. grid-item-card:: Message decoding using the forward block and variant types
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2024-07-15-matrix-operators.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2024-07-15-matrix-operators>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2024-07-15-matrix-operators>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/matrix-operators-using-scade-ones-forward-block/>`__

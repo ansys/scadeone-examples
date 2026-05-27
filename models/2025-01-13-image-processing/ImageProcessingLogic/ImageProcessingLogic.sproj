@@ -1,0 +1,14 @@
+{
+  "Version": "1.0",
+  "Name": "ImageProcessingLogic",
+  "Dependencies": [
+    "..\\RapidPrototyperPanel\\specification_ScadeOneCosimulation\\specification.sproj"
+  ],
+  "Resources": [
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\MatchPosOracle.sd",
+      "Key": "MatchPosOracle"
+    }
+  ]
+}
