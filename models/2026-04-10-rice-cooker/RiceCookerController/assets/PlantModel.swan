@@ -178,12 +178,14 @@ node PhysicalModel (tempExt : float32;
        (#99 expr volRiceInit
        #pragma diagram {"xy":"h-42120;v4462","wh":"16000;3200"} #end)
        (#27 block VolumeRice
-       #pragma diagram {"xy":"h-18554;v-2707","wh":"20000;9650"} #end)
+       #pragma diagram {"xy":"h-18554;v-3222","wh":"20000;9650"} #end)
        (#31 expr last'tempC
-       #pragma diagram {"xy":"h-41401;v-5762","wh":"14000;3200"} #end)
+       #pragma diagram {"xy":"h-41120;v-6722","wh":"14000;3200"} #end)
        (#33 expr last'massWaterAbsorbed
-       #pragma diagram {"xy":"h-47120;v-2251","wh":"26000;3200"} #end)
-       
+       #pragma diagram {"xy":"h-47120;v-3222","wh":"26000;3200"} #end)
+       (/* We assume the volume is > 0 */let
+       #pragma diagram {"xy":"h-41120;v9630","wh":"38000;3200"} #end)
+
        (#28 wire #27 => #89, #93
        #pragma diagram {"wp":"v1825|#27 h5429[v-1826 #89, h6858 v1544 #93]"} #end)
        (#100 wire #95 => #91)
