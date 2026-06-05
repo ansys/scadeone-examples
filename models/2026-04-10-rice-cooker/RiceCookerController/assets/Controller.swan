@@ -47,7 +47,7 @@ node MainControl (btnStartStop: bool;
            #pragma diagram {"xy":"h-35474;v-36859","wh":"10000;3200"} #end)
            (#15 def displayText
            #pragma diagram {"xy":"h-32474;v-16993","wh":"16000;3200"} #end)
-           (#16 expr timer
+           (#16 expr delay
            #pragma diagram {"xy":"h-103974;v-16993","wh":"10000;3200"} #end)
            (#17 block Msg::MillisecToHHMM
            #pragma diagram {"xy":"h-68320;v-16993","wh":"20000;7000"} #end)

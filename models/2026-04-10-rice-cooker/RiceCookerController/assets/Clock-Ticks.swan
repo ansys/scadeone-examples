@@ -30,4 +30,4 @@ node #pragma doc Returns the number of milliseconds passed since the application
 
 const #pragma doc The duration of a cycle (e.g. during DEBUG) #end T_CYCLE: uint32 = 200;
 
-const ACCELERATION: uint32 = 50;
+const ACCELERATION: uint32 = 1;
