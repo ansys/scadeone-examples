@@ -1,0 +1,18 @@
+{
+  "Version": "2.2",
+  "Kind": "Simulation",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "SimulationJobSatelliteWithControl",
+    "CustomArguments": "",
+    "FileScenario": "",
+    "SimulationInputType": "Harness",
+    "TestHarness": "SatelliteModel::harness_SatelliteWithControl",
+    "UseCycleTime": "False"
+  },
+  "InputPaths": [
+    "assets/SatelliteModel.swant"
+  ]
+}

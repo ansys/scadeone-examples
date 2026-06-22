@@ -1,0 +1,33 @@
+-- version swan: 2025.2 graph: 2.1
+use Matrix;
+
+use Vector;
+
+const K: float64^4^2 = [[ 0.00207535, 0.31622098,  0.00211798,  -0.32271692], [-3.16220978e-1, 2.07200806e-3, -3.22716923e-1, 9.83468834e+1]];
+
+function LQController (yRef: float64^4;
+                       y : float64^4;)
+  returns (u: float64^2;)
+{
+  diagram
+    (#0 block Matrix::MatVecMult <<4, 2>> 
+    #pragma diagram {"xy":"H25594;V-8088","wh":"20000;14000"} #end)
+    (#2 expr yRef
+    #pragma diagram {"xy":"H-34456;V-10188"} #end)
+    (#3 expr K
+    #pragma diagram {"xy":"H7344;V-11988"} #end)
+    (#5 expr y
+    #pragma diagram {"xy":"H-34456;V-4963"} #end)
+    (#8 def u
+    #pragma diagram {"xy":"H49794;V-8088"} #end)
+    (#1 block Vector::Sub <<4>> 
+    #pragma diagram {"xy":"H-10906;V-8088","wh":"20000;14000"} #end)
+    
+    (#12 wire #3 => #0 .(A))
+    (#16 wire #0 => #8
+    #pragma diagram {"wp":"v0|#0 #8"} #end)
+    (#4 wire #1 .(c) => #0 .(v)
+    #pragma diagram {"wp":"v1750|#1 #0"} #end)
+    (#6 wire #2 => #1 .(a))
+    (#7 wire #5 => #1 .(b))
+}
