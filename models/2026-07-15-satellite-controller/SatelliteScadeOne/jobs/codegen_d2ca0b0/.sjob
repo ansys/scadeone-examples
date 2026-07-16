@@ -1,0 +1,25 @@
+{
+  "Version": "2.2",
+  "Kind": "CodeGeneration",
+  "Properties": {
+    "RootDeclarations": [
+      "Control::LQController"
+    ],
+    "Name": "CodeGenerationJobController",
+    "CustomArguments": "",
+    "Expansion": "None",
+    "ExpansionExp": "",
+    "ExpansionNoExp": "",
+    "NameLength": "255",
+    "SignificanceLength": "31",
+    "KeepAssume": "False",
+    "GlobalsPrefix": "",
+    "UseMacros": "False",
+    "StaticLocals": "False",
+    "Probes": "False",
+    "RootInterfaceAsGlobals": "False"
+  },
+  "InputPaths": [
+    "assets/Control.swan"
+  ]
+}

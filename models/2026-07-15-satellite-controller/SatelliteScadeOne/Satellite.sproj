@@ -1,0 +1,10 @@
+{
+  "Version": "1.0",
+  "Name": "Satellite",
+  "Dependencies": [
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Sources\\Sources.sproj",
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Matrix\\Matrix.sproj",
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Vector\\Vector.sproj"
+  ],
+  "Resources": []
+}

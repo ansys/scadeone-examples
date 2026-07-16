@@ -1,0 +1,10 @@
+{
+  "JobsOrder": [
+    "jobs\\codegen_d2ca0b0\\.sjob",
+    "jobs\\simu_e1b8b85\\.sjob"
+  ],
+  "ModulesOrder": [
+    "assets\\Control.swan",
+    "assets\\SatelliteModel.swant"
+  ]
+}

@@ -21,6 +21,17 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
 
 .. grid:: 2 2 3 3
 
+    .. grid-item-card:: From Equations to Execution: Modeling and Integrating a Satellite Controller with Scade One 
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2026-07-15-satellite-controller.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2026-07-15-satellite-controller>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2026-07-15-satellite-controller>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovationspace.ansys.com/knowledge/forums/topic/from-equations-to-execution-modeling-and-integrating-a-satellite-controller-with-scade-one/>`__
+
+
     .. grid-item-card:: Control software for a rice cooker with Scade One
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2026-04-10-rice-cooker.jpg
