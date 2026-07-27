@@ -2,8 +2,8 @@
 
 This repository is organized into three components:
 
-- `fmu-plant`: Modelica plant source, FMU build scripts, and Python FMU tests
-- `fmu-controller`: Controller and panel FMU binaries used by Simulink models
+- `fmu-controller`: Controller FMU binary used by Simulink models
+- `fmu-panel`: Graphical panel FMU binary used by a Simulink model
 - `simulink`: Simulink model builders, co-simulation script, and MATLAB integration tests
 
 ## Repository layout
@@ -40,44 +40,56 @@ simulink/
   run_simulink_tests.bat
 ```
 
-## fmu-plant
+## Export Scade One controller model to FMU
 
-### Open in OpenModelica
+### Generate code from Scade One controller model
 
-1. Open OMEdit.
-2. Open `fmu-plant/src/package.mo`.
-3. Simulate `PlantModel.TestPhysicalModel` if needed.
+First, generate the code from the Scade One controller model:
 
-### Build the plant FMU
+1. Open "RiceCookerController/RiceCookerController.sproj" in Scade One
+2. Open the **Job Explorer** (Alt + Shift + J)
+3. Select the code generation job **CodeGenerationController** from "RiceCookerController"
+4. Click on **Start**
 
-Windows:
+### Install Dependencies
+
+Install dependencies (pyscadeone):
 
 ```bat
-cd fmu-plant
+pip install ansys-scadeone-core
+```
+
+... or in a virtual environment:
+
+```bat
+cd fmu-controller
+pip install uv
+uv venv
+uv pip install ansys-scadeone-core
+```
+
+### Export FMU from generated code
+
+You can then export the FMU from the generated code using the following batch command:
+
+```bat
+cd fmu-controller
 build_fmu.bat
 ```
 
-Linux or macOS:
+... or if you are using `uv` for a virtual environment:
 
-```bash
-cd fmu-plant
-bash build_fmu.sh
+```bat  
+cd fmu-controller
+uv run cmd /c build_fmu.bat
 ```
 
-Expected outputs:
+## Export Graphical Panel to FMU
 
-- `fmu-plant/build/windows/PlantModel.PhysicalModel.fmu`
-- `fmu-plant/build/linux/PlantModel.PhysicalModel.fmu`
+1. Open the panel "fmu-panel\RiceCookerGraphicalPanels\RiceCookerGraphicalPanels.etp"
+2. Launch the code generation with **FMU** configuration
 
-### Run plant FMU tests
-
-```bash
-cd fmu-plant
-pip install -r tests/requirements.txt
-pytest tests/
-```
-
-## simulink
+## Simulink import of FMU blocks
 
 ### Build Simulink models
 
@@ -91,7 +103,9 @@ Expected outputs:
 - `simulink/model/RiceCookerPlant.slx`
 - `simulink/model/RiceCookerWithPanel.slx`
 
-### Run co-simulation demo
+You can then run the Simulink models in MATLAB / Simulink.
+
+### Run Simulink co-simulation demo
 
 ```bat
 cd simulink
@@ -109,7 +123,7 @@ cd simulink
 run_simulink_tests.bat
 ```
 
-## Notes
+### Notes
 
 - Simulink FMU blocks use FMU file names only (for example `Controller_MainControl.fmu`).
 - `addpath` is used to expose `fmu-controller` before FMU blocks are instantiated.

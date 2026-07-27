@@ -1,0 +1,21 @@
+# SCADE Display
+*.ewo
+
+# Scade One
+cg_log.json
+config.json
+jobs/*/out/
+pyscadeone.log
+
+# Build artifacts
+*.fmu
+*.dll
+modelDescription.xml
+
+# Python
+*.pyc
+.pytest_cache/
+.mypy_cache/
+__pycache__/
+.venv/
+venv/
