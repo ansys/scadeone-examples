@@ -1,0 +1,193 @@
+-- version swan: 2025.2 graph: 2.1
+use Clock::Ticks as Clk;
+
+node #pragma doc ----- On-delay Timing (TON) ----- 
+     as specified in IEC 61131-3 (for PLC) #end TON (#pragma doc Rising edge: starts delay counter
+                                                     Falling edge: resets delay counter #end IN: bool;
+                                                     #pragma doc Time for the delay counter [ms] #end PT: uint32;
+                                                     #pragma doc Number of milliseconds since the start.
+                                                     If not defined (or set to 0), use the clock `millis` instead #end millis: uint32 default = 0;)
+  returns (#pragma doc TRUE if IN is TRUE and delay time PT elapsed
+           FALSE otherwise
+            #end Q: bool;
+           #pragma doc Elapsed time since rising edge at IN #end ET: uint32;)
+{
+  diagram
+    (/* 
+     ----- On-delay Timing (TON) ----- 
+     as specified in IEC 61131-3 (for PLC)
+     
+     Inputs:
+     * `IN`: input signal that 
+             starts timer on rising edge and
+             stops timer on falling edge
+     * `PT`: time for delay (in ms)
+     
+     Outputs:
+     * `Q`:  True if `IN` is true 
+             and delay time `PT` elapsed.
+             False otherwise
+     * `ET`: Elapsed time in ms since `IN` is true
+     ----------------------------------
+     
+         Example 1        Example 2
+            +--------+       +-+
+       IN   |        |       | |
+          --+        +---  --+ +---
+     
+                 +---+
+       Q         |   |
+          -------+   +---  --------
+     
+                 +---+
+                /    |
+               /     |
+       ET     /      |         +
+             /       |        /|
+          --+        +---  --+ +---
+     */ let
+    #pragma diagram {"xy":"H84450;V-37873","wh":"48000;61862"} #end)
+    
+    (activate #0
+      if IN
+      then
+        {
+          diagram
+            (#1 expr #12 - #26
+              where
+                (#12 group)
+                (#26 group)
+            #pragma diagram {"xy":"h1388;v525"} #end)
+            (#27 expr 0
+            #pragma diagram {"xy":"h2388;v6125"} #end)
+            (#5 def ET
+            #pragma diagram {"xy":"h2388;v-5075"} #end)
+            (#6 expr PT
+            #pragma diagram {"xy":"h-21612;v2425"} #end)
+            (#7 expr #8 >= #9
+              where
+                (#8 group)
+                (#9 group)
+            #pragma diagram {"xy":"h23388;v4225"} #end)
+            (#10 def Q
+            #pragma diagram {"xy":"h44388;v4225"} #end)
+            (#11 expr MsElapsed(millis)
+            #pragma diagram {"xy":"h-38388;v-5075","wh":"20000;3200"} #end)
+            
+            (#25 wire #11 => #5, #12
+            #pragma diagram {"wp":"#11 h12887[#5, v3700 #12]"} #end)
+            (#28 wire #6 => #26)
+            (#13 wire #7 => #10)
+            (#29 wire #1 => #8
+            #pragma diagram {"wp":"#1 h7500 v1800 #8"} #end)
+            (#30 wire #27 => #9)
+        #pragma diagram {"xy":"h0;v-7032","wh":"100775;20300"} #end
+        }
+      else
+        {
+          diagram
+            (#14 def ET
+            #pragma diagram {"xy":"h9988;v-3432"} #end)
+            (#15 def Q
+            #pragma diagram {"xy":"h10488;v3057"} #end)
+            (#16 expr 0
+            #pragma diagram {"xy":"h-10012;v-3432"} #end)
+            (#17 expr false
+            #pragma diagram {"xy":"h-10512;v3057","wh":"10000;3200"} #end)
+            
+            (#18 wire #17 => #15)
+            (#19 wire #16 => #14)
+        #pragma diagram {"xy":"h0;v14009","wh":"100775;14065"} #end
+        }
+    #pragma diagram {"xy":"H80062;V19848","wh":"100775;42084"} #end)
+}
+
+node MsElapsed (#pragma doc Number of milliseconds since the start.
+                If not defined (or set to 0), use the clock `millis` instead #end millis: uint32 default = 0;)
+  returns (elapsed: uint32;)
+{
+  diagram
+    (#0 expr #1 pre #2
+      where
+        (#1 group)
+        (#2 group)
+    #pragma diagram {"xy":"H-10275;V-35850"} #end)
+    (#4 expr #5 - #6
+      where
+        (#5 group)
+        (#6 group)
+    #pragma diagram {"xy":"H12725;V-37750"} #end)
+    (#7 def elapsed
+    #pragma diagram {"xy":"H37725;V-37750","wh":"12000;3200"} #end)
+    (#3 expr if #8 then #11 else #12
+      where
+        (#8 group)
+        (#11 group)
+        (#12 group)
+    #pragma diagram {"xy":"H-40000;V-40992"} #end)
+    (#13 expr millis
+    #pragma diagram {"xy":"H-84150;V-49458","wh":"10000;3200"} #end)
+    (#14 expr #15 = #16
+      where
+        (#15 group)
+        (#16 group)
+    #pragma diagram {"xy":"H-68900;V-51358"} #end)
+    (#17 expr 0
+    #pragma diagram {"xy":"H-83150;V-53258"} #end)
+    (#18 block Clk::millis
+    #pragma diagram {"xy":"H-57600;V-44058","wh":"12000;7000"} #end)
+    
+    (#9 wire #0 => #2, #6
+    #pragma diagram {"wp":"#0 h2500[v4500 h-14000 v-2600 #2, #6]"} #end)
+    (#10 wire #4 => #7)
+    (#19 wire #3 => #1, #5
+    #pragma diagram {"wp":"#3 h10862[v3242 #1, h27363 v1342 #5]"} #end)
+    (#20 wire #13 => #16, #12
+    #pragma diagram {"wp":"#13 h4125[#16, v10366 #12]"} #end)
+    (#21 wire #17 => #15)
+    (#22 wire #14 => #8
+    #pragma diagram {"wp":"#14 h25400 #8"} #end)
+    (#23 wire #18 .(ms) => #11
+    #pragma diagram {"wp":"v1166|#18 #11"} #end)
+}
+
+node DeltaSeconds (#pragma doc Number of milliseconds since the start.
+                   If not defined (or set to 0), use the clock `millis` instead #end millis: uint32 default = 0;)
+  returns (sec: float32;)
+{
+  diagram
+    (#0 def sec
+    #pragma diagram {"xy":"H51200;V-9000"} #end)
+    (#2 expr if millis = 0 then Clk::millis() else millis
+    #pragma diagram {"xy":"H-78938;V-7100","wh":"46000;3200"} #end)
+    (#3 expr #4 pre #5
+      where
+        (#4 group)
+        (#5 group)
+    #pragma diagram {"xy":"H-39600;V-7100"} #end)
+    (#6 expr #7 - #8
+      where
+        (#7 group)
+        (#8 group)
+    #pragma diagram {"xy":"H-18262;V-10900"} #end)
+    (#9 expr #10 / #11
+      where
+        (#10 group)
+        (#11 group)
+    #pragma diagram {"xy":"H32006;V-9000"} #end)
+    (#12 expr (#13 :> float32)
+      where
+        (#13 group)
+    #pragma diagram {"xy":"H100;V-10900","wh":"16000;7000"} #end)
+    (#14 expr 1000
+    #pragma diagram {"xy":"H17553;V-7100"} #end)
+    
+    (#15 wire #2 => #7, #5, #4
+    #pragma diagram {"wp":"#2 h7500[v-1900 h2226[v-3800 #7, #4], h1694 v1900 #5]"} #end)
+    (#16 wire #3 => #8
+    #pragma diagram {"wp":"#3 h4556 v-1900 #8"} #end)
+    (#17 wire #6 => #13)
+    (#18 wire #14 => #11)
+    (#19 wire #12 => #10)
+    (#20 wire #9 => #0)
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiModelDescription fmiVersion="2.0" generationTool="ScadeOne" guid="be41e734-8736-11f1-84cd-5cb47e03f399" modelName="Controller_MainControl" numberOfEventIndicators="0" variableNamingConvention="structured">
+  <CoSimulation modelIdentifier="Controller_MainControl" canHandleVariableCommunicationStepSize="true"/>
+  <ModelVariables>
+    <ScalarVariable causality="input" description="Controller::isLidOpen" name="isLidOpen_Controller" valueReference="0" variability="discrete">
+      <Boolean start="false"/>
+    </ScalarVariable>
+    <ScalarVariable causality="input" description="Controller::tempPot" name="tempPot_Controller" valueReference="0" variability="continuous">
+      <Real start="0.0"/>
+    </ScalarVariable>
+    <ScalarVariable causality="input" description="Controller::MainControl/btnStartStop" name="btnStartStop" valueReference="1" variability="discrete">
+      <Boolean start="false"/>
+    </ScalarVariable>
+    <ScalarVariable causality="input" description="Controller::MainControl/btnDelay" name="btnDelay" valueReference="2" variability="discrete">
+      <Boolean start="false"/>
+    </ScalarVariable>
+    <ScalarVariable causality="input" description="Controller::MainControl/btnSetTime" name="btnSetTime" valueReference="3" variability="discrete">
+      <Boolean start="false"/>
+    </ScalarVariable>
+    <ScalarVariable causality="output" description="Controller::MainControl/heaterPowerPct" name="heaterPowerPct" valueReference="1" variability="continuous" initial="calculated">
+      <Real/>
+    </ScalarVariable>
+    <ScalarVariable causality="output" description="Controller::MainControl/colorLED" name="colorLED" valueReference="0" variability="discrete" initial="calculated">
+      <Integer/>
+    </ScalarVariable>
+    <ScalarVariable causality="output" description="Controller::MainControl/displayText[0]" name="displayText[0]" valueReference="1" variability="discrete" initial="calculated">
+      <Integer/>
+    </ScalarVariable>
+    <ScalarVariable causality="output" description="Controller::MainControl/displayText[1]" name="displayText[1]" valueReference="2" variability="discrete" initial="calculated">
+      <Integer/>
+    </ScalarVariable>
+    <ScalarVariable causality="output" description="Controller::MainControl/displayText[2]" name="displayText[2]" valueReference="3" variability="discrete" initial="calculated">
+      <Integer/>
+    </ScalarVariable>
+    <ScalarVariable causality="output" description="Controller::MainControl/displayText[3]" name="displayText[3]" valueReference="4" variability="discrete" initial="calculated">
+      <Integer/>
+    </ScalarVariable>
+    <ScalarVariable causality="output" description="Controller::MainControl/displayText[4]" name="displayText[4]" valueReference="5" variability="discrete" initial="calculated">
+      <Integer/>
+    </ScalarVariable>
+    <ScalarVariable causality="output" description="Controller::MainControl/displayText[5]" name="displayText[5]" valueReference="6" variability="discrete" initial="calculated">
+      <Integer/>
+    </ScalarVariable>
+    <ScalarVariable causality="parameter" description="Period" name="period" valueReference="2" variability="fixed">
+      <Real start="0.2"/>
+    </ScalarVariable>
+  </ModelVariables>
+  <ModelStructure>
+    <Outputs>
+      <Unknown index="6"/>
+      <Unknown index="7"/>
+      <Unknown index="8"/>
+      <Unknown index="9"/>
+      <Unknown index="10"/>
+      <Unknown index="11"/>
+      <Unknown index="12"/>
+      <Unknown index="13"/>
+    </Outputs>
+    <InitialUnknowns>
+      <Unknown index="6"/>
+      <Unknown index="7"/>
+      <Unknown index="8"/>
+      <Unknown index="9"/>
+      <Unknown index="10"/>
+      <Unknown index="11"/>
+      <Unknown index="12"/>
+      <Unknown index="13"/>
+    </InitialUnknowns>
+  </ModelStructure>
+</fmiModelDescription>

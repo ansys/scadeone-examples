@@ -1,0 +1,18 @@
+{
+  "Version": "2.2",
+  "Kind": "Simulation",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "SimulationJobSystem",
+    "CustomArguments": "",
+    "FileScenario": "",
+    "SimulationInputType": "Harness",
+    "TestHarness": "Simulation::TestControllerWithPhysics",
+    "UseCycleTime": "False"
+  },
+  "InputPaths": [
+    "assets/Simulation.swant"
+  ]
+}
