@@ -115,6 +115,7 @@ class _FMURunner:
         self._fmu.exitInitializationMode()
         self._t = 0.0
 
+    # ruff: noqa: N803  # to match FMU names with arguments
     def step(
         self,
         *,
@@ -330,16 +331,14 @@ class TestMainControlFMU:
         # --- EnzymaticActivation ---
         runner.step(tempPot=62.0)
         runner.step(tempPot=62.0)
-        assert runner.heater == pytest.approx(
-            20.0
-        ), "Expected heater=20 in EnzymaticActivation"
+        msg = "Expected heater=20 in EnzymaticActivation"
+        assert runner.heater == pytest.approx(20.0), msg
 
         # --- ReachingBoiling ---
         runner.step(tempPot=82.0)
         runner.step(tempPot=82.0)
-        assert runner.heater == pytest.approx(
-            100.0
-        ), "Expected heater=100 in ReachingBoiling"
+        msg = "Expected heater=100 in ReachingBoiling"
+        assert runner.heater == pytest.approx(100.0), msg
 
         # --- Simmering ---
         runner.step(tempPot=102.0)
@@ -360,9 +359,8 @@ class TestMainControlFMU:
 
         assert runner.color_led == ColorLED.YELLOW, "Expected YELLOW LED in KeepWarm"
         assert runner.heater > 0.0, "PI controller must produce non-zero heater output"
-        assert (
-            ":" in runner.display
-        ), f"Expected HH:MM display in KeepWarm, got {runner.display!r}"
+        msg = f"Expected HH:MM display in KeepWarm, got {runner.display!r}"
+        assert ":" in runner.display, msg
 
     def test_keepwarm_to_idle(self, runner: _FMURunner):
         """
