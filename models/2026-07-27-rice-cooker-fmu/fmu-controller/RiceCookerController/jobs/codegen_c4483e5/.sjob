@@ -1,0 +1,25 @@
+{
+  "Version": "2.2",
+  "Kind": "CodeGeneration",
+  "Properties": {
+    "RootDeclarations": [
+      "Controller::MainControl"
+    ],
+    "Name": "CodeGenerationController",
+    "CustomArguments": "",
+    "Expansion": "None",
+    "ExpansionExp": "",
+    "ExpansionNoExp": "",
+    "NameLength": "200",
+    "SignificanceLength": "32",
+    "KeepAssume": "False",
+    "GlobalsPrefix": "",
+    "UseMacros": "False",
+    "StaticLocals": "False",
+    "Probes": "False",
+    "RootInterfaceAsGlobals": "False"
+  },
+  "InputPaths": [
+    "assets/Controller.swan"
+  ]
+}

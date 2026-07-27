@@ -1,0 +1,117 @@
+-- version swan: 2025.2 graph: 2.1
+function MillisecToHHMM (ms: uint32;)
+  returns (msg: char^SIZE_MSG;)
+{
+  diagram
+    (#3 expr '\x00'
+    #pragma diagram {"xy":"H-88975;V12135","wh":"10000;3200"} #end)
+    (#4 $minutes1 block Int2Char
+    #pragma diagram {"xy":"H-90075;V-6213","wh":"20000;7000"} #end)
+    (#5 $hours1 block Int2Char
+    #pragma diagram {"xy":"H-90075;V-34038","wh":"20000;7000"} #end)
+    (#6 expr ':'
+    #pragma diagram {"xy":"H-90075;V-14438"} #end)
+    (#7 expr 60
+    #pragma diagram {"xy":"H-151410;V3961"} #end)
+    (#0 expr #1 mod #2
+      where
+        (#1 group)
+        (#2 group)
+    #pragma diagram {"xy":"H-140567;V2061"} #end)
+    (#8 $hours2 block Int2Char
+    #pragma diagram {"xy":"H-90075;V-22962","wh":"20000;7000"} #end)
+    (#9 $minutes2 block Int2Char
+    #pragma diagram {"xy":"H-90075;V3911","wh":"20000;7000"} #end)
+    (#10 expr [#11, #12, #13, #14, #15, #16]
+      where
+        (#11 group)
+        (#12 group)
+        (#13 group)
+        (#14 group)
+        (#15 group)
+        (#16 group)
+    #pragma diagram {"xy":"H-46425;V-13162"} #end)
+    (#17 expr 60
+    #pragma diagram {"xy":"H-175312;V2311"} #end)
+    (#18 expr ms / 1000
+    #pragma diagram {"xy":"H-185150;V-19788","wh":"14000;3200"} #end)
+    (#19 expr #20 / #21
+      where
+        (#20 group)
+        (#21 group)
+    #pragma diagram {"xy":"H-140567;V-24862"} #end)
+    (#22 expr 3600
+    #pragma diagram {"xy":"H-153727;V-22962"} #end)
+    (#23 expr 10
+    #pragma diagram {"xy":"H-123600;V-40800"} #end)
+    (#24 expr #25 / #26
+      where
+        (#25 group)
+        (#26 group)
+    #pragma diagram {"xy":"H-112033;V-42700"} #end)
+    (#27 def msg
+    #pragma diagram {"xy":"H-24850;V-13162"} #end)
+    (#28 expr #29 / #30
+      where
+        (#29 group)
+        (#30 group)
+    #pragma diagram {"xy":"H-163361;V411"} #end)
+    (#31 expr #32 / #33
+      where
+        (#32 group)
+        (#33 group)
+    #pragma diagram {"xy":"H-112033;V-6213"} #end)
+    (#34 expr 10
+    #pragma diagram {"xy":"H-123600;V-4313"} #end)
+    (#53 expr #54 mod #55
+      where
+        (#54 group)
+        (#55 group)
+    #pragma diagram {"xy":"H-112033;V-22962"} #end)
+    (#56 expr 10
+    #pragma diagram {"xy":"H-124843;V-21062"} #end)
+    (#57 expr #58 mod #59
+      where
+        (#58 group)
+        (#59 group)
+    #pragma diagram {"xy":"H-112033;V3961"} #end)
+    (#60 expr 10
+    #pragma diagram {"xy":"H-124843;V5861"} #end)
+    
+    (#35 wire #31 => #4)
+    (#36 wire #28 => #1
+    #pragma diagram {"wp":"#28 h7873 v-250 #1"} #end)
+    (#37 wire #7 => #2)
+    (#38 wire #6 => #13
+    #pragma diagram {"wp":"#6 h20325 v-624 #13"} #end)
+    (#39 wire #10 => #27)
+    (#40 wire #8 .(nbAsChar) => #12
+    #pragma diagram {"wp":"v1767|#8 h7413 v2333 #12"} #end)
+    (#41 wire #5 .(nbAsChar) => #11
+    #pragma diagram {"wp":"v0|#5 h12825 v11376 #11"} #end)
+    (#42 wire #23 => #26)
+    (#43 wire #17 => #30)
+    (#44 wire #4 .(nbAsChar) => #14
+    #pragma diagram {"wp":"v-2249|#4 h5608 v-2800 #14"} #end)
+    (#45 wire #3 => #16
+    #pragma diagram {"wp":"#3 h25442 v-15797 #16"} #end)
+    (#46 wire #9 .(nbAsChar) => #15
+    #pragma diagram {"wp":"v0|#9 h12825 v-11373 #15"} #end)
+    (#47 wire #0 => #32, #58
+    #pragma diagram {"wp":"#0 h6845[v-10174 #32, #58]"} #end)
+    (#48 wire #18 => #20, #29
+    #pragma diagram {"wp":"#18 h5919[v-6974 #20, v18299 #29]"} #end)
+    (#49 wire #22 => #21)
+    (#50 wire #24 => #5
+    #pragma diagram {"wp":"#24 h5632 v9738 #5"} #end)
+    (#51 wire #19 => #25, #54
+    #pragma diagram {"wp":"#19 h5483[v-19738 #25, #54]"} #end)
+    (#52 wire #34 => #33)
+    (#61 wire #56 => #55)
+    (#62 wire #53 => #8)
+    (#63 wire #60 => #59)
+    (#64 wire #57 => #9)
+}
+
+function Int2Char (nb: uint32;)
+  returns (nbAsChar: char;);

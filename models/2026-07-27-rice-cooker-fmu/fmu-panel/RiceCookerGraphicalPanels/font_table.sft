@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?dom version="19.0" ?>
+
+<fontTable generateAsBitmap="true" generateHalo="true" name="font_table" size="16">
+    <fontDefinition index="0" path="fonts/oxanium-regular16.nfd"/>
+    <fontDefinition index="1" path="fonts/oxanium-medium32.nfd"/>
+    <fontDefinition index="2" path="fonts/oxanium-light12.nfd"/>
+</fontTable>
+
+<!-- crc32 : 3565468495 -->
+
