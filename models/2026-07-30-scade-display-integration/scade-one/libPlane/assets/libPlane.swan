@@ -1,0 +1,395 @@
+-- version swan: 2025.2 graph: 2.1
+use libPlane::TimingConstants as libPlane_TimingConstants;
+
+use libPlane::actuatorsConstants as libPlane_actuatorsConstants;
+
+use libPlane::physicsConstants as libPlane_physicsConstants;
+
+use libPlane::planeConstants as libPlane_planeConstants;
+
+use linear;
+
+use pwlinear;
+
+use Math::Trigo::StdC as StdC;
+
+node Actuator (in: float32;
+               Gain: float32;
+               Min: float32;
+               Max: float32;)
+  returns (out: float32;)
+{
+  diagram
+    (#1 expr in
+    #pragma diagram {"xy":"H12260;V12450"} #end)
+    (#2 def out
+    #pragma diagram {"xy":"H135500;V13755"} #end)
+    (#5 expr #4 - #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H30030;V13590"} #end)
+    (#8 expr #7 pre #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"dir":"sw","xy":"H66850;V46040"} #end)
+    (#9 $N1 block (linear::Gain \ Gain: Gain)
+    #pragma diagram {"xy":"H52255;V12965","wh":"15770;14450"} #end)
+    (#10 $N2 block (linear::IntegrTrapez \ Reset: false, TimeCycle: libPlane_TimingConstants::Time_cycle, LowLimit: Min, HiLimit: Max)
+    #pragma diagram {"xy":"H89030;V13890","wh":"38520;14720"} #end)
+    (#11 expr 0.0
+    #pragma diagram {"xy":"H0;V0"} #end)
+    
+    (#12 wire #1 => #4
+    #pragma diagram {"wp":"#1 h5885 v-760 #4"} #end)
+    (#13 wire #5 => #9 .(G_Input))
+    (#14 wire #10 .(Y) => #6, #2
+    #pragma diagram {"wp":"v3360|#10 h2000[h1000 v26890 #6, v-3495 #2]"} #end)
+    (#15 wire #11 => #7
+    #pragma diagram {"wp":"#11 h138000 v47940 #7"} #end)
+    (#16 wire #9 .(G_Output) => #10 .(U)
+    #pragma diagram {"wp":"v395|#9 #10"} #end)
+    (#17 wire #8 => #3
+    #pragma diagram {"wp":"#8 h-39320 v-30550 #3"} #end)
+}
+
+node Actuators (Throttle: float32;
+                Elevation: float32;)
+  returns (engineCommand: float32;
+           elevatorCommand: float32;)
+{
+  diagram
+    (#1 $N1 block ElevatorActuator
+    #pragma diagram {"xy":"H39160;V13365","wh":"30320;14710"} #end)
+    (#2 $N2 block EngineActuator
+    #pragma diagram {"xy":"H39420;V31615","wh":"30320;14710"} #end)
+    (#3 expr Throttle
+    #pragma diagram {"xy":"H9860;V31500","wh":"12000;3200"} #end)
+    (#4 expr Elevation
+    #pragma diagram {"xy":"H9310;V13585","wh":"14000;3200"} #end)
+    (#5 def engineCommand
+    #pragma diagram {"xy":"H81650;V31485","wh":"18000;3200"} #end)
+    (#6 def elevatorCommand
+    #pragma diagram {"xy":"H82750;V13495","wh":"20000;3200"} #end)
+    
+    (#7 wire #4 => #1 .(in))
+    (#8 wire #3 => #2 .(in))
+    (#9 wire #1 .(out) => #6
+    #pragma diagram {"wp":"v130|#1 #6"} #end)
+    (#10 wire #2 .(out) => #5
+    #pragma diagram {"wp":"v-130|#2 #5"} #end)
+}
+
+function AirResistance (speed: float32;)
+  returns (resistance: float32;)
+{
+  diagram
+    (#2 expr - #1
+      where
+        (#1 group)
+    #pragma diagram {"xy":"H69900;V25140"} #end)
+    (#5 expr #4 * #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H56930;V25140"} #end)
+    (#6 expr libPlane_planeConstants::ContribAirResitance
+    #pragma diagram {"xy":"H11270;V26135","wh":"46000;3200"} #end)
+    (#7 expr speed
+    #pragma diagram {"xy":"H20860;V14285","wh":"10000;3200"} #end)
+    (#8 def resistance
+    #pragma diagram {"xy":"H88990;V25135","wh":"14000;3200"} #end)
+    
+    (#9 wire #6 => #3
+    #pragma diagram {"wp":"#6 h10330 v905 #3"} #end)
+    (#10 wire #2 => #8)
+    (#11 wire #7 => #4
+    #pragma diagram {"wp":"#7 h7705 v8955 #4"} #end)
+    (#12 wire #5 => #1)
+}
+
+node ElevatorActuator (in: float32;)
+  returns (out: float32;)
+{
+  diagram
+    (#1 $N1 block (linear::Gain \ Gain: libPlane_actuatorsConstants::elevatorGain)
+    #pragma diagram {"xy":"H54370;V12965","wh":"20000;14450"} #end)
+    (#2 $N2 block linear::IntegrTrapez
+    #pragma diagram {"xy":"H79120;V13840","wh":"18540;14480"} #end)
+    (#3 expr 0.0
+    #pragma diagram {"xy":"H0;V0"} #end)
+    (#4 expr in
+    #pragma diagram {"xy":"H12170;V11850"} #end)
+    (#5 def out
+    #pragma diagram {"xy":"H100520;V13845"} #end)
+    (#8 expr #7 - #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H30120;V12960"} #end)
+    (#11 expr #10 pre #9
+      where
+        (#10 group)
+        (#9 group)
+    #pragma diagram {"dir":"sw","xy":"H54030;V45465"} #end)
+    (#12 expr false
+    #pragma diagram {"xy":"H58750;V25505","wh":"10000;3200"} #end)
+    (#13 expr libPlane_actuatorsConstants::elevatorMin
+    #pragma diagram {"xy":"H39920;V32705","wh":"42000;3200"} #end)
+    (#14 expr libPlane_actuatorsConstants::elevatorMax
+    #pragma diagram {"xy":"H39920;V36300","wh":"42000;3200"} #end)
+    (#15 expr libPlane_TimingConstants::Time_cycle
+    #pragma diagram {"xy":"H41910;V28895","wh":"38000;3200"} #end)
+    
+    (#16 wire #15 => #2 .(TimeCycle)
+    #pragma diagram {"wp":"#15 h8210 v-15055 #2"} #end)
+    (#17 wire #1 .(G_Output) => #2 .(U)
+    #pragma diagram {"wp":"v-4117|#1 #2"} #end)
+    (#18 wire #13 => #2 .(LowLimit)
+    #pragma diagram {"wp":"#13 h8292 v-16369 #2"} #end)
+    (#19 wire #14 => #2 .(HiLimit)
+    #pragma diagram {"wp":"#14 h8384 v-17468 #2"} #end)
+    (#20 wire #8 => #1 .(G_Input))
+    (#21 wire #12 => #2 .(Reset)
+    #pragma diagram {"wp":"#12 h5370 v-14161 #2"} #end)
+    (#22 wire #4 => #7
+    #pragma diagram {"wp":"#4 h5975 v-790 #7"} #end)
+    (#23 wire #2 .(Y) => #9, #5
+    #pragma diagram {"wp":"v3240|#2 h6130[h1000 v26485 #9, v-3235 #5]"} #end)
+    (#24 wire #11 => #6
+    #pragma diagram {"wp":"#11 h-31610 v-30605 #6"} #end)
+    (#25 wire #3 => #10
+    #pragma diagram {"wp":"#3 h63870 v47365 #10"} #end)
+}
+
+node EngineActuator (in: float32;)
+  returns (out: float32;)
+{
+  diagram
+    (#1 $N1 block linear::Gain
+    #pragma diagram {"xy":"H46735;V15745","wh":"19810;14730"} #end)
+    (#2 $N2 block linear::IntegrTrapez
+    #pragma diagram {"xy":"H72520;V16890","wh":"18540;14480"} #end)
+    (#3 expr 0.0
+    #pragma diagram {"xy":"H0;V0"} #end)
+    (#4 def out
+    #pragma diagram {"xy":"H93150;V16635"} #end)
+    (#5 expr in
+    #pragma diagram {"xy":"H11280;V14735"} #end)
+    (#8 expr #7 - #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H29270;V15710"} #end)
+    (#11 expr #10 pre #9
+      where
+        (#10 group)
+        (#9 group)
+    #pragma diagram {"dir":"sw","xy":"H53260;V45215"} #end)
+    (#12 expr false
+    #pragma diagram {"xy":"H57900;V26355","wh":"10000;3200"} #end)
+    (#13 expr libPlane_actuatorsConstants::engineGain
+    #pragma diagram {"xy":"H11280;V26942","wh":"42000;3200"} #end)
+    (#14 expr libPlane_actuatorsConstants::engineMin
+    #pragma diagram {"xy":"H40180;V34395","wh":"40000;3200"} #end)
+    (#15 expr libPlane_actuatorsConstants::engineMax
+    #pragma diagram {"xy":"H40180;V37995","wh":"40000;3200"} #end)
+    (#16 expr libPlane_TimingConstants::Time_cycle
+    #pragma diagram {"xy":"H41280;V30375","wh":"38000;3200"} #end)
+    
+    (#17 wire #15 => #2 .(HiLimit)
+    #pragma diagram {"wp":"#15 h40470 v-30345 h-38900 v6744 #2"} #end)
+    (#18 wire #12 => #2 .(Reset)
+    #pragma diagram {"wp":"#12 h1850 v4992|#2"} #end)
+    (#19 wire #1 .(G_Output) => #2 .(U)
+    #pragma diagram {"wp":"v1145|#1 #2"} #end)
+    (#20 wire #2 .(Y) => #9, #4
+    #pragma diagram {"wp":"v3240|#2 h4636[h1000 v23185 #9, v-3495 #4]"} #end)
+    (#21 wire #13 => #1 .(Gain)
+    #pragma diagram {"wp":"#13 h3775 v-5782 #1"} #end)
+    (#22 wire #5 => #7
+    #pragma diagram {"wp":"#5 h5995 v-925 #7"} #end)
+    (#23 wire #16 => #2 .(TimeCycle)
+    #pragma diagram {"wp":"#16 h4120 v-10989 #2"} #end)
+    (#24 wire #8 => #1 .(G_Input))
+    (#25 wire #11 => #6
+    #pragma diagram {"wp":"#11 h-59480 v-27605 #6"} #end)
+    (#26 wire #14 => #2 .(LowLimit)
+    #pragma diagram {"wp":"#14 h39470 v-25745 h-36900 v3248 #2"} #end)
+    (#27 wire #3 => #10
+    #pragma diagram {"wp":"#3 h97650 v47115 #10"} #end)
+}
+
+node PlaneModel (throttle: float32;
+                 elevation: float32;)
+  returns (speed: float32;
+           alt: float32;)
+{
+  diagram
+    (#1 $N1 block SimplePlanePhysic
+    #pragma diagram {"xy":"H119990;V42995","wh":"37460;19470"} #end)
+    (#2 $N2 block (Actuator \ Gain: libPlane_actuatorsConstants::elevatorGain, Min: libPlane_actuatorsConstants::elevatorMin, Max: libPlane_actuatorsConstants::elevatorMax)
+    #pragma diagram {"xy":"H56620;V52785","wh":"39320;14190"} #end)
+    (#3 $N3 block (Actuator \ Gain: libPlane_actuatorsConstants::engineGain, Min: libPlane_actuatorsConstants::engineMin, Max: libPlane_actuatorsConstants::engineMax)
+    #pragma diagram {"xy":"H56360;V31090","wh":"39320;14180"} #end)
+    (#4 expr elevation
+    #pragma diagram {"xy":"H16330;V52915","wh":"14000;3200"} #end)
+    (#5 expr throttle
+    #pragma diagram {"xy":"H16880;V31225","wh":"12000;3200"} #end)
+    (#6 def speed
+    #pragma diagram {"xy":"H170380;V32280","wh":"10000;3200"} #end)
+    (#7 def alt
+    #pragma diagram {"xy":"H169630;V53185"} #end)
+    
+    (#8 wire #1 .(speed) => #6
+    #pragma diagram {"wp":"v-3293|#1 h7728 v-7422 #6"} #end)
+    (#9 wire #2 .(out) => #1 .(elevation)
+    #pragma diagram {"wp":"v-3575|#2 #1"} #end)
+    (#10 wire #3 .(out) => #1 .(throttle)
+    #pragma diagram {"wp":"v4630|#3 #1"} #end)
+    (#11 wire #1 .(alt) => #7
+    #pragma diagram {"wp":"v7590|#1 h19182 v2600 #7"} #end)
+    (#12 wire #4 => #2 .(in))
+    (#13 wire #5 => #3 .(in))
+}
+
+node SimplePlanePhysic (throttle: float32;
+                        elevation: float32;)
+  returns (speed: float32;
+           alt: float32;)
+{
+  diagram
+    (#1 $N1 block (pwlinear::LimiterUnSymmetrical \ LowLimit: 0.0, HighLimit: 15000.0)
+    #pragma diagram {"xy":"H121575;V99615","wh":"18410;14710"} #end)
+    (#2 $N2 block (pwlinear::LimiterUnSymmetrical \ LowLimit: 0.0, HighLimit: 1300.0)
+    #pragma diagram {"xy":"H128585;V45775","wh":"18150;14450"} #end)
+    (#5 expr #4 pre #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"dir":"sw","xy":"H114740;V120385"} #end)
+    (#8 expr #7 pre #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"dir":"sw","xy":"H115270;V75670"} #end)
+    (#9 expr 0.0
+    #pragma diagram {"xy":"H0;V0"} #end)
+    (#10 expr 0.0
+    #pragma diagram {"xy":"H600;V4200"} #end)
+    (#11 $N3 block ({op_expr%*%op_expr})
+    #pragma diagram {"xy":"H72495;V98295","wh":"12000;7000"} #end)
+    (#12 def speed
+    #pragma diagram {"xy":"H169320;V45505","wh":"10000;3200"} #end)
+    (#13 def alt
+    #pragma diagram {"xy":"H168570;V99485"} #end)
+    (#16 expr #15 + #14
+      where
+        (#15 group)
+        (#14 group)
+    #pragma diagram {"xy":"H98210;V99480"} #end)
+    (#17 expr throttle
+    #pragma diagram {"xy":"H9210;V32805","wh":"12000;3200"} #end)
+    (#18 $N4 block ({op_expr%+%op_expr})
+    #pragma diagram {"xy":"H104510;V45510","wh":"12000;7000"} #end)
+    (#19 expr libPlane_planeConstants::ContribPortance
+    #pragma diagram {"xy":"H28070;V108055","wh":"42000;3200"} #end)
+    (#20 expr libPlane_TimingConstants::Time_cycle
+    #pragma diagram {"xy":"H29640;V102340","wh":"38000;3200"} #end)
+    (#21 $N5 block StdC::Sine
+    #pragma diagram {"xy":"H32810;V12305","wh":"21320;14710"} #end)
+    (#22 expr elevation
+    #pragma diagram {"xy":"H8400;V12435","wh":"14000;3200"} #end)
+    (#23 $N6 block AirResistance
+    #pragma diagram {"xy":"H71440;V60720","wh":"23440;14180"} #end)
+    (#24 $N7 block WeightAction
+    #pragma diagram {"xy":"H71440;V12435","wh":"23440;13910"} #end)
+    (#25 $N8 block ThrottleAction
+    #pragma diagram {"xy":"H71440;V32675","wh":"23440;14190"} #end)
+    
+    (#26 wire #17 => #25 .(throttle))
+    (#27 wire #5 => #14
+    #pragma diagram {"wp":"#5 h-19030 v-19005 #14"} #end)
+    (#28 wire #16 => #1 .(LUS_Input))
+    (#29 wire #8 => #11 .(1), #23 .(speed), #18 .(3)
+    #pragma diagram {"wp":"#8 h-14260[h-32015[v20750 #11, h-6775 v-14950 #23], v-28285 #18]"} #end)
+    (#30 wire #19 => #11 .(4)
+    #pragma diagram {"wp":"#19 h11891 v-7885 #11"} #end)
+    (#31 wire #1 .(LUS_Output) => #13, #3
+    #pragma diagram {"wp":"v3355|#1 h2000[v-3485 #13, h1000 v15515 #3]"} #end)
+    (#32 wire #23 .(resistance) => #18 .(4)
+    #pragma diagram {"wp":"v-5405|#23 h9094 v-9180 #18"} #end)
+    (#33 wire #24 .(speedContribution) => #18 .(1)
+    #pragma diagram {"wp":"v0|#24 h6256 v31200 #18"} #end)
+    (#34 wire #22 => #21)
+    (#35 wire #2 .(LUS_Output) => #12, #6
+    #pragma diagram {"wp":"v3225|#2 h2000[v-3495 #12, h1000 v24770 #6]"} #end)
+    (#36 wire #11 .(1) => #15
+    #pragma diagram {"wp":"v-715|#11 #15"} #end)
+    (#37 wire #21 => #24 .(sinElevation), #11 .(2)
+    #pragma diagram {"wp":"v3355|#21 h9278[#24, v82010 #11]"} #end)
+    (#38 wire #20 => #11 .(3)
+    #pragma diagram {"wp":"#20 h8964 v-3420 #11"} #end)
+    (#39 wire #25 .(speedContribution) => #18 .(2)
+    #pragma diagram {"wp":"v0|#25 h3419 v12210 #18"} #end)
+    (#40 wire #9 => #7
+    #pragma diagram {"wp":"#9 h172820 v77570 #7"} #end)
+    (#41 wire #10 => #4
+    #pragma diagram {"wp":"#10 h173220 v118085 #4"} #end)
+    (#42 wire #18 .(1) => #2 .(LUS_Input)
+    #pragma diagram {"wp":"v0|#18 #2"} #end)
+}
+
+function ThrottleAction (throttle: float32;)
+  returns (speedContribution: float32;)
+{
+  diagram
+    (#1 expr throttle
+    #pragma diagram {"xy":"H25350;V18255","wh":"12000;3200"} #end)
+    (#4 expr #3 * #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H49000;V19315"} #end)
+    (#5 expr libPlane_planeConstants::ContribThrottle
+    #pragma diagram {"xy":"H9870;V27410","wh":"42000;3200"} #end)
+    (#6 def speedContribution
+    #pragma diagram {"xy":"H71940;V19315","wh":"20000;3200"} #end)
+    
+    (#7 wire #1 => #3
+    #pragma diagram {"wp":"#1 h7825 v-840 #3"} #end)
+    (#8 wire #4 => #6)
+    (#9 wire #5 => #2
+    #pragma diagram {"wp":"#5 h3740 v-6195 #2"} #end)
+}
+
+function WeightAction (sinElevation: float32;)
+  returns (speedContribution: float32;)
+{
+  diagram
+    (#2 expr - #1
+      where
+        (#1 group)
+    #pragma diagram {"xy":"H47670;V39290"} #end)
+    (#3 $N1 block ({op_expr%*%op_expr})
+    #pragma diagram {"xy":"H68530;V25140","wh":"12000;7000"} #end)
+    (#4 expr libPlane_physicsConstants::G
+    #pragma diagram {"xy":"H28960;V25085","wh":"32000;3200"} #end)
+    (#5 expr sinElevation
+    #pragma diagram {"xy":"H20240;V39425","wh":"16000;3200"} #end)
+    (#6 def speedContribution
+    #pragma diagram {"xy":"H99190;V25135","wh":"20000;3200"} #end)
+    (#7 expr libPlane_planeConstants::ContribWeight
+    #pragma diagram {"xy":"H23240;V12595","wh":"40000;3200"} #end)
+    
+    (#8 wire #2 => #3 .(3)
+    #pragma diagram {"wp":"#2 h6930 v-12502 #3"} #end)
+    (#9 wire #5 => #1
+    #pragma diagram {"wp":"#5 h9215 v-135 #1"} #end)
+    (#10 wire #4 => #3 .(2))
+    (#11 wire #7 => #3 .(1)
+    #pragma diagram {"wp":"#7 h4360 v10860 #3"} #end)
+    (#12 wire #3 .(1) => #6
+    #pragma diagram {"wp":"v-5|#3 #6"} #end)
+}

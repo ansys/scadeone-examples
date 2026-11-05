@@ -1,0 +1,100 @@
+-- version swan: 2025.2 graph: 2.1
+function #pragma doc Builds an array of N elements, where each element value is the previous element plus Inc, first element being StartIdx #end BuildArray <<N>> (StartValue: 'T;
+                                                                                                                                                                   Increment: 'T;)
+  returns (Output: 'T^N;)
+  where 'T numeric;
+
+function #pragma doc Computes the determinant of a square matrix of type 'T^2^2 #end Det2x2 (A: 'T^2^2;)
+  returns (Det: 'T;)
+  where 'T numeric;
+
+function #pragma doc Computes the determinant of a square matrix of type 'T^3^3 #end Det3x3 (A: 'T^3^3;)
+  returns (Det: 'T;)
+  where 'T numeric;
+
+function #pragma doc Computes the determinant of a square matrix of type 'T^4^4 #end Det4x4 (A: 'T^4^4;)
+  returns (Det: 'T;)
+  where 'T numeric;
+
+function #pragma doc Inverses a square matrix of type real^2^2
+         
+         Error output is set to true when the determinant
+         of the matrix is lower or equal to Epsilon input
+         
+         It is assumed that Epsilon is a positive value #end Inv2x2 (A: 'T^2^2;
+                                                                     Epsilon: 'T;)
+  returns (InvA: 'T^2^2;
+           Error: bool;)
+  where 'T float;
+
+function #pragma doc Inverses a square matrix of type real^3^3
+         
+         Error output is set to true when the determinant
+         of the matrix is lower or equal to Epsilon input
+         
+         It is assumed that Epsilon is a positive value #end Inv3x3 (A: 'T^3^3;
+                                                                     Epsilon: 'T;)
+  returns (InvA: 'T^3^3;
+           Error: bool;)
+  where 'T float;
+
+function #pragma doc Inverses a square matrix of type real^4^4
+         
+         Error output is set to true when the determinant
+         of the matrix is lower or equal to Epsilon input
+         
+         It is assumed that Epsilon is a positive value #end Inv4x4 (A: 'T^4^4;
+                                                                     Epsilon: 'T;)
+  returns (InvA: 'T^4^4;
+           Error: bool;)
+  where 'T float;
+
+function #pragma doc Computes the sum of two matrices of type 'T^n^m #end MatAdd <<m, n>> (A: 'T^n^m;
+                                                                                           B: 'T^n^m;)
+  returns (C: 'T^n^m;)
+  where 'T numeric;
+
+function #pragma doc Computes the matrix product A*B, 
+         matrixes (m,n) implemented as 'T^n^m #end MatProd <<m, n, p>> (A: 'T^n^m;
+                                                                        B: 'T^p^n;)
+  returns (C: 'T^p^m;)
+  where 'T numeric;
+
+function #pragma doc Computes the difference of two matrices of type 'T^n^m #end MatSub <<m, n>> (A: 'T^n^m;
+                                                                                                  B: 'T^n^m;)
+  returns (C: 'T^n^m;)
+  where 'T numeric;
+
+function #pragma doc Computes the product of matrix by vector, 
+         matrix (m,n) implemented as 'T^n^m #end MatVectProd <<m, n>> (A: 'T^n^m;
+                                                                       V: 'T^n;)
+  returns (R: 'T^m;)
+  where 'T numeric;
+
+inline function #pragma doc Computes the scalar product of vectors V and W:
+                sp = V[0]*W[0]+...+V[N-1]*W[N-1] #end ScalProd <<n>> (V: 'T^n;
+                                                                      W: 'T^n;)
+  returns (SP: 'T;)
+  where 'T numeric;
+
+function #pragma doc This operator selects DstSize elements with specified indices from a source array of size SrcSize. #end Selector <<SrcSize, DstSize>> (Input: 'T^SrcSize;
+                                                                                                                                                            Indices: 'I^DstSize;
+                                                                                                                                                            Default: 'T;)
+  returns (Output: 'T^DstSize;)
+  where 'I integer;
+
+function #pragma doc Computes the sum of two vectors of type 'T^n #end VectAdd <<n>> (U: 'T^n;
+                                                                                      V: 'T^n;)
+  returns (W: 'T^n;)
+  where 'T numeric;
+
+function #pragma doc Computes the product of matrix by vector, 
+         matrix (m,n) implemented as 'T^n^m #end VectMatProd <<m, n>> (V: 'T^m;
+                                                                       A: 'T^n^m;)
+  returns (R: 'T^n;)
+  where 'T numeric;
+
+function #pragma doc Computes the difference of two vectors of type 'T^n #end VectSub <<n>> (U: 'T^n;
+                                                                                             V: 'T^n;)
+  returns (W: 'T^n;)
+  where 'T numeric;

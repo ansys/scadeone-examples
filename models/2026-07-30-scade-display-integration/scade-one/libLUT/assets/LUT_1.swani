@@ -1,0 +1,22 @@
+-- version swan: 2025.2 graph: 2.1
+function InterpolateLinear (F: float32;
+                            Y1: float32;
+                            Y2: float32;)
+  returns (Y: float32;);
+
+function LUT1D <<Size>> (X_In: float32;
+                         X: float32^Size;
+                         Y: float32^Size;)
+  returns (Y_Out: float32;);
+
+function LUT2D <<SizeX, SizeY>> (X_In: float32;
+                                 Y_In: float32;
+                                 X: float32^SizeX;
+                                 Y: float32^SizeY;
+                                 Z: float32^SizeY^SizeX;)
+  returns (Z_Out: float32;);
+
+function Locate <<Size>> (X_In: float32;
+                          X: float32^Size;)
+  returns (Idx: int32;
+           F: float32;);

@@ -1,0 +1,295 @@
+-- version swan: 2025.2 graph: 2.1
+function InterpolateLinear (F: float32;
+                            Y1: float32;
+                            Y2: float32;)
+  returns (Y: float32;)
+{
+  diagram
+    (#1 expr Y2
+    #pragma diagram {"xy":"H11070;V8335"} #end)
+    (#2 expr F
+    #pragma diagram {"xy":"H34090;V8335"} #end)
+    (#5 expr #4 - #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H34180;V19445"} #end)
+    (#6 expr Y1
+    #pragma diagram {"xy":"H11070;V27915"} #end)
+    (#9 expr #8 * #7
+      where
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H53760;V9655"} #end)
+    (#12 expr #11 + #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H70960;V26855"} #end)
+    (#13 def Y
+    #pragma diagram {"xy":"H93330;V26855"} #end)
+    
+    (#14 wire #6 => #3, #10
+    #pragma diagram {"wp":"#6 h8555[v-6570 #3, h33235 v840 #10]"} #end)
+    (#15 wire #1 => #4
+    #pragma diagram {"wp":"#1 h8555 v9210 #4"} #end)
+    (#16 wire #9 => #11
+    #pragma diagram {"wp":"#9 h5100 v15300 #11"} #end)
+    (#17 wire #2 => #8
+    #pragma diagram {"wp":"#2 h6835 v-580 #8"} #end)
+    (#18 wire #5 => #7
+    #pragma diagram {"wp":"#5 h6290 v-7890 #7"} #end)
+    (#19 wire #12 => #13)
+}
+
+function LUT1D <<Size>> (X_In: float32;
+                         X: float32^Size;
+                         Y: float32^Size;)
+  returns (Y_Out: float32;)
+{
+  diagram
+    (#1 $N1 block (Locate <<Size>>  \ X: X)
+    #pragma diagram {"xy":"H36115;V19580","wh":"21590;28200"} #end)
+    (#2 expr X_In
+    #pragma diagram {"xy":"H12990;V19445"} #end)
+    (#3 def F
+    #pragma diagram {"xy":"H67940;V24210"} #end)
+    (#4 def Idx
+    #pragma diagram {"xy":"H67940;V14685"} #end)
+    (#5 $N2 block InterpolateLinear
+    #pragma diagram {"xy":"H60590;V52655","wh":"26080;32970"} #end)
+    (#6 expr F
+    #pragma diagram {"xy":"H33830;V44315"} #end)
+    (#7 expr (Y . [Idx] default 0.0)
+    #pragma diagram {"xy":"H23190;V52650","wh":"26000;3200"} #end)
+    (#8 expr (Y . [Idx + 1_i32] default 0.0)
+    #pragma diagram {"xy":"H18790;V60855","wh":"34000;3200"} #end)
+    (#9 def Y_Out
+    #pragma diagram {"xy":"H93290;V52520","wh":"10000;3200"} #end)
+    
+    (#10 wire #2 => #1 .(X_In))
+    (#11 wire #8 => #5 .(Y2))
+    (#12 wire #7 => #5 .(Y1))
+    (#13 wire #5 .(Y) => #9
+    #pragma diagram {"wp":"v-135|#5 #9"} #end)
+    (#14 wire #1 .(F) => #3
+    #pragma diagram {"wp":"v4630|#1 #3"} #end)
+    (#15 wire #1 .(Idx) => #4
+    #pragma diagram {"wp":"v-4895|#1 #4"} #end)
+    (#16 wire #6 => #5 .(F))
+    
+    (var
+        Idx: int32;
+        F: float32;)
+}
+
+function LUT2D <<SizeX, SizeY>> (X_In: float32;
+                                 Y_In: float32;
+                                 X: float32^SizeX;
+                                 Y: float32^SizeY;
+                                 Z: float32^SizeY^SizeX;)
+  returns (Z_Out: float32;)
+{
+  diagram
+    (#1 $N1 block (Locate <<SizeX>>  \ X: X)
+    #pragma diagram {"xy":"H73290;V21435","wh":"25560;32970"} #end)
+    (#2 $N2 block (Locate <<SizeY>>  \ X: Y)
+    #pragma diagram {"xy":"H135200;V21435","wh":"25560;32970"} #end)
+    (#3 expr X_In
+    #pragma diagram {"xy":"H47920;V21300"} #end)
+    (#4 expr Y_In
+    #pragma diagram {"xy":"H110360;V21300"} #end)
+    (#5 def IdxX
+    #pragma diagram {"xy":"H101300;V15745"} #end)
+    (#6 def F_X
+    #pragma diagram {"xy":"H101100;V26855"} #end)
+    (#7 def IdxY
+    #pragma diagram {"xy":"H165070;V15745"} #end)
+    (#8 def F_Y
+    #pragma diagram {"xy":"H164870;V26855"} #end)
+    (#9 $N3 block InterpolateLinear
+    #pragma diagram {"xy":"H73290;V59005","wh":"25560;35610"} #end)
+    (#10 $N4 block InterpolateLinear
+    #pragma diagram {"xy":"H135200;V59005","wh":"25560;35610"} #end)
+    (#11 $N5 block InterpolateLinear
+    #pragma diagram {"xy":"H73290;V97630","wh":"25560;35620"} #end)
+    (#12 expr F_Y
+    #pragma diagram {"xy":"H48120;V50140"} #end)
+    (#13 expr F_X
+    #pragma diagram {"xy":"H109770;V50140"} #end)
+    (#14 expr F_Y
+    #pragma diagram {"xy":"H48120;V88765"} #end)
+    (#15 def Z_Out
+    #pragma diagram {"xy":"H165880;V58870","wh":"10000;3200"} #end)
+    (#16 expr (Z . [IdxY][IdxX] default 0.0)
+    #pragma diagram {"xy":"H33620;V59000","wh":"34000;3200"} #end)
+    (#17 expr (Z . [IdxY + 1_i32][IdxX] default 0.0)
+    #pragma diagram {"xy":"H29220;V68000","wh":"40000;3200"} #end)
+    (#18 expr (Z . [IdxY][IdxX + 1_i32] default 0.0)
+    #pragma diagram {"xy":"H29220;V97630","wh":"40000;3200"} #end)
+    (#19 expr (Z . [IdxY + 1_i32][IdxX + 1_i32] default 0.0)
+    #pragma diagram {"xy":"H24820;V106625","wh":"48000;3200"} #end)
+    
+    (#20 wire #2 .(Idx) => #7
+    #pragma diagram {"wp":"v-5690|#2 #7"} #end)
+    (#21 wire #3 => #1 .(X_In))
+    (#22 wire #1 .(F) => #6
+    #pragma diagram {"wp":"v5420|#1 #6"} #end)
+    (#23 wire #9 .(Y) => #10 .(Y1)
+    #pragma diagram {"wp":"v6147|#9 #10"} #end)
+    (#24 wire #16 => #9 .(Y1))
+    (#25 wire #11 .(Y) => #10 .(Y2)
+    #pragma diagram {"wp":"v0|#11 h26525 v-25372 #10"} #end)
+    (#26 wire #19 => #11 .(Y2))
+    (#27 wire #14 => #11 .(F))
+    (#28 wire #12 => #9 .(F))
+    (#29 wire #2 .(F) => #8
+    #pragma diagram {"wp":"v5420|#2 #8"} #end)
+    (#30 wire #17 => #9 .(Y2))
+    (#31 wire #13 => #10 .(F))
+    (#32 wire #1 .(Idx) => #5
+    #pragma diagram {"wp":"v-5690|#1 #5"} #end)
+    (#33 wire #18 => #11 .(Y1))
+    (#34 wire #4 => #2 .(X_In))
+    (#35 wire #10 .(Y) => #15
+    #pragma diagram {"wp":"v-135|#10 #15"} #end)
+    
+    (var
+        IdxX: int32;
+        IdxY: int32;
+        F_X: float32;
+        F_Y: float32;)
+}
+
+function Locate <<Size>> (X_In: float32;
+                          X: float32^Size;)
+  returns (Idx: int32;
+           F: float32;)
+{
+  diagram
+    (#2 expr {#1}: LUT_Idx
+      where
+        (#1 group)
+    #pragma diagram {"xy":"H24960;V23015","wh":"12000;10000"} #end)
+    (#3 expr 0_i32
+    #pragma diagram {"xy":"H10280;V18100","wh":"10000;3200"} #end)
+    (#4 expr X[0]
+    #pragma diagram {"xy":"H10830;V22965"} #end)
+    (#5 expr X[1]
+    #pragma diagram {"xy":"H10830;V28045"} #end)
+    (#6 expr X_In
+    #pragma diagram {"xy":"H10610;V40350"} #end)
+    (#8 expr #7 ^ ({text%Size - 1%text})
+      where
+        (#7 group)
+    #pragma diagram {"xy":"H21660;V40480","wh":"16000;7000"} #end)
+    (#10 expr #9 [0 .. Size - 2]
+      where
+        (#9 group)
+    #pragma diagram {"xy":"H24760;V52390","wh":"22000;7000"} #end)
+    (#12 expr #11 [1 .. Size - 1]
+      where
+        (#11 group)
+    #pragma diagram {"xy":"H24760;V64560","wh":"22000;7000"} #end)
+    (#13 expr X
+    #pragma diagram {"xy":"H10810;V52255"} #end)
+    (#14 $N1 block (foldi SearchIdx) <<Size - 1>>
+    #pragma diagram {"xy":"H60720;V40480","wh":"32700;72120"} #end)
+    (#16 expr LUT_Idx group (#15)
+      where
+        (#15 group)
+    #pragma diagram {"xy":"H87970;V40480","wh":"12000;10000"} #end)
+    (#17 def Idx
+    #pragma diagram {"xy":"H118210;V19715"} #end)
+    (#18 expr X_In
+    #pragma diagram {"xy":"H113270;V30030"} #end)
+    (#19 def F
+    #pragma diagram {"xy":"H171650;V44585"} #end)
+    (#22 expr #21 / #20
+      where
+        (#21 group)
+        (#20 group)
+    #pragma diagram {"xy":"H151390;V44980"} #end)
+    (#25 expr #24 - #23
+      where
+        (#24 group)
+        (#23 group)
+    #pragma diagram {"xy":"H131280;V39290"} #end)
+    (#28 expr #27 - #26
+      where
+        (#27 group)
+        (#26 group)
+    #pragma diagram {"xy":"H131280;V49875"} #end)
+    
+    (#29 wire #6 => #7
+    #pragma diagram {"wp":"#6 v1515 #7"} #end)
+    (#30 wire #16 .(3) => #27
+    #pragma diagram {"wp":"v3333|#16 h19694 v4162 #27"} #end)
+    (#31 wire #4 => #1 .(X1))
+    (#32 wire #8 => #14 .(2))
+    (#33 wire #3 => #1 .(Idx)
+    #pragma diagram {"wp":"#3 h3082 v3355 #1"} #end)
+    (#34 wire #5 => #1 .(X2)
+    #pragma diagram {"wp":"#5 h3598 v-2380 #1"} #end)
+    (#35 wire #28 => #20
+    #pragma diagram {"wp":"#28 h6555 v-2995 #20"} #end)
+    (#36 wire #12 => #14 .(4))
+    (#37 wire #16 .(1) => #17
+    #pragma diagram {"wp":"v-3090|#16 h5539 v-17675 #17"} #end)
+    (#38 wire #13 => #9, #11
+    #pragma diagram {"wp":"#13[v3117 h-1550 #9, h3500 v6220 h-5050 v6085 #11]"} #end)
+    (#39 wire #2 => #14 .(1))
+    (#40 wire #16 .(2) => #23, #26
+    #pragma diagram {"wp":"v2000|#16 h12616[h14155 v-1290 #23, v9295 #26]"} #end)
+    (#41 wire #14 .(1) => #15
+    #pragma diagram {"wp":"v-2000|#14 #15"} #end)
+    (#42 wire #25 => #21
+    #pragma diagram {"wp":"#25 h6555 v3790 #21"} #end)
+    (#43 wire #10 => #14 .(3))
+    (#44 wire #18 => #24
+    #pragma diagram {"wp":"#18 h4971 v7360 #24"} #end)
+    (#45 wire #22 => #19
+    #pragma diagram {"wp":"#22 h7130 v-395 #19"} #end)
+}
+
+function SearchIdx (Idx: int32;
+                    Acc_In: LUT_Idx;
+                    X_In: float32;
+                    X1: float32;
+                    X2: float32;)
+  returns (Acc_Out: LUT_Idx;)
+{
+  diagram
+    (#2 $N1 block (activate ({op_expr%function a_1, b_1, c => {Idx: a_1, X1: b_1, X2: c} : LUT_Idx%op_expr}) every #1 default (Acc_In))
+      where
+        (#1 group)
+    #pragma diagram {"xy":"H48945;V39555","wh":"20270;39590"} #end)
+    (#3 expr Idx
+    #pragma diagram {"xy":"H18750;V29500"} #end)
+    (#4 expr X1
+    #pragma diagram {"xy":"H18750;V39555"} #end)
+    (#5 expr X2
+    #pragma diagram {"xy":"H18750;V49345"} #end)
+    (#8 expr #7 >= #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H39540;V10185"} #end)
+    (#9 expr X_In
+    #pragma diagram {"xy":"H18290;V8865"} #end)
+    (#10 def Acc_Out
+    #pragma diagram {"xy":"H76230;V39555","wh":"12000;3200"} #end)
+    
+    (#11 wire #9 => #7
+    #pragma diagram {"wp":"#9 h7625 v-580 #7"} #end)
+    (#12 wire #2 .(1) => #10
+    #pragma diagram {"wp":"v-2000|#2 #10"} #end)
+    (#13 wire #5 => #2 .(3))
+    (#14 wire #8 => #1
+    #pragma diagram {"wp":"#8 h3500 v6538 h-9730 v5537 #1"} #end)
+    (#15 wire #4 => #6, #2 .(2)
+    #pragma diagram {"wp":"#4 h6515[v-27470 #6, #2]"} #end)
+    (#16 wire #3 => #2 .(1))
+}
+
+type LUT_Idx = {Idx: int32, X1: float32, X2: float32};

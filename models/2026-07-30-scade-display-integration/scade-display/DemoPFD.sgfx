@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?dom version="19.0" ?>
+
+<specification>
+    <IDE>
+        <project path="DemoPFD.etp"/>
+        <ratio horizontal="0.049005" vertical="0.049045"/>
+    </IDE>
+    <symbology>
+        <dimension height="1080" width="1920"/>
+    </symbology>
+    <children>
+        <layer oid="76fa213c-9e8a-4a13-9c92-c5854d3ef4d1">
+            <pathFromRoot value=""/>
+            <declaration>
+                <inputs>
+                    <input name="PN_PITCH_ANGLE" oid="7e424e04-d956-4abe-97e7-16f0c41c89ac" type="float32">
+                        <init>0.0</init>
+                    </input>
+                    <input name="PN_ROLL_ANGLE" oid="01499d2e-a447-410e-bd67-e6b3d236aa09" type="float32">
+                        <init>0.0</init>
+                    </input>
+                    <input name="PN_ALTI" oid="805f569c-21e5-4093-8628-69d9fb55d543" type="float32">
+                        <init>0.0</init>
+                    </input>
+                    <input name="PN_AIRSPEED" oid="b6309698-e41b-46e8-8e9b-f9550b909d45" type="float32">
+                        <init>0.0</init>
+                    </input>
+                </inputs>
+            </declaration>
+            <properties name="symbology_layer">
+                <visible>
+                    <init>true</init>
+                </visible>
+                <origin>
+                    <x>
+                        <init>0.0</init>
+                    </x>
+                    <y>
+                        <init>0.0</init>
+                    </y>
+                </origin>
+                <id>
+                    <init>1</init>
+                </id>
+                <ratio horizontal="1" vertical="1"/>
+            </properties>
+            <children>
+                <referenceContainer oid="1236c9e7-6dd2-42a0-b093-56162bdfab5a">
+                    <pathFromRoot value="0"/>
+                    <properties modular="false" name="ADI">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>0.0</init>
+                            </x>
+                            <y>
+                                <init>0.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="ADI.ogfx" path="."/>
+                        <crc value="1405460324"/>
+                        <inputParameters>
+                            <parameter control="false" name="B_VIS_ADI" oid="a572bcc3-9411-4357-b102-31a5b7611f5a" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="F_PITCH_ANGLE" oid="20b575d2-c1a7-4284-a075-8c4249a261ab" type="real">
+                                <expr>PN_PITCH_ANGLE</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="F_PITCH_REF" oid="03cfd045-6dba-4605-aa29-194fed55af52" type="real">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="F_ROLL_ANGLE" oid="faea9172-8d3d-441d-9ec3-55107e794795" type="real">
+                                <expr>PN_ROLL_ANGLE</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="PARAM_ALARM_COLOR" oid="e56fba51-2f08-4686-a972-63b4088aaaad" representation="color" type="int">
+                                <init>36</init>
+                            </parameter>
+                            <parameter control="false" name="PARAM_BUG_REF_COLOR" oid="79e10e12-07d4-4ee7-a580-d2f61c1d518f" representation="color" type="int">
+                                <init>11</init>
+                            </parameter>
+                            <parameter control="false" name="PARAM_EARTH_COLOR" oid="88696b55-0184-4eb3-bd5b-ae1e32d3be40" representation="color" type="int">
+                                <init>46</init>
+                            </parameter>
+                            <parameter control="false" name="PARAM_SKY_COLOR" oid="da67eb86-e0b7-4384-ab29-178e5befe10c" representation="color" type="int">
+                                <init>6</init>
+                            </parameter>
+                            <parameter control="false" name="PARAM_WARNING_COLOR" oid="1e0e6470-b7df-4240-b64d-e95e77391363" representation="color" type="int">
+                                <init>36</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <container oid="ddb9fd53-6d17-4b38-bc0d-67821b60b4c9">
+                    <pathFromRoot value="1"/>
+                    <properties name="PFD">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>0.0</init>
+                            </x>
+                            <y>
+                                <init>0.0</init>
+                            </y>
+                        </origin>
+                        <priority>
+                            <init>-1</init>
+                        </priority>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <static editorLinked="true" generateStaticSequence="true" maxX="0.0" maxY="0.0" minX="0.0" minY="0.0">
+                            <init>false</init>
+                        </static>
+                    </properties>
+                    <children/>
+                </container>
+                <referenceContainer oid="ef611d3e-21b4-41ec-b1f1-22fa02e0a3b8">
+                    <pathFromRoot value="2"/>
+                    <properties modular="false" name="AirSpeedScale2">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>-200.0</init>
+                            </x>
+                            <y>
+                                <init>0.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="AirSpeedScale2.ogfx" path="."/>
+                        <crc value="2442840529"/>
+                        <inputParameters>
+                            <parameter control="false" name="PN_AIRSPEED" oid="872dde99-3a2a-43ed-ba43-70019b5873da" type="real">
+                                <expr>PN_AIRSPEED</expr>
+                                <init>0.0</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="d33eb2c7-00e6-4d8c-b7a0-efa2beffc963">
+                    <pathFromRoot value="3"/>
+                    <properties modular="false" name="AltitudeScale3">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>200.0</init>
+                            </x>
+                            <y>
+                                <init>0.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="AltitudeScale3.ogfx" path="."/>
+                        <crc value="3902992830"/>
+                        <inputParameters>
+                            <parameter control="false" name="PN_ALTI" oid="ca333cf4-8ca6-4349-9ac3-bf154853ec34" type="real">
+                                <expr>PN_ALTI</expr>
+                                <init>0.0</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <bitmap oid="0b5ccb69-94fc-4c91-b081-5925de3295bb">
+                    <pathFromRoot value="4"/>
+                    <properties name="Ansys">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>-104.0</init>
+                            </x>
+                            <y>
+                                <init>-305.0</init>
+                            </y>
+                        </position>
+                        <textureId>
+                            <init>2</init>
+                        </textureId>
+                    </properties>
+                </bitmap>
+            </children>
+        </layer>
+    </children>
+</specification>
+
+<!-- crc32 : 1701008023 -->
+

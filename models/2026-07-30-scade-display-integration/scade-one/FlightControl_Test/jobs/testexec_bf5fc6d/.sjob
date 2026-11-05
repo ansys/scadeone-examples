@@ -1,0 +1,16 @@
+{
+  "Version": "2.2",
+  "Kind": "TestExecution",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "TestExecutionJob0",
+    "CustomArguments": "{\"float32_absolute_tolerance\": 0.01}",
+    "TestResultFile": "testResults.json"
+  },
+  "InputPaths": [
+    "assets/FCU_AM_Proc.swant",
+    "assets/FCU_FC_Proc.swant"
+  ]
+}

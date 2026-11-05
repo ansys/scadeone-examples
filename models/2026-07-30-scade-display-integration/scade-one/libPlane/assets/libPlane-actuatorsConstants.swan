@@ -1,0 +1,12 @@
+-- version swan: 2025.2 graph: 2.1
+const elevatorGain: float32 = 40.0;
+
+const elevatorMax: float32 = 80.0;
+
+const elevatorMin: float32 = -75.0;
+
+const engineGain: float32 = 20.0;
+
+const engineMax: float32 = 100.0;
+
+const engineMin: float32 = 0.0;

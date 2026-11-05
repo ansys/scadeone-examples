@@ -1,0 +1,8 @@
+{
+  "Version": "1.0",
+  "Name": "liblinear",
+  "Dependencies": [
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Flows\\Flows.sproj"
+  ],
+  "Resources": []
+}

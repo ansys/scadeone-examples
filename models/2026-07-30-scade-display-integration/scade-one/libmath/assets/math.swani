@@ -1,0 +1,189 @@
+-- version swan: 2025.2 graph: 2.1
+inline function #pragma doc Gives the real or integer absolute value. #end Abs (A_Input: 'T;)
+  returns (A_Output: 'T;)
+  where 'T numeric;
+
+inline function #pragma doc Converts a Boolean value into a real value. 
+                When the input is true, the output is equal to 1.0, otherwise it is equal to 0.0.  #end BoolToFloat32 (BTR_Input: bool;)
+  returns (BTR_Output: float32;);
+
+inline function #pragma doc Converts a Boolean value into a real value. 
+                When the input is true, the output is equal to 1.0, otherwise it is equal to 0.0.  #end BoolToFloat64 (BTR_Input: bool;)
+  returns (BTR_Output: float64;);
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToInt16 (BTI_Input: bool;)
+  returns (BTI_Output: int16;);
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToInt32 (BTI_Input: bool;)
+  returns (BTI_Output: int32;);
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToInt64 (BTI_Input: bool;)
+  returns (BTI_Output: int64;);
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToInt8 (BTI_Input: bool;)
+  returns (BTI_Output: int8;);
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToUint16 (BTI_Input: bool;)
+  returns (BTI_Output: uint16;);
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToUint32 (BTI_Input: bool;)
+  returns (BTI_Output: uint32;);
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToUint64 (BTI_Input: bool;)
+  returns (BTI_Output: uint64;);
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToUint8 (BTI_Input: bool;)
+  returns (BTI_Output: uint8;);
+
+function #pragma doc Interpret 8 bits (Boolean inputs) as an integer value between 0 and 255. #end ByteToUint8 (b1: bool;
+                                                                                                                b2: bool;
+                                                                                                                b3: bool;
+                                                                                                                b4: bool;
+                                                                                                                b5: bool;
+                                                                                                                b6: bool;
+                                                                                                                b7: bool;
+                                                                                                                b8: bool;)
+  returns (OTI_Output: uint8;);
+
+inline function #pragma doc Outputs true if the input is within the [ A ; B ] range, false otherwise.  #end InRangeInIn (IRII_Input: 'T;
+                                                                                                                         A: 'T;
+                                                                                                                         B: 'T;)
+  returns (IRII_Output: bool;)
+  where 'T numeric;
+
+inline function #pragma doc Issues true if the input is within the [ A, B [ range, false otherwise. #end InRangeInOut (IRIO_Input: 'T;
+                                                                                                                       A: 'T;
+                                                                                                                       B: 'T;)
+  returns (IRIO_Output: bool;)
+  where 'T numeric;
+
+inline function #pragma doc Outputs true if the input is within the ] A, B ] range, false otherwise. #end InRangeOutIn (IROI_Input: 'T;
+                                                                                                                        A: 'T;
+                                                                                                                        B: 'T;)
+  returns (IROI_Output: bool;)
+  where 'T numeric;
+
+inline function #pragma doc Outputs true if the input is within the ] A, B [ range, false otherwise. #end InRangeOutOut (IROO_Input: 'T;
+                                                                                                                         A: 'T;
+                                                                                                                         B: 'T;)
+  returns (IROO_Output: bool;)
+  where 'T numeric;
+
+inline function #pragma doc Converts an Integer value into a Boolean value. 
+                When the input is 0, the output is equal to false, otherwise the output is equal to true. #end IntToBool (ITB_Input: 'T;)
+  returns (ITB_Output: bool;)
+  where 'T integer;
+
+inline function #pragma doc Outputs the maximum of two real or integer values. #end Max (I1: 'T;
+                                                                                         I2: 'T;)
+  returns (Ma_Output: 'T;)
+  where 'T numeric;
+
+function #pragma doc Outputs the maximum of three real or integer values.  #end Max3 (I1: 'T;
+                                                                                      I2: 'T;
+                                                                                      I3: 'T;)
+  returns (Ma3_Output: 'T;)
+  where 'T numeric;
+
+inline function #pragma doc Computes the mean of two real values.  #end Mean (I1: 'T;
+                                                                              I2: 'T;)
+  returns (Me_output: 'T;)
+  where 'T numeric;
+
+inline function #pragma doc Computes the mean of three real values. #end Mean3 (I1: 'T;
+                                                                                I2: 'T;
+                                                                                I3: 'T;)
+  returns (Me3_Output: 'T;)
+  where 'T numeric;
+
+inline function #pragma doc Outputs the minimum of two real or integer values.  #end Min (I1: 'T;
+                                                                                          I2: 'T;)
+  returns (Mi_Output: 'T;)
+  where 'T numeric;
+
+function #pragma doc Outputs the minimum of three real or integer values.  #end Min3 (I1: 'T;
+                                                                                      I2: 'T;
+                                                                                      I3: 'T;)
+  returns (Mi3_Output: 'T;)
+  where 'T numeric;
+
+function Mod (value: 'T;
+              modulus: 'T;)
+  returns (remain: 'T;)
+  where 'T numeric;
+
+inline function NumericToFloat32 (Input1: 'T;)
+  returns (Output1: float32;)
+  where 'T numeric;
+
+inline function NumericToFloat64 (Input1: 'T;)
+  returns (Output1: float64;)
+  where 'T numeric;
+
+inline function NumericToInt16 (Input1: 'T;)
+  returns (Output1: int16;)
+  where 'T numeric;
+
+inline function NumericToInt32 (Input1: 'T;)
+  returns (Output1: int32;)
+  where 'T numeric;
+
+inline function NumericToInt64 (Input1: 'T;)
+  returns (Output1: int64;)
+  where 'T numeric;
+
+inline function NumericToInt8 (Input1: 'T;)
+  returns (Output1: int8;)
+  where 'T numeric;
+
+inline function NumericToUint16 (Input1: 'T;)
+  returns (Output1: uint16;)
+  where 'T numeric;
+
+inline function NumericToUint32 (Input1: 'T;)
+  returns (Output1: uint32;)
+  where 'T numeric;
+
+inline function NumericToUint64 (Input1: 'T;)
+  returns (Output1: uint64;)
+  where 'T numeric;
+
+inline function NumericToUint8 (Input1: 'T;)
+  returns (Output1: uint8;)
+  where 'T numeric;
+
+inline function #pragma doc Perform evaluation of polynomial coefficients on input values. #end Polynomial <<N>> (X: 'T;
+                                                                                                                  C: 'T^N;)
+  returns (Y: 'T;)
+  where 'T numeric;
+
+inline function #pragma doc Converts a Real value into a Boolean value. 
+                When the input is 0.0, the output is equal to false, otherwise the output is equal to true. #end RealToBool (RTB_Input: 'T;)
+  returns (RTB_Output: bool;)
+  where 'T float;
+
+function #pragma doc R_Output = x when R_Input [x-0.5, x+0.5[  #end Round (R_Input: 'T;)
+  returns (R_Output: int32;)
+  where 'T float;
+
+function #pragma doc RC_Output = x when R_Input ]x-1, x] #end RoundCeil (RC_Input: 'T;)
+  returns (RC_Output: int32;)
+  where 'T float;
+
+function #pragma doc RF_Output = x when R_Input [x, x+1[ . #end RoundFloor (RF_Input: 'T;)
+  returns (RF_Output: int32;)
+  where 'T numeric;
+
+function #pragma doc Returns 1.0 if input is greater than 0.0,
+          -1.0 if input is less than 0.0
+         and 0.0 if input is equal to 0.0 #end Sign (S_Input: 'T;)
+  returns (S_Ouput: 'T;)
+  where 'T numeric;

@@ -1,0 +1,8 @@
+-- version swan: 2025.2 graph: 2.1
+const alarmAltThreshold: float32 = 100.0;
+
+const alarmAltTimer: int32 = 18;
+
+const alarmSpeedThreshold: float32 = 85.0;
+
+const alarmSpeedTimer: int32 = 22;

@@ -1,0 +1,10 @@
+-- version swan: 2025.2 graph: 2.1
+const ContribAirResitance: float32 = 0.37;
+
+const ContribPortance: float32 = 7.6235;
+
+const ContribThrottle: float32 = 365.0;
+
+const ContribWeight: float32 = 7.6235;
+
+const SpeedMinForTakeOff: float32 = 220.0;

@@ -1,0 +1,16 @@
+-- version swan: 2025.2 graph: 2.1
+const ElevatorLimit: float32 = 1.56;
+
+const Xtable: float32^4 = [-300.0, -200.0, 200.0, 300.0];
+
+const Ytable: float32^4 = [-1.55, -0.7, 0.7, 1.55];
+
+const altKp: float32 = 0.015;
+
+const speedKi: float32 = 6.0;
+
+const speedKp: float32 = 2.0;
+
+const speedMax: float32 = 500.0;
+
+const speedMin: float32 = -500.0;

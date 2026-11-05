@@ -1,0 +1,1720 @@
+-- version swan: 2025.2 graph: 2.1
+inline function #pragma doc Gives the real or integer absolute value. #end Abs (A_Input: 'T;)
+  returns (A_Output: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr (0 :> 'T)
+    #pragma diagram {"xy":"H38820;V20635","wh":"14000;3200"} #end)
+    (#2 def A_Output
+    #pragma diagram {"xy":"H125200;V41935","wh":"12000;3200"} #end)
+    (#5 expr #4 <= #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H72000;V21840"} #end)
+    (#9 expr if #8 then #7 else #6
+      where
+        (#8 group)
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H93930;V41910"} #end)
+    (#11 expr - #10
+      where
+        (#10 group)
+    #pragma diagram {"xy":"H70960;V61250"} #end)
+    (#12 expr A_Input
+    #pragma diagram {"xy":"H23520;V40350","wh":"12000;3200"} #end)
+    
+    (#13 wire #5 => #8
+    #pragma diagram {"wp":"#5 h18430 #8"} #end)
+    (#14 wire #12 => #7, #10, #3
+    #pragma diagram {"wp":"#12 h7575[h8150[h39220 v-340 #7, v-16610 #3], v20900 #10]"} #end)
+    (#15 wire #9 => #2)
+    (#16 wire #1 => #4
+    #pragma diagram {"wp":"#1 h12090 v-695 #4"} #end)
+    (#17 wire #11 => #6
+    #pragma diagram {"wp":"#11 h4520 v-17440 #6"} #end)
+}
+
+inline function #pragma doc Converts a Boolean value into a real value. 
+                When the input is true, the output is equal to 1.0, otherwise it is equal to 0.0.  #end BoolToFloat32 (BTR_Input: bool;)
+  returns (BTR_Output: float32;)
+{
+  diagram
+    (#1 expr BTR_Input
+    #pragma diagram {"xy":"H14210;V10980","wh":"14000;3200"} #end)
+    (#2 def BTR_Output
+    #pragma diagram {"xy":"H100800;V29235","wh":"14000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H59390;V29210"} #end)
+    (#7 expr (0.0 :> float32)
+    #pragma diagram {"xy":"H16190;V32015","wh":"20000;3200"} #end)
+    (#8 expr (1.0 :> float32)
+    #pragma diagram {"xy":"H16190;V26460","wh":"20000;3200"} #end)
+    
+    (#9 wire #8 => #4
+    #pragma diagram {"wp":"#8 h15600 v850 #4"} #end)
+    (#10 wire #1 => #5
+    #pragma diagram {"wp":"#1 h39680 #5"} #end)
+    (#11 wire #6 => #2)
+    (#12 wire #7 => #3
+    #pragma diagram {"wp":"#7 h15600 v-905 #3"} #end)
+}
+
+inline function #pragma doc Converts a Boolean value into a real value. 
+                When the input is true, the output is equal to 1.0, otherwise it is equal to 0.0.  #end BoolToFloat64 (BTR_Input: bool;)
+  returns (BTR_Output: float64;)
+{
+  diagram
+    (#1 expr BTR_Input
+    #pragma diagram {"xy":"H14210;V10980","wh":"14000;3200"} #end)
+    (#2 def BTR_Output
+    #pragma diagram {"xy":"H100800;V29235","wh":"14000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H59390;V29210"} #end)
+    (#7 expr (0.0 :> float64)
+    #pragma diagram {"xy":"H16190;V32015","wh":"20000;3200"} #end)
+    (#8 expr (1.0 :> float64)
+    #pragma diagram {"xy":"H16190;V26460","wh":"20000;3200"} #end)
+    
+    (#9 wire #1 => #5
+    #pragma diagram {"wp":"#1 h39680 #5"} #end)
+    (#10 wire #6 => #2)
+    (#11 wire #7 => #3
+    #pragma diagram {"wp":"#7 h15600 v-905 #3"} #end)
+    (#12 wire #8 => #4
+    #pragma diagram {"wp":"#8 h15600 v850 #4"} #end)
+}
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToInt16 (BTI_Input: bool;)
+  returns (BTI_Output: int16;)
+{
+  diagram
+    (#1 expr BTI_Input
+    #pragma diagram {"xy":"H17660;V15745","wh":"14000;3200"} #end)
+    (#2 def BTI_Output
+    #pragma diagram {"xy":"H103390;V35325","wh":"14000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H59390;V35300"} #end)
+    (#7 expr (1_i16 :> int16)
+    #pragma diagram {"xy":"H18300;V32280","wh":"20000;3200"} #end)
+    (#8 expr (0_i16 :> int16)
+    #pragma diagram {"xy":"H18300;V38100","wh":"20000;3200"} #end)
+    
+    (#9 wire #8 => #3
+    #pragma diagram {"wp":"#8 h14545 v-900 #3"} #end)
+    (#10 wire #6 => #2)
+    (#11 wire #1 => #5
+    #pragma diagram {"wp":"#1 h36230 #5"} #end)
+    (#12 wire #7 => #4
+    #pragma diagram {"wp":"#7 h14545 v1120 #4"} #end)
+}
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToInt32 (BTI_Input: bool;)
+  returns (BTI_Output: int32;)
+{
+  diagram
+    (#1 expr BTI_Input
+    #pragma diagram {"xy":"H17660;V15745","wh":"14000;3200"} #end)
+    (#2 def BTI_Output
+    #pragma diagram {"xy":"H102660;V35325","wh":"14000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H59390;V35300"} #end)
+    (#7 expr (1_i32 :> int32)
+    #pragma diagram {"xy":"H18300;V32280","wh":"20000;3200"} #end)
+    (#8 expr (0_i32 :> int32)
+    #pragma diagram {"xy":"H18300;V38100","wh":"20000;3200"} #end)
+    
+    (#9 wire #6 => #2)
+    (#10 wire #1 => #5
+    #pragma diagram {"wp":"#1 h36230 #5"} #end)
+    (#11 wire #8 => #3
+    #pragma diagram {"wp":"#8 h14545 v-900 #3"} #end)
+    (#12 wire #7 => #4
+    #pragma diagram {"wp":"#7 h14545 v1120 #4"} #end)
+}
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToInt64 (BTI_Input: bool;)
+  returns (BTI_Output: int64;)
+{
+  diagram
+    (#1 expr BTI_Input
+    #pragma diagram {"xy":"H17660;V15745","wh":"14000;3200"} #end)
+    (#2 def BTI_Output
+    #pragma diagram {"xy":"H102660;V35325","wh":"14000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H59390;V35300"} #end)
+    (#7 expr (1_i64 :> int64)
+    #pragma diagram {"xy":"H18300;V32280","wh":"20000;3200"} #end)
+    (#8 expr (0_i64 :> int64)
+    #pragma diagram {"xy":"H18300;V38100","wh":"20000;3200"} #end)
+    
+    (#9 wire #6 => #2)
+    (#10 wire #8 => #3
+    #pragma diagram {"wp":"#8 h14545 v-900 #3"} #end)
+    (#11 wire #1 => #5
+    #pragma diagram {"wp":"#1 h36230 #5"} #end)
+    (#12 wire #7 => #4
+    #pragma diagram {"wp":"#7 h14545 v1120 #4"} #end)
+}
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToInt8 (BTI_Input: bool;)
+  returns (BTI_Output: int8;)
+{
+  diagram
+    (#1 expr BTI_Input
+    #pragma diagram {"xy":"H17660;V15745","wh":"14000;3200"} #end)
+    (#2 def BTI_Output
+    #pragma diagram {"xy":"H102660;V35325","wh":"14000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H59390;V35300"} #end)
+    (#7 expr (1_i8 :> int8)
+    #pragma diagram {"xy":"H19400;V32280","wh":"18000;3200"} #end)
+    (#8 expr (0_i8 :> int8)
+    #pragma diagram {"xy":"H19400;V38100","wh":"18000;3200"} #end)
+    
+    (#9 wire #1 => #5
+    #pragma diagram {"wp":"#1 h36230 #5"} #end)
+    (#10 wire #7 => #4
+    #pragma diagram {"wp":"#7 h14495 v1120 #4"} #end)
+    (#11 wire #6 => #2)
+    (#12 wire #8 => #3
+    #pragma diagram {"wp":"#8 h14495 v-900 #3"} #end)
+}
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToUint16 (BTI_Input: bool;)
+  returns (BTI_Output: uint16;)
+{
+  diagram
+    (#1 expr BTI_Input
+    #pragma diagram {"xy":"H17660;V15745","wh":"14000;3200"} #end)
+    (#2 def BTI_Output
+    #pragma diagram {"xy":"H102660;V35325","wh":"14000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H59390;V35300"} #end)
+    (#7 expr (1_ui16 :> uint16)
+    #pragma diagram {"xy":"H17830;V32220","wh":"22000;3200"} #end)
+    (#8 expr (0_ui16 :> uint16)
+    #pragma diagram {"xy":"H17200;V38100","wh":"22000;3200"} #end)
+    
+    (#9 wire #8 => #3
+    #pragma diagram {"wp":"#8 h14595 v-900 #3"} #end)
+    (#10 wire #7 => #4
+    #pragma diagram {"wp":"#7 h14280 v1180 #4"} #end)
+    (#11 wire #1 => #5
+    #pragma diagram {"wp":"#1 h36230 #5"} #end)
+    (#12 wire #6 => #2)
+}
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToUint32 (BTI_Input: bool;)
+  returns (BTI_Output: uint32;)
+{
+  diagram
+    (#1 expr BTI_Input
+    #pragma diagram {"xy":"H17660;V15745","wh":"14000;3200"} #end)
+    (#2 def BTI_Output
+    #pragma diagram {"xy":"H102660;V35325","wh":"14000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H59390;V35300"} #end)
+    (#7 expr (1_ui32 :> uint32)
+    #pragma diagram {"xy":"H17200;V32280","wh":"22000;3200"} #end)
+    (#8 expr (0_ui32 :> uint32)
+    #pragma diagram {"xy":"H17200;V38100","wh":"22000;3200"} #end)
+    
+    (#9 wire #1 => #5
+    #pragma diagram {"wp":"#1 h36230 #5"} #end)
+    (#10 wire #7 => #4
+    #pragma diagram {"wp":"#7 h14595 v1120 #4"} #end)
+    (#11 wire #6 => #2)
+    (#12 wire #8 => #3
+    #pragma diagram {"wp":"#8 h14595 v-900 #3"} #end)
+}
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToUint64 (BTI_Input: bool;)
+  returns (BTI_Output: uint64;)
+{
+  diagram
+    (#1 expr BTI_Input
+    #pragma diagram {"xy":"H17660;V15745","wh":"14000;3200"} #end)
+    (#2 def BTI_Output
+    #pragma diagram {"xy":"H102660;V35325","wh":"14000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H59390;V35300"} #end)
+    (#7 expr (1_ui64 :> uint64)
+    #pragma diagram {"xy":"H17200;V32280","wh":"22000;3200"} #end)
+    (#8 expr (0_ui64 :> uint64)
+    #pragma diagram {"xy":"H17200;V38100","wh":"22000;3200"} #end)
+    
+    (#9 wire #1 => #5
+    #pragma diagram {"wp":"#1 h36230 #5"} #end)
+    (#10 wire #6 => #2)
+    (#11 wire #8 => #3
+    #pragma diagram {"wp":"#8 h14595 v-900 #3"} #end)
+    (#12 wire #7 => #4
+    #pragma diagram {"wp":"#7 h14595 v1120 #4"} #end)
+}
+
+inline function #pragma doc Converts a Boolean value into an integer value. 
+                When the input is true, the output is equal to 1, otherwise the output is equal to 0. #end BoolToUint8 (BTI_Input: bool;)
+  returns (BTI_Output: uint8;)
+{
+  diagram
+    (#1 expr BTI_Input
+    #pragma diagram {"xy":"H17710;V15855","wh":"14000;3200"} #end)
+    (#2 def BTI_Output
+    #pragma diagram {"xy":"H102660;V35325","wh":"14000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H59390;V35300"} #end)
+    (#7 expr (1_ui8 :> uint8)
+    #pragma diagram {"xy":"H18300;V32280","wh":"20000;3200"} #end)
+    (#8 expr (0_ui8 :> uint8)
+    #pragma diagram {"xy":"H18300;V38100","wh":"20000;3200"} #end)
+    
+    (#9 wire #7 => #4
+    #pragma diagram {"wp":"#7 h14545 v1120 #4"} #end)
+    (#10 wire #1 => #5
+    #pragma diagram {"wp":"#1 h36180 #5"} #end)
+    (#11 wire #8 => #3
+    #pragma diagram {"wp":"#8 h14545 v-900 #3"} #end)
+    (#12 wire #6 => #2)
+}
+
+function #pragma doc Interpret 8 bits (Boolean inputs) as an integer value between 0 and 255. #end ByteToUint8 (b1: bool;
+                                                                                                                b2: bool;
+                                                                                                                b3: bool;
+                                                                                                                b4: bool;
+                                                                                                                b5: bool;
+                                                                                                                b6: bool;
+                                                                                                                b7: bool;
+                                                                                                                b8: bool;)
+  returns (OTI_Output: uint8;)
+{
+  diagram
+    (#4 expr if #3 then #2 else #1
+      where
+        (#3 group)
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H67230;V83210"} #end)
+    (#7 expr #6 + #5
+      where
+        (#6 group)
+        (#5 group)
+    #pragma diagram {"xy":"H127580;V115225"} #end)
+    (#8 expr (16_ui8 :> uint8)
+    #pragma diagram {"xy":"H38390;V79905","wh":"20000;3200"} #end)
+    (#9 expr (0_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V86255","wh":"20000;3200"} #end)
+    (#13 expr if #12 then #11 else #10
+      where
+        (#12 group)
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H67230;V98560"} #end)
+    (#16 expr #15 + #14
+      where
+        (#15 group)
+        (#14 group)
+    #pragma diagram {"xy":"H108530;V116285"} #end)
+    (#17 expr (32_ui8 :> uint8)
+    #pragma diagram {"xy":"H38390;V96045","wh":"20000;3200"} #end)
+    (#18 expr (0_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V101070","wh":"20000;3200"} #end)
+    (#21 expr #20 + #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H146630;V114170"} #end)
+    (#22 expr b5
+    #pragma diagram {"xy":"H15570;V75010"} #end)
+    (#23 expr b6
+    #pragma diagram {"xy":"H15570;V90885"} #end)
+    (#24 expr b7
+    #pragma diagram {"xy":"H15570;V107025"} #end)
+    (#25 expr b8
+    #pragma diagram {"xy":"H15570;V122900"} #end)
+    (#29 expr if #28 then #27 else #26
+      where
+        (#28 group)
+        (#27 group)
+        (#26 group)
+    #pragma diagram {"xy":"H67230;V116280"} #end)
+    (#30 expr (0_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V118800","wh":"20000;3200"} #end)
+    (#31 expr (64_ui8 :> uint8)
+    #pragma diagram {"xy":"H38390;V113505","wh":"20000;3200"} #end)
+    (#34 expr #33 + #32
+      where
+        (#33 group)
+        (#32 group)
+    #pragma diagram {"xy":"H89480;V117345"} #end)
+    (#35 expr (0_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V134675","wh":"20000;3200"} #end)
+    (#36 expr (128_ui8 :> uint8)
+    #pragma diagram {"xy":"H37840;V129380","wh":"22000;3200"} #end)
+    (#40 expr if #39 then #38 else #37
+      where
+        (#39 group)
+        (#38 group)
+        (#37 group)
+    #pragma diagram {"xy":"H67230;V131895"} #end)
+    (#41 expr b1
+    #pragma diagram {"xy":"H15570;V10980"} #end)
+    (#42 expr b2
+    #pragma diagram {"xy":"H15570;V23945"} #end)
+    (#43 expr b3
+    #pragma diagram {"xy":"H15570;V40350"} #end)
+    (#44 expr b4
+    #pragma diagram {"xy":"H15570;V58870"} #end)
+    (#48 expr if #47 then #46 else #45
+      where
+        (#47 group)
+        (#46 group)
+        (#45 group)
+    #pragma diagram {"xy":"H67230;V17595"} #end)
+    (#49 expr (1_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V14815","wh":"20000;3200"} #end)
+    (#50 expr (0_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V20375","wh":"20000;3200"} #end)
+    (#54 expr if #53 then #52 else #51
+      where
+        (#53 group)
+        (#52 group)
+        (#51 group)
+    #pragma diagram {"xy":"H67230;V32150"} #end)
+    (#55 expr (0_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V35190","wh":"20000;3200"} #end)
+    (#56 expr (2_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V29105","wh":"20000;3200"} #end)
+    (#60 expr if #59 then #58 else #57
+      where
+        (#59 group)
+        (#58 group)
+        (#57 group)
+    #pragma diagram {"xy":"H67230;V48550"} #end)
+    (#61 expr (0_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V51595","wh":"20000;3200"} #end)
+    (#62 expr (4_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V45775","wh":"20000;3200"} #end)
+    (#66 expr if #65 then #64 else #63
+      where
+        (#65 group)
+        (#64 group)
+        (#63 group)
+    #pragma diagram {"xy":"H67230;V66540"} #end)
+    (#67 expr (0_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V69320","wh":"20000;3200"} #end)
+    (#68 expr (8_ui8 :> uint8)
+    #pragma diagram {"xy":"H38940;V63765","wh":"20000;3200"} #end)
+    (#71 expr #70 + #69
+      where
+        (#70 group)
+        (#69 group)
+    #pragma diagram {"xy":"H165680;V113110"} #end)
+    (#74 expr #73 + #72
+      where
+        (#73 group)
+        (#72 group)
+    #pragma diagram {"xy":"H184730;V112050"} #end)
+    (#77 expr #76 + #75
+      where
+        (#76 group)
+        (#75 group)
+    #pragma diagram {"xy":"H203710;V110915"} #end)
+    (#78 def OTI_Output
+    #pragma diagram {"xy":"H221070;V110885","wh":"14000;3200"} #end)
+    
+    (#79 wire #67 => #63
+    #pragma diagram {"wp":"#67 h8145 v-880 #63"} #end)
+    (#80 wire #56 => #52
+    #pragma diagram {"wp":"#56 h8145 v1145 #52"} #end)
+    (#81 wire #44 => #65
+    #pragma diagram {"wp":"#44 h49160 #65"} #end)
+    (#82 wire #23 => #12
+    #pragma diagram {"wp":"#23 h49160 #12"} #end)
+    (#83 wire #50 => #45
+    #pragma diagram {"wp":"#50 h8145 v-880 #45"} #end)
+    (#84 wire #42 => #53
+    #pragma diagram {"wp":"#42 h49160 #53"} #end)
+    (#85 wire #55 => #51
+    #pragma diagram {"wp":"#55 h8145 v-1140 #51"} #end)
+    (#86 wire #66 => #20
+    #pragma diagram {"wp":"#66 h66375 v45730 #20"} #end)
+    (#87 wire #17 => #11
+    #pragma diagram {"wp":"#17 h8695 v615 #11"} #end)
+    (#88 wire #68 => #64
+    #pragma diagram {"wp":"#68 h8145 v875 #64"} #end)
+    (#89 wire #18 => #10
+    #pragma diagram {"wp":"#18 h8145 v-610 #10"} #end)
+    (#90 wire #61 => #57
+    #pragma diagram {"wp":"#61 h8145 v-1145 #57"} #end)
+    (#91 wire #35 => #37
+    #pragma diagram {"wp":"#35 h8145 v-880 #37"} #end)
+    (#92 wire #48 => #76
+    #pragma diagram {"wp":"#48 h123490 v91420 #76"} #end)
+    (#93 wire #43 => #59
+    #pragma diagram {"wp":"#43 h49160 #59"} #end)
+    (#94 wire #4 => #6
+    #pragma diagram {"wp":"#4 h47325 v30115 #6"} #end)
+    (#95 wire #34 => #14
+    #pragma diagram {"wp":"#34 h6025 v840 #14"} #end)
+    (#96 wire #40 => #32
+    #pragma diagram {"wp":"#40 h7625 v-12650 #32"} #end)
+    (#97 wire #24 => #28
+    #pragma diagram {"wp":"#24 h49160 #28"} #end)
+    (#98 wire #16 => #5
+    #pragma diagram {"wp":"#16 h6025 v840 #5"} #end)
+    (#99 wire #36 => #38
+    #pragma diagram {"wp":"#36 h8195 v615 #38"} #end)
+    (#100 wire #41 => #47
+    #pragma diagram {"wp":"#41 h49160 #47"} #end)
+    (#101 wire #54 => #73
+    #pragma diagram {"wp":"#54 h104475 v78000 #73"} #end)
+    (#102 wire #9 => #1
+    #pragma diagram {"wp":"#9 h8145 v-1145 #1"} #end)
+    (#103 wire #13 => #15
+    #pragma diagram {"wp":"#13 h28275 v15825 #15"} #end)
+    (#104 wire #62 => #58
+    #pragma diagram {"wp":"#62 h8145 v875 #58"} #end)
+    (#105 wire #60 => #70
+    #pragma diagram {"wp":"#60 h85425 v62660 #70"} #end)
+    (#106 wire #22 => #3
+    #pragma diagram {"wp":"#22 h49160 #3"} #end)
+    (#107 wire #74 => #75
+    #pragma diagram {"wp":"#74 h5990 v765 #75"} #end)
+    (#108 wire #71 => #72
+    #pragma diagram {"wp":"#71 h6025 v840 #72"} #end)
+    (#109 wire #29 => #33
+    #pragma diagram {"wp":"#29 h7625 v-835 #33"} #end)
+    (#110 wire #77 => #78)
+    (#111 wire #7 => #19
+    #pragma diagram {"wp":"#7 h6025 v845 #19"} #end)
+    (#112 wire #30 => #26
+    #pragma diagram {"wp":"#30 h8145 v-620 #26"} #end)
+    (#113 wire #25 => #39
+    #pragma diagram {"wp":"#25 h49160 #39"} #end)
+    (#114 wire #8 => #2
+    #pragma diagram {"wp":"#8 h8420 v1405 #2"} #end)
+    (#115 wire #31 => #27
+    #pragma diagram {"wp":"#31 h8420 v875 #27"} #end)
+    (#116 wire #49 => #46
+    #pragma diagram {"wp":"#49 h8145 v880 #46"} #end)
+    (#117 wire #21 => #69
+    #pragma diagram {"wp":"#21 h6025 v840 #69"} #end)
+}
+
+inline function #pragma doc Outputs true if the input is within the [ A ; B ] range, false otherwise.  #end InRangeInIn (IRII_Input: 'T;
+                                                                                                                         A: 'T;
+                                                                                                                         B: 'T;)
+  returns (IRII_Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#3 expr #2 and #1
+      where
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H99580;V32675"} #end)
+    (#6 expr #5 >= #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H51430;V57910"} #end)
+    (#7 expr IRII_Input
+    #pragma diagram {"xy":"H14730;V32675","wh":"14000;3200"} #end)
+    (#8 def IRII_Output
+    #pragma diagram {"xy":"H130720;V32675","wh":"16000;3200"} #end)
+    (#9 expr A
+    #pragma diagram {"dir":"es","xy":"H36905;V80180","wh":"3200;8000"} #end)
+    (#12 expr #11 >= #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H72610;V12570"} #end)
+    (#13 expr B
+    #pragma diagram {"dir":"es","xy":"H59395;V80180","wh":"3200;8000"} #end)
+    (assume
+           $A1: A <= B;
+    #pragma diagram {"xy":"H0;V0","wh":"22000;3200"} #end)
+    
+    (#14 wire #6 => #1
+    #pragma diagram {"wp":"#6 h23165 v-23335 #1"} #end)
+    (#15 wire #9 => #4
+    #pragma diagram {"wp":"#9 v-17870 #4"} #end)
+    (#16 wire #13 => #11
+    #pragma diagram {"wp":"#13 v-67010 #11"} #end)
+    (#17 wire #7 => #5, #10
+    #pragma diagram {"wp":"#7 h23253[v23335 #5, h7956 v-18205 #10]"} #end)
+    (#18 wire #3 => #8)
+    (#19 wire #12 => #2
+    #pragma diagram {"wp":"#12 h8985 v18205 #2"} #end)
+}
+
+inline function #pragma doc Issues true if the input is within the [ A, B [ range, false otherwise. #end InRangeInOut (IRIO_Input: 'T;
+                                                                                                                       A: 'T;
+                                                                                                                       B: 'T;)
+  returns (IRIO_Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr IRIO_Input
+    #pragma diagram {"xy":"H15510;V23680","wh":"14000;3200"} #end)
+    (#4 expr #3 and #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H96090;V22600"} #end)
+    (#5 expr A
+    #pragma diagram {"dir":"es","xy":"H37964;V64060","wh":"3200;8000"} #end)
+    (#6 expr B
+    #pragma diagram {"dir":"es","xy":"H61509;V63810","wh":"3200;8000"} #end)
+    (#9 expr #8 >= #7
+      where
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H50410;V35560"} #end)
+    (#10 def IRIO_Output
+    #pragma diagram {"xy":"H123840;V22625","wh":"16000;3200"} #end)
+    (#13 expr #12 > #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H74400;V13360"} #end)
+    (assume
+           $A1: A <= B;
+    #pragma diagram {"xy":"H0;V0","wh":"22000;3200"} #end)
+    
+    (#14 wire #6 => #12
+    #pragma diagram {"wp":"#6 v-49850 #12"} #end)
+    (#15 wire #9 => #2
+    #pragma diagram {"wp":"#9 h4250 v-11060 #2"} #end)
+    (#16 wire #1 => #8, #11
+    #pragma diagram {"wp":"#1 h12100[v9980 #8, h17199 v-8420 #11]"} #end)
+    (#17 wire #5 => #7
+    #pragma diagram {"wp":"#5 v-24100 #7"} #end)
+    (#18 wire #4 => #10
+    #pragma diagram {"wp":"#4 h7875 v25 #10"} #end)
+    (#19 wire #13 => #3
+    #pragma diagram {"wp":"#13 h6345 v7340 #3"} #end)
+}
+
+inline function #pragma doc Outputs true if the input is within the ] A, B ] range, false otherwise. #end InRangeOutIn (IROI_Input: 'T;
+                                                                                                                        A: 'T;
+                                                                                                                        B: 'T;)
+  returns (IROI_Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr IROI_Input
+    #pragma diagram {"xy":"H15250;V21565","wh":"14000;3200"} #end)
+    (#2 def IROI_Output
+    #pragma diagram {"xy":"H138390;V23150","wh":"16000;3200"} #end)
+    (#5 expr #4 > #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H49790;V34000"} #end)
+    (#6 expr A
+    #pragma diagram {"dir":"es","xy":"H27645;V62720","wh":"3200;8000"} #end)
+    (#7 expr B
+    #pragma diagram {"dir":"es","xy":"H63894;V62740","wh":"3200;8000"} #end)
+    (#10 expr #9 and #8
+      where
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H103810;V23150"} #end)
+    (#13 expr #12 >= #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H79220;V7275"} #end)
+    (assume
+           $A1: A <= B;
+    #pragma diagram {"xy":"H0;V0","wh":"22000;3200"} #end)
+    
+    (#14 wire #13 => #9
+    #pragma diagram {"wp":"#13 h7795 v13975 #9"} #end)
+    (#15 wire #6 => #3
+    #pragma diagram {"wp":"#6 v-24320 #3"} #end)
+    (#16 wire #1 => #4, #11
+    #pragma diagram {"wp":"#1 h9495[v10535 #4, h20699 v-12390 #11]"} #end)
+    (#17 wire #10 => #2)
+    (#18 wire #5 => #8
+    #pragma diagram {"wp":"#5 h5752 v-8950 #8"} #end)
+    (#19 wire #7 => #12
+    #pragma diagram {"wp":"#7 v-54865 #12"} #end)
+}
+
+inline function #pragma doc Outputs true if the input is within the ] A, B [ range, false otherwise. #end InRangeOutOut (IROO_Input: 'T;
+                                                                                                                         A: 'T;
+                                                                                                                         B: 'T;)
+  returns (IROO_Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr IROO_Input
+    #pragma diagram {"xy":"H17370;V19185","wh":"14000;3200"} #end)
+    (#2 def IROO_Output
+    #pragma diagram {"xy":"H120140;V23680","wh":"16000;3200"} #end)
+    (#3 expr A
+    #pragma diagram {"dir":"es","xy":"H32139;V60900","wh":"3200;8000"} #end)
+    (#4 expr B
+    #pragma diagram {"dir":"es","xy":"H61779;V60880","wh":"3200;8000"} #end)
+    (#7 expr #6 > #5
+      where
+        (#6 group)
+        (#5 group)
+    #pragma diagram {"xy":"H76260;V8890"} #end)
+    (#10 expr #9 and #8
+      where
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H92700;V23680"} #end)
+    (#13 expr #12 > #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H49790;V31885"} #end)
+    (assume
+           $A1: A <= B;
+    #pragma diagram {"xy":"H0;V0","wh":"22000;3200"} #end)
+    
+    (#14 wire #1 => #5, #12
+    #pragma diagram {"wp":"#1 h7684[h36212 v-8395 #5, v10800 #12]"} #end)
+    (#15 wire #4 => #6
+    #pragma diagram {"wp":"#4 v-51390 #6"} #end)
+    (#16 wire #3 => #11
+    #pragma diagram {"wp":"#3 v-24615 #11"} #end)
+    (#17 wire #7 => #9
+    #pragma diagram {"wp":"#7 h3720 v12890 #9"} #end)
+    (#18 wire #13 => #8
+    #pragma diagram {"wp":"#13 h4694 v-6305 #8"} #end)
+    (#19 wire #10 => #2)
+}
+
+inline function #pragma doc Converts an Integer value into a Boolean value. 
+                When the input is 0, the output is equal to false, otherwise the output is equal to true. #end IntToBool (ITB_Input: 'T;)
+  returns (ITB_Output: bool;)
+  where 'T integer
+{
+  diagram
+    (#1 expr ITB_Input
+    #pragma diagram {"xy":"H17120;V16535","wh":"14000;3200"} #end)
+    (#4 expr #3 <> #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H44300;V17860"} #end)
+    (#5 def ITB_Output
+    #pragma diagram {"xy":"H69850;V18125","wh":"14000;3200"} #end)
+    (#6 expr (0 :> 'T)
+    #pragma diagram {"xy":"H20830;V31485","wh":"14000;3200"} #end)
+    
+    (#7 wire #4 => #5
+    #pragma diagram {"wp":"#4 h8275 v265 #5"} #end)
+    (#8 wire #1 => #3
+    #pragma diagram {"wp":"#1 h9090 v-575 #3"} #end)
+    (#9 wire #6 => #2
+    #pragma diagram {"wp":"#6 h7235 v-11725 #2"} #end)
+}
+
+inline function #pragma doc Outputs the maximum of two real or integer values. #end Max (I1: 'T;
+                                                                                         I2: 'T;)
+  returns (Ma_Output: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr I1
+    #pragma diagram {"xy":"H13720;V12040"} #end)
+    (#2 expr I2
+    #pragma diagram {"xy":"H13720;V29765"} #end)
+    (#5 expr #4 >= #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H50920;V13460"} #end)
+    (#9 expr if #8 then #7 else #6
+      where
+        (#8 group)
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H59830;V28440"} #end)
+    (#10 def Ma_Output
+    #pragma diagram {"xy":"H96810;V28445","wh":"14000;3200"} #end)
+    
+    (#11 wire #2 => #3, #6
+    #pragma diagram {"wp":"#2 h9018[v-14405 #3, h22074 v575 #6]"} #end)
+    (#12 wire #9 => #10)
+    (#13 wire #1 => #4, #7
+    #pragma diagram {"wp":"#1 h20055[h7645 v-480 #4, v14500 #7]"} #end)
+    (#14 wire #5 => #8
+    #pragma diagram {"wp":"#5 h5410 #8"} #end)
+}
+
+function #pragma doc Outputs the maximum of three real or integer values.  #end Max3 (I1: 'T;
+                                                                                      I2: 'T;
+                                                                                      I3: 'T;)
+  returns (Ma3_Output: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr I1
+    #pragma diagram {"xy":"H20330;V11775"} #end)
+    (#2 expr I2
+    #pragma diagram {"xy":"H20330;V29500"} #end)
+    (#3 expr I3
+    #pragma diagram {"xy":"H20860;V55430"} #end)
+    (#6 expr #5 >= #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H63350;V12835"} #end)
+    (#9 expr #8 >= #7
+      where
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H63080;V41405"} #end)
+    (#12 expr #11 >= #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H63080;V61780"} #end)
+    (#15 expr #14 and #13
+      where
+        (#14 group)
+        (#13 group)
+    #pragma diagram {"xy":"H88730;V28180"} #end)
+    (#19 expr if #18 then #17 else #16
+      where
+        (#18 group)
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H103750;V36910"} #end)
+    (#23 expr if #22 then #21 else #20
+      where
+        (#22 group)
+        (#21 group)
+        (#20 group)
+    #pragma diagram {"xy":"H75970;V76860"} #end)
+    (#24 def Ma3_Output
+    #pragma diagram {"xy":"H131760;V37175","wh":"14000;3200"} #end)
+    
+    (#25 wire #1 => #8, #17, #5
+    #pragma diagram {"wp":"#1 h5979[h19833[v27730 #8, h4959 v23235 #17], v-840 #5]"} #end)
+    (#26 wire #9 => #13
+    #pragma diagram {"wp":"#9 h3945 v-11325 #13"} #end)
+    (#27 wire #23 => #16
+    #pragma diagram {"wp":"#23 h16770 v-38050 #16"} #end)
+    (#28 wire #3 => #7, #10, #20
+    #pragma diagram {"wp":"#3 h5449[h4959[h19833 v-12125 #7, v8250 #10], v23330 #20]"} #end)
+    (#29 wire #19 => #24
+    #pragma diagram {"wp":"#19 h9505 v265 #24"} #end)
+    (#30 wire #15 => #18
+    #pragma diagram {"wp":"#15 h9520 #18"} #end)
+    (#31 wire #6 => #14
+    #pragma diagram {"wp":"#6 h8500 v13445 #14"} #end)
+    (#32 wire #2 => #4, #11, #21
+    #pragma diagram {"wp":"#2 h5979[v-14765 #4, h9917[h4958 v30380 #11, v45460 #21]]"} #end)
+    (#33 wire #12 => #22
+    #pragma diagram {"wp":"#12 h9390 #22"} #end)
+}
+
+inline function #pragma doc Computes the mean of two real values.  #end Mean (I1: 'T;
+                                                                              I2: 'T;)
+  returns (Me_output: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr (2 :> 'T)
+    #pragma diagram {"xy":"H55280;V30165","wh":"14000;3200"} #end)
+    (#2 expr I1
+    #pragma diagram {"xy":"H18220;V12835"} #end)
+    (#3 expr I2
+    #pragma diagram {"xy":"H18220;V28445"} #end)
+    (#6 expr #5 / #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H73870;V22095"} #end)
+    (#9 expr #8 + #7
+      where
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H41850;V21035"} #end)
+    (#10 def Me_output
+    #pragma diagram {"xy":"H114280;V22095","wh":"14000;3200"} #end)
+    
+    (#11 wire #9 => #5
+    #pragma diagram {"wp":"#9 h12510 v-840 #5"} #end)
+    (#12 wire #3 => #7
+    #pragma diagram {"wp":"#3 h8815 v-5510 #7"} #end)
+    (#13 wire #2 => #8
+    #pragma diagram {"wp":"#2 h8815 v6300 #8"} #end)
+    (#14 wire #1 => #4
+    #pragma diagram {"wp":"#1 h4795 v-6170 #4"} #end)
+    (#15 wire #6 => #10)
+}
+
+inline function #pragma doc Computes the mean of three real values. #end Mean3 (I1: 'T;
+                                                                                I2: 'T;
+                                                                                I3: 'T;)
+  returns (Me3_Output: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr (3 :> 'T)
+    #pragma diagram {"xy":"H58880;V39690","wh":"14000;3200"} #end)
+    (#2 expr I1
+    #pragma diagram {"xy":"H21920;V10185"} #end)
+    (#3 expr I2
+    #pragma diagram {"xy":"H21920;V29235"} #end)
+    (#4 expr I3
+    #pragma diagram {"xy":"H21920;V48550"} #end)
+    (#5 $N1 block ({op_expr%+%op_expr})
+    #pragma diagram {"xy":"H49530;V29210","wh":"12000;7000"} #end)
+    (#8 expr #7 / #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H75760;V30220"} #end)
+    (#9 def Me3_Output
+    #pragma diagram {"xy":"H105040;V30295","wh":"14000;3200"} #end)
+    
+    (#10 wire #8 => #9
+    #pragma diagram {"wp":"#8 h10140 v75 #9"} #end)
+    (#11 wire #1 => #6
+    #pragma diagram {"wp":"#1 h3940 v-7570 #6"} #end)
+    (#12 wire #4 => #5 .(3)
+    #pragma diagram {"wp":"#4 h13708 v-17665 #5"} #end)
+    (#13 wire #5 .(1) => #7
+    #pragma diagram {"wp":"v-890|#5 #7"} #end)
+    (#14 wire #2 => #5 .(1)
+    #pragma diagram {"wp":"#2 h6903 v17367 #5"} #end)
+    (#15 wire #3 => #5 .(2))
+}
+
+inline function #pragma doc Outputs the minimum of two real or integer values.  #end Min (I1: 'T;
+                                                                                          I2: 'T;)
+  returns (Mi_Output: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr I1
+    #pragma diagram {"xy":"H17950;V13625"} #end)
+    (#2 expr I2
+    #pragma diagram {"xy":"H17950;V38495"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H59560;V37170"} #end)
+    (#9 expr #8 <= #7
+      where
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H47210;V14685"} #end)
+    (#10 def Mi_Output
+    #pragma diagram {"xy":"H103430;V37175","wh":"14000;3200"} #end)
+    
+    (#11 wire #6 => #10)
+    (#12 wire #9 => #5
+    #pragma diagram {"wp":"#9 h8850 #5"} #end)
+    (#13 wire #2 => #3, #7
+    #pragma diagram {"wp":"#2 h8268[h19074 v575 #3, v-21910 #7]"} #end)
+    (#14 wire #1 => #4, #8
+    #pragma diagram {"wp":"#1 h17805[v21645 #4, h1955 v-840 #8]"} #end)
+}
+
+function #pragma doc Outputs the minimum of three real or integer values.  #end Min3 (I1: 'T;
+                                                                                      I2: 'T;
+                                                                                      I3: 'T;)
+  returns (Mi3_Output: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#3 expr #2 <= #1
+      where
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H42980;V12835"} #end)
+    (#6 expr #5 <= #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H43240;V38235"} #end)
+    (#9 expr #8 <= #7
+      where
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H43510;V53315"} #end)
+    (#10 expr I1
+    #pragma diagram {"xy":"H13190;V11775"} #end)
+    (#11 expr I2
+    #pragma diagram {"xy":"H13450;V51990"} #end)
+    (#12 expr I3
+    #pragma diagram {"xy":"H13450;V64955"} #end)
+    (#15 expr #14 and #13
+      where
+        (#14 group)
+        (#13 group)
+    #pragma diagram {"xy":"H69420;V24380"} #end)
+    (#19 expr if #18 then #17 else #16
+      where
+        (#18 group)
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H88850;V33780"} #end)
+    (#23 expr if #22 then #21 else #20
+      where
+        (#22 group)
+        (#21 group)
+        (#20 group)
+    #pragma diagram {"xy":"H68030;V63370"} #end)
+    (#24 def Mi3_Output
+    #pragma diagram {"xy":"H120650;V33735","wh":"14000;3200"} #end)
+    
+    (#25 wire #6 => #13
+    #pragma diagram {"wp":"#6 h8590 v-11955 #13"} #end)
+    (#26 wire #9 => #22
+    #pragma diagram {"wp":"#9 h21020 #22"} #end)
+    (#27 wire #19 => #24
+    #pragma diagram {"wp":"#19 h11400 v-45 #24"} #end)
+    (#28 wire #23 => #16
+    #pragma diagram {"wp":"#23 h6910 v-27690 #16"} #end)
+    (#29 wire #10 => #2, #5, #17
+    #pragma diagram {"wp":"#10 h4582[h2166[v-840 #2, h2164 v20105 #17], v24560 #5]"} #end)
+    (#30 wire #12 => #4, #7, #20
+    #pragma diagram {"wp":"#12 h15148[v-24820 #4, h4330[v-9740 #7, h25297 v315 #20]]"} #end)
+    (#31 wire #11 => #1, #8, #21
+    #pragma diagram {"wp":"#11 h10818[v-37255 #1, h2165[v-575 #8, h4329 v9480 #21]]"} #end)
+    (#32 wire #3 => #14
+    #pragma diagram {"wp":"#3 h3630 v9645 #14"} #end)
+    (#33 wire #15 => #18
+    #pragma diagram {"wp":"#15 h13930 #18"} #end)
+}
+
+function Mod (value: 'T;
+              modulus: 'T;)
+  returns (remain: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 def remain
+    #pragma diagram {"xy":"H169980;V25820","wh":"10000;3200"} #end)
+    (#4 expr #3 / #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H70420;V25650"} #end)
+    (#5 expr modulus
+    #pragma diagram {"xy":"H11930;V46780","wh":"12000;3200"} #end)
+    (#9 expr if #8 then #7 else #6
+      where
+        (#8 group)
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H50540;V26800"} #end)
+    (#11 expr (#10 :> 'T)
+      where
+        (#10 group)
+    #pragma diagram {"xy":"H115310;V25740","wh":"12000;7000"} #end)
+    (#14 expr #13 * #12
+      where
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H134220;V27010"} #end)
+    (#17 expr #16 = #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H45950;V38010"} #end)
+    (#18 expr value
+    #pragma diagram {"xy":"H13030;V13970","wh":"10000;3200"} #end)
+    (#21 expr #20 - #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H150940;V25950"} #end)
+    (#22 expr (1 :> 'T)
+    #pragma diagram {"xy":"H26070;V25300","wh":"14000;3200"} #end)
+    (#23 expr (0 :> 'T)
+    #pragma diagram {"xy":"H31160;V39265","wh":"14000;3200"} #end)
+    (#24 $N1 block RoundFloor
+    #pragma diagram {"xy":"H91125;V25825","wh":"20270;11170"} #end)
+    
+    (#25 wire #24 .(RF_Output) => #10
+    #pragma diagram {"wp":"v4500|#24 h4025 v-4585 #10"} #end)
+    (#26 wire #21 => #1
+    #pragma diagram {"wp":"#21 h6020 v-130 #1"} #end)
+    (#27 wire #11 => #13
+    #pragma diagram {"wp":"#11 h5455 v-630 #13"} #end)
+    (#28 wire #4 => #24 .(RF_Input))
+    (#29 wire #17 => #8
+    #pragma diagram {"wp":"#17 h8090 v-16710 h-7000 #8"} #end)
+    (#30 wire #18 => #3, #20
+    #pragma diagram {"wp":"#18 h45420[v9780 #3, h80630 v10080 #20]"} #end)
+    (#31 wire #14 => #19
+    #pragma diagram {"wp":"#14 h4860 v840 #19"} #end)
+    (#32 wire #23 => #15
+    #pragma diagram {"wp":"#23 h3000 v645 #15"} #end)
+    (#33 wire #9 => #2
+    #pragma diagram {"wp":"#9 h7910 v750 #2"} #end)
+    (#34 wire #5 => #6, #12, #16
+    #pragma diagram {"wp":"#5 h4308[v-18080 #6, h1614[h102913 v-17870 #12, v-10670 #16]]"} #end)
+    (#35 wire #22 => #7
+    #pragma diagram {"wp":"#22 h7735 v-400 #7"} #end)
+}
+
+inline function NumericToFloat32 (Input1: 'T;)
+  returns (Output1: float32;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Input1
+    #pragma diagram {"xy":"H26870;V19690","wh":"10000;3200"} #end)
+    (#2 def Output1
+    #pragma diagram {"xy":"H60040;V19690","wh":"12000;3200"} #end)
+    (#4 expr (#3 :> float32)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H39960;V19690","wh":"16000;7000"} #end)
+    
+    (#5 wire #1 => #3
+    #pragma diagram {"wp":"#1 h1590 v-2100 h-90 v2100 #3"} #end)
+    (#6 wire #4 => #2)
+}
+
+inline function NumericToFloat64 (Input1: 'T;)
+  returns (Output1: float64;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Input1
+    #pragma diagram {"xy":"H26870;V19690","wh":"10000;3200"} #end)
+    (#2 def Output1
+    #pragma diagram {"xy":"H60040;V19690","wh":"12000;3200"} #end)
+    (#4 expr (#3 :> float64)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H39960;V19690","wh":"16000;7000"} #end)
+    
+    (#5 wire #1 => #3
+    #pragma diagram {"wp":"#1 h1590 v-2100 h-90 v2100 #3"} #end)
+    (#6 wire #4 => #2)
+}
+
+inline function NumericToInt16 (Input1: 'T;)
+  returns (Output1: int16;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Input1
+    #pragma diagram {"xy":"H26870;V19690","wh":"10000;3200"} #end)
+    (#2 def Output1
+    #pragma diagram {"xy":"H60040;V19690","wh":"12000;3200"} #end)
+    (#4 expr (#3 :> int16)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H41060;V19690","wh":"14000;7000"} #end)
+    
+    (#5 wire #4 => #2)
+    (#6 wire #1 => #3)
+}
+
+inline function NumericToInt32 (Input1: 'T;)
+  returns (Output1: int32;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Input1
+    #pragma diagram {"xy":"H26870;V19690","wh":"10000;3200"} #end)
+    (#2 def Output1
+    #pragma diagram {"xy":"H60040;V19690","wh":"12000;3200"} #end)
+    (#4 expr (#3 :> int32)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H41060;V19690","wh":"14000;7000"} #end)
+    
+    (#5 wire #4 => #2)
+    (#6 wire #1 => #3)
+}
+
+inline function NumericToInt64 (Input1: 'T;)
+  returns (Output1: int64;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Input1
+    #pragma diagram {"xy":"H26870;V19690","wh":"10000;3200"} #end)
+    (#2 def Output1
+    #pragma diagram {"xy":"H60040;V19690","wh":"12000;3200"} #end)
+    (#4 expr (#3 :> int64)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H41060;V19690","wh":"14000;7000"} #end)
+    
+    (#5 wire #4 => #2)
+    (#6 wire #1 => #3)
+}
+
+inline function NumericToInt8 (Input1: 'T;)
+  returns (Output1: int8;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Input1
+    #pragma diagram {"xy":"H26870;V19690","wh":"10000;3200"} #end)
+    (#2 def Output1
+    #pragma diagram {"xy":"H60040;V19690","wh":"12000;3200"} #end)
+    (#4 expr (#3 :> int8)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H41610;V19690","wh":"14000;7000"} #end)
+    
+    (#5 wire #4 => #2)
+    (#6 wire #1 => #3)
+}
+
+inline function NumericToUint16 (Input1: 'T;)
+  returns (Output1: uint16;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Input1
+    #pragma diagram {"xy":"H26870;V19690","wh":"10000;3200"} #end)
+    (#2 def Output1
+    #pragma diagram {"xy":"H60040;V19690","wh":"12000;3200"} #end)
+    (#4 expr (#3 :> uint16)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H40510;V19690","wh":"16000;7000"} #end)
+    
+    (#5 wire #1 => #3)
+    (#6 wire #4 => #2)
+}
+
+inline function NumericToUint32 (Input1: 'T;)
+  returns (Output1: uint32;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Input1
+    #pragma diagram {"xy":"H26870;V19690","wh":"10000;3200"} #end)
+    (#2 def Output1
+    #pragma diagram {"xy":"H60040;V19690","wh":"12000;3200"} #end)
+    (#4 expr (#3 :> uint32)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H40510;V19690","wh":"16000;7000"} #end)
+    
+    (#5 wire #1 => #3)
+    (#6 wire #4 => #2)
+}
+
+inline function NumericToUint64 (Input1: 'T;)
+  returns (Output1: uint64;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Input1
+    #pragma diagram {"xy":"H26870;V19690","wh":"10000;3200"} #end)
+    (#2 def Output1
+    #pragma diagram {"xy":"H60040;V19690","wh":"12000;3200"} #end)
+    (#4 expr (#3 :> uint64)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H41350;V19690","wh":"16000;7000"} #end)
+    
+    (#5 wire #1 => #3)
+    (#6 wire #4 => #2)
+}
+
+inline function NumericToUint8 (Input1: 'T;)
+  returns (Output1: uint8;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Input1
+    #pragma diagram {"xy":"H26870;V19690","wh":"10000;3200"} #end)
+    (#2 def Output1
+    #pragma diagram {"xy":"H60040;V19690","wh":"12000;3200"} #end)
+    (#4 expr (#3 :> uint8)
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H41060;V19690","wh":"14000;7000"} #end)
+    
+    (#5 wire #4 => #2)
+    (#6 wire #1 => #3)
+}
+
+inline function #pragma doc Perform evaluation of polynomial coefficients on input values. #end Polynomial <<N>> (X: 'T;
+                                                                                                                  C: 'T^N;)
+  returns (Y: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 $N1 block (fold PolynomialStep) <<N>>
+    #pragma diagram {"xy":"H102980;V26040","wh":"46940;35720"} #end)
+    (#2 expr (0 :> 'T)
+    #pragma diagram {"xy":"H22470;V17035","wh":"14000;3200"} #end)
+    (#3 expr X
+    #pragma diagram {"xy":"H25310;V25795"} #end)
+    (#5 expr #4 ^ (N)
+      where
+        (#4 group)
+    #pragma diagram {"xy":"H57550;V25935","wh":"10000;7000"} #end)
+    (#6 expr C
+    #pragma diagram {"xy":"H25320;V34905"} #end)
+    (#7 def Y
+    #pragma diagram {"xy":"H148990;V25790"} #end)
+    
+    (#8 wire #6 => #1 .(3))
+    (#9 wire #5 => #1 .(2))
+    (#10 wire #3 => #4
+    #pragma diagram {"wp":"#3 h13200 v140 #4"} #end)
+    (#11 wire #2 => #1 .(1))
+    (#12 wire #1 .(1) => #7
+    #pragma diagram {"wp":"v-2250|#1 #7"} #end)
+}
+
+inline function PolynomialStep (Acc: 'T;
+                                X: 'T;
+                                C: 'T;)
+  returns (Y: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Acc
+    #pragma diagram {"xy":"H7910;V7015"} #end)
+    (#2 expr X
+    #pragma diagram {"xy":"H7910;V16275"} #end)
+    (#3 expr C
+    #pragma diagram {"xy":"H7910;V25535"} #end)
+    (#4 def Y
+    #pragma diagram {"xy":"H88930;V9655"} #end)
+    (#7 expr #6 * #5
+      where
+        (#6 group)
+        (#5 group)
+    #pragma diagram {"xy":"H34900;V8335"} #end)
+    (#10 expr #9 + #8
+      where
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H61880;V9660"} #end)
+    
+    (#11 wire #2 => #5
+    #pragma diagram {"wp":"#2 h10495 v-6040 #5"} #end)
+    (#12 wire #7 => #9
+    #pragma diagram {"wp":"#7 h9990 v-575 #9"} #end)
+    (#13 wire #1 => #6
+    #pragma diagram {"wp":"#1 h10495 v-580 #6"} #end)
+    (#14 wire #3 => #8
+    #pragma diagram {"wp":"#3 h37980 v-13975 #8"} #end)
+    (#15 wire #10 => #4)
+}
+
+inline function #pragma doc Converts a Real value into a Boolean value. 
+                When the input is 0.0, the output is equal to false, otherwise the output is equal to true. #end RealToBool (RTB_Input: 'T;)
+  returns (RTB_Output: bool;)
+  where 'T float
+{
+  diagram
+    (#1 def RTB_Output
+    #pragma diagram {"xy":"H71700;V23415","wh":"14000;3200"} #end)
+    (#2 expr (0.0 :> 'T)
+    #pragma diagram {"xy":"H24490;V29105","wh":"16000;3200"} #end)
+    (#3 expr RTB_Input
+    #pragma diagram {"xy":"H19760;V18915","wh":"14000;3200"} #end)
+    (#6 expr #5 <> #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H49060;V23415"} #end)
+    
+    (#7 wire #2 => #4
+    #pragma diagram {"wp":"#2 h7285 v-3790 #4"} #end)
+    (#8 wire #3 => #5
+    #pragma diagram {"wp":"#3 h6365 v2600 #5"} #end)
+    (#9 wire #6 => #1)
+}
+
+function #pragma doc R_Output = x when R_Input [x-0.5, x+0.5[  #end Round (R_Input: 'T;)
+  returns (R_Output: int32;)
+  where 'T float
+{
+  diagram
+    (#2 expr (#1 :> 'T)
+      where
+        (#1 group)
+    #pragma diagram {"xy":"H39980;V56755","wh":"12000;7000"} #end)
+    (#5 expr #4 >= #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H104890;V47495"} #end)
+    (#9 expr if #8 then #7 else #6
+      where
+        (#8 group)
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H113540;V62045"} #end)
+    (#12 expr #11 + #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H94510;V58075"} #end)
+    (#13 expr (1.0 :> 'T)
+    #pragma diagram {"xy":"H73710;V59265","wh":"16000;3200"} #end)
+    (#15 expr (#14 :> int32)
+      where
+        (#14 group)
+    #pragma diagram {"xy":"H169570;V43260","wh":"14000;7000"} #end)
+    (#16 def R_Output
+    #pragma diagram {"xy":"H200290;V43150","wh":"12000;3200"} #end)
+    (#17 expr R_Input
+    #pragma diagram {"xy":"H11600;V45115","wh":"12000;3200"} #end)
+    (#19 expr (#18 :> int32)
+      where
+        (#18 group)
+    #pragma diagram {"xy":"H25370;V56755","wh":"14000;7000"} #end)
+    (#22 expr #21 - #20
+      where
+        (#21 group)
+        (#20 group)
+    #pragma diagram {"xy":"H58520;V46170"} #end)
+    (#25 expr #24 <= #23
+      where
+        (#24 group)
+        (#23 group)
+    #pragma diagram {"xy":"H105680;V19710"} #end)
+    (#26 expr (0.5 :> 'T)
+    #pragma diagram {"xy":"H84290;V48420","wh":"16000;3200"} #end)
+    (#30 expr if #29 then #28 else #27
+      where
+        (#29 group)
+        (#28 group)
+        (#27 group)
+    #pragma diagram {"xy":"H113540;V35320"} #end)
+    (#31 expr (-0.5 :> 'T)
+    #pragma diagram {"xy":"H84530;V20905","wh":"16000;3200"} #end)
+    (#32 expr (1.0 :> 'T)
+    #pragma diagram {"xy":"H76090;V30955","wh":"16000;3200"} #end)
+    (#35 expr #34 - #33
+      where
+        (#34 group)
+        (#33 group)
+    #pragma diagram {"xy":"H94510;V29765"} #end)
+    (#39 expr if #38 then #37 else #36
+      where
+        (#38 group)
+        (#37 group)
+        (#36 group)
+    #pragma diagram {"xy":"H153220;V43260"} #end)
+    (#40 expr (0.0 :> 'T)
+    #pragma diagram {"xy":"H113660;V8995","wh":"16000;3200"} #end)
+    (#43 expr #42 < #41
+      where
+        (#42 group)
+        (#41 group)
+    #pragma diagram {"xy":"H134990;V7805"} #end)
+    
+    (#44 wire #5 => #8
+    #pragma diagram {"wp":"#5 h5150 #8"} #end)
+    (#45 wire #35 => #28
+    #pragma diagram {"wp":"#35 h6015 v3655 #28"} #end)
+    (#46 wire #39 => #14)
+    (#47 wire #40 => #41
+    #pragma diagram {"wp":"#40 h5665 v710 #41"} #end)
+    (#48 wire #2 => #6, #11, #20, #34, #27
+    #pragma diagram {"wp":"#2 h5040[h1000[h1000[h5276[h5276 v7190 #6, v-580 #11], v-8685 #20], v-19535 #27], v-28890 #34]"} #end)
+    (#49 wire #15 => #16
+    #pragma diagram {"wp":"#15 h10360 v-110 #16"} #end)
+    (#50 wire #22 => #4, #24, #42
+    #pragma diagram {"wp":"#22 h4070[h1000[h5467 v-575 #4, v-28360 #24], v-40265 #42]"} #end)
+    (#51 wire #30 => #37
+    #pragma diagram {"wp":"#30 h16340 v6040 #37"} #end)
+    (#52 wire #26 => #3
+    #pragma diagram {"wp":"#26 h5300 v975 #3"} #end)
+    (#53 wire #13 => #10
+    #pragma diagram {"wp":"#13 h5400 v710 #10"} #end)
+    (#54 wire #19 => #1)
+    (#55 wire #31 => #23
+    #pragma diagram {"wp":"#31 h5575 v705 #23"} #end)
+    (#56 wire #32 => #33
+    #pragma diagram {"wp":"#32 h4210 v710 #33"} #end)
+    (#57 wire #17 => #18, #21
+    #pragma diagram {"wp":"#17 h2270[v11640 #18, h30150 v-845 #21]"} #end)
+    (#58 wire #25 => #29
+    #pragma diagram {"wp":"#25 h4360 #29"} #end)
+    (#59 wire #43 => #38
+    #pragma diagram {"wp":"#43 h14730 #38"} #end)
+    (#60 wire #12 => #7
+    #pragma diagram {"wp":"#12 h6015 v2070 #7"} #end)
+    (#61 wire #9 => #36
+    #pragma diagram {"wp":"#9 h16340 v-16885 #36"} #end)
+}
+
+function #pragma doc RC_Output = x when R_Input ]x-1, x] #end RoundCeil (RC_Input: 'T;)
+  returns (RC_Output: int32;)
+  where 'T float
+{
+  diagram
+    (#1 expr RC_Input
+    #pragma diagram {"xy":"H15560;V10715","wh":"12000;3200"} #end)
+    (#4 expr #3 <= #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H96890;V11680"} #end)
+    (#5 expr (0.0 :> 'T)
+    #pragma diagram {"xy":"H75820;V12965","wh":"16000;3200"} #end)
+    (#9 expr if #8 then #7 else #6
+      where
+        (#8 group)
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H106130;V31350"} #end)
+    (#11 expr (#10 :> int32)
+      where
+        (#10 group)
+    #pragma diagram {"xy":"H45480;V29765","wh":"14000;7000"} #end)
+    (#13 expr (#12 :> 'T)
+      where
+        (#12 group)
+    #pragma diagram {"xy":"H63450;V37340","wh":"12000;7000"} #end)
+    (#17 expr if #16 then #15 else #14
+      where
+        (#16 group)
+        (#15 group)
+        (#14 group)
+    #pragma diagram {"xy":"H86310;V53340"} #end)
+    (#20 expr #19 + #18
+      where
+        (#19 group)
+        (#18 group)
+    #pragma diagram {"xy":"H48470;V57285"} #end)
+    (#22 expr (#21 :> int32)
+      where
+        (#21 group)
+    #pragma diagram {"xy":"H59500;V57285","wh":"14000;7000"} #end)
+    (#23 expr (1.0 :> 'T)
+    #pragma diagram {"xy":"H21050;V58210","wh":"16000;3200"} #end)
+    (#24 def RC_Output
+    #pragma diagram {"xy":"H133330;V31090","wh":"14000;3200"} #end)
+    (#27 expr #26 = #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H80480;V44585"} #end)
+    
+    (#28 wire #5 => #2
+    #pragma diagram {"wp":"#5 h5535 v615 #2"} #end)
+    (#29 wire #17 => #6
+    #pragma diagram {"wp":"#17 h6410 v-20090 #6"} #end)
+    (#30 wire #22 => #14
+    #pragma diagram {"wp":"#22 h11395 v-2045 #14"} #end)
+    (#31 wire #4 => #8
+    #pragma diagram {"wp":"#4 h5740 #8"} #end)
+    (#32 wire #13 => #26
+    #pragma diagram {"wp":"#13 h4530 v5345 #26"} #end)
+    (#33 wire #20 => #21
+    #pragma diagram {"wp":"#20 h3250 v-4000 h-4720 v4000 #21"} #end)
+    (#34 wire #1 => #3, #10, #19, #25
+    #pragma diagram {"wp":"#1 h5653[h4307[h4307[h26323 v-935 #3, v19050 #10], v35770 #25], v44670 #19]"} #end)
+    (#35 wire #11 => #7, #12, #15
+    #pragma diagram {"wp":"#11 h3985[h18515[h17100 v-315 #7, v21675 #15], v7575 #12]"} #end)
+    (#36 wire #23 => #18
+    #pragma diagram {"wp":"#23 h8710 v975 #18"} #end)
+    (#37 wire #27 => #16
+    #pragma diagram {"wp":"#27 h2330 #16"} #end)
+    (#38 wire #9 => #24
+    #pragma diagram {"wp":"#9 h9100 v-260 #24"} #end)
+}
+
+function #pragma doc RF_Output = x when R_Input [x, x+1[ . #end RoundFloor (RF_Input: 'T;)
+  returns (RF_Output: int32;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr RF_Input
+    #pragma diagram {"xy":"H15300;V10185","wh":"12000;3200"} #end)
+    (#2 def RF_Output
+    #pragma diagram {"xy":"H141530;V24740","wh":"14000;3200"} #end)
+    (#5 expr #4 >= #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H108320;V11170"} #end)
+    (#6 expr (0 :> 'T)
+    #pragma diagram {"xy":"H87770;V12435","wh":"14000;3200"} #end)
+    (#10 expr if #9 then #8 else #7
+      where
+        (#9 group)
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H116980;V25000"} #end)
+    (#13 expr #12 - #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H39690;V48770"} #end)
+    (#14 expr (1 :> 'T)
+    #pragma diagram {"xy":"H17920;V49740","wh":"14000;3200"} #end)
+    (#16 expr (#15 :> int32)
+      where
+        (#15 group)
+    #pragma diagram {"xy":"H49970;V48815","wh":"14000;7000"} #end)
+    (#18 expr (#17 :> int32)
+      where
+        (#17 group)
+    #pragma diagram {"xy":"H44950;V23415","wh":"14000;7000"} #end)
+    (#22 expr if #21 then #20 else #19
+      where
+        (#21 group)
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H101550;V47240"} #end)
+    (#24 expr (#23 :> 'T)
+      where
+        (#23 group)
+    #pragma diagram {"xy":"H70940;V30560","wh":"12000;7000"} #end)
+    (#27 expr #26 = #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H89470;V36070"} #end)
+    
+    (#28 wire #6 => #3
+    #pragma diagram {"wp":"#6 h5775 v635 #3"} #end)
+    (#29 wire #16 => #19
+    #pragma diagram {"wp":"#16 h31275 v325 #19"} #end)
+    (#30 wire #10 => #2
+    #pragma diagram {"wp":"#10 h7775 v-260 #2"} #end)
+    (#31 wire #14 => #11
+    #pragma diagram {"wp":"#14 h6385 v930 #11"} #end)
+    (#32 wire #27 => #21
+    #pragma diagram {"wp":"#27 h8580 #21"} #end)
+    (#33 wire #1 => #4, #12, #17, #25
+    #pragma diagram {"wp":"#1 h6630[h6260[h2173[h44492 v-915 #4, v13230 #17], v27785 #25], v36685 #12]"} #end)
+    (#34 wire #5 => #9
+    #pragma diagram {"wp":"#5 h5160 #9"} #end)
+    (#35 wire #22 => #7
+    #pragma diagram {"wp":"#22 h4215 v-20340 #7"} #end)
+    (#36 wire #13 => #15
+    #pragma diagram {"wp":"#13 h3250 v-3978 h-5470 v4023 #15"} #end)
+    (#37 wire #18 => #8, #20, #23
+    #pragma diagram {"wp":"#18 h9512[h1986[h43702 v-315 #8, v7145 #23], v21925 #20]"} #end)
+    (#38 wire #24 => #26
+    #pragma diagram {"wp":"#24 h5265 v3610 #26"} #end)
+}
+
+function #pragma doc Returns 1.0 if input is greater than 0.0,
+          -1.0 if input is less than 0.0
+         and 0.0 if input is equal to 0.0 #end Sign (S_Input: 'T;)
+  returns (S_Ouput: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr S_Input
+    #pragma diagram {"xy":"H13460;V36380","wh":"12000;3200"} #end)
+    (#4 expr #3 > #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H55610;V9130"} #end)
+    (#7 expr #6 = #5
+      where
+        (#6 group)
+        (#5 group)
+    #pragma diagram {"xy":"H55350;V35320"} #end)
+    (#8 def S_Ouput
+    #pragma diagram {"xy":"H134080;V47495","wh":"12000;3200"} #end)
+    (#12 expr if #11 then #10 else #9
+      where
+        (#11 group)
+        (#10 group)
+        (#9 group)
+    #pragma diagram {"xy":"H100530;V47500"} #end)
+    (#16 expr if #15 then #14 else #13
+      where
+        (#15 group)
+        (#14 group)
+        (#13 group)
+    #pragma diagram {"xy":"H69880;V50140"} #end)
+    (#17 expr (0 :> 'T)
+    #pragma diagram {"xy":"H31150;V21695","wh":"14000;3200"} #end)
+    (#18 expr (1 :> 'T)
+    #pragma diagram {"xy":"H79570;V42865","wh":"14000;3200"} #end)
+    (#19 expr -(1 :> 'T)
+    #pragma diagram {"xy":"H43540;V52385","wh":"16000;3200"} #end)
+    (#20 expr (0 :> 'T)
+    #pragma diagram {"xy":"H44640;V47625","wh":"14000;3200"} #end)
+    
+    (#21 wire #1 => #3, #5
+    #pragma diagram {"wp":"#1 h4345[v-29150 #3, h19140 v840 #5]"} #end)
+    (#22 wire #4 => #11
+    #pragma diagram {"wp":"#4 h41420 #11"} #end)
+    (#23 wire #20 => #14
+    #pragma diagram {"wp":"#20 h8120 v615 #14"} #end)
+    (#24 wire #7 => #15
+    #pragma diagram {"wp":"#7 h11030 #15"} #end)
+    (#25 wire #12 => #8)
+    (#26 wire #17 => #2, #6
+    #pragma diagram {"wp":"#17 h5615[h4230 v-10665 #2, v11725 #6]"} #end)
+    (#27 wire #18 => #10
+    #pragma diagram {"wp":"#18 h5980 v2735 #10"} #end)
+    (#28 wire #16 => #9
+    #pragma diagram {"wp":"#16 h17670 v-740 #9"} #end)
+    (#29 wire #19 => #13
+    #pragma diagram {"wp":"#19 h8220 v-345 #13"} #end)
+}

@@ -1,0 +1,8 @@
+{
+  "JobsOrder": [],
+  "ModulesOrder": [
+    "assets\\lut.swan",
+    "assets\\lut.swani",
+    "assets\\pwlinear.swan"
+  ]
+}

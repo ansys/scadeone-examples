@@ -1,0 +1,68 @@
+-- version swan: 2025.2 graph: 2.1
+use FlightControl;
+
+use DemoPFD;
+
+node FlightcontrolSystem (MCP_Speed: float32;
+                          MCP_Altitude: float32;
+                          MCP_AutoPilot: bool;
+                          MCP_UnlockRoll: bool;
+                          Altitude: float32;
+                          Speed: float32;)
+  returns (SDY_Baro_Scale: float32;
+           JV_Alti_Alarm: bool;
+           JV_Speed_Alarm: bool;)
+{
+  diagram
+    (#1 expr MCP_UnlockRoll
+    #pragma diagram {"xy":"H18830;V127660","wh":"18000;3200"} #end)
+    (#2 $N1 block FlightControl::FCU
+    #pragma diagram {"xy":"H57280;V88105","wh":"31120;111290"} #end)
+    (#3 expr MCP_Speed
+    #pragma diagram {"xy":"H20830;V95915","wh":"14000;3200"} #end)
+    (#4 expr MCP_Altitude
+    #pragma diagram {"xy":"H19830;V80035","wh":"16000;3200"} #end)
+    (#5 expr MCP_AutoPilot
+    #pragma diagram {"xy":"H18830;V111785","wh":"18000;3200"} #end)
+    (#10 def SDY_Baro_Scale
+    #pragma diagram {"xy":"H108225;V110200","wh":"18000;3200"} #end)
+    (#11 def JV_Alti_Alarm
+    #pragma diagram {"xy":"H108225;V132425","wh":"18000;3200"} #end)
+    (#12 def JV_Speed_Alarm
+    #pragma diagram {"xy":"H108225;V121315","wh":"18000;3200"} #end)
+    (#0 expr Altitude
+    #pragma diagram {"xy":"H21830;V48285","wh":"12000;3200"} #end)
+    (#13 expr Speed
+    #pragma diagram {"xy":"H22830;V60825","wh":"10000;3200"} #end)
+    (#20 block DemoPFD::DemoPFD
+    #pragma diagram {"xy":"H145725;V63300","wh":"20000;14000"} #end)
+    (#14 def _
+    #pragma diagram {"xy":"H103225;V39600"} #end)
+    (#15 def _
+    #pragma diagram {"xy":"H103225;V47111"} #end)
+    
+    (#22 wire #1 => #2 .(MCP_UnlockRoll))
+    (#27 wire #2 .(SDY_Baro_Scale) => #10
+    #pragma diagram {"wp":"v22095|#2 #10"} #end)
+    (#28 wire #5 => #2 .(AutoPilot))
+    (#30 wire #3 => #2 .(MCPspeed))
+    (#31 wire #4 => #2 .(MCPaltitude))
+    (#32 wire #2 .(JV_Alti_Alarm) => #11
+    #pragma diagram {"wp":"v44320|#2 #11"} #end)
+    (#40 wire #2 .(JV_Speed_Alarm) => #12
+    #pragma diagram {"wp":"v33210|#2 #12"} #end)
+    (#6 wire #2 .(SDY_Roll_Angle) => #20 .(PN_ROLL_ANGLE)
+    #pragma diagram {"wp":"v-20305|#2 #20"} #end)
+    (#16 wire #2 .(elevatorCmd) => #15
+    #pragma diagram {"wp":"v-40994|#2 #15"} #end)
+    (#7 wire #2 .(SDY_Airspeed) => #20 .(PN_AIRSPEED)
+    #pragma diagram {"wp":"v-23305|#2 #20"} #end)
+    (#8 wire #2 .(SDY_Alti) => #20 .(PN_ALTI)
+    #pragma diagram {"wp":"v-26305|#2 #20"} #end)
+    (#17 wire #13 => #2 .(speed))
+    (#9 wire #2 .(SDY_Pitch_Angle) => #20 .(PN_PITCH_ANGLE)
+    #pragma diagram {"wp":"v-29305|#2 #20"} #end)
+    (#18 wire #0 => #2 .(altitude))
+    (#19 wire #2 .(throttleCmd) => #14
+    #pragma diagram {"wp":"v-48505|#2 #14"} #end)
+}

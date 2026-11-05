@@ -1,0 +1,57 @@
+-- version swan: 2025.2 graph: 2.1 swant: 1.1
+use FlightControl;
+
+use DemoPFD as ScadeDisplay;
+
+use libPlane as Plane;
+
+use ControlPanel as RapidProto;
+
+_harness World
+{
+  diagram
+    (#0 block FlightControl::FCU
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-50713;V6886","wh":"44000;51713"} #end)
+    (#1 block ScadeDisplay::DemoPFD
+    #pragma diagram {"xy":"H38912;V47817","wh":"35200;37388"} #end)
+    (#2 block Plane::PlaneModel
+    #pragma diagram {"xy":"H37837;V704","wh":"37350;35388"} #end)
+    (#3 block RapidProto::ControlPanel
+    #pragma diagram {"xy":"H-103338;V11276","wh":"31250;31388"} #end)
+    (#4 expr #5 pre #6
+      where
+        (#5 group)
+        (#6 group)
+    #pragma diagram {"dir":"se","xy":"H-91238;V-26806"} #end)
+    (#14 expr (0.0_f32, 0.0_f32, 0.0_f32, 0.0_f32, false, false)
+    #pragma diagram {"dir":"se","xy":"H-135170;V47817","wh":"14000;11657"} #end)
+    (#15 expr #16 pre #17
+      where
+        (#16 group)
+        (#17 group)
+    #pragma diagram {"xy":"H-166835;V-13862"} #end)
+    (#9 expr (0.0_f32, 0.0_f32)
+    #pragma diagram {"dir":"se","xy":"H-113160;V-24906","wh":"20000;3200"} #end)
+    
+    (#7 wire #0 .(throttleCmd, elevatorCmd) => #2
+    #pragma diagram {"wp":"v-20271|#0 #2"} #end)
+    (#8 wire #0 .(SDY_Pitch_Angle, SDY_Roll_Angle, SDY_Alti, SDY_Airspeed) => #1
+    #pragma diagram {"wp":"v24047|#0 #1"} #end)
+    (#10 wire #3 => #0 .(MCPspeed, 
+MCPaltitude, 
+AutoPilot, 
+MCP_UnlockRoll)
+    #pragma diagram {"wp":"v0|#3 #0"} #end)
+    (#18 wire #14 => #16
+    #pragma diagram {"wp":"#14 h3500 v-55207 h-49665 v-8372 #16"} #end)
+    (#11 wire #4 => #0 .(speed, altitude)
+    #pragma diagram {"wp":"#4 h7762 v15112 #0"} #end)
+    (#12 wire #9 => #5)
+    (#19 wire #0 .(SDY_Pitch_Angle, SDY_Roll_Angle, SDY_Alti, SDY_Airspeed, JV_Alti_Alarm, JV_Speed_Alarm) => #17
+    #pragma diagram {"wp":"v-15062|#0 h2000 v62821 h-148122 v-66607 #17"} #end)
+    (#13 wire #2 .(speed, alt) => #6
+    #pragma diagram {"wp":"v0|#2 h2000 v-32010 h-157750 v2600 #6"} #end)
+    (#20 wire #15 => #3 .(PITCH, ROLL, ALTITUDE, AIRSPEED, JV_Alti_Alarm, JV_Speed_Alarm)
+    #pragma diagram {"wp":"#15 h40070 v25138 #3"} #end)
+}

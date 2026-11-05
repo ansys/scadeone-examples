@@ -1,0 +1,174 @@
+-- version swan: 2025.2 graph: 2.1
+node #pragma doc Discrete filter expressed as a Z-transform function:
+       Num / (Den[0] + Den[1]*z^-1)
+     Optimization of FilterND when numerator order is 0 and denominator order is 1
+     At first tick, Out = (Num*InX)/Den[0] #end Filter01 (In: 'T;
+                                                          Num: 'T;
+                                                          Den: 'T^2;)
+  returns (Out: 'T;)
+  where 'T numeric;
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function:
+       Num / (1 + Den*z^-1)
+     Optimization of FilterND when numerator order is 0 and denominator order is 1
+     At first tick, Out = Num*InX #end Filter01Norm (In: 'T;
+                                                     Num: 'T;
+                                                     Den: 'T;)
+  returns (Out: 'T;)
+  where 'T numeric;
+
+node #pragma doc Discrete filter expressed as a Z-transform function: 
+       Num / (Den[0] + Den[1]*z^-1  + Den[2]*z^-2)
+     Optimization of FilterND when numerator order is 0 and denominator order is 2
+     At first tick, Out = (Num*InX)/Den[0] #end Filter02 (In: 'T;
+                                                          Num: 'T;
+                                                          Den: 'T^3;)
+  returns (Out: 'T;)
+  where 'T float;
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function: 
+       Num / (1 + Den[0]*z^-1 + Den[1]*z^-2)
+     Optimization of FilterND when numerator order is 0 and denominator order is 2
+     At first tick, Out = Num*InX #end Filter02Norm (In: 'T;
+                                                     Num: 'T;
+                                                     Den: 'T^2;)
+  returns (Out: 'T;)
+  where 'T numeric;
+
+node #pragma doc Discrete filter expressed as a Z-transform function: 
+       Num / (Den[0] + Den[1]*z^-1  + ... + Den[Ds - 1]*z^-(Ds - 1))
+       where Ds is the denominator's array size (Ds > 2)
+     Optimization of FilterND when numerator order is 0 and denominator order is Ds - 1
+     At first tick, Out = (Num*InX)/Den[0] #end Filter0D <<Ds>> (In: 'T;
+                                                                 Num: 'T;
+                                                                 Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float;
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function: 
+       Num / (1 + Den[0]*z^-1  + ... + Den[Ds - 1]*z^-(Ds-2))
+       where Ds is the denominator's array size  (Ds > 2)
+     Optimization of FilterND when numerator order is 0 and denominator order is Ds
+     At first tick, Out = Num*InX #end Filter0DNorm <<Ds>> (In: 'T;
+                                                            Num: 'T;
+                                                            Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float;
+
+node #pragma doc Discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1) / (Den[0] + Den[1]*z^-1)
+     Optimization of FilterND when numerator order is 1 and denominator order is 1
+     At first tick, Out = (Num*InX)/Den[0] #end Filter11 (In: 'T;
+                                                          Num: 'T^2;
+                                                          Den: 'T^2;)
+  returns (Out: 'T;)
+  where 'T numeric;
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function:
+     (Num[0] + Num[1]*z^-1) / ( 1 + Den*z^-1)
+     Optimization of FilterND when numerator order is 1 and denominator order is 1
+     At first tick, Out = Num*InX #end Filter11Norm (In: 'T;
+                                                     Num: 'T^2;
+                                                     Den: 'T;)
+  returns (Out: 'T;)
+  where 'T numeric;
+
+node #pragma doc Discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1) / (Den[0] + Den[1]*z^-1  + Den[2]*z^-2)
+     Optimization of FilterND when numerator order is 1 and denominator order is 2
+     At first tick, Out = (Num*InX)/Den[0] #end Filter12 (In: 'T;
+                                                          Num: 'T^2;
+                                                          Den: 'T^3;)
+  returns (Out: 'T;)
+  where 'T numeric;
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1) / (1 + Den[0]*z^-1 + Den[1]*z^-2)
+     Optimization of FilterND when numerator order is 1 and denominator order is 2
+     At first tick, Out = Num*InX #end Filter12Norm (In: 'T;
+                                                     Num: 'T^2;
+                                                     Den: 'T^2;)
+  returns (Out: 'T;)
+  where 'T numeric;
+
+node #pragma doc Discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1 + Num[Ns - 1]*z^-(Ns - 1)) / (Den[0] + Den[1]*z^-1  + ... + Den[Ds - 1]*z^-(Ds - 1))
+     where Ns is the numerator's array size and Ds is the denominator's array size (Ds > Ns > 1)
+     At first tick, Out = (Num*InX)/Den[0] #end FilterND <<Ns, Ds>> (In: 'T;
+                                                                     Num: 'T^Ns;
+                                                                     Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float;
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1 + Num[Ns - 1]*z^-(Ns - 1)) / (1 + Den[0]*z^-1  + ... + Den[Ds - 1]*z^-Ds)
+      where Ns is the numerator's array size and Ds is the denominator's array size (Ds => Ns > 1)
+     At first tick, Out = Num*InX #end FilterNDNorm <<Ns, Ds>> (In: 'T;
+                                                                Num: 'T^Ns;
+                                                                Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float;
+
+node #pragma doc Discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1 + ... + Num[Ns - 1]*z^-(Ns - 1)) / (Den[0] + Den[1]*z^-1  + ... + Den[Ns - 1]*z^-(Ns - 1))
+     where  Ns is the numerator's and the denominator's array size (Ns > 1)
+     At first tick, Out = (Num*InX)/Den[0] #end FilterNN <<Ns>> (In: 'T;
+                                                                 Num: 'T^Ns;
+                                                                 Den: 'T^Ns;)
+  returns (Out: 'T;)
+  where 'T float;
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1 + Num[Ns - 1]*z^-(Ns - 1)) / (1 + Den[0]*z^-1  + ... + Den[Ns - 2]*z^-(Ns - 1))
+     where  Ns is the numerator's array size and Ns - 1 is the denominator's array size (Ns > 1)
+     At first tick, Out = Num*InX #end FilterNNNorm <<Ns>> (In: 'T;
+                                                            Num: 'T^Ns;
+                                                            Den: 'T^(Ns - 1);)
+  returns (Out: 'T;)
+  where 'T float;
+
+node #pragma doc Discrete transfer function expressed as a Z-transform function:
+       (Num) / (Den[0]*z + Den[1])
+     Optimization of TransferFcnND when numerator order is 0 and denominator order is 1
+     At first tick, Out = 0 #end TransferFcn01 (In: 'T;
+                                                Num: 'T;
+                                                Den: 'T^2;)
+  returns (Out: 'T;)
+  where 'T float;
+
+node #pragma doc Discrete transfer function expressed as a Z-transform function:
+       (Num) / (Den[0]*z^2 + Den[1]*z + Den[2])
+     Optimization of TransferFcnND when numerator order is 0 and denominator order is 2
+     At first tick, Out = 0 #end TransferFcn02 (In: 'T;
+                                                Num: 'T;
+                                                Den: 'T^3;)
+  returns (Out: 'T;)
+  where 'T float;
+
+node #pragma doc Discrete transfer function expressed as a Z-transform function:
+       (Num) / (Den[0]*z^(Ds - 1) + ... + Den[Ds - 2]*z + Den[Ds - 1])
+      where Ds is denominator's array size (Ds > 2)
+     Optimization of TransferFcnND when numerator order is 0 and denominator order is Ds - 1
+     At first tick, Out = 0 #end TransferFcn0D <<Ds>> (In: 'T;
+                                                       Num: 'T;
+                                                       Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float;
+
+node #pragma doc Discrete transfer function expressed as a Z-transform function:
+       (Num[0]*z + Num[1]) / (Den[0]*z^2 + Den[1]*z + Den[2])
+     Optimization of TransferFcnND when numerator order is 1 and denominator order is 2
+     At first tick, Out = 0 #end TransferFcn12 (In: 'T;
+                                                Num: 'T^2;
+                                                Den: 'T^3;)
+  returns (Out: 'T;)
+  where 'T float;
+
+node #pragma doc Discrete transfer function expressed as a Z-transform function:
+       (Num[0]*z^(Ns - 1) + ... + Num[Ns - 2]*z + Num[Ns - 1]) / (Den[0]*z^(Ds - 1) + ... + Den[Ds - 2]*z + Den[Ds - 1])
+     where Ns is the numerator's array size and Ds is the denominator's array size (Ds > Ns > 1)
+     At first tick, Out = 0 #end TransferFcnND <<Ns, Ds>> (In: 'T;
+                                                           Num: 'T^Ns;
+                                                           Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float;

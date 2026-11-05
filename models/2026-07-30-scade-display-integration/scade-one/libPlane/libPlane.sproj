@@ -1,0 +1,10 @@
+{
+  "Version": "1.0",
+  "Name": "libPlane",
+  "Dependencies": [
+    "..\\liblinear\\liblinear.sproj",
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Math\\Math.sproj",
+    "..\\libpwlinear\\libpwlinear.sproj"
+  ],
+  "Resources": []
+}

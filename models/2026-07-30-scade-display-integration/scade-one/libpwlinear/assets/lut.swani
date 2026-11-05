@@ -1,0 +1,153 @@
+-- version swan: 2025.2 graph: 2.1
+inline function InterpolateLinear (F: 'T;
+                                   Y1: 'T;
+                                   Y2: 'T;)
+  returns (Y: 'T;)
+  where 'T numeric;
+
+function Limiter <<Xs>> (Val: 'T;
+                         Range: 'T^Xs;)
+  returns (LimitedVal: 'T;)
+  where 'T numeric;
+
+inline function #pragma doc Performs piecewise linear interpolation to approximate y = f(x) with <Xs> points set as vectors
+                X and Y. X values must increase strictly monotonically. For out-of-bounds input, Extrapol
+                parameter allows linear extrapolation, otherwise the end-point values are output. #end Lut1D <<Xs>> (InX: 'T;
+                                                                                                                     X: 'T^Xs;
+                                                                                                                     Y: 'T^Xs;
+                                                                                                                     Extrapol: bool;)
+  returns (OutY: 'T;)
+  where 'T float;
+
+function #pragma doc Returns corresponding output value to nearest and above x element
+         from <Xs> points set as vectors X and Y.
+         If no value is found then the nearest is returned.
+         X values must increase strictly monotonically. #end Lut1DCeil <<Xs>> (InX: 'T;
+                                                                               X: 'T^Xs;
+                                                                               Y: 'T^Xs;)
+  returns (OutY: 'T;)
+  where 'T float;
+
+function #pragma doc Returns corresponding output value to nearest and below x element
+         from <Xs> points set as vectors X and Y.
+         If no value is found then the nearest is returned.
+         X values must increase strictly monotonically. #end Lut1DFloor <<Xs>> (InX: 'T;
+                                                                                X: 'T^Xs;
+                                                                                Y: 'T^Xs;)
+  returns (OutY: 'T;)
+  where 'T float;
+
+function #pragma doc Returns corresponding output value to nearest x element
+         from <Xs> points set as vectors X and Y.
+         X values must increase strictly monotonically. #end Lut1DNearest <<Xs>> (InX: 'T;
+                                                                                  X: 'T^Xs;
+                                                                                  Y: 'T^Xs;)
+  returns (OutY: 'T;)
+  where 'T float;
+
+function Lut1DNoSat <<Xs>> (InX: 'T;
+                            X: 'T^Xs;
+                            Y: 'T^Xs;)
+  returns (OutY: 'T;)
+  where 'T float;
+
+inline function Lut2D <<Xs, Ys>> (InX: 'T;
+                                  InY: 'T;
+                                  X: 'T^Xs;
+                                  Y: 'T^Ys;
+                                  Z: 'T^Ys^Xs;
+                                  Extrapol: bool;)
+  returns (OutZ: 'T;)
+  where 'T float;
+
+function #pragma doc Returns corresponding output value to nearest and above x and y elements
+         from <Xs>, <Ys> points set as vector X, Y and <Xs>*<Ys> points set as array Z.
+         If no value is found then the nearest is returned.
+         X and Y values must increase strictly monotonically. #end Lut2DCeil <<Xs, Ys>> (InX: 'T;
+                                                                                         InY: 'T;
+                                                                                         X: 'T^Xs;
+                                                                                         Y: 'T^Ys;
+                                                                                         Z: 'T^Ys^Xs;)
+  returns (OutZ: 'T;)
+  where 'T float;
+
+function #pragma doc Returns corresponding output value to nearest and below x and y elements
+         from <Xs>, <Ys> points set as vector X, Y and <Xs>*<Ys> points set as array Z.
+         If no value is found then the nearest is returned.
+         X and Y values must increase strictly monotonically. #end Lut2DFloor <<Xs, Ys>> (InX: 'T;
+                                                                                          InY: 'T;
+                                                                                          X: 'T^Xs;
+                                                                                          Y: 'T^Ys;
+                                                                                          Z: 'T^Ys^Xs;)
+  returns (OutZ: 'T;)
+  where 'T float;
+
+function #pragma doc Returns corresponding output value to nearest x and y elements
+         from <Xs>, <Ys> points set as vector X, Y and <Xs>*<Ys> points set as array Z.
+         X and Y values must increase strictly monotonically. #end Lut2DNearest <<Xs, Ys>> (InX: 'T;
+                                                                                            InY: 'T;
+                                                                                            X: 'T^Xs;
+                                                                                            Y: 'T^Ys;
+                                                                                            Z: 'T^Ys^Xs;)
+  returns (OutZ: 'T;)
+  where 'T float;
+
+function Lut2DNoSat <<Xs, Ys>> (InX: 'T;
+                                InY: 'T;
+                                X: 'T^Xs;
+                                Y: 'T^Ys;
+                                Z: 'T^Ys^Xs;)
+  returns (OutZ: 'T;)
+  where 'T float;
+
+inline function #pragma doc Perform piecewise linear interpolation to approximate w = f(x,y,z) with <Xs>, <Ys>, <Zs> points set as vectors X, Y, Z, and <Xs>*<Ys>*<Zs> points set as array W. #end Lut3D <<Xs, Ys, Zs>> (InX: 'T;
+                                                                                                                                                                                                                         InY: 'T;
+                                                                                                                                                                                                                         InZ: 'T;
+                                                                                                                                                                                                                         X: 'T^Xs;
+                                                                                                                                                                                                                         Y: 'T^Ys;
+                                                                                                                                                                                                                         Z: 'T^Zs;
+                                                                                                                                                                                                                         W: 'T^Zs^Ys^Xs;
+                                                                                                                                                                                                                         Extrapol: bool;)
+  returns (OutW: 'T;)
+  where 'T float;
+
+function #pragma doc Returns corresponding output value to nearest x and y elements
+         from <Xs>, <Ys> points set as vector X, Y and <Xs>*<Ys> points set as array Z.
+         X and Y values must increase strictly monotonically. #end Lut3DNearest <<Xs, Ys, Zs>> (InX: 'T;
+                                                                                                InY: 'T;
+                                                                                                InZ: 'T;
+                                                                                                X: 'T^Xs;
+                                                                                                Y: 'T^Ys;
+                                                                                                Z: 'T^Zs;
+                                                                                                W: 'T^Zs^Ys^Xs;)
+  returns (OutW: 'T;)
+  where 'T float;
+
+function Lut3DNoSat <<Xs, Ys, Zs>> (InX: 'T;
+                                    InY: 'T;
+                                    InZ: 'T;
+                                    X: 'T^Xs;
+                                    Y: 'T^Ys;
+                                    Z: 'T^Zs;
+                                    W: 'T^Zs^Ys^Xs;)
+  returns (OutW: 'T;)
+  where 'T float;
+
+inline function PreLutNoSat <<Xs>> (InX: 'T;
+                                    X: 'T^Xs;)
+  returns (F: 'T;
+           Idx: int32;)
+  where 'T float;
+
+inline function Proj <<N>> (Idx: int32;
+                            Input1: 'T^N;
+                            DefVal: 'T;)
+  returns (Output1: 'T;
+           Output2: 'T;);
+
+inline function SearchIdx (i: int32;
+                           AccIn: int32;
+                           InX: 'T;
+                           X: 'T;)
+  returns (AccOut: int32;)
+  where 'T numeric;
