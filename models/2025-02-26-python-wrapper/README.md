@@ -1,6 +1,6 @@
 # Using Python wrapper with Jupyter for frequency analysis
 
-This example is adapted from the [blog published on Ansys Innovation Space](https://innovationspace.ansys.com/knowledge/forums/topic/jupyter-notebook-programming-with-the-scade-python-wrapper/).
+This example is adapted from the [blog published on Ansys Innovation Space](https://innovation.ansys.com/public/articles/topic/jupyter-notebook-programming-with-the-scade-python-wrapper-expu/).
 It demonstrates how to use Python libraries (NumPy, SciPy) with a Jupyter notebook to perform time and frequency analysis
 on a low-pass controller implemented in Swan.
 
