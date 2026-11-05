@@ -21,6 +21,16 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
 
 .. grid:: 2 2 3 3
 
+    .. grid-item-card:: Scade One and SCADE Display integration on a hardware target
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2026-07-30-scade-display-integration.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2026-07-30-scade-display-integration>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2026-07-30-scade-display-integration>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovation.ansys.com/public/articles/topic/scade-one-and-scade-display-integration-on-a-hardware-target-expu/>`__
+
     .. grid-item-card:: From Equations to Execution: Modeling and Integrating a Satellite Controller with Scade One 
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2026-07-15-satellite-controller.jpg
