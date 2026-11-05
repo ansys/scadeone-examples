@@ -41,7 +41,6 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovation.ansys.com/public/articles/topic/from-equations-to-execution-modeling-and-integrating-a-satellite-controller-with-scade-one-expu/>`__
 
-
     .. grid-item-card:: Control software for a rice cooker with Scade One
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2026-04-10-rice-cooker.jpg
@@ -161,7 +160,6 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
         :fas:`fa-solid fa-code` :model_sources:`View sources <2024-08-21-boyer-moore-majority>`
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovation.ansys.com/public/articles/topic/boyer-moore-voting-in-scade-one-unlock-the-power-of-streaming-algorithms-expu/>`__
-
 
     .. grid-item-card:: Message decoding using the forward block and variant types
         :margin: 0 4 0 0
