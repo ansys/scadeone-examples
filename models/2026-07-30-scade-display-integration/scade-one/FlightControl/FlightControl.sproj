@@ -1,0 +1,16 @@
+{
+  "Version": "1.0",
+  "Name": "FlightControl",
+  "Dependencies": [
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Flows\\Flows.sproj",
+    "..\\libLUT\\libLUT.sproj",
+    "..\\liblinear\\liblinear.sproj",
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Digital\\Digital.sproj",
+    "$(SCADE_ONE_LIBRARIES_DIR)\\Math\\Math.sproj",
+    "..\\libpwlinear\\libpwlinear.sproj",
+    "..\\DemoPFD_ScadeOneCosimulation\\DemoPFD.sproj",
+    "..\\libPlane\\libPlane.sproj",
+    "..\\ControlPanel_ScadeOneCosimulation\\ControlPanel.sproj"
+  ],
+  "Resources": []
+}

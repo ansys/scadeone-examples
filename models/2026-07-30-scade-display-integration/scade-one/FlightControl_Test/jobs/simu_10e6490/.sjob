@@ -1,0 +1,19 @@
+{
+  "Version": "2.2",
+  "Kind": "Simulation",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "SimulationJob0",
+    "CustomArguments": "",
+    "FileScenario": "",
+    "SimulationInputType": "Harness",
+    "TestHarness": "FCU_FC_Proc::FlightControler",
+    "UseCycleTime": "True",
+    "CycleTime": "200"
+  },
+  "InputPaths": [
+    "assets/FCU_FC_Proc.swant"
+  ]
+}

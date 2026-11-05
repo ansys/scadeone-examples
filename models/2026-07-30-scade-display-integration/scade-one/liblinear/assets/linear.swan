@@ -1,0 +1,1479 @@
+-- version swan: 2025.2 graph: 2.1
+node #pragma doc If the input was decreasing before and is now increasing, the output shall remain constant until it has travelled deadband_width, and then it shall increase at the same rhythm as input. And vice versa. #end Backlash (input: 'T;
+                                                                                                                                                                                                                                          deadband_width: 'T;
+                                                                                                                                                                                                                                          initial_output: 'T;)
+  returns (output: 'T last = initial_output;)
+  where 'T float
+{
+  diagram
+    (#1 expr input
+    #pragma diagram {"xy":"H85530;V57120","wh":"10000;3200"} #end)
+    (#4 expr #3 > #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H99560;V63285"} #end)
+    (#5 def output
+    #pragma diagram {"xy":"H189870;V103265","wh":"10000;3200"} #end)
+    (#8 expr #7 + #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H75440;V64350"} #end)
+    (#11 expr #10 or #9
+      where
+        (#10 group)
+        (#9 group)
+    #pragma diagram {"xy":"H130050;V46355"} #end)
+    (#15 expr if #14 then #13 else #12
+      where
+        (#14 group)
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H145630;V103350"} #end)
+    (#18 expr #17 < #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H99560;V36195"} #end)
+    (#21 expr #20 + #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H126010;V101815"} #end)
+    (#22 expr input
+    #pragma diagram {"xy":"H105290;V102845","wh":"10000;3200"} #end)
+    (#26 expr if #25 then #24 else #23
+      where
+        (#25 group)
+        (#24 group)
+        (#23 group)
+    #pragma diagram {"xy":"H107330;V91920"} #end)
+    (#29 expr #28 - #27
+      where
+        (#28 group)
+        (#27 group)
+    #pragma diagram {"xy":"H75460;V37175"} #end)
+    (#30 expr deadband_width / (2.0 :> 'T)
+    #pragma diagram {"xy":"H35740;V68265","wh":"32000;3200"} #end)
+    (#31 expr last 'output
+    #pragma diagram {"xy":"H44520;V36410","wh":"16000;3200"} #end)
+    (#32 expr last 'output
+    #pragma diagram {"xy":"H44520;V63500","wh":"16000;3200"} #end)
+    (#33 expr last 'output
+    #pragma diagram {"xy":"H129830;V112400","wh":"16000;3200"} #end)
+    (#34 expr deadband_width / (2.0 :> 'T)
+    #pragma diagram {"xy":"H35730;V41375","wh":"32000;3200"} #end)
+    (#35 expr deadband_width / (2.0 :> 'T)
+    #pragma diagram {"xy":"H78690;V95150","wh":"32000;3200"} #end)
+    (#36 expr -deadband_width / (2.0 :> 'T)
+    #pragma diagram {"xy":"H77600;V90280","wh":"34000;3200"} #end)
+    (#37 expr input
+    #pragma diagram {"xy":"H85420;V28685","wh":"10000;3200"} #end)
+    
+    (#38 wire #29 => #16
+    #pragma diagram {"wp":"#29 h13585 v920 #16"} #end)
+    (#39 wire #37 => #17
+    #pragma diagram {"wp":"#37 h3625 v5610 #17"} #end)
+    (#40 wire #15 => #5)
+    (#41 wire #1 => #3
+    #pragma diagram {"wp":"#1 h3515 v4265 #3"} #end)
+    (#42 wire #32 => #7
+    #pragma diagram {"wp":"#32 h13000 v-1050 #7"} #end)
+    (#43 wire #33 => #12
+    #pragma diagram {"wp":"#33 h2300 v-7150 #12"} #end)
+    (#44 wire #21 => #13
+    #pragma diagram {"wp":"#21 h6310 v-365 #13"} #end)
+    (#45 wire #8 => #2
+    #pragma diagram {"wp":"#8 h8560 v835 #2"} #end)
+    (#46 wire #31 => #28
+    #pragma diagram {"wp":"#31 h10470 v-1135 #28"} #end)
+    (#47 wire #11 => #14
+    #pragma diagram {"wp":"#11 h10080 #14"} #end)
+    (#48 wire #35 => #23
+    #pragma diagram {"wp":"#35 h5320 v-1330 #23"} #end)
+    (#49 wire #30 => #6
+    #pragma diagram {"wp":"#30 h3890 v-2015 #6"} #end)
+    (#50 wire #36 => #24
+    #pragma diagram {"wp":"#36 h5410 v-260 #24"} #end)
+    (#51 wire #34 => #27
+    #pragma diagram {"wp":"#34 h3895 v-2300 #27"} #end)
+    (#52 wire #18 => #10
+    #pragma diagram {"wp":"#18 h14630 v8260 #10"} #end)
+    (#53 wire #26 => #20
+    #pragma diagram {"wp":"#26 h5840 v7995 #20"} #end)
+    (#54 wire #4 => #9, #25
+    #pragma diagram {"wp":"#4 h4270[h10360 v-15030 #9, #25]"} #end)
+    (#55 wire #22 => #19
+    #pragma diagram {"wp":"#22 h7880 v870 #19"} #end)
+}
+
+node #pragma doc The output is a simple approximation of the input derivative: 
+     Output(0)=0.0 
+     Output(k)=(u(k)-u(k-1))/TimeCycle #end Derivative (u: 'T;
+                                                        TimeCycle: 'T;)
+  returns (Derivative: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 expr (0.0 :> 'T)
+    #pragma diagram {"xy":"H78200;V38365","wh":"16000;3200"} #end)
+    (#4 expr #3 - #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H53400;V26920"} #end)
+    (#6 expr pre #5
+      where
+        (#5 group)
+    #pragma diagram {"xy":"H37160;V35850"} #end)
+    (#7 expr u
+    #pragma diagram {"xy":"H13450;V25795"} #end)
+    (#8 def Derivative
+    #pragma diagram {"xy":"H124340;V27935","wh":"14000;3200"} #end)
+    (#11 expr #10 -> #9
+      where
+        (#10 group)
+        (#9 group)
+    #pragma diagram {"xy":"H91560;V27940"} #end)
+    (#14 expr #13 / #12
+      where
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H75250;V27940"} #end)
+    (#15 expr TimeCycle
+    #pragma diagram {"dir":"es","xy":"H60724;V63040","wh":"3200;14000"} #end)
+    
+    (#16 wire #11 => #8)
+    (#17 wire #6 => #2
+    #pragma diagram {"wp":"#6 h4120 v-7030 #2"} #end)
+    (#18 wire #15 => #12
+    #pragma diagram {"wp":"#15 v-27700 #12"} #end)
+    (#19 wire #1 => #10
+    #pragma diagram {"wp":"#1 h1860 v-12325 #10"} #end)
+    (#20 wire #7 => #3, #5
+    #pragma diagram {"wp":"#7 h8355[h21475 v-775 #3, v10055 #5]"} #end)
+    (#21 wire #14 => #9
+    #pragma diagram {"wp":"#14 h4655 v1900 #9"} #end)
+    (#22 wire #4 => #13
+    #pragma diagram {"wp":"#4 h7425 v-880 #13"} #end)
+}
+
+node #pragma doc Detects if input value has changed w.r.t. previous step. #end DetectChange (Input: 'T;
+                                                                                             Init: 'T;)
+  returns (Output: bool;)
+{
+  diagram
+    (#1 expr Input
+    #pragma diagram {"xy":"H12980;V7015","wh":"10000;3200"} #end)
+    (#2 def Output
+    #pragma diagram {"xy":"H89120;V8445","wh":"10000;3200"} #end)
+    (#5 expr #4 <> #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H61160;V8340"} #end)
+    (#8 expr #7 pre #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H36800;V15075"} #end)
+    (#9 expr Init
+    #pragma diagram {"dir":"es","xy":"H37830;V33560","wh":"3200;8000"} #end)
+    
+    (#10 wire #5 => #2
+    #pragma diagram {"wp":"#5 h10480 v105 #2"} #end)
+    (#11 wire #1 => #6, #4
+    #pragma diagram {"wp":"#1 h11320[v9960 #6, h1000 v-575 #4]"} #end)
+    (#12 wire #8 => #3
+    #pragma diagram {"wp":"#8 h8180 v-4835 #3"} #end)
+    (#13 wire #9 => #7
+    #pragma diagram {"wp":"#9 v-6992 h-9030 v-10893 #7"} #end)
+}
+
+node #pragma doc Detect decrease in signal's value. #end DetectDecrease (Input: 'T;
+                                                                         Init: 'T;)
+  returns (Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#3 expr #2 pre #1
+      where
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H38640;V17200"} #end)
+    (#4 expr Input
+    #pragma diagram {"xy":"H14830;V9120","wh":"10000;3200"} #end)
+    (#5 expr Init
+    #pragma diagram {"dir":"es","xy":"H39955;V35670","wh":"3200;8000"} #end)
+    (#6 def Output
+    #pragma diagram {"xy":"H91030;V10550","wh":"10000;3200"} #end)
+    (#9 expr #8 < #7
+      where
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H63200;V10445"} #end)
+    
+    (#10 wire #3 => #7
+    #pragma diagram {"wp":"#3 h8280 v-4855 #7"} #end)
+    (#11 wire #4 => #1, #8
+    #pragma diagram {"wp":"#4 h5702[v9980 #1, h27388 v-575 #8]"} #end)
+    (#12 wire #5 => #2
+    #pragma diagram {"wp":"#5 v-6985 h-9315 v-10885 #2"} #end)
+    (#13 wire #9 => #6
+    #pragma diagram {"wp":"#9 h10415 v105 #6"} #end)
+}
+
+node #pragma doc Detect falling edge when signal's value decreases to strictly negative value, and its previous value was nonnegative. #end DetectFallNegative (Input: 'T;)
+  returns (Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#1 def Output
+    #pragma diagram {"xy":"H206380;V15215","wh":"10000;3200"} #end)
+    (#4 expr #3 < #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H104260;V13885"} #end)
+    (#5 expr (0 :> 'T)
+    #pragma diagram {"xy":"H82160;V37565","wh":"14000;3200"} #end)
+    (#8 expr #7 >= #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H104070;V26170"} #end)
+    (#11 expr #10 and #9
+      where
+        (#10 group)
+        (#9 group)
+    #pragma diagram {"xy":"H159020;V15220"} #end)
+    (#13 expr pre #12
+      where
+        (#12 group)
+    #pragma diagram {"xy":"H75500;V24895"} #end)
+    (#16 expr #15 -> #14
+      where
+        (#15 group)
+        (#14 group)
+    #pragma diagram {"xy":"H185030;V15240"} #end)
+    (#17 expr Input
+    #pragma diagram {"xy":"H47420;V12465","wh":"10000;3200"} #end)
+    (#18 expr false
+    #pragma diagram {"xy":"H0;V0","wh":"10000;3200"} #end)
+    
+    (#19 wire #17 => #3, #12
+    #pragma diagram {"wp":"#17 h10040[h36205 v-480 #3, v12430 #12]"} #end)
+    (#20 wire #8 => #9
+    #pragma diagram {"wp":"#8 h23070 v-9050 #9"} #end)
+    (#21 wire #16 => #1
+    #pragma diagram {"wp":"#16 h7175 v-25 #1"} #end)
+    (#22 wire #18 => #15
+    #pragma diagram {"wp":"#18 h169525 v13340 #15"} #end)
+    (#23 wire #4 => #10
+    #pragma diagram {"wp":"#4 h22880 v-565 #10"} #end)
+    (#24 wire #5 => #2, #6
+    #pragma diagram {"wp":"#5 h3500[v-21780 #2, h3940 v-9495 #6]"} #end)
+    (#25 wire #13 => #7
+    #pragma diagram {"wp":"#13 h6053 v-625 #7"} #end)
+    (#26 wire #11 => #14
+    #pragma diagram {"wp":"#11 h8505 v1920 #14"} #end)
+}
+
+node #pragma doc Detect falling edge when signal's value decreases to nonpositive value, and its previous value was strictly positive. #end DetectFallNonPositive (Input: 'T;)
+  returns (Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#1 def Output
+    #pragma diagram {"xy":"H200880;V13945","wh":"10000;3200"} #end)
+    (#4 expr #3 and #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H156650;V13885"} #end)
+    (#7 expr #6 > #5
+      where
+        (#6 group)
+        (#5 group)
+    #pragma diagram {"xy":"H101720;V22565"} #end)
+    (#9 expr pre #8
+      where
+        (#8 group)
+    #pragma diagram {"xy":"H72960;V21295"} #end)
+    (#12 expr #11 <= #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H101530;V12620"} #end)
+    (#13 expr (0 :> 'T)
+    #pragma diagram {"xy":"H81740;V33545","wh":"14000;3200"} #end)
+    (#14 expr Input
+    #pragma diagram {"xy":"H41720;V11195","wh":"10000;3200"} #end)
+    (#17 expr #16 -> #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H178260;V13970"} #end)
+    (#18 expr false
+    #pragma diagram {"xy":"H0;V0","wh":"10000;3200"} #end)
+    
+    (#19 wire #14 => #8, #11
+    #pragma diagram {"wp":"#14 h11620[v10100 #8, h30905 v-475 #11]"} #end)
+    (#20 wire #9 => #6
+    #pragma diagram {"wp":"#9 h17070 v-630 #6"} #end)
+    (#21 wire #18 => #16
+    #pragma diagram {"wp":"#18 h164955 v12070 #16"} #end)
+    (#22 wire #7 => #2
+    #pragma diagram {"wp":"#7 h22965 v-6780 #2"} #end)
+    (#23 wire #13 => #10, #5
+    #pragma diagram {"wp":"#13 h4763[v-19025 #10, h2527 v-9080 #5]"} #end)
+    (#24 wire #12 => #3
+    #pragma diagram {"wp":"#12 h23060 v-635 #3"} #end)
+    (#25 wire #4 => #15
+    #pragma diagram {"wp":"#4 h6305 v1985 #15"} #end)
+    (#26 wire #17 => #1
+    #pragma diagram {"wp":"#17 h7810 v-25 #1"} #end)
+}
+
+node #pragma doc Detect increase in signal's value. #end DetectIncrease (Input: 'T;
+                                                                         Init: 'T;)
+  returns (Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#3 expr #2 pre #1
+      where
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H35740;V17195"} #end)
+    (#4 expr Init
+    #pragma diagram {"dir":"es","xy":"H37300;V33460","wh":"3200;8000"} #end)
+    (#7 expr #6 > #5
+      where
+        (#6 group)
+        (#5 group)
+    #pragma diagram {"xy":"H60300;V10445"} #end)
+    (#8 expr Input
+    #pragma diagram {"xy":"H11910;V9125","wh":"10000;3200"} #end)
+    (#9 def Output
+    #pragma diagram {"xy":"H88060;V10550","wh":"10000;3200"} #end)
+    
+    (#10 wire #8 => #1, #6
+    #pragma diagram {"wp":"#8 h4122[v9970 #1, h28988 v-580 #6]"} #end)
+    (#11 wire #7 => #9
+    #pragma diagram {"wp":"#7 h10380 v105 #9"} #end)
+    (#12 wire #4 => #2
+    #pragma diagram {"wp":"#4 v-5882 h-18768 v-9783 #2"} #end)
+    (#13 wire #3 => #5
+    #pragma diagram {"wp":"#3 h8280 v-4850 #5"} #end)
+}
+
+node #pragma doc Detect rising edge when signal's value increases to nonnegative value, and its previous value was strictly negative. #end DetectRiseNonNegative (Input: 'T;)
+  returns (Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr Input
+    #pragma diagram {"xy":"H29220;V12040","wh":"10000;3200"} #end)
+    (#3 expr pre #2
+      where
+        (#2 group)
+    #pragma diagram {"xy":"H76340;V23205"} #end)
+    (#6 expr #5 >= #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H104700;V13260"} #end)
+    (#7 def Output
+    #pragma diagram {"xy":"H212520;V14585","wh":"10000;3200"} #end)
+    (#8 expr (0 :> 'T)
+    #pragma diagram {"xy":"H81320;V32710","wh":"14000;3200"} #end)
+    (#11 expr #10 and #9
+      where
+        (#10 group)
+        (#9 group)
+    #pragma diagram {"xy":"H159820;V14685"} #end)
+    (#14 expr #13 < #12
+      where
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H104910;V24475"} #end)
+    (#17 expr #16 -> #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H185880;V14820"} #end)
+    (#18 expr false
+    #pragma diagram {"xy":"H0;V0","wh":"10000;3200"} #end)
+    
+    (#19 wire #3 => #13
+    #pragma diagram {"wp":"#3 h16860 v-630 #13"} #end)
+    (#20 wire #1 => #2, #5
+    #pragma diagram {"wp":"#1 h19560[v11165 #2, h38740 v-680 #5]"} #end)
+    (#21 wire #8 => #12, #4
+    #pragma diagram {"wp":"#8 h5960[h4920 v-6335 #12, v-17550 #4]"} #end)
+    (#22 wire #11 => #15
+    #pragma diagram {"wp":"#11 h8530 v2035 #15"} #end)
+    (#23 wire #18 => #16
+    #pragma diagram {"wp":"#18 h170350 v12920 #16"} #end)
+    (#24 wire #14 => #9
+    #pragma diagram {"wp":"#14 h22955 v-7890 #9"} #end)
+    (#25 wire #6 => #10
+    #pragma diagram {"wp":"#6 h23060 v-475 #10"} #end)
+    (#26 wire #17 => #7
+    #pragma diagram {"wp":"#17 h9820 v-235 #7"} #end)
+}
+
+node #pragma doc Detect rising edge when signal's value increases to strictly positive value, and its previous value was nonpositive. #end DetectRisePositive (Input: 'T;)
+  returns (Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#1 def Output
+    #pragma diagram {"xy":"H210410;V12465","wh":"10000;3200"} #end)
+    (#3 expr pre #2
+      where
+        (#2 group)
+    #pragma diagram {"xy":"H69990;V21085"} #end)
+    (#6 expr #5 > #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H98550;V11345"} #end)
+    (#9 expr #8 and #7
+      where
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H153470;V12570"} #end)
+    (#10 expr (0 :> 'T)
+    #pragma diagram {"xy":"H74760;V31215","wh":"14000;3200"} #end)
+    (#13 expr #12 <= #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H98360;V22360"} #end)
+    (#14 expr Input
+    #pragma diagram {"xy":"H27100;V9925","wh":"10000;3200"} #end)
+    (#17 expr #16 -> #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H183130;V12700"} #end)
+    (#18 expr false
+    #pragma diagram {"xy":"H0;V0","wh":"10000;3200"} #end)
+    
+    (#19 wire #6 => #8
+    #pragma diagram {"wp":"#6 h22960 v-675 #8"} #end)
+    (#20 wire #3 => #12
+    #pragma diagram {"wp":"#3 h5728 v-625 #12"} #end)
+    (#21 wire #9 => #15
+    #pragma diagram {"wp":"#9 h10330 v2030 #15"} #end)
+    (#22 wire #13 => #7
+    #pragma diagram {"wp":"#13 h23150 v-7890 #7"} #end)
+    (#23 wire #10 => #4, #11
+    #pragma diagram {"wp":"#10 h4415[v-17970 #4, h4457 v-6955 #11]"} #end)
+    (#24 wire #17 => #1
+    #pragma diagram {"wp":"#17 h10140 v-235 #1"} #end)
+    (#25 wire #14 => #2, #5
+    #pragma diagram {"wp":"#14 h17445[v11160 #2, h43410 v-480 #5]"} #end)
+    (#26 wire #18 => #16
+    #pragma diagram {"wp":"#18 h165800 v10800 #16"} #end)
+}
+
+inline node #pragma doc 1st order filter 
+            At the initialization Output_R = Init 
+            After initialization Output_R = K1*Input(k)-k2*Output_R(k-1) where k stands for the current cycle. #end Filter1stOrderLoop (F1OL_Input: 'T;
+                                                                                                                                        K1: 'T;
+                                                                                                                                        K2: 'T;
+                                                                                                                                        Init: 'T;)
+  returns (F1OL_Output: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr K1
+    #pragma diagram {"dir":"es","xy":"H23675;V72240","wh":"3200;8000"} #end)
+    (#2 expr K2
+    #pragma diagram {"dir":"es","xy":"H53045;V71980","wh":"3200;8000"} #end)
+    (#3 expr F1OL_Input
+    #pragma diagram {"xy":"H14460;V27120","wh":"14000;3200"} #end)
+    (#4 def F1OL_Output
+    #pragma diagram {"xy":"H139980;V32415","wh":"16000;3200"} #end)
+    (#7 expr #6 * #5
+      where
+        (#6 group)
+        (#5 group)
+    #pragma diagram {"xy":"H45030;V28180"} #end)
+    (#9 expr pre #8
+      where
+        (#8 group)
+    #pragma diagram {"xy":"H45090;V40615"} #end)
+    (#12 expr #11 * #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H66100;V41650"} #end)
+    (#15 expr #14 - #13
+      where
+        (#14 group)
+        (#13 group)
+    #pragma diagram {"xy":"H91760;V32510"} #end)
+    (#18 expr #17 -> #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H109920;V32545"} #end)
+    (#19 expr Init
+    #pragma diagram {"dir":"es","xy":"H109135;V72440","wh":"3200;8000"} #end)
+    
+    (#20 wire #1 => #5
+    #pragma diagram {"wp":"#1 v-39660 #5"} #end)
+    (#21 wire #3 => #6
+    #pragma diagram {"wp":"#3 h10785 v-840 #6"} #end)
+    (#22 wire #7 => #14
+    #pragma diagram {"wp":"#7 h23400 v2430 #14"} #end)
+    (#23 wire #2 => #10
+    #pragma diagram {"wp":"#2 v-25930 #10"} #end)
+    (#24 wire #15 => #16
+    #pragma diagram {"wp":"#15 h4540 v1935 #16"} #end)
+    (#25 wire #19 => #17
+    #pragma diagram {"wp":"#19 v-17645 h-6215 v-21650 #17"} #end)
+    (#26 wire #18 => #8, #4
+    #pragma diagram {"wp":"#18 h3500[v45895 h-79830 v-37825 #8, h9795 v-130 #4]"} #end)
+    (#27 wire #12 => #13
+    #pragma diagram {"wp":"#12 h9330 v-7240 #13"} #end)
+    (#28 wire #9 => #11
+    #pragma diagram {"wp":"#9 h6505 v-865 #11"} #end)
+}
+
+inline function #pragma doc Output_R equals Input_R multiplied by Gain_R. #end Gain (G_Input: 'T;
+                                                                                     Gain: 'T;)
+  returns (G_Output: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr G_Input
+    #pragma diagram {"xy":"H13720;V29500","wh":"12000;3200"} #end)
+    (#2 expr Gain
+    #pragma diagram {"dir":"es","xy":"H37890;V52670","wh":"3200;8000"} #end)
+    (#3 def G_Output
+    #pragma diagram {"xy":"H101820;V30560","wh":"12000;3200"} #end)
+    (#6 expr #5 * #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H59160;V30695"} #end)
+    
+    (#7 wire #2 => #4
+    #pragma diagram {"wp":"#2 v-17575 #4"} #end)
+    (#8 wire #6 => #3
+    #pragma diagram {"wp":"#6 h17330 v-135 #3"} #end)
+    (#9 wire #1 => #5
+    #pragma diagram {"wp":"#1 h18720 v-705 #5"} #end)
+}
+
+node #pragma doc HCE _Output is true when the input reaches the offset by growing or downing. #end HitCrossingEither (HCE_Input: 'T;
+                                                                                                                      Offset: 'T;)
+  returns (HCE_Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr HCE_Input
+    #pragma diagram {"xy":"H12630;V7015","wh":"14000;3200"} #end)
+    (#2 expr Offset
+    #pragma diagram {"xy":"H13750;V27650","wh":"10000;3200"} #end)
+    (#3 def HCE_Output
+    #pragma diagram {"xy":"H129210;V44055","wh":"14000;3200"} #end)
+    (#6 expr #5 <= #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H71490;V26670"} #end)
+    (#9 expr #8 >= #7
+      where
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H71490;V38610"} #end)
+    (#12 expr #11 and #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H89230;V33020"} #end)
+    (#15 expr #14 >= #13
+      where
+        (#14 group)
+        (#13 group)
+    #pragma diagram {"xy":"H71750;V50290"} #end)
+    (#18 expr #17 <= #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H71750;V61210"} #end)
+    (#21 expr #20 and #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H89740;V55620"} #end)
+    (#24 expr #23 or #22
+      where
+        (#23 group)
+        (#22 group)
+    #pragma diagram {"xy":"H105950;V44320"} #end)
+    (#27 expr #26 pre #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H45540;V18030"} #end)
+    
+    (#28 wire #27 => #5, #14
+    #pragma diagram {"wp":"#27 h8975[h3650 v6740 #5, v30360 #14]"} #end)
+    (#29 wire #1 => #8, #17, #25, #26
+    #pragma diagram {"wp":"#1 h11015[h2399[v29695 #8, h2398[v12915 #25, h2399 v9115 #26]], v52295 #17]"} #end)
+    (#30 wire #2 => #4, #7, #13, #16
+    #pragma diagram {"wp":"#2 h4699[h2399[h2398[h28619 v920 #4, v12860 #7], v24540 #13], v35460 #16]"} #end)
+    (#31 wire #6 => #11
+    #pragma diagram {"wp":"#6 h3630 v4450 #11"} #end)
+    (#32 wire #21 => #22
+    #pragma diagram {"wp":"#21 h1710 v-9400 #22"} #end)
+    (#33 wire #15 => #20
+    #pragma diagram {"wp":"#15 h4495 v3430 #20"} #end)
+    (#34 wire #9 => #10
+    #pragma diagram {"wp":"#9 h4500 v-3690 #10"} #end)
+    (#35 wire #24 => #3
+    #pragma diagram {"wp":"#24 h6130 v-265 #3"} #end)
+    (#36 wire #18 => #19
+    #pragma diagram {"wp":"#18 h4495 v-3690 #19"} #end)
+    (#37 wire #12 => #23
+    #pragma diagram {"wp":"#12 h2220 v9400 #23"} #end)
+}
+
+node #pragma doc HCF _Output is true when the input reaches the offset by downing. #end HitCrossingFalling (HCF_Input: 'T;
+                                                                                                            Offset: 'T;)
+  returns (HCF_Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr HCF_Input
+    #pragma diagram {"xy":"H11840;V18390","wh":"14000;3200"} #end)
+    (#2 expr Offset
+    #pragma diagram {"xy":"H13490;V51195","wh":"10000;3200"} #end)
+    (#5 expr #4 -> #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H107800;V35720"} #end)
+    (#6 expr false
+    #pragma diagram {"xy":"H93940;V43920","wh":"10000;3200"} #end)
+    (#7 def HCF_Output
+    #pragma diagram {"xy":"H143140;V35585","wh":"14000;3200"} #end)
+    (#9 expr pre #8
+      where
+        (#8 group)
+    #pragma diagram {"xy":"H32380;V18540"} #end)
+    (#12 expr #11 >= #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H53030;V20105"} #end)
+    (#15 expr #14 < #13
+      where
+        (#14 group)
+        (#13 group)
+    #pragma diagram {"xy":"H53150;V30480"} #end)
+    (#18 expr #17 and #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H71790;V25535"} #end)
+    (#21 expr #20 > #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H53150;V40640"} #end)
+    (#24 expr #23 = #22
+      where
+        (#23 group)
+        (#22 group)
+    #pragma diagram {"xy":"H53150;V50290"} #end)
+    (#27 expr #26 and #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H71960;V45720"} #end)
+    (#30 expr #29 or #28
+      where
+        (#29 group)
+        (#28 group)
+    #pragma diagram {"xy":"H91660;V35585"} #end)
+    
+    (#31 wire #27 => #28
+    #pragma diagram {"wp":"#27 h4350 v-8235 #28"} #end)
+    (#32 wire #24 => #25
+    #pragma diagram {"wp":"#24 h4820 v-2670 #25"} #end)
+    (#33 wire #5 => #7
+    #pragma diagram {"wp":"#5 h13170 v-135 #7"} #end)
+    (#34 wire #15 => #16
+    #pragma diagram {"wp":"#15 h4820 v-3045 #16"} #end)
+    (#35 wire #30 => #3
+    #pragma diagram {"wp":"#30 h3605 v2035 #3"} #end)
+    (#36 wire #2 => #10, #13, #19, #22
+    #pragma diagram {"wp":"#2 h7390[h16000[v-29190 #10, h2000[v-18815 #13, h2513 v-8655 #19]], v995 #22]"} #end)
+    (#37 wire #9 => #11, #20
+    #pragma diagram {"wp":"#9 h4500[h1000 v-335 #11, v20200 #20]"} #end)
+    (#38 wire #12 => #17
+    #pragma diagram {"wp":"#12 h4880 v3530 #17"} #end)
+    (#39 wire #21 => #26
+    #pragma diagram {"wp":"#21 h4820 v3180 #26"} #end)
+    (#40 wire #6 => #4
+    #pragma diagram {"wp":"#6 h3255 v-10100 #4"} #end)
+    (#41 wire #18 => #29
+    #pragma diagram {"wp":"#18 h4435 v8150 #29"} #end)
+    (#42 wire #1 => #8, #14, #23
+    #pragma diagram {"wp":"#1 h5040[h1000[h1000 v150 #8, v10190 #14], v30000 #23]"} #end)
+}
+
+node #pragma doc HCR _Output is true when the input reaches the offset by growing. #end HitCrossingRising (HCR_Input: 'T;
+                                                                                                           Offset: 'T;)
+  returns (HCR_Output: bool;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr HCR_Input
+    #pragma diagram {"xy":"H13690;V16800","wh":"14000;3200"} #end)
+    (#2 expr Offset
+    #pragma diagram {"xy":"H16130;V49610","wh":"10000;3200"} #end)
+    (#5 expr #4 -> #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H127110;V34925"} #end)
+    (#6 expr false
+    #pragma diagram {"xy":"H115110;V47095","wh":"10000;3200"} #end)
+    (#7 def HCR_Output
+    #pragma diagram {"xy":"H151070;V34795","wh":"14000;3200"} #end)
+    (#9 expr pre #8
+      where
+        (#8 group)
+    #pragma diagram {"xy":"H40250;V16760"} #end)
+    (#12 expr #11 <= #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H71750;V17780"} #end)
+    (#15 expr #14 > #13
+      where
+        (#14 group)
+        (#13 group)
+    #pragma diagram {"xy":"H71950;V28700"} #end)
+    (#18 expr #17 and #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H90500;V23620"} #end)
+    (#21 expr #20 < #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H71950;V38860"} #end)
+    (#24 expr #23 = #22
+      where
+        (#23 group)
+        (#22 group)
+    #pragma diagram {"xy":"H71950;V48510"} #end)
+    (#27 expr #26 and #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H90500;V43430"} #end)
+    (#30 expr #29 or #28
+      where
+        (#29 group)
+        (#28 group)
+    #pragma diagram {"xy":"H110970;V34795"} #end)
+    
+    (#31 wire #2 => #10, #13, #19, #22
+    #pragma diagram {"wp":"#2 h26620[v-29930 #10, h1000[v-19010 #13, h1000[v-8850 #19, h11133 v800 #22]]]"} #end)
+    (#32 wire #18 => #29
+    #pragma diagram {"wp":"#18 h4735 v9275 #29"} #end)
+    (#33 wire #15 => #16
+    #pragma diagram {"wp":"#15 h4775 v-3180 #16"} #end)
+    (#34 wire #30 => #3
+    #pragma diagram {"wp":"#30 h3570 v2030 #3"} #end)
+    (#35 wire #5 => #7
+    #pragma diagram {"wp":"#5 h7480 v-130 #7"} #end)
+    (#36 wire #9 => #11, #20
+    #pragma diagram {"wp":"#9 h3500[h11133 v-880 #11, v20200 #20]"} #end)
+    (#37 wire #27 => #28
+    #pragma diagram {"wp":"#27 h4735 v-6735 #28"} #end)
+    (#38 wire #6 => #4
+    #pragma diagram {"wp":"#6 h3000 v-14070 #4"} #end)
+    (#39 wire #12 => #17
+    #pragma diagram {"wp":"#12 h4875 v3940 #17"} #end)
+    (#40 wire #24 => #25
+    #pragma diagram {"wp":"#24 h4775 v-3180 #25"} #end)
+    (#41 wire #21 => #26
+    #pragma diagram {"wp":"#21 h4775 v2670 #26"} #end)
+    (#42 wire #1 => #8, #14, #23
+    #pragma diagram {"wp":"#1 h3647[h293[h9120 v-40 #8, v10000 #14], v29810 #23]"} #end)
+}
+
+node #pragma doc Deprecated operator, use IntegralForward instead #end IntegrFwd (U: 'T;
+                                                                                  Reset: bool;
+                                                                                  TimeCycle: 'T;
+                                                                                  LowLimit: 'T;
+                                                                                  HiLimit: 'T;)
+  returns (Y: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 $N1 block (IntegralForward \ init: (0 :> 'T))
+    #pragma diagram {"xy":"H79135;V31835","wh":"82490;42070"} #end)
+    (#2 expr U
+    #pragma diagram {"xy":"H19280;V24770"} #end)
+    (#3 expr Reset
+    #pragma diagram {"xy":"H18530;V38740","wh":"10000;3200"} #end)
+    (#4 expr TimeCycle
+    #pragma diagram {"xy":"H16330;V76840","wh":"14000;3200"} #end)
+    (#5 expr LowLimit
+    #pragma diagram {"xy":"H16880;V70270","wh":"12000;3200"} #end)
+    (#6 expr HiLimit
+    #pragma diagram {"xy":"H17430;V63710","wh":"12000;3200"} #end)
+    (#7 def Y
+    #pragma diagram {"xy":"H141800;V24770"} #end)
+    (#8 def _
+    #pragma diagram {"xy":"H141800;V38740"} #end)
+    
+    (#9 wire #3 => #1 .(Reset))
+    (#10 wire #2 => #1 .(Input))
+    (#11 wire #5 => #1 .(LowLimit)
+    #pragma diagram {"wp":"#5 h9280 v-23665 #1"} #end)
+    (#12 wire #1 .(Saturation) => #8
+    #pragma diagram {"wp":"v6905|#1 #8"} #end)
+    (#13 wire #4 => #1 .(deltaT)
+    #pragma diagram {"wp":"#4 h12317 v-26725 #1"} #end)
+    (#14 wire #1 .(Output) => #7
+    #pragma diagram {"wp":"v-7065|#1 #7"} #end)
+    (#15 wire #6 => #1 .(HighLimit)
+    #pragma diagram {"wp":"#6 h5243 v-20615 #1"} #end)
+}
+
+node #pragma doc Deprecated operator, use IntegralTrapezoid instead #end IntegrTrapez (U: 'T;
+                                                                                       Reset: bool;
+                                                                                       TimeCycle: 'T;
+                                                                                       LowLimit: 'T;
+                                                                                       HiLimit: 'T;)
+  returns (Y: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 $N1 block (IntegralTrapezoid \ init: (0 :> 'T))
+    #pragma diagram {"xy":"H67180;V28450","wh":"53500;32760"} #end)
+    (#2 expr U
+    #pragma diagram {"xy":"H23090;V23070"} #end)
+    (#3 expr Reset
+    #pragma diagram {"xy":"H22340;V33870","wh":"10000;3200"} #end)
+    (#4 expr TimeCycle
+    #pragma diagram {"xy":"H28190;V71760","wh":"14000;3200"} #end)
+    (#5 expr LowLimit
+    #pragma diagram {"xy":"H28740;V63710","wh":"12000;3200"} #end)
+    (#6 expr HiLimit
+    #pragma diagram {"xy":"H29290;V55670","wh":"12000;3200"} #end)
+    (#7 def Y
+    #pragma diagram {"xy":"H117240;V23070"} #end)
+    (#8 def _
+    #pragma diagram {"xy":"H117240;V33870"} #end)
+    
+    (#9 wire #1 .(Saturation) => #8
+    #pragma diagram {"wp":"v5420|#1 #8"} #end)
+    (#10 wire #3 => #1 .(Reset))
+    (#11 wire #4 => #1 .(deltaT)
+    #pragma diagram {"wp":"#4 h4740 v-29157 #1"} #end)
+    (#12 wire #2 => #1 .(Input))
+    (#13 wire #5 => #1 .(LowLimit)
+    #pragma diagram {"wp":"#5 h5190 v-23560 #1"} #end)
+    (#14 wire #1 .(Output) => #7
+    #pragma diagram {"wp":"v-5380|#1 #7"} #end)
+    (#15 wire #6 => #1 .(HighLimit)
+    #pragma diagram {"wp":"#6 h3640 v-17973 #1"} #end)
+}
+
+node #pragma doc Computes the integral of the input using the backward rule. Saturates the output between LowLimit and HighLimit, and detects when saturation is reached. #end IntegralBackward (Input: 'T;
+                                                                                                                                                                                                 Reset: bool;
+                                                                                                                                                                                                 HighLimit: 'T;
+                                                                                                                                                                                                 LowLimit: 'T;
+                                                                                                                                                                                                 init: 'T;
+                                                                                                                                                                                                 deltaT: 'T;)
+  returns (Output: 'T;
+           Saturation: bool;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr RawIntegral >= HighLimit
+    #pragma diagram {"xy":"H71790;V72500","wh":"28000;3200"} #end)
+    (#2 def Saturation
+    #pragma diagram {"xy":"H132810;V78950","wh":"14000;3200"} #end)
+    (#3 expr HighLimit
+    #pragma diagram {"xy":"H72430;V90810","wh":"14000;3200"} #end)
+    (#4 expr LowLimit
+    #pragma diagram {"xy":"H27890;V92290","wh":"12000;3200"} #end)
+    (#5 expr RawIntegral
+    #pragma diagram {"xy":"H26240;V99700","wh":"16000;3200"} #end)
+    (#8 expr #7 or #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H112220;V78850"} #end)
+    (#9 expr RawIntegral <= LowLimit
+    #pragma diagram {"xy":"H24520;V79905","wh":"26000;3200"} #end)
+    (#13 expr if #12 then #11 else #10
+      where
+        (#12 group)
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H47580;V93870"} #end)
+    (#17 expr if #16 then #15 else #14
+      where
+        (#16 group)
+        (#15 group)
+        (#14 group)
+    #pragma diagram {"xy":"H95200;V92395"} #end)
+    (#18 def Output
+    #pragma diagram {"xy":"H130610;V92500","wh":"10000;3200"} #end)
+    (#19 def RawIntegral
+    #pragma diagram {"xy":"H107530;V30270","wh":"16000;3200"} #end)
+    (#20 expr Output
+    #pragma diagram {"xy":"H16710;V11745","wh":"10000;3200"} #end)
+    (#21 expr Input
+    #pragma diagram {"xy":"H7700;V21590","wh":"10000;3200"} #end)
+    (#22 expr deltaT
+    #pragma diagram {"dir":"es","xy":"H16065;V45520","wh":"3200;10000"} #end)
+    (#23 expr init
+    #pragma diagram {"dir":"es","xy":"H37434;V67680","wh":"3200;8000"} #end)
+    (#26 expr #25 + #24
+      where
+        (#25 group)
+        (#24 group)
+    #pragma diagram {"xy":"H53360;V21500"} #end)
+    (#29 expr #28 * #27
+      where
+        (#28 group)
+        (#27 group)
+    #pragma diagram {"xy":"H26480;V22600"} #end)
+    (#33 expr if #32 then #31 else #30
+      where
+        (#32 group)
+        (#31 group)
+        (#30 group)
+    #pragma diagram {"xy":"H66750;V30220"} #end)
+    (#35 expr pre #34
+      where
+        (#34 group)
+    #pragma diagram {"xy":"H34920;V11680"} #end)
+    (#36 expr Reset
+    #pragma diagram {"xy":"H60230;V42970","wh":"10000;3200"} #end)
+    (#39 expr #38 -> #37
+      where
+        (#38 group)
+        (#37 group)
+    #pragma diagram {"xy":"H87750;V30220"} #end)
+    (assume
+           $A1: LowLimit <= HighLimit;
+    #pragma diagram {"xy":"H0;V0","wh":"36000;3200"} #end)
+    
+    (#40 wire #26 => #30
+    #pragma diagram {"wp":"#26 h2890 v10620 #30"} #end)
+    (#41 wire #33 => #37
+    #pragma diagram {"wp":"#33 h7000 v1900 #37"} #end)
+    (#42 wire #35 => #25
+    #pragma diagram {"wp":"#35 h5220 v7920 #25"} #end)
+    (#43 wire #36 => #32
+    #pragma diagram {"wp":"#36 h10020 v-18250 h-7000 #32"} #end)
+    (#44 wire #9 => #6, #12
+    #pragma diagram {"wp":"#9 h11560[h55130 v845 #6, #12]"} #end)
+    (#45 wire #22 => #27
+    #pragma diagram {"wp":"#22 v-17520 #27"} #end)
+    (#46 wire #39 => #19
+    #pragma diagram {"wp":"#39 h4890 v50 #19"} #end)
+    (#47 wire #23 => #31, #38
+    #pragma diagram {"wp":"#23 v-7580[v-29280 #31, h42149 v-29280 #38]"} #end)
+    (#48 wire #21 => #28
+    #pragma diagram {"wp":"#21 h7873 v-890 #28"} #end)
+    (#49 wire #3 => #15
+    #pragma diagram {"wp":"#3 h6885 v-315 #15"} #end)
+    (#50 wire #17 => #18
+    #pragma diagram {"wp":"#17 h14205 v105 #18"} #end)
+    (#51 wire #1 => #7, #16
+    #pragma diagram {"wp":"#1 h10910[h4667 v4450 #7, #16]"} #end)
+    (#52 wire #20 => #34
+    #pragma diagram {"wp":"#20 h5105 v-65 #34"} #end)
+    (#53 wire #5 => #10
+    #pragma diagram {"wp":"#5 h5670 v-3930 #10"} #end)
+    (#54 wire #4 => #11
+    #pragma diagram {"wp":"#4 h6020 v-320 #11"} #end)
+    (#55 wire #13 => #14
+    #pragma diagram {"wp":"#13 h33735 v425 #14"} #end)
+    (#56 wire #29 => #24
+    #pragma diagram {"wp":"#29 h9940 v800 #24"} #end)
+    (#57 wire #8 => #2
+    #pragma diagram {"wp":"#8 h4795 v100 #2"} #end)
+    
+    (var
+        RawIntegral: 'T;)
+}
+
+node #pragma doc Computes the integral of the input using the forward rule. Saturates the output between LowLimit and HighLimit, and detects when saturation is reached. #end IntegralForward (Input: 'T;
+                                                                                                                                                                                               Reset: bool;
+                                                                                                                                                                                               HighLimit: 'T;
+                                                                                                                                                                                               LowLimit: 'T;
+                                                                                                                                                                                               init: 'T;
+                                                                                                                                                                                               deltaT: 'T;)
+  returns (Output: 'T;
+           Saturation: bool;)
+  where 'T numeric
+{
+  diagram
+    (#3 expr #2 + #1
+      where
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H96120;V28470"} #end)
+    (#4 def RawIntegral
+    #pragma diagram {"xy":"H160240;V27310","wh":"16000;3200"} #end)
+    (#5 expr RawIntegral <= LowLimit
+    #pragma diagram {"xy":"H33400;V76725","wh":"26000;3200"} #end)
+    (#6 expr LowLimit
+    #pragma diagram {"xy":"H36780;V89110","wh":"12000;3200"} #end)
+    (#10 expr if #9 then #8 else #7
+      where
+        (#9 group)
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H56470;V90700"} #end)
+    (#11 expr RawIntegral
+    #pragma diagram {"xy":"H35130;V96520","wh":"16000;3200"} #end)
+    (#15 expr if #14 then #13 else #12
+      where
+        (#14 group)
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H104090;V89220"} #end)
+    (#16 expr HighLimit
+    #pragma diagram {"xy":"H81320;V87630","wh":"14000;3200"} #end)
+    (#17 expr RawIntegral >= HighLimit
+    #pragma diagram {"xy":"H80680;V69315","wh":"28000;3200"} #end)
+    (#18 def Output
+    #pragma diagram {"xy":"H139500;V89320","wh":"10000;3200"} #end)
+    (#21 expr #20 or #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H121110;V75670"} #end)
+    (#22 def Saturation
+    #pragma diagram {"xy":"H141700;V75780","wh":"14000;3200"} #end)
+    (#23 expr Output
+    #pragma diagram {"xy":"H48460;V19580","wh":"10000;3200"} #end)
+    (#24 expr deltaT
+    #pragma diagram {"xy":"H22010;V37470","wh":"10000;3200"} #end)
+    (#25 expr Input
+    #pragma diagram {"xy":"H22440;V28765","wh":"10000;3200"} #end)
+    (#26 expr init
+    #pragma diagram {"xy":"H106930;V19715"} #end)
+    (#29 expr #28 * #27
+      where
+        (#28 group)
+        (#27 group)
+    #pragma diagram {"xy":"H48760;V29640"} #end)
+    (#33 expr if #32 then #31 else #30
+      where
+        (#32 group)
+        (#31 group)
+        (#30 group)
+    #pragma diagram {"xy":"H131000;V27385"} #end)
+    (#34 expr Reset
+    #pragma diagram {"xy":"H124040;V46675","wh":"10000;3200"} #end)
+    (#37 expr #36 pre #35
+      where
+        (#36 group)
+        (#35 group)
+    #pragma diagram {"xy":"H71710;V19585"} #end)
+    (#38 expr init
+    #pragma diagram {"xy":"H0;V0"} #end)
+    (assume
+           $A1: LowLimit <= HighLimit;
+    #pragma diagram {"xy":"H1100;V4400","wh":"36000;3200"} #end)
+    
+    (#39 wire #25 => #28
+    #pragma diagram {"wp":"#25 h9660 v-1025 #28"} #end)
+    (#40 wire #37 => #2
+    #pragma diagram {"wp":"#37 h8205 v6985 #2"} #end)
+    (#41 wire #29 => #1
+    #pragma diagram {"wp":"#29 h24155 v730 #1"} #end)
+    (#42 wire #34 => #32
+    #pragma diagram {"wp":"#34 h10460 v-24790 h-7000 #32"} #end)
+    (#43 wire #11 => #7
+    #pragma diagram {"wp":"#11 h5670 v-3920 #7"} #end)
+    (#44 wire #10 => #12
+    #pragma diagram {"wp":"#10 h33735 v420 #12"} #end)
+    (#45 wire #24 => #27
+    #pragma diagram {"wp":"#24 h3715 v-5930 #27"} #end)
+    (#46 wire #17 => #14, #20
+    #pragma diagram {"wp":"#17 h10910[#14, h5347 v4455 #20]"} #end)
+    (#47 wire #33 => #4
+    #pragma diagram {"wp":"#33 h12680 v-75 #4"} #end)
+    (#48 wire #23 => #35
+    #pragma diagram {"wp":"#23 h7625 v1905 #35"} #end)
+    (#49 wire #6 => #8
+    #pragma diagram {"wp":"#6 h6020 v-310 #8"} #end)
+    (#50 wire #3 => #30
+    #pragma diagram {"wp":"#3 h21400 v815 #30"} #end)
+    (#51 wire #21 => #22
+    #pragma diagram {"wp":"#21 h4795 v110 #22"} #end)
+    (#52 wire #26 => #31
+    #pragma diagram {"wp":"#26 h11590 v5770 #31"} #end)
+    (#53 wire #16 => #13
+    #pragma diagram {"wp":"#16 h6885 v-310 #13"} #end)
+    (#54 wire #5 => #9, #19
+    #pragma diagram {"wp":"#5 h11570[#9, h52967 v845 #19]"} #end)
+    (#55 wire #15 => #18
+    #pragma diagram {"wp":"#15 h14715 v100 #18"} #end)
+    (#56 wire #38 => #36
+    #pragma diagram {"wp":"#38 h57085 v17685 #36"} #end)
+    
+    (var
+        RawIntegral: 'T;)
+}
+
+node #pragma doc Computes the integral of the input using the trapezoid rule. Saturates the output between LowLimit and HighLimit, and detects when saturation is reached. #end IntegralTrapezoid (Input: 'T;
+                                                                                                                                                                                                   Reset: bool;
+                                                                                                                                                                                                   HighLimit: 'T;
+                                                                                                                                                                                                   LowLimit: 'T;
+                                                                                                                                                                                                   init: 'T;
+                                                                                                                                                                                                   deltaT: 'T;)
+  returns (Output: 'T;
+           Saturation: bool;)
+  where 'T numeric
+{
+  diagram
+    (#3 expr #2 + #1
+      where
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H40240;V19790"} #end)
+    (#6 expr #5 / #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H57380;V21065"} #end)
+    (#7 expr (2 :> 'T)
+    #pragma diagram {"xy":"H41950;V30170","wh":"14000;3200"} #end)
+    (#8 expr RawIntegral >= HighLimit
+    #pragma diagram {"xy":"H73710;V76095","wh":"28000;3200"} #end)
+    (#9 def Saturation
+    #pragma diagram {"xy":"H134710;V82550","wh":"14000;3200"} #end)
+    (#10 expr RawIntegral
+    #pragma diagram {"xy":"H28150;V103290","wh":"16000;3200"} #end)
+    (#11 expr LowLimit
+    #pragma diagram {"xy":"H29800;V95890","wh":"12000;3200"} #end)
+    (#15 expr if #14 then #13 else #12
+      where
+        (#14 group)
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H97110;V95990"} #end)
+    (#16 def Output
+    #pragma diagram {"xy":"H132510;V96100","wh":"10000;3200"} #end)
+    (#17 expr HighLimit
+    #pragma diagram {"xy":"H74330;V94400","wh":"14000;3200"} #end)
+    (#21 expr if #20 then #19 else #18
+      where
+        (#20 group)
+        (#19 group)
+        (#18 group)
+    #pragma diagram {"xy":"H49480;V97470"} #end)
+    (#24 expr #23 or #22
+      where
+        (#23 group)
+        (#22 group)
+    #pragma diagram {"xy":"H114120;V82440"} #end)
+    (#25 expr RawIntegral <= LowLimit
+    #pragma diagram {"xy":"H26410;V83510","wh":"26000;3200"} #end)
+    (#26 expr Output
+    #pragma diagram {"xy":"H64350;V11325","wh":"10000;3200"} #end)
+    (#27 def RawIntegral
+    #pragma diagram {"xy":"H153470;V27310","wh":"16000;3200"} #end)
+    (#28 expr Input
+    #pragma diagram {"xy":"H6680;V18630","wh":"10000;3200"} #end)
+    (#29 expr deltaT
+    #pragma diagram {"dir":"es","xy":"H66860;V46800","wh":"3200;10000"} #end)
+    (#30 expr init
+    #pragma diagram {"dir":"es","xy":"H90355;V66010","wh":"3200;8000"} #end)
+    (#33 expr #32 + #31
+      where
+        (#32 group)
+        (#31 group)
+    #pragma diagram {"xy":"H99380;V20830"} #end)
+    (#36 expr #35 * #34
+      where
+        (#35 group)
+        (#34 group)
+    #pragma diagram {"xy":"H76510;V21850"} #end)
+    (#40 expr if #39 then #38 else #37
+      where
+        (#39 group)
+        (#38 group)
+        (#37 group)
+    #pragma diagram {"xy":"H114000;V27175"} #end)
+    (#43 expr #42 pre #41
+      where
+        (#42 group)
+        (#41 group)
+    #pragma diagram {"xy":"H25810;V26350"} #end)
+    (#45 expr pre #44
+      where
+        (#44 group)
+    #pragma diagram {"xy":"H81650;V11430"} #end)
+    (#46 expr Reset
+    #pragma diagram {"xy":"H107860;V39160","wh":"10000;3200"} #end)
+    (#49 expr #48 -> #47
+      where
+        (#48 group)
+        (#47 group)
+    #pragma diagram {"xy":"H133210;V27180"} #end)
+    (#50 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (assume
+           $A1: LowLimit <= HighLimit;
+    #pragma diagram {"xy":"H1100;V4400","wh":"36000;3200"} #end)
+    
+    (#51 wire #6 => #35
+    #pragma diagram {"wp":"#6 h6065 v-1115 #35"} #end)
+    (#52 wire #29 => #34
+    #pragma diagram {"wp":"#29 v-19550 #34"} #end)
+    (#53 wire #28 => #41, #2
+    #pragma diagram {"wp":"#28 h5565[v9620 #41, h16780 v-740 #2]"} #end)
+    (#54 wire #49 => #27
+    #pragma diagram {"wp":"#49 h5130 v130 #27"} #end)
+    (#55 wire #46 => #39
+    #pragma diagram {"wp":"#46 h13245 v-35122 h-10605 #39"} #end)
+    (#56 wire #36 => #31
+    #pragma diagram {"wp":"#36 h7935 v880 #31"} #end)
+    (#57 wire #21 => #12
+    #pragma diagram {"wp":"#21 h26830 v420 #12"} #end)
+    (#58 wire #25 => #22, #20
+    #pragma diagram {"wp":"#25 h11570[h43930 v830 #22, #20]"} #end)
+    (#59 wire #43 => #1
+    #pragma diagram {"wp":"#43 h2930 v-4660 #1"} #end)
+    (#60 wire #33 => #37
+    #pragma diagram {"wp":"#33 h3810 v8245 #37"} #end)
+    (#61 wire #26 => #44
+    #pragma diagram {"wp":"#26 h4650 v105 #44"} #end)
+    (#62 wire #45 => #32
+    #pragma diagram {"wp":"#45 h4865 v7500 #32"} #end)
+    (#63 wire #7 => #4
+    #pragma diagram {"wp":"#7 h2930 v-7205 #4"} #end)
+    (#64 wire #3 => #5
+    #pragma diagram {"wp":"#3 h5070 v-625 #5"} #end)
+    (#65 wire #8 => #14, #23
+    #pragma diagram {"wp":"#8 h6200[h4700 #14, v4445 #23]"} #end)
+    (#66 wire #30 => #38, #48
+    #pragma diagram {"wp":"#30 v-31833[v-6402 #38, h33250 v-6397 #48]"} #end)
+    (#67 wire #10 => #18
+    #pragma diagram {"wp":"#10 h5130 v-3920 #18"} #end)
+    (#68 wire #17 => #13
+    #pragma diagram {"wp":"#17 h6890 v-310 #13"} #end)
+    (#69 wire #50 => #42
+    #pragma diagram {"wp":"#50 h13600 v24450 #42"} #end)
+    (#70 wire #40 => #47
+    #pragma diagram {"wp":"#40 h5105 v1905 #47"} #end)
+    (#71 wire #15 => #16
+    #pragma diagram {"wp":"#15 h14705 v110 #16"} #end)
+    (#72 wire #24 => #9
+    #pragma diagram {"wp":"#24 h4795 v110 #9"} #end)
+    (#73 wire #11 => #19
+    #pragma diagram {"wp":"#11 h7645 v-320 #19"} #end)
+    
+    (var
+        RawIntegral: 'T;)
+}
+
+node #pragma doc Compute the mean of two iterative values of the input.
+     MeanOn2Step (0) =  (U(0) + U(0)) / 2
+     MeanOn2Step (k) = (U(k) + U(k -1)) / 2 #end MeanCycle2 (U: 'T;)
+  returns (MeanOn2Steps: 'T;)
+  where 'T float
+{
+  diagram
+    (#3 expr #2 + #1
+      where
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H57720;V9400"} #end)
+    (#4 expr U
+    #pragma diagram {"xy":"H16890;V8335"} #end)
+    (#5 def MeanOn2Steps
+    #pragma diagram {"xy":"H98990;V19975","wh":"16000;3200"} #end)
+    (#8 expr #7 / #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H74400;V19975"} #end)
+    (#9 expr (2 :> 'T)
+    #pragma diagram {"xy":"H53370;V20850","wh":"14000;3200"} #end)
+    (#12 expr #11 pre #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H35810;V15610"} #end)
+    
+    (#13 wire #8 => #5)
+    (#14 wire #3 => #7
+    #pragma diagram {"wp":"#3 h4840 v8675 #7"} #end)
+    (#15 wire #9 => #6
+    #pragma diagram {"wp":"#9 h7190 v1025 #6"} #end)
+    (#16 wire #4 => #10, #11, #2
+    #pragma diagram {"wp":"#4 h4730[v9175 #10, h2460[v5375 #11, h20685 v-835 #2]]"} #end)
+    (#17 wire #12 => #1
+    #pragma diagram {"wp":"#12 h6955 v-4310 #1"} #end)
+}
+
+node #pragma doc Compute the mean of three iterative values of the input.
+     MeanOn3Steps (0) =  (U(0) + U(0) + U(0)) / 3
+     MeanOn3Steps (1) =  (U(1) + U(0) + U(0)) / 3
+     MeanOn3Steps (k) =  (U(k) + U(k -1) + U(k-2)) / 3 #end MeanCycle3 (U: 'T;)
+  returns (MeanOn3Step: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 def MeanOn3Step
+    #pragma diagram {"xy":"H119610;V20770","wh":"16000;3200"} #end)
+    (#2 expr U
+    #pragma diagram {"xy":"H11340;V11510"} #end)
+    (#5 expr #4 pre #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H31310;V19845"} #end)
+    (#8 expr #7 pre #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H48510;V28175"} #end)
+    (#9 expr (3 :> 'T)
+    #pragma diagram {"xy":"H67560;V29315","wh":"14000;3200"} #end)
+    (#10 $N1 block ({op_expr%+%op_expr})
+    #pragma diagram {"xy":"H68580;V19810","wh":"12000;7000"} #end)
+    (#13 expr #12 / #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H87690;V20830"} #end)
+    
+    (#14 wire #9 => #11
+    #pragma diagram {"wp":"#9 h5575 v-6585 #11"} #end)
+    (#15 wire #2 => #3, #4, #7, #10 .(1)
+    #pragma diagram {"wp":"#2 h4495[h1990[v10235 #3, h1990[v6435 #4, h26195 v6645 #10]], v14765 #7]"} #end)
+    (#16 wire #8 => #10 .(3)
+    #pragma diagram {"wp":"#8 h3500 v-6687 #10"} #end)
+    (#17 wire #13 => #1
+    #pragma diagram {"wp":"#13 h10960 v-60 #1"} #end)
+    (#18 wire #5 => #6, #10 .(2)
+    #pragma diagram {"wp":"#5 h4700[v10230 #6, #10]"} #end)
+    (#19 wire #10 .(1) => #12
+    #pragma diagram {"wp":"v-880|#10 #12"} #end)
+}
+
+inline node #pragma doc Stores a value. 
+            If the MemCond condition equals true, then the current value of the input is stored and available as output. 
+            If Reset equals true, output value and memory equal InitVal. 
+            In all other cases output = last stored value. #end Memory (M_Input: 'T;
+                                                                        Reset: bool;
+                                                                        MemCond: bool;
+                                                                        InitVal: 'T;)
+  returns (Out: 'T;)
+{
+  diagram
+    (#1 expr Reset
+    #pragma diagram {"dir":"es","xy":"H103320;V64010","wh":"3200;10000"} #end)
+    (#2 expr InitVal
+    #pragma diagram {"xy":"H13720;V13890","wh":"12000;3200"} #end)
+    (#3 expr MemCond
+    #pragma diagram {"dir":"es","xy":"H65484;V64850","wh":"3200;12000"} #end)
+    (#6 expr #5 pre #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H43220;V38365"} #end)
+    (#7 expr M_Input
+    #pragma diagram {"xy":"H13720;V29500","wh":"12000;3200"} #end)
+    (#11 expr if #10 then #9 else #8
+      where
+        (#10 group)
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H64060;V31090"} #end)
+    (#15 expr if #14 then #13 else #12
+      where
+        (#14 group)
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H101800;V15490"} #end)
+    (#16 def Out
+    #pragma diagram {"xy":"H154980;V15475"} #end)
+    (#17 expr InitVal
+    #pragma diagram {"xy":"H31710;V49610","wh":"12000;3200"} #end)
+    
+    (#18 wire #2 => #13
+    #pragma diagram {"wp":"#2 h72623 v-300 #13"} #end)
+    (#19 wire #17 => #5
+    #pragma diagram {"wp":"#17 h3500 v-2600 h-5490 v-10545 #5"} #end)
+    (#20 wire #3 => #10
+    #pragma diagram {"wp":"#3 v-13340 h10533 v-30620 h-11957 #10"} #end)
+    (#21 wire #15 => #16, #4
+    #pragma diagram {"wp":"#15 h3500[#16, v27375 h-73580 v-2600 #4]"} #end)
+    (#22 wire #11 => #12
+    #pragma diagram {"wp":"#11 h7457 v-13700 #12"} #end)
+    (#23 wire #6 => #8
+    #pragma diagram {"wp":"#6 h6420 v-5375 #8"} #end)
+    (#24 wire #7 => #9
+    #pragma diagram {"wp":"#7 h21170 v-310 #9"} #end)
+    (#25 wire #1 => #14
+    #pragma diagram {"wp":"#1 v-13500 h6480 v-37020 h-8000 #14"} #end)
+}
+
+inline node MemoryBasic (BM_Input: 'T;
+                         Init: 'T;
+                         Write: bool;)
+  returns (Memorized: 'T;)
+{
+  diagram
+    (#1 expr BM_Input
+    #pragma diagram {"xy":"H19520;V21565","wh":"12000;3200"} #end)
+    (#2 def Memorized
+    #pragma diagram {"xy":"H126710;V23150","wh":"14000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H63200;V23110"} #end)
+    (#7 expr Write
+    #pragma diagram {"dir":"es","xy":"H64684;V74050","wh":"3200;10000"} #end)
+    (#10 expr #9 pre #8
+      where
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H33860;V39120"} #end)
+    (#11 expr Init
+    #pragma diagram {"dir":"es","xy":"H35325;V73520","wh":"3200;8000"} #end)
+    
+    (#12 wire #6 => #2, #8
+    #pragma diagram {"wp":"#6 h3500[h23755 v40 #2, v11510 h-45340 v6400 #8]"} #end)
+    (#13 wire #1 => #4
+    #pragma diagram {"wp":"#1 h17840 v-355 #4"} #end)
+    (#14 wire #10 => #3
+    #pragma diagram {"wp":"#10 h10670 v-14110 #3"} #end)
+    (#15 wire #7 => #5
+    #pragma diagram {"wp":"#7 v-13643 h30271 v-39297 h-31755 #5"} #end)
+    (#16 wire #11 => #9
+    #pragma diagram {"wp":"#11 v-14950 h-9465 v-18850 #9"} #end)
+}

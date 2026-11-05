@@ -1,0 +1,2 @@
+-- version swan: 2025.2 graph: 2.1
+const G: float32 = 9.81;

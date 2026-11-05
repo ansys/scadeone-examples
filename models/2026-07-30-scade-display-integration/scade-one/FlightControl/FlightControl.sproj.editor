@@ -1,0 +1,13 @@
+{
+  "JobsOrder": [
+    "jobs\\codegen_6294cfd\\.sjob"
+  ],
+  "ModulesOrder": [
+    "assets\\FlightControl-AlarmConstants.swan",
+    "assets\\FlightControl-RegulationConstants.swan",
+    "assets\\FlightControl-UnitConversionsConstants.swan",
+    "assets\\FlightControl.swan",
+    "assets\\FlightControlIntegration.swan",
+    "assets\\FlightControlSimulation.swant"
+  ]
+}

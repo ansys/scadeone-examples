@@ -1,0 +1,10 @@
+-- version swan: 2025.2 graph: 2.1
+const FTtoM: float32 = 0.3048;
+
+const KMHtoKTS: float32 = 0.5399568;
+
+const KTStoKMH: float32 = 1.852;
+
+const MtoFT: float32 = 3.2808399;
+
+const RDtoDEG: float32 = 57.2957795;

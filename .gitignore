@@ -23,6 +23,9 @@
 models/**/Standalone/
 models/**/GCS_Exe/
 models/**/kcgdisplay/
+models/**/ninja_gcc/
+models/**/msvc20*/
+models/**/swan_cg/
 *_ScadeOneCoSimulation/
 
 ### Python #### Byte-compiled / optimized / DLL files

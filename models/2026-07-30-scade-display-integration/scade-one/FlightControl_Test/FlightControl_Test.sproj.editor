@@ -1,0 +1,10 @@
+{
+  "JobsOrder": [
+    "jobs\\testexec_bf5fc6d\\.sjob",
+    "jobs\\simu_10e6490\\.sjob"
+  ],
+  "ModulesOrder": [
+    "assets\\FCU_AM_Proc.swant",
+    "assets\\FCU_FC_Proc.swant"
+  ]
+}

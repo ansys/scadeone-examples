@@ -1,0 +1,1845 @@
+-- version swan: 2025.2 graph: 2.1
+use Flows;
+
+node #pragma doc Discrete filter expressed as a Z-transform function:
+       Num / (Den[0] + Den[1]*z^-1)
+     Optimization of FilterND when numerator order is 0 and denominator order is 1
+     At first tick, Out = (Num*InX)/Den[0] #end Filter01 (In: 'T;
+                                                          Num: 'T;
+                                                          Den: 'T^2;)
+  returns (Out: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#2 expr Den[0]
+    #pragma diagram {"xy":"H90590;V27625","wh":"10000;3200"} #end)
+    (#3 expr In
+    #pragma diagram {"xy":"H15300;V8070"} #end)
+    (#6 expr #5 * #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H46350;V12305"} #end)
+    (#7 expr Num
+    #pragma diagram {"xy":"H15310;V16670"} #end)
+    (#10 expr #9 - #8
+      where
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H88160;V20770"} #end)
+    (#13 expr #12 * #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H46350;V29235"} #end)
+    (#14 expr Den[1]
+    #pragma diagram {"xy":"H14390;V28045","wh":"10000;3200"} #end)
+    (#17 expr #16 pre #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H69840;V29420"} #end)
+    (#20 expr #19 / #18
+      where
+        (#19 group)
+        (#18 group)
+    #pragma diagram {"xy":"H109320;V22095"} #end)
+    (#21 def Out
+    #pragma diagram {"xy":"H132320;V22095"} #end)
+    
+    (#22 wire #2 => #18
+    #pragma diagram {"wp":"#2 h5865 v-3630 #18"} #end)
+    (#23 wire #13 => #15
+    #pragma diagram {"wp":"#13 h7745 v2085 #15"} #end)
+    (#24 wire #6 => #9
+    #pragma diagram {"wp":"#6 h5622 v6565 #9"} #end)
+    (#25 wire #17 => #8
+    #pragma diagram {"wp":"#17 h5160 v-6750 #8"} #end)
+    (#26 wire #10 => #19
+    #pragma diagram {"wp":"#10 h8295 v-575 #19"} #end)
+    (#27 wire #1 => #16
+    #pragma diagram {"wp":"#1 h54217 v27520 #16"} #end)
+    (#28 wire #7 => #4
+    #pragma diagram {"wp":"#7 h12560 v-2465 #4"} #end)
+    (#29 wire #3 => #5
+    #pragma diagram {"wp":"#3 h12570 v2335 #5"} #end)
+    (#30 wire #14 => #12
+    #pragma diagram {"wp":"#14 h12480 v-710 #12"} #end)
+    (#31 wire #20 => #21, #11
+    #pragma diagram {"wp":"#20 h3500[#21, v11825 h-76970 v-2785 #11]"} #end)
+}
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function:
+       Num / (1 + Den*z^-1)
+     Optimization of FilterND when numerator order is 0 and denominator order is 1
+     At first tick, Out = Num*InX #end Filter01Norm (In: 'T;
+                                                     Num: 'T;
+                                                     Den: 'T;)
+  returns (Out: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#2 def Out
+    #pragma diagram {"xy":"H115290;V19715"} #end)
+    (#3 expr In
+    #pragma diagram {"xy":"H18220;V7275"} #end)
+    (#6 expr #5 * #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H46350;V11775"} #end)
+    (#7 expr Num
+    #pragma diagram {"xy":"H18230;V15610"} #end)
+    (#10 expr #9 - #8
+      where
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H88160;V19975"} #end)
+    (#13 expr #12 * #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H46350;V28180"} #end)
+    (#14 expr Den
+    #pragma diagram {"xy":"H18230;V26985"} #end)
+    (#17 expr #16 pre #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H68570;V28150"} #end)
+    
+    (#18 wire #17 => #8
+    #pragma diagram {"wp":"#17 h5795 v-6275 #8"} #end)
+    (#19 wire #3 => #5
+    #pragma diagram {"wp":"#3 h11065 v2600 #5"} #end)
+    (#20 wire #7 => #4
+    #pragma diagram {"wp":"#7 h11060 v-1935 #4"} #end)
+    (#21 wire #1 => #16
+    #pragma diagram {"wp":"#1 h53265 v26250 #16"} #end)
+    (#22 wire #14 => #12
+    #pragma diagram {"wp":"#14 h11060 v-705 #12"} #end)
+    (#23 wire #13 => #15
+    #pragma diagram {"wp":"#13 h7110 v1870 #15"} #end)
+    (#24 wire #6 => #9
+    #pragma diagram {"wp":"#6 h5305 v6300 #9"} #end)
+    (#25 wire #10 => #2, #11
+    #pragma diagram {"wp":"#10 h3500[h10598 v-260 #2, v12705 h-55810 v-2600 #11]"} #end)
+}
+
+node #pragma doc Discrete filter expressed as a Z-transform function: 
+       Num / (Den[0] + Den[1]*z^-1  + Den[2]*z^-2)
+     Optimization of FilterND when numerator order is 0 and denominator order is 2
+     At first tick, Out = (Num*InX)/Den[0] #end Filter02 (In: 'T;
+                                                          Num: 'T;
+                                                          Den: 'T^3;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 expr (0.0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"16000;3200"} #end)
+    (#2 expr In
+    #pragma diagram {"xy":"H26680;V9925"} #end)
+    (#5 expr #4 * #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H44230;V14685"} #end)
+    (#8 expr #7 / #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H127050;V35055"} #end)
+    (#9 def Out
+    #pragma diagram {"xy":"H152600;V34795"} #end)
+    (#10 expr Num
+    #pragma diagram {"xy":"H26690;V18785"} #end)
+    (#11 expr Den[1]
+    #pragma diagram {"xy":"H25390;V29740","wh":"10000;3200"} #end)
+    (#14 expr #13 * #12
+      where
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H43970;V30825"} #end)
+    (#17 expr #16 * #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H62490;V52785"} #end)
+    (#18 expr Den[2]
+    #pragma diagram {"xy":"H25390;V51540","wh":"10000;3200"} #end)
+    (#19 expr Den[0]
+    #pragma diagram {"xy":"H108150;V40745","wh":"10000;3200"} #end)
+    (#22 expr #21 pre #20
+      where
+        (#21 group)
+        (#20 group)
+    #pragma diagram {"xy":"H65180;V30900"} #end)
+    (#25 expr #24 - #23
+      where
+        (#24 group)
+        (#23 group)
+    #pragma diagram {"xy":"H106410;V33735"} #end)
+    (#26 $N1 block (Flows::Delay <<2>>  \ init: (0.0 :> 'T))
+    #pragma diagram {"xy":"H81280;V52920","wh":"17100;10320"} #end)
+    (#29 expr #28 - #27
+      where
+        (#28 group)
+        (#27 group)
+    #pragma diagram {"xy":"H82330;V16005"} #end)
+    
+    (#30 wire #25 => #7
+    #pragma diagram {"wp":"#25 h7690 v-580 #7"} #end)
+    (#31 wire #19 => #6
+    #pragma diagram {"wp":"#19 h5950 v-3790 #6"} #end)
+    (#32 wire #26 .(1) => #23
+    #pragma diagram {"wp":"v0|#26 h5790 v-17285 #23"} #end)
+    (#33 wire #2 => #4
+    #pragma diagram {"wp":"#2 h3505 v2860 #4"} #end)
+    (#34 wire #18 => #16
+    #pragma diagram {"wp":"#18 h15050 v-655 #16"} #end)
+    (#35 wire #22 => #27
+    #pragma diagram {"wp":"#22 h4575 v-12995 #27"} #end)
+    (#36 wire #29 => #24
+    #pragma diagram {"wp":"#29 h8540 v15830 #24"} #end)
+    (#37 wire #1 => #21
+    #pragma diagram {"wp":"#1 h48990 v29000 #21"} #end)
+    (#38 wire #14 => #20
+    #pragma diagram {"wp":"#14 h8865 v1975 #20"} #end)
+    (#39 wire #17 => #26 .(1))
+    (#40 wire #10 => #3
+    #pragma diagram {"wp":"#10 h5770 v-2200 #3"} #end)
+    (#41 wire #8 => #9, #12, #15
+    #pragma diagram {"wp":"#8 h3500[h1000[h9458 v-260 #9, v26025 h-102660 v-6395 #15], v8290 h-97080 v-10620 #12]"} #end)
+    (#42 wire #5 => #28
+    #pragma diagram {"wp":"#5 h20987 v-580 #28"} #end)
+    (#43 wire #11 => #13
+    #pragma diagram {"wp":"#11 h5790 v-815 #13"} #end)
+}
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function: 
+       Num / (1 + Den[0]*z^-1 + Den[1]*z^-2)
+     Optimization of FilterND when numerator order is 0 and denominator order is 2
+     At first tick, Out = Num*InX #end Filter02Norm (In: 'T;
+                                                     Num: 'T;
+                                                     Den: 'T^2;)
+  returns (Out: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#2 expr In
+    #pragma diagram {"xy":"H25890;V9925"} #end)
+    (#5 expr #4 * #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H44230;V14685"} #end)
+    (#6 def Out
+    #pragma diagram {"xy":"H134340;V33470"} #end)
+    (#7 expr Num
+    #pragma diagram {"xy":"H25850;V18735"} #end)
+    (#8 expr Den[0]
+    #pragma diagram {"xy":"H24550;V29740","wh":"10000;3200"} #end)
+    (#11 expr #10 * #9
+      where
+        (#10 group)
+        (#9 group)
+    #pragma diagram {"xy":"H43970;V30825"} #end)
+    (#14 expr #13 * #12
+      where
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H43970;V52785"} #end)
+    (#15 expr Den[1]
+    #pragma diagram {"xy":"H24550;V51330","wh":"10000;3200"} #end)
+    (#18 expr #17 pre #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H65600;V30900"} #end)
+    (#21 expr #20 - #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H106410;V33735"} #end)
+    (#22 $N1 block (Flows::Delay <<2>>  \ init: (0 :> 'T))
+    #pragma diagram {"xy":"H63285;V52920","wh":"14130;10320"} #end)
+    (#25 expr #24 - #23
+      where
+        (#24 group)
+        (#23 group)
+    #pragma diagram {"xy":"H82330;V16005"} #end)
+    
+    (#26 wire #21 => #6, #12, #9
+    #pragma diagram {"wp":"#21 h3500[h1000[h11442 v-265 #6, v27345 h-82860 v-6395 #12], v4500 h-76440 v-5510 #9]"} #end)
+    (#27 wire #11 => #16
+    #pragma diagram {"wp":"#11 h8440 v1975 #16"} #end)
+    (#28 wire #22 .(1) => #19
+    #pragma diagram {"wp":"v0|#22 h2625 v-17285 #19"} #end)
+    (#29 wire #1 => #17
+    #pragma diagram {"wp":"#1 h48720 v29000 #17"} #end)
+    (#30 wire #2 => #4
+    #pragma diagram {"wp":"#2 h6170 v2860 #4"} #end)
+    (#31 wire #8 => #10
+    #pragma diagram {"wp":"#8 h6210 v-815 #10"} #end)
+    (#32 wire #14 => #22 .(1))
+    (#33 wire #18 => #23
+    #pragma diagram {"wp":"#18 h4365 v-12995 #23"} #end)
+    (#34 wire #15 => #13
+    #pragma diagram {"wp":"#15 h6210 v-445 #13"} #end)
+    (#35 wire #5 => #24
+    #pragma diagram {"wp":"#5 h20563 v-580 #24"} #end)
+    (#36 wire #7 => #3
+    #pragma diagram {"wp":"#7 h6190 v-2150 #3"} #end)
+    (#37 wire #25 => #20
+    #pragma diagram {"wp":"#25 h8540 v15830 #20"} #end)
+}
+
+node #pragma doc Discrete filter expressed as a Z-transform function: 
+       Num / (Den[0] + Den[1]*z^-1  + ... + Den[Ds - 1]*z^-(Ds - 1))
+       where Ds is the denominator's array size (Ds > 2)
+     Optimization of FilterND when numerator order is 0 and denominator order is Ds - 1
+     At first tick, Out = (Num*InX)/Den[0] #end Filter0D <<Ds>> (In: 'T;
+                                                                 Num: 'T;
+                                                                 Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 $N1 block (map ({op_expr%*%op_expr})) <<Ds - 1>>
+    #pragma diagram {"xy":"H59665;V36250","wh":"24230;16040"} #end)
+    (#2 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#5 expr #4 - #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H149010;V22885"} #end)
+    (#7 expr #6 [1 .. Ds - 1]
+      where
+        (#6 group)
+    #pragma diagram {"xy":"H31780;V29000","wh":"20000;7000"} #end)
+    (#8 expr Den
+    #pragma diagram {"xy":"H13730;V29105"} #end)
+    (#9 expr Num
+    #pragma diagram {"xy":"H13730;V17200"} #end)
+    (#10 expr Den[0]
+    #pragma diagram {"xy":"H152390;V31010","wh":"10000;3200"} #end)
+    (#13 expr #12 pre #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H132490;V32390"} #end)
+    (#14 expr In
+    #pragma diagram {"xy":"H13720;V8070"} #end)
+    (#16 expr reverse (#15)
+      where
+        (#15 group)
+    #pragma diagram {"xy":"H76900;V35980"} #end)
+    (#17 $N3 block (fold SumDelay) <<Ds - 1>>
+    #pragma diagram {"xy":"H105040;V32410","wh":"23440;22120"} #end)
+    (#18 def Out
+    #pragma diagram {"xy":"H191850;V23945"} #end)
+    (#20 expr #19 ^ ({text%Ds - 1%text})
+      where
+        (#19 group)
+    #pragma diagram {"xy":"H33980;V42865","wh":"14000;7000"} #end)
+    (#23 expr #22 / #21
+      where
+        (#22 group)
+        (#21 group)
+    #pragma diagram {"xy":"H170440;V24075"} #end)
+    (#24 expr (0 :> 'T)
+    #pragma diagram {"xy":"H76920;V25135","wh":"14000;3200"} #end)
+    (#27 expr #26 * #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H64610;V12835"} #end)
+    
+    (#28 wire #1 .(1) => #15
+    #pragma diagram {"wp":"v-1408|#1 h-1000 v-2424 #15"} #end)
+    (#29 wire #7 => #1 .(1)
+    #pragma diagram {"wp":"#7 h4385 v10268 #1"} #end)
+    (#30 wire #16 => #17 .(2))
+    (#31 wire #5 => #22
+    #pragma diagram {"wp":"#5 h7215 v-710 #22"} #end)
+    (#32 wire #2 => #12
+    #pragma diagram {"wp":"#2 h117080 v30490 #12"} #end)
+    (#33 wire #24 => #17 .(1)
+    #pragma diagram {"wp":"#24 h6200 v2155 #17"} #end)
+    (#34 wire #20 => #1 .(2))
+    (#35 wire #13 => #3
+    #pragma diagram {"wp":"#13 h4260 v-7605 #3"} #end)
+    (#36 wire #17 .(1) => #11
+    #pragma diagram {"wp":"v-120|#17 #11"} #end)
+    (#37 wire #23 => #18, #19
+    #pragma diagram {"wp":"#23 h5603[h4205 v-130 #18, v29290 h-157188 v-10500 #19]"} #end)
+    (#38 wire #9 => #25
+    #pragma diagram {"wp":"#9 h34465 v-2465 #25"} #end)
+    (#39 wire #27 => #4
+    #pragma diagram {"wp":"#27 h50650 v8150 #4"} #end)
+    (#40 wire #10 => #21
+    #pragma diagram {"wp":"#10 h5525 v-5035 #21"} #end)
+    (#41 wire #14 => #26
+    #pragma diagram {"wp":"#14 h15530 v2865 #26"} #end)
+    (#42 wire #8 => #6
+    #pragma diagram {"wp":"#8 h3525 v-105 #6"} #end)
+}
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function: 
+       Num / (1 + Den[0]*z^-1  + ... + Den[Ds - 1]*z^-(Ds-2))
+       where Ds is the denominator's array size  (Ds > 2)
+     Optimization of FilterND when numerator order is 0 and denominator order is Ds
+     At first tick, Out = Num*InX #end Filter0DNorm <<Ds>> (In: 'T;
+                                                            Num: 'T;
+                                                            Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 $N1 block (map ({op_expr%*%op_expr})) <<Ds>>
+    #pragma diagram {"xy":"H46835;V39160","wh":"19210;16040"} #end)
+    (#2 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#3 expr In
+    #pragma diagram {"xy":"H17160;V10980"} #end)
+    (#5 expr reverse (#4)
+      where
+        (#4 group)
+    #pragma diagram {"xy":"H63140;V38895"} #end)
+    (#6 $N3 block (fold SumDelay) <<Ds>>
+    #pragma diagram {"xy":"H93000;V35320","wh":"21060;22120"} #end)
+    (#7 def Out
+    #pragma diagram {"xy":"H163450;V25535"} #end)
+    (#9 expr #8 ^ (Ds)
+      where
+        (#8 group)
+    #pragma diagram {"xy":"H25710;V45770","wh":"10000;7000"} #end)
+    (#10 expr (0 :> 'T)
+    #pragma diagram {"xy":"H68460;V27255","wh":"14000;3200"} #end)
+    (#13 expr #12 * #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H52440;V16005"} #end)
+    (#14 expr Den
+    #pragma diagram {"xy":"H17170;V36515"} #end)
+    (#15 expr Num
+    #pragma diagram {"xy":"H17170;V20110"} #end)
+    (#18 expr #17 pre #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H119790;V35455"} #end)
+    (#21 expr #20 - #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H136840;V25795"} #end)
+    
+    (#22 wire #5 => #6 .(2))
+    (#23 wire #15 => #11
+    #pragma diagram {"wp":"#15 h19405 v-2205 #11"} #end)
+    (#24 wire #3 => #12
+    #pragma diagram {"wp":"#3 h3505 v3125 #12"} #end)
+    (#25 wire #13 => #20
+    #pragma diagram {"wp":"#13 h49590 v7890 #20"} #end)
+    (#26 wire #9 => #1 .(2))
+    (#27 wire #1 .(1) => #4
+    #pragma diagram {"wp":"v-2265|#1 #4"} #end)
+    (#28 wire #10 => #6 .(1)
+    #pragma diagram {"wp":"#10 h5005 v2303 #6"} #end)
+    (#29 wire #21 => #7, #8
+    #pragma diagram {"wp":"#21 h3500[h10208 v-260 #7, v24475 h-125130 v-4500 #8]"} #end)
+    (#30 wire #6 .(1) => #16
+    #pragma diagram {"wp":"v35|#6 #16"} #end)
+    (#31 wire #2 => #17
+    #pragma diagram {"wp":"#2 h104203 v33555 #17"} #end)
+    (#32 wire #14 => #1 .(1))
+    (#33 wire #18 => #19
+    #pragma diagram {"wp":"#18 h4525 v-7760 #19"} #end)
+}
+
+node #pragma doc Discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1) / (Den[0] + Den[1]*z^-1)
+     Optimization of FilterND when numerator order is 1 and denominator order is 1
+     At first tick, Out = (Num*InX)/Den[0] #end Filter11 (In: 'T;
+                                                          Num: 'T^2;
+                                                          Den: 'T^2;)
+  returns (Out: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#2 expr In
+    #pragma diagram {"xy":"H24040;V25265"} #end)
+    (#5 expr #4 * #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H45820;V13360"} #end)
+    (#8 expr #7 / #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H143170;V15665"} #end)
+    (#9 def Out
+    #pragma diagram {"xy":"H172280;V15635"} #end)
+    (#10 expr Num[0]
+    #pragma diagram {"xy":"H22850;V12170","wh":"10000;3200"} #end)
+    (#13 expr #12 + #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H114880;V14685"} #end)
+    (#14 expr Den[1]
+    #pragma diagram {"xy":"H22850;V55350","wh":"10000;3200"} #end)
+    (#15 expr Num[1]
+    #pragma diagram {"xy":"H22850;V39690","wh":"10000;3200"} #end)
+    (#18 expr #17 * #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H45820;V38495"} #end)
+    (#21 expr #20 * #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H45820;V56490"} #end)
+    (#24 expr #23 - #22
+      where
+        (#23 group)
+        (#22 group)
+    #pragma diagram {"xy":"H68580;V47495"} #end)
+    (#27 expr #26 pre #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H90660;V47710"} #end)
+    (#28 expr Den[0]
+    #pragma diagram {"xy":"H123610;V22755","wh":"10000;3200"} #end)
+    
+    (#29 wire #24 => #25
+    #pragma diagram {"wp":"#24 h7040 v2115 #25"} #end)
+    (#30 wire #1 => #26
+    #pragma diagram {"wp":"#1 h77160 v45810 #26"} #end)
+    (#31 wire #28 => #6
+    #pragma diagram {"wp":"#28 h6280 v-5190 #6"} #end)
+    (#32 wire #15 => #16
+    #pragma diagram {"wp":"#15 h7985 v705 #16"} #end)
+    (#33 wire #10 => #4
+    #pragma diagram {"wp":"#10 h7985 v-710 #4"} #end)
+    (#34 wire #2 => #3, #17
+    #pragma diagram {"wp":"#2 h5695[v-10005 #3, h4390 v11330 #17]"} #end)
+    (#35 wire #18 => #23
+    #pragma diagram {"wp":"#18 h7880 v7100 #23"} #end)
+    (#36 wire #8 => #9, #19
+    #pragma diagram {"wp":"#8 h3500[h12082 v-30 #9, v45325 h-111350 v-2600 #19]"} #end)
+    (#37 wire #21 => #22
+    #pragma diagram {"wp":"#21 h7880 v-7095 #22"} #end)
+    (#38 wire #5 => #12
+    #pragma diagram {"wp":"#5 h50153 v-575 #12"} #end)
+    (#39 wire #14 => #20
+    #pragma diagram {"wp":"#14 h7985 v-760 #20"} #end)
+    (#40 wire #27 => #11
+    #pragma diagram {"wp":"#27 h8110 v-31125 #11"} #end)
+    (#41 wire #13 => #7
+    #pragma diagram {"wp":"#13 h15010 v-920 #7"} #end)
+}
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function:
+     (Num[0] + Num[1]*z^-1) / ( 1 + Den*z^-1)
+     Optimization of FilterND when numerator order is 1 and denominator order is 1
+     At first tick, Out = Num*InX #end Filter11Norm (In: 'T;
+                                                     Num: 'T^2;
+                                                     Den: 'T;)
+  returns (Out: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#2 expr In
+    #pragma diagram {"xy":"H19010;V25265"} #end)
+    (#5 expr #4 * #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H45820;V13360"} #end)
+    (#6 def Out
+    #pragma diagram {"xy":"H142810;V14685"} #end)
+    (#7 expr Num[0]
+    #pragma diagram {"xy":"H17770;V12170","wh":"10000;3200"} #end)
+    (#10 expr #9 + #8
+      where
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H114880;V14685"} #end)
+    (#11 expr Den
+    #pragma diagram {"xy":"H21140;V55300"} #end)
+    (#12 expr Num[1]
+    #pragma diagram {"xy":"H17770;V39690","wh":"10000;3200"} #end)
+    (#15 expr #14 * #13
+      where
+        (#14 group)
+        (#13 group)
+    #pragma diagram {"xy":"H45820;V38495"} #end)
+    (#18 expr #17 * #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H45820;V56490"} #end)
+    (#21 expr #20 - #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H68580;V47495"} #end)
+    (#24 expr #23 pre #22
+      where
+        (#23 group)
+        (#22 group)
+    #pragma diagram {"xy":"H89790;V47625"} #end)
+    
+    (#25 wire #5 => #9
+    #pragma diagram {"wp":"#5 h49863 v-575 #9"} #end)
+    (#26 wire #10 => #6, #16
+    #pragma diagram {"wp":"#10 h3500[#6, v46305 h-83060 v-2600 #16]"} #end)
+    (#27 wire #11 => #17
+    #pragma diagram {"wp":"#11 h9340 v-710 #17"} #end)
+    (#28 wire #15 => #20
+    #pragma diagram {"wp":"#15 h7880 v7100 #20"} #end)
+    (#29 wire #21 => #22
+    #pragma diagram {"wp":"#21 h6605 v2030 #22"} #end)
+    (#30 wire #1 => #23
+    #pragma diagram {"wp":"#1 h76290 v45725 #23"} #end)
+    (#31 wire #12 => #13
+    #pragma diagram {"wp":"#12 h11710 v705 #13"} #end)
+    (#32 wire #18 => #19
+    #pragma diagram {"wp":"#18 h7880 v-7095 #19"} #end)
+    (#33 wire #7 => #4
+    #pragma diagram {"wp":"#7 h10645 v-710 #4"} #end)
+    (#34 wire #24 => #8
+    #pragma diagram {"wp":"#24 h8545 v-31040 #8"} #end)
+    (#35 wire #2 => #3, #14
+    #pragma diagram {"wp":"#2 h5630[h7787 v-10005 #3, v11330 #14]"} #end)
+}
+
+node #pragma doc Discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1) / (Den[0] + Den[1]*z^-1  + Den[2]*z^-2)
+     Optimization of FilterND when numerator order is 1 and denominator order is 2
+     At first tick, Out = (Num*InX)/Den[0] #end Filter12 (In: 'T;
+                                                          Num: 'T^2;
+                                                          Den: 'T^3;)
+  returns (Out: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#2 expr In
+    #pragma diagram {"xy":"H22980;V28705"} #end)
+    (#5 expr #4 * #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H42830;V17150"} #end)
+    (#8 expr #7 / #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H171500;V20770"} #end)
+    (#9 def Out
+    #pragma diagram {"xy":"H200490;V20770"} #end)
+    (#10 expr Num[0]
+    #pragma diagram {"xy":"H21790;V15980","wh":"10000;3200"} #end)
+    (#13 expr #12 + #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H109060;V18125"} #end)
+    (#14 expr Den[1]
+    #pragma diagram {"xy":"H21790;V58740","wh":"10000;3200"} #end)
+    (#15 expr Num[1]
+    #pragma diagram {"xy":"H21790;V42865","wh":"10000;3200"} #end)
+    (#18 expr #17 * #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H42910;V41670"} #end)
+    (#21 expr #20 * #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H42910;V59930"} #end)
+    (#24 expr #23 - #22
+      where
+        (#23 group)
+        (#22 group)
+    #pragma diagram {"xy":"H66460;V50935"} #end)
+    (#27 expr #26 pre #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H90370;V51010"} #end)
+    (#28 expr Den[0]
+    #pragma diagram {"xy":"H149850;V26775","wh":"10000;3200"} #end)
+    (#31 expr #30 - #29
+      where
+        (#30 group)
+        (#29 group)
+    #pragma diagram {"xy":"H142920;V19445"} #end)
+    (#34 expr #33 * #32
+      where
+        (#33 group)
+        (#32 group)
+    #pragma diagram {"xy":"H86570;V68660"} #end)
+    (#35 $N1 block (Flows::Delay <<2>>  \ init: (0 :> 'T))
+    #pragma diagram {"xy":"H110175;V68790","wh":"14770;10320"} #end)
+    (#36 expr Den[2]
+    #pragma diagram {"xy":"H62860;V67415","wh":"10000;3200"} #end)
+    
+    (#37 wire #2 => #3, #17
+    #pragma diagram {"wp":"#2 h5232[v-9655 #3, h3466 v11065 #17]"} #end)
+    (#38 wire #24 => #25
+    #pragma diagram {"wp":"#24 h11010 v1975 #25"} #end)
+    (#39 wire #1 => #26
+    #pragma diagram {"wp":"#1 h76870 v49110 #26"} #end)
+    (#40 wire #35 .(1) => #29
+    #pragma diagram {"wp":"v0|#35 h10180 v-47445 #29"} #end)
+    (#41 wire #8 => #9, #19, #32
+    #pragma diagram {"wp":"#8 h3500[h1000[#9, v57180 h-143590 v-16120 #19], v56180 h-108640 v-6390 #32]"} #end)
+    (#42 wire #34 => #35 .(1))
+    (#43 wire #18 => #23
+    #pragma diagram {"wp":"#18 h11750 v7365 #23"} #end)
+    (#44 wire #28 => #6
+    #pragma diagram {"wp":"#28 h7325 v-4105 #6"} #end)
+    (#45 wire #10 => #4
+    #pragma diagram {"wp":"#10 h7115 v-730 #4"} #end)
+    (#46 wire #31 => #7
+    #pragma diagram {"wp":"#31 h10790 v-575 #7"} #end)
+    (#47 wire #14 => #20
+    #pragma diagram {"wp":"#14 h7155 v-710 #20"} #end)
+    (#48 wire #5 => #12
+    #pragma diagram {"wp":"#5 h49167 v-925 #12"} #end)
+    (#49 wire #15 => #16
+    #pragma diagram {"wp":"#15 h7155 v705 #16"} #end)
+    (#50 wire #13 => #30
+    #pragma diagram {"wp":"#13 h13430 v-580 #30"} #end)
+    (#51 wire #27 => #11
+    #pragma diagram {"wp":"#27 h5345 v-30985 #11"} #end)
+    (#52 wire #36 => #33
+    #pragma diagram {"wp":"#36 h8355 v-655 #33"} #end)
+    (#53 wire #21 => #22
+    #pragma diagram {"wp":"#21 h6975 v-7095 #22"} #end)
+}
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1) / (1 + Den[0]*z^-1 + Den[1]*z^-2)
+     Optimization of FilterND when numerator order is 1 and denominator order is 2
+     At first tick, Out = Num*InX #end Filter12Norm (In: 'T;
+                                                     Num: 'T^2;
+                                                     Den: 'T^2;)
+  returns (Out: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#2 expr In
+    #pragma diagram {"xy":"H21920;V28705"} #end)
+    (#5 expr #4 * #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H42910;V16800"} #end)
+    (#6 def Out
+    #pragma diagram {"xy":"H168480;V19445"} #end)
+    (#7 expr Num[0]
+    #pragma diagram {"xy":"H20740;V15560","wh":"10000;3200"} #end)
+    (#10 expr #9 + #8
+      where
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H109060;V18125"} #end)
+    (#11 expr Den[0]
+    #pragma diagram {"xy":"H20740;V58740","wh":"10000;3200"} #end)
+    (#12 expr Num[1]
+    #pragma diagram {"xy":"H20740;V42865","wh":"10000;3200"} #end)
+    (#15 expr #14 * #13
+      where
+        (#14 group)
+        (#13 group)
+    #pragma diagram {"xy":"H42910;V41670"} #end)
+    (#18 expr #17 * #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H42910;V59930"} #end)
+    (#21 expr #20 - #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H66460;V50935"} #end)
+    (#24 expr #23 pre #22
+      where
+        (#23 group)
+        (#22 group)
+    #pragma diagram {"xy":"H90790;V51010"} #end)
+    (#27 expr #26 - #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H142920;V19445"} #end)
+    (#30 expr #29 * #28
+      where
+        (#29 group)
+        (#28 group)
+    #pragma diagram {"xy":"H86570;V68660"} #end)
+    (#31 $N1 block (Flows::Delay <<2>>  \ init: (0 :> 'T))
+    #pragma diagram {"xy":"H110385;V68790","wh":"15190;10320"} #end)
+    (#32 expr Den[1]
+    #pragma diagram {"xy":"H65820;V67415","wh":"10000;3200"} #end)
+    
+    (#33 wire #1 => #23
+    #pragma diagram {"wp":"#1 h72625 v49110 #23"} #end)
+    (#34 wire #31 .(1) => #25
+    #pragma diagram {"wp":"v0|#31 h9970 v-47445 #25"} #end)
+    (#35 wire #15 => #20
+    #pragma diagram {"wp":"#15 h8275 v7365 #20"} #end)
+    (#36 wire #18 => #19
+    #pragma diagram {"wp":"#18 h8275 v-7095 #19"} #end)
+    (#37 wire #10 => #26
+    #pragma diagram {"wp":"#10 h13430 v-580 #26"} #end)
+    (#38 wire #32 => #29
+    #pragma diagram {"wp":"#32 h6875 v-655 #29"} #end)
+    (#39 wire #27 => #6, #28, #16
+    #pragma diagram {"wp":"#27 h3500[h1000[#6, v58505 h-115010 v-16120 #16], v57505 h-70350 v-6390 #28]"} #end)
+    (#40 wire #11 => #17
+    #pragma diagram {"wp":"#11 h7585 v-710 #17"} #end)
+    (#41 wire #21 => #22
+    #pragma diagram {"wp":"#21 h8165 v1975 #22"} #end)
+    (#42 wire #24 => #8
+    #pragma diagram {"wp":"#24 h4500 v-30985 #8"} #end)
+    (#43 wire #5 => #9
+    #pragma diagram {"wp":"#5 h55015 v-575 #9"} #end)
+    (#44 wire #12 => #13
+    #pragma diagram {"wp":"#12 h7585 v705 #13"} #end)
+    (#45 wire #7 => #4
+    #pragma diagram {"wp":"#7 h7585 v-660 #4"} #end)
+    (#46 wire #30 => #31 .(1))
+    (#47 wire #2 => #3, #14
+    #pragma diagram {"wp":"#2 h5498[v-10005 #3, h3994 v11065 #14]"} #end)
+}
+
+node #pragma doc Discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1 + Num[Ns - 1]*z^-(Ns - 1)) / (Den[0] + Den[1]*z^-1  + ... + Den[Ds - 1]*z^-(Ds - 1))
+     where Ns is the numerator's array size and Ds is the denominator's array size (Ds > Ns > 1)
+     At first tick, Out = (Num*InX)/Den[0] #end FilterND <<Ns, Ds>> (In: 'T;
+                                                                     Num: 'T^Ns;
+                                                                     Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 $N1 block (map ({op_expr%*%op_expr})) <<Ns - 1>>
+    #pragma diagram {"xy":"H61515;V19580","wh":"24230;16040"} #end)
+    (#2 $N2 block (map ({op_expr%*%op_expr})) <<Ds - 1>>
+    #pragma diagram {"xy":"H61780;V56090","wh":"24240;16040"} #end)
+    (#3 $N3 block (map ({op_expr%function a_1, b_1 => a_1 - b_1%op_expr})) <<Ds - 1>>
+    #pragma diagram {"xy":"H101865;V41670","wh":"24510;18940"} #end)
+    (#4 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#6 expr #5 ^ ({text%Ns - 1%text})
+      where
+        (#5 group)
+    #pragma diagram {"xy":"H36310;V13230","wh":"14000;7000"} #end)
+    (#7 $N4 block (fold SumDelay) <<Ds - 1>>
+    #pragma diagram {"xy":"H142745;V38365","wh":"22650;20790"} #end)
+    (#8 def Out
+    #pragma diagram {"xy":"H217690;V27120"} #end)
+    (#10 expr #9 ^ ({text%Ds - 1%text})
+      where
+        (#9 group)
+    #pragma diagram {"xy":"H35460;V61595","wh":"14000;7000"} #end)
+    (#13 expr #12 / #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H196110;V27255"} #end)
+    (#14 expr (0 :> 'T)
+    #pragma diagram {"xy":"H39880;V35190","wh":"14000;3200"} #end)
+    (#17 expr #16 @ #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H81540;V26855"} #end)
+    (#19 expr #18 ^ ({text%Ds - Ns%text})
+      where
+        (#18 group)
+    #pragma diagram {"xy":"H61110;V35060","wh":"16000;7000"} #end)
+    (#20 expr (0 :> 'T)
+    #pragma diagram {"xy":"H116080;V30690","wh":"14000;3200"} #end)
+    (#22 expr #21 [1 .. Ds - 1]
+      where
+        (#21 group)
+    #pragma diagram {"xy":"H34060;V49875","wh":"20000;7000"} #end)
+    (#24 expr #23 [1 .. Ns - 1]
+      where
+        (#23 group)
+    #pragma diagram {"xy":"H34060;V25800","wh":"20000;7000"} #end)
+    (#27 expr #26 + #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H179700;V26060"} #end)
+    (#28 expr In
+    #pragma diagram {"xy":"H139390;V9655"} #end)
+    (#29 expr Num[0]
+    #pragma diagram {"xy":"H138000;V19155","wh":"10000;3200"} #end)
+    (#32 expr #31 * #30
+      where
+        (#31 group)
+        (#30 group)
+    #pragma diagram {"xy":"H163300;V14685"} #end)
+    (#33 expr In
+    #pragma diagram {"xy":"H13980;V13095"} #end)
+    (#36 expr #35 pre #34
+      where
+        (#35 group)
+        (#34 group)
+    #pragma diagram {"xy":"H164660;V38310"} #end)
+    (#37 expr Num
+    #pragma diagram {"xy":"H13990;V25930"} #end)
+    (#38 expr Den
+    #pragma diagram {"xy":"H13990;V50005"} #end)
+    (#39 expr Den[0]
+    #pragma diagram {"xy":"H180540;V33340","wh":"10000;3200"} #end)
+    (#41 expr reverse (#40)
+      where
+        (#40 group)
+    #pragma diagram {"xy":"H117380;V41670"} #end)
+    
+    (#42 wire #10 => #2 .(2))
+    (#43 wire #7 .(1) => #34
+    #pragma diagram {"wp":"v-155|#7 #34"} #end)
+    (#44 wire #14 => #18
+    #pragma diagram {"wp":"#14 h4615 v-130 #18"} #end)
+    (#45 wire #2 .(1) => #3 .(2)
+    #pragma diagram {"wp":"v-5532|#2 h7855 v-5488 #3"} #end)
+    (#46 wire #20 => #7 .(1)
+    #pragma diagram {"wp":"#20 h3650 v4368 #7"} #end)
+    (#47 wire #39 => #11
+    #pragma diagram {"wp":"#39 h4285 v-4185 #11"} #end)
+    (#48 wire #33 => #5
+    #pragma diagram {"wp":"#33 h4980 v135 #5"} #end)
+    (#49 wire #1 .(1) => #16
+    #pragma diagram {"wp":"v3375|#1 #16"} #end)
+    (#50 wire #13 => #8, #9
+    #pragma diagram {"wp":"#13 h7290[v-135 #8, h1000 v-35055 h-185840 v69395 #9]"} #end)
+    (#51 wire #27 => #12
+    #pragma diagram {"wp":"#27 h4705 v-705 #12"} #end)
+    (#52 wire #22 => #2 .(1)
+    #pragma diagram {"wp":"#22 h3910 v3835 #2"} #end)
+    (#53 wire #38 => #21
+    #pragma diagram {"wp":"#38 h4370 v-130 #21"} #end)
+    (#54 wire #3 .(1) => #40
+    #pragma diagram {"wp":"v6470|#3 h5630 v-3470 h-20255 v-5000 #40"} #end)
+    (#55 wire #17 => #3 .(1)
+    #pragma diagram {"wp":"#17 h3500 v19415 #3"} #end)
+    (#56 wire #36 => #25
+    #pragma diagram {"wp":"#36 h3520 v-10350 #25"} #end)
+    (#57 wire #32 => #26
+    #pragma diagram {"wp":"#32 h4700 v9475 #26"} #end)
+    (#58 wire #41 => #7 .(2))
+    (#59 wire #4 => #35
+    #pragma diagram {"wp":"#4 h150685 v36410 #35"} #end)
+    (#60 wire #24 => #1 .(2))
+    (#61 wire #28 => #31
+    #pragma diagram {"wp":"#28 h8760 v3130 #31"} #end)
+    (#62 wire #19 => #15
+    #pragma diagram {"wp":"#19 h8020 v-6305 #15"} #end)
+    (#63 wire #29 => #30
+    #pragma diagram {"wp":"#29 h8150 v-2570 #30"} #end)
+    (#64 wire #6 => #1 .(1)
+    #pragma diagram {"wp":"#6 h4285 v3902 #1"} #end)
+    (#65 wire #37 => #23
+    #pragma diagram {"wp":"#37 h3770 v-130 #23"} #end)
+}
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1 + Num[Ns - 1]*z^-(Ns - 1)) / (1 + Den[0]*z^-1  + ... + Den[Ds - 1]*z^-Ds)
+      where Ns is the numerator's array size and Ds is the denominator's array size (Ds => Ns > 1)
+     At first tick, Out = Num*InX #end FilterNDNorm <<Ns, Ds>> (In: 'T;
+                                                                Num: 'T^Ns;
+                                                                Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 $N1 block (map ({op_expr%*%op_expr})) <<Ns - 1>>
+    #pragma diagram {"xy":"H61515;V19580","wh":"24230;16040"} #end)
+    (#2 $N2 block (map ({op_expr%*%op_expr})) <<Ds>>
+    #pragma diagram {"xy":"H61780;V55565","wh":"24240;16030"} #end)
+    (#3 $N3 block (map ({op_expr%function a_1, b_1 => a_1 - b_1%op_expr})) <<Ds>>
+    #pragma diagram {"xy":"H101205;V40880","wh":"19470;18940"} #end)
+    (#4 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#6 expr #5 ^ ({text%Ns - 1%text})
+      where
+        (#5 group)
+    #pragma diagram {"xy":"H36310;V13230","wh":"14000;7000"} #end)
+    (#7 $N4 block (fold SumDelay) <<Ds>>
+    #pragma diagram {"xy":"H142080;V38365","wh":"21320;16030"} #end)
+    (#8 def Out
+    #pragma diagram {"xy":"H204190;V26065"} #end)
+    (#10 expr #9 ^ (Ds)
+      where
+        (#9 group)
+    #pragma diagram {"xy":"H38410;V58210","wh":"10000;7000"} #end)
+    (#11 expr (0 :> 'T)
+    #pragma diagram {"xy":"H37500;V35190","wh":"14000;3200"} #end)
+    (#14 expr #13 @ #12
+      where
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H82330;V26855"} #end)
+    (#16 expr #15 ^ ({text%Ds - Ns + 1%text})
+      where
+        (#15 group)
+    #pragma diagram {"xy":"H62770;V35030","wh":"20000;7000"} #end)
+    (#17 expr (0 :> 'T)
+    #pragma diagram {"xy":"H117140;V30955","wh":"14000;3200"} #end)
+    (#18 expr In
+    #pragma diagram {"xy":"H14510;V13095"} #end)
+    (#20 expr reverse (#19)
+      where
+        (#19 group)
+    #pragma diagram {"xy":"H116320;V40880"} #end)
+    (#21 expr Num
+    #pragma diagram {"xy":"H14520;V25930"} #end)
+    (#22 expr Den
+    #pragma diagram {"xy":"H14520;V52915"} #end)
+    (#24 expr #23 [1 .. Ns - 1]
+      where
+        (#23 group)
+    #pragma diagram {"xy":"H34060;V25800","wh":"20000;7000"} #end)
+    (#27 expr #26 + #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H179700;V26060"} #end)
+    (#28 expr In
+    #pragma diagram {"xy":"H135950;V9655"} #end)
+    (#29 expr Num[0]
+    #pragma diagram {"xy":"H134610;V19370","wh":"10000;3200"} #end)
+    (#32 expr #31 * #30
+      where
+        (#31 group)
+        (#30 group)
+    #pragma diagram {"xy":"H163300;V14685"} #end)
+    (#35 expr #34 pre #33
+      where
+        (#34 group)
+        (#33 group)
+    #pragma diagram {"xy":"H164660;V38310"} #end)
+    
+    (#36 wire #22 => #2 .(1))
+    (#37 wire #28 => #31
+    #pragma diagram {"wp":"#28 h10225 v3130 #31"} #end)
+    (#38 wire #10 => #2 .(2))
+    (#39 wire #17 => #7 .(1)
+    #pragma diagram {"wp":"#17 h5140 v12675 #7"} #end)
+    (#40 wire #18 => #5
+    #pragma diagram {"wp":"#18 h6905 v135 #5"} #end)
+    (#41 wire #4 => #34
+    #pragma diagram {"wp":"#4 h150020 v36410 #34"} #end)
+    (#42 wire #6 => #1 .(1)
+    #pragma diagram {"wp":"#6 h5140 v13370 #1"} #end)
+    (#43 wire #35 => #25
+    #pragma diagram {"wp":"#35 h3520 v-10350 #25"} #end)
+    (#44 wire #20 => #7 .(2))
+    (#45 wire #24 => #1 .(2))
+    (#46 wire #7 .(1) => #33
+    #pragma diagram {"wp":"v-155|#7 #33"} #end)
+    (#47 wire #29 => #30
+    #pragma diagram {"wp":"#29 h9565 v-2785 #30"} #end)
+    (#48 wire #2 .(1) => #3 .(2)
+    #pragma diagram {"wp":"v0|#2 h8785 v-9615 #3"} #end)
+    (#49 wire #27 => #8, #9
+    #pragma diagram {"wp":"#27 h9245[#8, v46520 h-166480 v-14370 #9]"} #end)
+    (#50 wire #14 => #3 .(1)
+    #pragma diagram {"wp":"#14 h3570 v10040 #3"} #end)
+    (#51 wire #16 => #12
+    #pragma diagram {"wp":"#16 h3780 v-6275 #12"} #end)
+    (#52 wire #3 .(1) => #19
+    #pragma diagram {"wp":"v4985|#3 h7690 v-1000 h-18735 v-5985 #19"} #end)
+    (#53 wire #11 => #15
+    #pragma diagram {"wp":"#11 h5635 v-160 #15"} #end)
+    (#54 wire #21 => #23
+    #pragma diagram {"wp":"#21 h4270 v-130 #23"} #end)
+    (#55 wire #32 => #26
+    #pragma diagram {"wp":"#32 h4700 v9475 #26"} #end)
+    (#56 wire #1 .(1) => #13
+    #pragma diagram {"wp":"v3375|#1 #13"} #end)
+}
+
+node #pragma doc Discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1 + ... + Num[Ns - 1]*z^-(Ns - 1)) / (Den[0] + Den[1]*z^-1  + ... + Den[Ns - 1]*z^-(Ns - 1))
+     where  Ns is the numerator's and the denominator's array size (Ns > 1)
+     At first tick, Out = (Num*InX)/Den[0] #end FilterNN <<Ns>> (In: 'T;
+                                                                 Num: 'T^Ns;
+                                                                 Den: 'T^Ns;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 $N1 block (map ({op_expr%*%op_expr})) <<Ns - 1>>
+    #pragma diagram {"xy":"H63100;V29770","wh":"24240;16300"} #end)
+    (#2 $N2 block (map ({op_expr%*%op_expr})) <<Ns - 1>>
+    #pragma diagram {"xy":"H62840;V54900","wh":"24240;16300"} #end)
+    (#3 $N3 block (map ({op_expr%function a_1, b_1 => a_1 - b_1%op_expr})) <<Ns - 1>>
+    #pragma diagram {"xy":"H92340;V41670","wh":"24500;18940"} #end)
+    (#4 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#5 expr Num
+    #pragma diagram {"xy":"H17700;V35985"} #end)
+    (#6 expr Den
+    #pragma diagram {"xy":"H17700;V48685"} #end)
+    (#7 expr Den[0]
+    #pragma diagram {"xy":"H172710;V34610","wh":"10000;3200"} #end)
+    (#9 expr #8 [1 .. Ns - 1]
+      where
+        (#8 group)
+    #pragma diagram {"xy":"H36860;V35880","wh":"20000;7000"} #end)
+    (#12 expr #11 pre #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H151960;V38950"} #end)
+    (#13 expr Num[0]
+    #pragma diagram {"xy":"H131650;V20425","wh":"10000;3200"} #end)
+    (#14 expr In
+    #pragma diagram {"xy":"H132250;V12305"} #end)
+    (#17 expr #16 * #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H152710;V15745"} #end)
+    (#20 expr #19 + #18
+      where
+        (#19 group)
+        (#18 group)
+    #pragma diagram {"xy":"H169120;V27915"} #end)
+    (#22 expr #21 [1 .. Ns - 1]
+      where
+        (#21 group)
+    #pragma diagram {"xy":"H36860;V48580","wh":"20000;7000"} #end)
+    (#23 expr In
+    #pragma diagram {"xy":"H17690;V23680"} #end)
+    (#25 expr #24 ^ ({text%Ns - 1%text})
+      where
+        (#24 group)
+    #pragma diagram {"xy":"H39060;V23815","wh":"14000;7000"} #end)
+    (#26 $N4 block (fold SumDelay) <<Ns - 1>>
+    #pragma diagram {"xy":"H129650;V38760","wh":"24500;18940"} #end)
+    (#27 def Out
+    #pragma diagram {"xy":"H211070;V28975"} #end)
+    (#29 expr #28 ^ ({text%Ns - 1%text})
+      where
+        (#28 group)
+    #pragma diagram {"xy":"H39060;V60325","wh":"14000;7000"} #end)
+    (#32 expr #31 / #30
+      where
+        (#31 group)
+        (#30 group)
+    #pragma diagram {"xy":"H187370;V29105"} #end)
+    (#33 expr (0 :> 'T)
+    #pragma diagram {"xy":"H107880;V29635","wh":"14000;3200"} #end)
+    (#35 expr reverse (#34)
+      where
+        (#34 group)
+    #pragma diagram {"xy":"H105470;V41670"} #end)
+    
+    (#36 wire #23 => #24
+    #pragma diagram {"wp":"#23 h7270 v135 #24"} #end)
+    (#37 wire #2 .(1) => #3 .(2)
+    #pragma diagram {"wp":"v0|#2 h2565 v-8745 #3"} #end)
+    (#38 wire #25 => #1 .(1)
+    #pragma diagram {"wp":"#25 h3960 v3652 #1"} #end)
+    (#39 wire #5 => #8
+    #pragma diagram {"wp":"#5 h4080 v-105 #8"} #end)
+    (#40 wire #22 => #2 .(1)
+    #pragma diagram {"wp":"#22 h3180 v3835 #2"} #end)
+    (#41 wire #6 => #21
+    #pragma diagram {"wp":"#6 h4080 v-105 #21"} #end)
+    (#42 wire #7 => #30
+    #pragma diagram {"wp":"#7 h3830 v-3605 #30"} #end)
+    (#43 wire #14 => #16
+    #pragma diagram {"wp":"#14 h10085 v1540 #16"} #end)
+    (#44 wire #29 => #2 .(2))
+    (#45 wire #20 => #31
+    #pragma diagram {"wp":"#20 h5625 v-710 #31"} #end)
+    (#46 wire #26 .(1) => #10
+    #pragma diagram {"wp":"v90|#26 #10"} #end)
+    (#47 wire #33 => #26 .(1)
+    #pragma diagram {"wp":"#33 h2020 v15315 #26"} #end)
+    (#48 wire #17 => #19
+    #pragma diagram {"wp":"#17 h4705 v10270 #19"} #end)
+    (#49 wire #9 => #1 .(2))
+    (#50 wire #12 => #18
+    #pragma diagram {"wp":"#12 h4580 v-9135 #18"} #end)
+    (#51 wire #32 => #27, #28
+    #pragma diagram {"wp":"#32 h8350[v-130 #27, h1000 v42945 h-173340 v-11725 #28]"} #end)
+    (#52 wire #13 => #15
+    #pragma diagram {"wp":"#13 h5655 v-2780 #15"} #end)
+    (#53 wire #35 => #26 .(2))
+    (#54 wire #3 .(1) => #34
+    #pragma diagram {"wp":"v4985|#3 h4440 v-1000 h-20250 v-5985 #34"} #end)
+    (#55 wire #1 .(1) => #3 .(1)
+    #pragma diagram {"wp":"v0|#1 h2435 v7290 #3"} #end)
+    (#56 wire #4 => #11
+    #pragma diagram {"wp":"#4 h138430 v37050 #11"} #end)
+}
+
+node #pragma doc Normalized discrete filter expressed as a Z-transform function:
+       (Num[0] + Num[1]*z^-1 + Num[Ns - 1]*z^-(Ns - 1)) / (1 + Den[0]*z^-1  + ... + Den[Ns - 2]*z^-(Ns - 1))
+     where  Ns is the numerator's array size and Ns - 1 is the denominator's array size (Ns > 1)
+     At first tick, Out = Num*InX #end FilterNNNorm <<Ns>> (In: 'T;
+                                                            Num: 'T^Ns;
+                                                            Den: 'T^(Ns - 1);)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 $N1 block (map ({op_expr%*%op_expr})) <<Ns - 1>>
+    #pragma diagram {"xy":"H62970;V29770","wh":"23980;16300"} #end)
+    (#2 $N2 block (map ({op_expr%*%op_expr})) <<Ns - 1>>
+    #pragma diagram {"xy":"H62705;V54900","wh":"23970;16300"} #end)
+    (#3 $N3 block (map ({op_expr%function a_1, b_1 => a_1 - b_1%op_expr})) <<Ns - 1>>
+    #pragma diagram {"xy":"H92735;V41670","wh":"24770;18940"} #end)
+    (#4 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#5 expr In
+    #pragma diagram {"xy":"H20600;V23680"} #end)
+    (#7 expr #6 ^ ({text%Ns - 1%text})
+      where
+        (#6 group)
+    #pragma diagram {"xy":"H39060;V23815","wh":"14000;7000"} #end)
+    (#8 $N4 block (fold SumDelay) <<Ns - 1>>
+    #pragma diagram {"xy":"H132160;V38760","wh":"22120;18940"} #end)
+    (#9 def Out
+    #pragma diagram {"xy":"H191230;V27915"} #end)
+    (#11 expr #10 ^ ({text%Ns - 1%text})
+      where
+        (#10 group)
+    #pragma diagram {"xy":"H39060;V60325","wh":"14000;7000"} #end)
+    (#12 expr (0 :> 'T)
+    #pragma diagram {"xy":"H108940;V29370","wh":"14000;3200"} #end)
+    (#14 expr reverse (#13)
+      where
+        (#13 group)
+    #pragma diagram {"xy":"H108120;V41670"} #end)
+    (#15 expr Num
+    #pragma diagram {"xy":"H20610;V35985"} #end)
+    (#16 expr Den
+    #pragma diagram {"xy":"H20610;V52125"} #end)
+    (#18 expr #17 [1 .. Ns - 1]
+      where
+        (#17 group)
+    #pragma diagram {"xy":"H36860;V35880","wh":"20000;7000"} #end)
+    (#21 expr #20 pre #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H154080;V38950"} #end)
+    (#22 expr Num[0]
+    #pragma diagram {"xy":"H133340;V19580","wh":"10000;3200"} #end)
+    (#23 expr In
+    #pragma diagram {"xy":"H134630;V10980"} #end)
+    (#26 expr #25 * #24
+      where
+        (#25 group)
+        (#24 group)
+    #pragma diagram {"xy":"H152710;V15745"} #end)
+    (#29 expr #28 + #27
+      where
+        (#28 group)
+        (#27 group)
+    #pragma diagram {"xy":"H169120;V27915"} #end)
+    
+    (#30 wire #14 => #8 .(2))
+    (#31 wire #21 => #27
+    #pragma diagram {"wp":"#21 h3520 v-9135 #27"} #end)
+    (#32 wire #11 => #2 .(2))
+    (#33 wire #4 => #20
+    #pragma diagram {"wp":"#4 h139810 v37050 #20"} #end)
+    (#34 wire #22 => #24
+    #pragma diagram {"wp":"#22 h8870 v-1935 #24"} #end)
+    (#35 wire #29 => #9, #10
+    #pragma diagram {"wp":"#29 h8055[#9, v44135 h-152340 v-11725 #10]"} #end)
+    (#36 wire #2 .(1) => #3 .(2)
+    #pragma diagram {"wp":"v-5662|#2 h3660 v-6818 #3"} #end)
+    (#37 wire #7 => #1 .(1)
+    #pragma diagram {"wp":"#7 h3960 v3652 #1"} #end)
+    (#38 wire #18 => #1 .(2))
+    (#39 wire #8 .(1) => #19
+    #pragma diagram {"wp":"v90|#8 #19"} #end)
+    (#40 wire #1 .(1) => #3 .(1)
+    #pragma diagram {"wp":"v0|#1 h2695 v7165 #3"} #end)
+    (#41 wire #26 => #28
+    #pragma diagram {"wp":"#26 h4705 v10270 #28"} #end)
+    (#42 wire #16 => #2 .(1))
+    (#43 wire #3 .(1) => #13
+    #pragma diagram {"wp":"v4985|#3 h5500 v-1000 h-20385 v-5985 #13"} #end)
+    (#44 wire #5 => #6
+    #pragma diagram {"wp":"#5 h5360 v135 #6"} #end)
+    (#45 wire #12 => #8 .(1)
+    #pragma diagram {"wp":"#12 h4080 v15580 #8"} #end)
+    (#46 wire #15 => #17
+    #pragma diagram {"wp":"#15 h3000 v-105 #17"} #end)
+    (#47 wire #23 => #25
+    #pragma diagram {"wp":"#23 h8380 v2865 #25"} #end)
+}
+
+node #pragma doc This private function adds 2 inputs.
+     NB: First input is delayed. #end SumDelay (Delay: 'T;
+                                                Val: 'T;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#4 expr #3 pre #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H46980;V17780"} #end)
+    (#5 expr Delay
+    #pragma diagram {"xy":"H19580;V17595","wh":"10000;3200"} #end)
+    (#6 expr Val
+    #pragma diagram {"xy":"H20330;V34000"} #end)
+    (#7 def Out
+    #pragma diagram {"xy":"H95720;V25535"} #end)
+    (#10 expr #9 + #8
+      where
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H72810;V25795"} #end)
+    
+    (#11 wire #1 => #3
+    #pragma diagram {"wp":"#1 h27280 v15880 #3"} #end)
+    (#12 wire #6 => #8
+    #pragma diagram {"wp":"#6 h9950 v-6305 #8"} #end)
+    (#13 wire #10 => #7
+    #pragma diagram {"wp":"#10 h8455 v-260 #7"} #end)
+    (#14 wire #5 => #2
+    #pragma diagram {"wp":"#5 h9700 v2085 #2"} #end)
+    (#15 wire #4 => #9
+    #pragma diagram {"wp":"#4 h8915 v6115 #9"} #end)
+}
+
+node #pragma doc Discrete transfer function expressed as a Z-transform function:
+       (Num) / (Den[0]*z + Den[1])
+     Optimization of TransferFcnND when numerator order is 0 and denominator order is 1
+     At first tick, Out = 0 #end TransferFcn01 (In: 'T;
+                                                Num: 'T;
+                                                Den: 'T^2;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 expr 0.0
+    #pragma diagram {"xy":"H0;V0"} #end)
+    (#4 expr #3 / #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H119640;V27120"} #end)
+    (#7 expr #6 - #5
+      where
+        (#6 group)
+        (#5 group)
+    #pragma diagram {"xy":"H69110;V25795"} #end)
+    (#8 expr Num
+    #pragma diagram {"xy":"H18490;V23815"} #end)
+    (#9 expr Den[1]
+    #pragma diagram {"xy":"H17140;V32385","wh":"10000;3200"} #end)
+    (#12 expr #11 pre #10
+      where
+        (#11 group)
+        (#10 group)
+    #pragma diagram {"xy":"H89520;V25930"} #end)
+    (#13 expr Den[0]
+    #pragma diagram {"xy":"H103290;V33230","wh":"10000;3200"} #end)
+    (#14 def Out
+    #pragma diagram {"xy":"H145190;V27120"} #end)
+    (#17 expr #16 * #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H45560;V33735"} #end)
+    (#20 expr #19 * #18
+      where
+        (#19 group)
+        (#18 group)
+    #pragma diagram {"xy":"H45560;V18390"} #end)
+    (#21 expr In
+    #pragma diagram {"xy":"H18480;V12565"} #end)
+    
+    (#22 wire #13 => #2
+    #pragma diagram {"wp":"#13 h4675 v-4210 #2"} #end)
+    (#23 wire #1 => #11
+    #pragma diagram {"wp":"#1 h76315 v24030 #11"} #end)
+    (#24 wire #8 => #18
+    #pragma diagram {"wp":"#8 h10535 v-3525 #18"} #end)
+    (#25 wire #7 => #10
+    #pragma diagram {"wp":"#7 h6205 v2035 #10"} #end)
+    (#26 wire #17 => #5
+    #pragma diagram {"wp":"#17 h8275 v-6040 #5"} #end)
+    (#27 wire #20 => #6
+    #pragma diagram {"wp":"#20 h8275 v5505 #6"} #end)
+    (#28 wire #12 => #3
+    #pragma diagram {"wp":"#12 h11060 v-710 #3"} #end)
+    (#29 wire #9 => #16
+    #pragma diagram {"wp":"#9 h10885 v-550 #16"} #end)
+    (#30 wire #4 => #14, #15
+    #pragma diagram {"wp":"#4 h3500[#14, v11115 h-88080 v-2600 #15]"} #end)
+    (#31 wire #21 => #19
+    #pragma diagram {"wp":"#21 h3505 v3925 #19"} #end)
+}
+
+node #pragma doc Discrete transfer function expressed as a Z-transform function:
+       (Num) / (Den[0]*z^2 + Den[1]*z + Den[2])
+     Optimization of TransferFcnND when numerator order is 0 and denominator order is 2
+     At first tick, Out = 0 #end TransferFcn02 (In: 'T;
+                                                Num: 'T;
+                                                Den: 'T^3;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#2 expr (0 :> 'T)
+    #pragma diagram {"xy":"H700;V4200","wh":"14000;3200"} #end)
+    (#3 def Out
+    #pragma diagram {"xy":"H171120;V36645"} #end)
+    (#4 expr In
+    #pragma diagram {"xy":"H19010;V14420"} #end)
+    (#7 expr #6 / #5
+      where
+        (#6 group)
+        (#5 group)
+    #pragma diagram {"xy":"H145570;V36645"} #end)
+    (#10 expr #9 - #8
+      where
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H65400;V25795"} #end)
+    (#13 expr #12 pre #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H122120;V35455"} #end)
+    (#14 expr Den[2]
+    #pragma diagram {"xy":"H17350;V32070","wh":"10000;3200"} #end)
+    (#17 expr #16 * #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H45030;V33205"} #end)
+    (#20 expr #19 * #18
+      where
+        (#19 group)
+        (#18 group)
+    #pragma diagram {"xy":"H45030;V18390"} #end)
+    (#21 expr Num
+    #pragma diagram {"xy":"H19020;V23285"} #end)
+    (#24 expr #23 pre #22
+      where
+        (#23 group)
+        (#22 group)
+    #pragma diagram {"xy":"H85710;V25930"} #end)
+    (#27 expr #26 * #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H83660;V42995"} #end)
+    (#28 expr Den[1]
+    #pragma diagram {"xy":"H63700;V41805","wh":"10000;3200"} #end)
+    (#31 expr #30 - #29
+      where
+        (#30 group)
+        (#29 group)
+    #pragma diagram {"xy":"H102970;V35320"} #end)
+    (#32 expr Den[0]
+    #pragma diagram {"xy":"H131230;V42440","wh":"10000;3200"} #end)
+    
+    (#33 wire #27 => #29
+    #pragma diagram {"wp":"#27 h6155 v-5775 #29"} #end)
+    (#34 wire #7 => #3, #15, #25
+    #pragma diagram {"wp":"#7 h3000[h1000[#3, v10850 h-76410 v-2600 #25], v-39245 h-160070 v37705 #15]"} #end)
+    (#35 wire #24 => #30
+    #pragma diagram {"wp":"#24 h4630 v7490 #30"} #end)
+    (#36 wire #21 => #18
+    #pragma diagram {"wp":"#21 h10005 v-2995 #18"} #end)
+    (#37 wire #32 => #5
+    #pragma diagram {"wp":"#32 h3670 v-3895 #5"} #end)
+    (#38 wire #10 => #22
+    #pragma diagram {"wp":"#10 h8285 v2035 #22"} #end)
+    (#39 wire #2 => #23
+    #pragma diagram {"wp":"#2 h68330 v19830 #23"} #end)
+    (#40 wire #28 => #26
+    #pragma diagram {"wp":"#28 h6480 v-710 #26"} #end)
+    (#41 wire #14 => #16
+    #pragma diagram {"wp":"#14 h10675 v-765 #16"} #end)
+    (#42 wire #20 => #9
+    #pragma diagram {"wp":"#20 h6685 v5505 #9"} #end)
+    (#43 wire #13 => #6
+    #pragma diagram {"wp":"#13 h11780 v-710 #6"} #end)
+    (#44 wire #17 => #8
+    #pragma diagram {"wp":"#17 h6335 v-5510 #8"} #end)
+    (#45 wire #31 => #11
+    #pragma diagram {"wp":"#31 h5575 v2035 #11"} #end)
+    (#46 wire #4 => #19
+    #pragma diagram {"wp":"#4 h10015 v2070 #19"} #end)
+    (#47 wire #1 => #12
+    #pragma diagram {"wp":"#1 h106545 v33555 #12"} #end)
+}
+
+node #pragma doc Discrete transfer function expressed as a Z-transform function:
+       (Num) / (Den[0]*z^(Ds - 1) + ... + Den[Ds - 2]*z + Den[Ds - 1])
+      where Ds is denominator's array size (Ds > 2)
+     Optimization of TransferFcnND when numerator order is 0 and denominator order is Ds - 1
+     At first tick, Out = 0 #end TransferFcn0D <<Ds>> (In: 'T;
+                                                       Num: 'T;
+                                                       Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 $N1 block (map ({op_expr%*%op_expr})) <<Ds - 2>>
+    #pragma diagram {"xy":"H65750;V58740","wh":"24240;16040"} #end)
+    (#2 expr 0.0
+    #pragma diagram {"xy":"H0;V0"} #end)
+    (#5 expr #4 - #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H86040;V24740"} #end)
+    (#7 expr #6 [1 .. Ds - 2]
+      where
+        (#6 group)
+    #pragma diagram {"xy":"H40140;V53050","wh":"20000;7000"} #end)
+    (#8 expr Den
+    #pragma diagram {"xy":"H22460;V53235"} #end)
+    (#9 expr In
+    #pragma diagram {"xy":"H23770;V9925"} #end)
+    (#10 expr Num
+    #pragma diagram {"xy":"H22460;V20850"} #end)
+    (#13 expr #12 * #11
+      where
+        (#12 group)
+        (#11 group)
+    #pragma diagram {"xy":"H64340;V15480"} #end)
+    (#14 expr Den[Ds - 1]
+    #pragma diagram {"xy":"H18410;V32915","wh":"16000;3200"} #end)
+    (#17 expr #16 * #15
+      where
+        (#16 group)
+        (#15 group)
+    #pragma diagram {"xy":"H64340;V34000"} #end)
+    (#18 $N2 block (fold SumDelay) <<Ds - 2>>
+    #pragma diagram {"xy":"H112315;V42335","wh":"24770;18150"} #end)
+    (#20 expr reverse (#19)
+      where
+        (#19 group)
+    #pragma diagram {"xy":"H82720;V58870"} #end)
+    (#23 expr #22 pre #21
+      where
+        (#22 group)
+        (#21 group)
+    #pragma diagram {"xy":"H137680;V42335"} #end)
+    (#26 expr #25 / #24
+      where
+        (#25 group)
+        (#24 group)
+    #pragma diagram {"xy":"H160650;V43525"} #end)
+    (#27 expr Den[0]
+    #pragma diagram {"xy":"H146470;V50060","wh":"10000;3200"} #end)
+    (#28 def Out
+    #pragma diagram {"xy":"H185410;V43525"} #end)
+    (#30 expr #29 ^ ({text%Ds - 2%text})
+      where
+        (#29 group)
+    #pragma diagram {"xy":"H42450;V63925","wh":"14000;7000"} #end)
+    
+    (#31 wire #2 => #22
+    #pragma diagram {"wp":"#2 h125690 v40435 #22"} #end)
+    (#32 wire #13 => #4
+    #pragma diagram {"wp":"#13 h7350 v7360 #4"} #end)
+    (#33 wire #10 => #11
+    #pragma diagram {"wp":"#10 h4155 v-3470 #11"} #end)
+    (#34 wire #23 => #25
+    #pragma diagram {"wp":"#23 h7485 v-710 #25"} #end)
+    (#35 wire #14 => #16
+    #pragma diagram {"wp":"#14 h18645 v-815 #16"} #end)
+    (#36 wire #18 .(1) => #21
+    #pragma diagram {"wp":"v-100|#18 #21"} #end)
+    (#37 wire #9 => #12
+    #pragma diagram {"wp":"#9 h17285 v3655 #12"} #end)
+    (#38 wire #20 => #18 .(2)
+    #pragma diagram {"wp":"#20 h4660 v-8305 #18"} #end)
+    (#39 wire #17 => #3
+    #pragma diagram {"wp":"#17 h7350 v-7360 #3"} #end)
+    (#40 wire #5 => #18 .(1)
+    #pragma diagram {"wp":"#5 h5945 v19582 #18"} #end)
+    (#41 wire #7 => #1 .(1)
+    #pragma diagram {"wp":"#7 h3500 v12792 #1"} #end)
+    (#42 wire #8 => #6
+    #pragma diagram {"wp":"#8 h3180 v-185 #6"} #end)
+    (#43 wire #30 => #1 .(2))
+    (#44 wire #1 .(1) => #19
+    #pragma diagram {"wp":"v2630|#1 h1750 #19"} #end)
+    (#45 wire #27 => #24
+    #pragma diagram {"wp":"#27 h3590 v-4635 #24"} #end)
+    (#46 wire #26 => #28, #29, #15
+    #pragma diagram {"wp":"#26 h8880[h1000[#28, v31735 h-148575 v-11335 #29], v32735 h-159595 v-40360 #15]"} #end)
+}
+
+node #pragma doc Discrete transfer function expressed as a Z-transform function:
+       (Num[0]*z + Num[1]) / (Den[0]*z^2 + Den[1]*z + Den[2])
+     Optimization of TransferFcnND when numerator order is 1 and denominator order is 2
+     At first tick, Out = 0 #end TransferFcn12 (In: 'T;
+                                                Num: 'T^2;
+                                                Den: 'T^3;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 expr (0 :> 'T)
+    #pragma diagram {"xy":"H0;V0","wh":"14000;3200"} #end)
+    (#2 expr (0 :> 'T)
+    #pragma diagram {"xy":"H700;V4200","wh":"14000;3200"} #end)
+    (#5 expr #4 pre #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H120430;V44980"} #end)
+    (#8 expr #7 - #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H63550;V28445"} #end)
+    (#9 expr In
+    #pragma diagram {"xy":"H27930;V56065"} #end)
+    (#10 def Out
+    #pragma diagram {"xy":"H170330;V46170"} #end)
+    (#11 expr In
+    #pragma diagram {"xy":"H27930;V25370"} #end)
+    (#14 expr #13 / #12
+      where
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H141340;V46170"} #end)
+    (#15 expr Den[2]
+    #pragma diagram {"xy":"H27290;V35245","wh":"10000;3200"} #end)
+    (#18 expr #17 * #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H45290;V36380"} #end)
+    (#21 expr #20 * #19
+      where
+        (#20 group)
+        (#19 group)
+    #pragma diagram {"xy":"H45290;V20505"} #end)
+    (#22 expr Num[1]
+    #pragma diagram {"xy":"H26660;V19365","wh":"10000;3200"} #end)
+    (#25 expr #24 pre #23
+      where
+        (#24 group)
+        (#23 group)
+    #pragma diagram {"xy":"H83600;V28580"} #end)
+    (#28 expr #27 * #26
+      where
+        (#27 group)
+        (#26 group)
+    #pragma diagram {"xy":"H61170;V70510"} #end)
+    (#29 expr Den[1]
+    #pragma diagram {"xy":"H26660;V69320","wh":"10000;3200"} #end)
+    (#30 expr Den[0]
+    #pragma diagram {"xy":"H123820;V55775","wh":"10000;3200"} #end)
+    (#33 expr #32 - #31
+      where
+        (#32 group)
+        (#31 group)
+    #pragma diagram {"xy":"H81810;V61515"} #end)
+    (#36 expr #35 + #34
+      where
+        (#35 group)
+        (#34 group)
+    #pragma diagram {"xy":"H100590;V44845"} #end)
+    (#39 expr #38 * #37
+      where
+        (#38 group)
+        (#37 group)
+    #pragma diagram {"xy":"H60900;V52520"} #end)
+    (#40 expr Num[0]
+    #pragma diagram {"xy":"H26660;V51325","wh":"10000;3200"} #end)
+    
+    (#41 wire #29 => #27
+    #pragma diagram {"wp":"#29 h23875 v-710 #27"} #end)
+    (#42 wire #18 => #6
+    #pragma diagram {"wp":"#18 h6435 v-6035 #6"} #end)
+    (#43 wire #40 => #38
+    #pragma diagram {"wp":"#40 h13755 v-705 #38"} #end)
+    (#44 wire #28 => #31
+    #pragma diagram {"wp":"#28 h6820 v-7095 #31"} #end)
+    (#45 wire #25 => #35
+    #pragma diagram {"wp":"#25 h4495 v14365 #35"} #end)
+    (#46 wire #11 => #19
+    #pragma diagram {"wp":"#11 h5680 v-2965 #19"} #end)
+    (#47 wire #5 => #13
+    #pragma diagram {"wp":"#5 h6455 v-710 #13"} #end)
+    (#48 wire #1 => #4
+    #pragma diagram {"wp":"#1 h104510 v43080 #4"} #end)
+    (#49 wire #39 => #32
+    #pragma diagram {"wp":"#39 h6955 v7095 #32"} #end)
+    (#50 wire #30 => #12
+    #pragma diagram {"wp":"#30 h5260 v-7705 #12"} #end)
+    (#51 wire #14 => #10, #16, #26
+    #pragma diagram {"wp":"#14 h3000[h1000[#10, v28840 h-94940 v-2600 #26], v-48770 h-155840 v40880 #16]"} #end)
+    (#52 wire #22 => #20
+    #pragma diagram {"wp":"#22 h5815 v-760 #20"} #end)
+    (#53 wire #2 => #24
+    #pragma diagram {"wp":"#2 h66875 v22480 #24"} #end)
+    (#54 wire #36 => #3
+    #pragma diagram {"wp":"#36 h5920 v2035 #3"} #end)
+    (#55 wire #21 => #7
+    #pragma diagram {"wp":"#21 h6435 v6040 #7"} #end)
+    (#56 wire #8 => #23
+    #pragma diagram {"wp":"#8 h6025 v2035 #23"} #end)
+    (#57 wire #15 => #17
+    #pragma diagram {"wp":"#15 h5500 v-765 #17"} #end)
+    (#58 wire #33 => #34
+    #pragma diagram {"wp":"#33 h5890 v-14770 #34"} #end)
+    (#59 wire #9 => #37
+    #pragma diagram {"wp":"#9 h13485 v-1645 #37"} #end)
+}
+
+node #pragma doc Discrete transfer function expressed as a Z-transform function:
+       (Num[0]*z^(Ns - 1) + ... + Num[Ns - 2]*z + Num[Ns - 1]) / (Den[0]*z^(Ds - 1) + ... + Den[Ds - 2]*z + Den[Ds - 1])
+     where Ns is the numerator's array size and Ds is the denominator's array size (Ds > Ns > 1)
+     At first tick, Out = 0 #end TransferFcnND <<Ns, Ds>> (In: 'T;
+                                                           Num: 'T^Ns;
+                                                           Den: 'T^Ds;)
+  returns (Out: 'T;)
+  where 'T float
+{
+  diagram
+    (#1 $N1 block (map ({op_expr%*%op_expr})) <<Ns>>
+    #pragma diagram {"xy":"H57545;V36775","wh":"20530;16030"} #end)
+    (#2 $N2 block (map ({op_expr%*%op_expr})) <<Ds - 1>>
+    #pragma diagram {"xy":"H64560;V59795","wh":"24500;16030"} #end)
+    (#3 $N3 block (map ({op_expr%function a_1, b_1 => a_1 - b_1%op_expr})) <<Ds - 1>>
+    #pragma diagram {"xy":"H100010;V42600","wh":"24500;16040"} #end)
+    (#4 expr 0.0
+    #pragma diagram {"xy":"H0;V0"} #end)
+    (#6 expr #5 [1 .. Ds - 1]
+      where
+        (#5 group)
+    #pragma diagram {"xy":"H36440;V51460","wh":"20000;7000"} #end)
+    (#7 expr Den
+    #pragma diagram {"xy":"H13730;V51595"} #end)
+    (#8 expr In
+    #pragma diagram {"xy":"H13720;V31090"} #end)
+    (#9 expr Num
+    #pragma diagram {"xy":"H13730;V41805"} #end)
+    (#10 $N4 block (fold SumDelay) <<Ds - 1>>
+    #pragma diagram {"xy":"H140365;V39955","wh":"22650;18150"} #end)
+    (#12 expr reverse (#11)
+      where
+        (#11 group)
+    #pragma diagram {"xy":"H113150;V42730"} #end)
+    (#15 expr #14 pre #13
+      where
+        (#14 group)
+        (#13 group)
+    #pragma diagram {"xy":"H162550;V39955"} #end)
+    (#18 expr #17 / #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H186580;V41145"} #end)
+    (#19 expr Den[0]
+    #pragma diagram {"xy":"H171230;V50485","wh":"10000;3200"} #end)
+    (#20 def Out
+    #pragma diagram {"xy":"H216370;V41405"} #end)
+    (#22 expr #21 ^ ({text%Ds - 1%text})
+      where
+        (#21 group)
+    #pragma diagram {"xy":"H38640;V68370","wh":"14000;7000"} #end)
+    (#24 expr #23 ^ (Ns)
+      where
+        (#23 group)
+    #pragma diagram {"xy":"H33120;V31090","wh":"10000;7000"} #end)
+    (#27 expr #26 @ #25
+      where
+        (#26 group)
+        (#25 group)
+    #pragma diagram {"xy":"H79160;V26590"} #end)
+    (#29 expr #28 ^ ({text%Ds - Ns - 1%text})
+      where
+        (#28 group)
+    #pragma diagram {"xy":"H58110;V14925","wh":"20000;7000"} #end)
+    (#30 expr (0 :> 'T)
+    #pragma diagram {"xy":"H35280;V15080","wh":"14000;3200"} #end)
+    (#31 expr (0 :> 'T)
+    #pragma diagram {"xy":"H113700;V32015","wh":"14000;3200"} #end)
+    
+    (#32 wire #19 => #16
+    #pragma diagram {"wp":"#19 h4175 v-7440 #16"} #end)
+    (#33 wire #12 => #10 .(2))
+    (#34 wire #31 => #10 .(1)
+    #pragma diagram {"wp":"#31 h5670 v14365 #10"} #end)
+    (#35 wire #10 .(1) => #13
+    #pragma diagram {"wp":"v-100|#10 #13"} #end)
+    (#36 wire #8 => #23)
+    (#37 wire #9 => #1 .(2))
+    (#38 wire #7 => #5
+    #pragma diagram {"wp":"#7 h5855 v-135 #5"} #end)
+    (#39 wire #3 .(1) => #11
+    #pragma diagram {"wp":"v2630|#3 h1750 #11"} #end)
+    (#40 wire #22 => #2 .(2)
+    #pragma diagram {"wp":"#22 h4335 v-2530 #2"} #end)
+    (#41 wire #4 => #14
+    #pragma diagram {"wp":"#4 h151620 v38055 #14"} #end)
+    (#42 wire #24 => #1 .(1)
+    #pragma diagram {"wp":"#24 h5580 v3572 #1"} #end)
+    (#43 wire #15 => #17
+    #pragma diagram {"wp":"#15 h8015 v-710 #17"} #end)
+    (#44 wire #29 => #26
+    #pragma diagram {"wp":"#29 h4525 v9765 #26"} #end)
+    (#45 wire #6 => #2 .(1)
+    #pragma diagram {"wp":"#6 h4535 v8852 #2"} #end)
+    (#46 wire #1 .(1) => #25
+    #pragma diagram {"wp":"v-5527|#1 h3175 v-4758 #25"} #end)
+    (#47 wire #30 => #28
+    #pragma diagram {"wp":"#30 h4415 v-155 #28"} #end)
+    (#48 wire #18 => #20, #21
+    #pragma diagram {"wp":"#18 h11395[v260 #20, h1000 v31225 h-172835 v-4000 #21]"} #end)
+    (#49 wire #2 .(1) => #3 .(2)
+    #pragma diagram {"wp":"v-5528|#2 h5475 v-8307 #3"} #end)
+    (#50 wire #27 => #3 .(1)
+    #pragma diagram {"wp":"#27 h3500 v20770 #3"} #end)
+}

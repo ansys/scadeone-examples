@@ -1,0 +1,1288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?dom version="19.0" ?>
+
+<specification>
+    <IDE>
+        <project path="ControlPanel.etp"/>
+        <ratio horizontal="1" vertical="1"/>
+    </IDE>
+    <symbology>
+        <dimension height="600" width="768"/>
+    </symbology>
+    <children>
+        <layer oid="ff1365ea-9b78-4c66-ae4a-6d63108a7b10">
+            <pathFromRoot value=""/>
+            <declaration>
+                <constants>
+                    <constant name="glTF_PATH" oid="e166e482-3919-4be0-8e08-20a7d4e603eb" representation="as_string" type="char^512">
+                        <init>[46,46,92,66,117,115,105,110,101,115,115,95,74,101,116,46,103,108,98,0]</init>
+                    </constant>
+                </constants>
+                <inputs>
+                    <input name="JV_Speed_Alarm" oid="e65a4df6-aea5-4315-bb98-e50d5b6436dc" type="bool">
+                        <init>false</init>
+                    </input>
+                    <input name="JV_Alti_Alarm" oid="97d0ec83-af11-487d-83cf-44ae461dd1c4" type="bool">
+                        <init>false</init>
+                    </input>
+                    <input name="AIRSPEED" oid="a225d5ba-35bd-4ab5-8ccd-a11e69cf7f0d" type="real">
+                        <init>0.0</init>
+                    </input>
+                    <input name="ALTITUDE" oid="408c3082-1812-455a-be71-3fdf896a04a0" type="real">
+                        <init>0.0</init>
+                    </input>
+                    <input name="ROLL" oid="0ec336e2-0cb8-48e4-bfe9-297a27d4c28b" type="real">
+                        <init>0.0</init>
+                    </input>
+                    <input name="PITCH" oid="613c3415-bf32-4cb5-8013-eb2a776f3887" type="real">
+                        <init>0.0</init>
+                    </input>
+                </inputs>
+                <outputs>
+                    <output memory="false" name="MCP_Speed" oid="52cd171f-c1b6-46cf-a753-f3855011f92b" type="real">
+                        <init>0.0</init>
+                    </output>
+                    <output memory="false" name="MCP_Altitude" oid="7076b908-4aa5-4229-8d27-5fd0dac37f03" type="real">
+                        <init>0.0</init>
+                    </output>
+                    <output memory="false" name="MCP_AutoPilot" oid="b756f959-fec5-4fda-ad75-5aa6c7987117" type="bool">
+                        <init>false</init>
+                    </output>
+                    <output memory="false" name="MCP_UnlockRoll" oid="539b0bbb-6d34-4703-83f9-196f605f43da" type="bool">
+                        <init>false</init>
+                    </output>
+                </outputs>
+            </declaration>
+            <properties name="control_panel">
+                <visible>
+                    <init>true</init>
+                </visible>
+                <origin>
+                    <x>
+                        <init>0.0</init>
+                    </x>
+                    <y>
+                        <init>0.0</init>
+                    </y>
+                </origin>
+                <id>
+                    <init>1</init>
+                </id>
+                <ratio horizontal="1" vertical="1"/>
+            </properties>
+            <children>
+                <referenceContainer oid="106b31a2-f528-4e19-83ce-e880c07672ff">
+                    <pathFromRoot value="0"/>
+                    <properties modular="false" name="InfiniteKnob_ref">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>-176.625</init>
+                            </x>
+                            <y>
+                                <init>-199.5</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="InfiniteKnob.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="571877067"/>
+                        <inputParameters>
+                            <parameter control="false" name="WidgetId" oid="3bf2b49a-f7ac-4348-a8ac-b760105b1164" type="int32">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="NextWidgetId" oid="f6f4f764-3c99-4fd5-86cd-e5e3606aa586" type="int32">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="Enabled" oid="d7df9d73-2fa6-43ca-aec1-a9adb31997fd" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="ValuePerRevolution" oid="cdba685a-8ca1-4366-8f43-2f52e935f83c" type="real">
+                                <init>100.0</init>
+                            </parameter>
+                            <parameter control="false" name="ValueVisible" oid="230cbf71-dc40-46a4-a639-ad16bf12f88e" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="KnobType" oid="dd87bba9-9cac-4ce3-b9b9-0815aa2df11d" representation="index" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="6c35d2a6-f6bb-4d0d-956e-4f07580e1755" representation="as_string" type="char^255">
+                                <init>[84,97,114,103,101,116,32,83,112,101,101,100,0]</init>
+                            </parameter>
+                            <parameter control="false" name="Radius" oid="2021a24e-013c-4635-8472-bc72bf4538c4" type="real">
+                                <init>55.0</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="0864b0db-b76b-49be-955e-cda034a8d540" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                            <parameter control="false" name="TextColor" oid="2d89a3aa-4595-4d10-93e3-dbec0636c5c6" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="BackColor" oid="958eca32-0b77-45c4-bb24-b04c3fe54407" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="ColorStyle" oid="76aedaf6-b1c6-4e27-8ad4-d3ab0de1314a" type="int">
+                                <init>0</init>
+                            </parameter>
+                        </inputParameters>
+                        <outputParameters>
+                            <parameter name="Value" oid="e763a119-78fb-4773-a9b3-0ceb3e2dc5f5" type="real">
+                                <expr>MCP_Speed</expr>
+                            </parameter>
+                        </outputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="076e2c57-5af2-407a-a2eb-04a64de27592">
+                    <pathFromRoot value="1"/>
+                    <properties modular="false" name="InfiniteKnob_ref">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>163.125</init>
+                            </x>
+                            <y>
+                                <init>-199.5</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="InfiniteKnob.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="571877067"/>
+                        <inputParameters>
+                            <parameter control="false" name="WidgetId" oid="3bf2b49a-f7ac-4348-a8ac-b760105b1164" type="int32">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="NextWidgetId" oid="f6f4f764-3c99-4fd5-86cd-e5e3606aa586" type="int32">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="Enabled" oid="d7df9d73-2fa6-43ca-aec1-a9adb31997fd" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="ValuePerRevolution" oid="cdba685a-8ca1-4366-8f43-2f52e935f83c" type="real">
+                                <init>1000.0</init>
+                            </parameter>
+                            <parameter control="false" name="ValueVisible" oid="230cbf71-dc40-46a4-a639-ad16bf12f88e" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="KnobType" oid="dd87bba9-9cac-4ce3-b9b9-0815aa2df11d" representation="index" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="6c35d2a6-f6bb-4d0d-956e-4f07580e1755" representation="as_string" type="char^255">
+                                <init>[84,97,114,103,101,116,32,65,108,116,105,116,117,100,101,0]</init>
+                            </parameter>
+                            <parameter control="false" name="Radius" oid="2021a24e-013c-4635-8472-bc72bf4538c4" type="real">
+                                <init>55.0</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="0864b0db-b76b-49be-955e-cda034a8d540" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                            <parameter control="false" name="TextColor" oid="2d89a3aa-4595-4d10-93e3-dbec0636c5c6" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="BackColor" oid="958eca32-0b77-45c4-bb24-b04c3fe54407" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="ColorStyle" oid="76aedaf6-b1c6-4e27-8ad4-d3ab0de1314a" type="int">
+                                <init>0</init>
+                            </parameter>
+                        </inputParameters>
+                        <outputParameters>
+                            <parameter name="Value" oid="e763a119-78fb-4773-a9b3-0ceb3e2dc5f5" type="real">
+                                <expr>MCP_Altitude</expr>
+                            </parameter>
+                        </outputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="edfe0c9d-54c7-44cd-b399-edc0fbef0e4f">
+                    <pathFromRoot value="2"/>
+                    <properties modular="false" name="RectToggleButton_ref">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>-56.75</init>
+                            </x>
+                            <y>
+                                <init>-177.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="ToggleButton.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1861758070"/>
+                        <inputParameters>
+                            <parameter control="false" name="WidgetId" oid="8da0bb3a-a338-4d32-953a-8d43608f3365" type="int32">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="NextWidgetId" oid="77b35b31-46d9-4705-b388-306a69223e54" type="int32">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeX" oid="48698053-3e5c-44f2-a397-fad6d30086dd" type="real">
+                                <init>100.0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeY" oid="a14d50fe-3285-4968-9a9c-073704346e96" type="real">
+                                <init>40.0</init>
+                            </parameter>
+                            <parameter control="false" name="Enable" oid="443d8b7c-8be4-4d72-bc64-0e2817a2492c" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="Style" oid="c28f50cc-9186-40e8-becf-c5956fab8359" representation="index" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="ColorStyle" oid="0ca3b90e-d739-4e3a-be61-29eb9a2f210a" type="int">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="LabelString" oid="2cfe68f7-4ac3-4ac1-9a65-f40ce6cd4045" representation="as_string" type="char^255">
+                                <init>[65,117,116,111,32,80,105,108,111,116,0]</init>
+                            </parameter>
+                            <parameter control="false" name="ButtonColor" oid="8a7fed0e-c4cb-42ee-acf8-e3a5b20b7f35" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="a7157311-38d0-4206-ae12-f6e8bcd95a13" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                            <parameter control="false" name="TextColor" oid="02c4c87c-863d-4b18-a15e-a318f5c3784a" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="TextAlignment" oid="5df03f6f-8847-43ed-a0c8-5a0890b9d41c" representation="horizontal_alignment" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="AlternateLabelString" oid="2aa929f1-3443-46e4-a8f8-fb84663d581f" representation="as_string" type="char^255">
+                                <init>[65,117,116,111,32,80,105,108,111,116,0]</init>
+                            </parameter>
+                            <parameter control="false" name="AlternateButtonColor" oid="0e4b5948-2010-4703-ba4a-79080ce0514e" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="EmitCondition" oid="788df87b-8195-4451-adf8-07715255d653" representation="index" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="InState" oid="ca3e7b7d-2905-4b65-8705-0ce55137d5d1" type="bool">
+                                <init>false</init>
+                            </parameter>
+                            <parameter control="false" name="InStateSet" oid="35a4216d-8831-4828-ad93-12d19c0394ce" type="bool">
+                                <init>false</init>
+                            </parameter>
+                        </inputParameters>
+                        <outputParameters>
+                            <parameter name="State" oid="36dc132e-3c20-4729-9b21-730bf97a4ef3" type="bool">
+                                <expr>MCP_AutoPilot</expr>
+                            </parameter>
+                            <parameter name="StateChangeEmit" oid="dbbe4993-d669-4cc5-8485-8702f8367115" type="bool"/>
+                        </outputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="78001a1a-651f-467f-b67f-2829ef1214bd">
+                    <pathFromRoot value="3"/>
+                    <properties modular="false" name="LED_ref">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>-349.5</init>
+                            </x>
+                            <y>
+                                <init>-219.5</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="LED.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1191490682"/>
+                        <inputParameters>
+                            <parameter control="false" name="SizeX" oid="b50c0fdc-f138-44d2-a60a-01cf4040c145" type="real">
+                                <init>40.0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeY" oid="df2255be-4190-4ff1-a16e-b49ba5ab9a70" type="real">
+                                <init>40.0</init>
+                            </parameter>
+                            <parameter control="false" name="Style" oid="b92b8804-3d1c-46c9-90c2-9ae4fe1933fd" representation="index" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="ColorStyle" oid="b48ee7f2-9526-45af-a334-8df02f8bade7" type="int">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="LEDOn" oid="e01c6bbf-dcc2-4976-9fa8-36c21a18dabd" type="bool">
+                                <expr>JV_Speed_Alarm</expr>
+                                <init>false</init>
+                            </parameter>
+                            <parameter control="false" name="LEDColor" oid="07d7b1a4-6e20-4683-b82f-1234b88d91db" representation="color" type="int">
+                                <init>15</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="e43f4a50-f0e2-48d3-9bba-79c9889e8c92" representation="as_string" type="char^255">
+                                <init>[83,112,101,101,100,32,65,108,97,114,109,0]</init>
+                            </parameter>
+                            <parameter control="false" name="LegendColor" oid="9d6f8669-9361-4193-a44f-be5331d1d132" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="b1c4cf11-8c08-4643-8a5f-dd985a65d7f0" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="bc50f470-b11c-4f39-bdeb-abf25f1b20f1">
+                    <pathFromRoot value="4"/>
+                    <properties modular="false" name="LED_ref">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>299.0</init>
+                            </x>
+                            <y>
+                                <init>-219.5</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="LED.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1191490682"/>
+                        <inputParameters>
+                            <parameter control="false" name="SizeX" oid="b50c0fdc-f138-44d2-a60a-01cf4040c145" type="real">
+                                <init>40.0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeY" oid="df2255be-4190-4ff1-a16e-b49ba5ab9a70" type="real">
+                                <init>40.0</init>
+                            </parameter>
+                            <parameter control="false" name="Style" oid="b92b8804-3d1c-46c9-90c2-9ae4fe1933fd" representation="index" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="ColorStyle" oid="b48ee7f2-9526-45af-a334-8df02f8bade7" type="int">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="LEDOn" oid="e01c6bbf-dcc2-4976-9fa8-36c21a18dabd" type="bool">
+                                <expr>JV_Alti_Alarm</expr>
+                                <init>false</init>
+                            </parameter>
+                            <parameter control="false" name="LEDColor" oid="07d7b1a4-6e20-4683-b82f-1234b88d91db" representation="color" type="int">
+                                <init>15</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="e43f4a50-f0e2-48d3-9bba-79c9889e8c92" representation="as_string" type="char^255">
+                                <init>[65,108,116,105,116,117,100,101,32,65,108,97,114,109,0]</init>
+                            </parameter>
+                            <parameter control="false" name="LegendColor" oid="9d6f8669-9361-4193-a44f-be5331d1d132" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="b1c4cf11-8c08-4643-8a5f-dd985a65d7f0" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="d54fa434-bdf3-419b-a289-d837430b05b2">
+                    <pathFromRoot value="5"/>
+                    <properties modular="false" name="RoundToggleButton_ref">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>-37.0</init>
+                            </x>
+                            <y>
+                                <init>-279.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="ToggleButton.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1861758070"/>
+                        <inputParameters>
+                            <parameter control="false" name="WidgetId" oid="8da0bb3a-a338-4d32-953a-8d43608f3365" type="int32">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="NextWidgetId" oid="77b35b31-46d9-4705-b388-306a69223e54" type="int32">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeX" oid="48698053-3e5c-44f2-a397-fad6d30086dd" type="real">
+                                <init>70.0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeY" oid="a14d50fe-3285-4968-9a9c-073704346e96" type="real">
+                                <init>70.0</init>
+                            </parameter>
+                            <parameter control="false" name="Enable" oid="443d8b7c-8be4-4d72-bc64-0e2817a2492c" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="Style" oid="c28f50cc-9186-40e8-becf-c5956fab8359" representation="index" type="int">
+                                <init>3</init>
+                            </parameter>
+                            <parameter control="false" name="ColorStyle" oid="0ca3b90e-d739-4e3a-be61-29eb9a2f210a" type="int">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="LabelString" oid="2cfe68f7-4ac3-4ac1-9a65-f40ce6cd4045" representation="as_string" type="char^255">
+                                <init>[85,110,108,111,99,107,32,82,111,108,108,0]</init>
+                            </parameter>
+                            <parameter control="false" name="ButtonColor" oid="8a7fed0e-c4cb-42ee-acf8-e3a5b20b7f35" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="a7157311-38d0-4206-ae12-f6e8bcd95a13" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                            <parameter control="false" name="TextColor" oid="02c4c87c-863d-4b18-a15e-a318f5c3784a" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="TextAlignment" oid="5df03f6f-8847-43ed-a0c8-5a0890b9d41c" representation="horizontal_alignment" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="AlternateLabelString" oid="2aa929f1-3443-46e4-a8f8-fb84663d581f" representation="as_string" type="char^255">
+                                <init>[85,110,108,111,99,107,32,82,111,108,108,0]</init>
+                            </parameter>
+                            <parameter control="false" name="AlternateButtonColor" oid="0e4b5948-2010-4703-ba4a-79080ce0514e" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="EmitCondition" oid="788df87b-8195-4451-adf8-07715255d653" representation="index" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="InState" oid="ca3e7b7d-2905-4b65-8705-0ce55137d5d1" type="bool">
+                                <init>false</init>
+                            </parameter>
+                            <parameter control="false" name="InStateSet" oid="35a4216d-8831-4828-ad93-12d19c0394ce" type="bool">
+                                <init>false</init>
+                            </parameter>
+                        </inputParameters>
+                        <outputParameters>
+                            <parameter name="State" oid="36dc132e-3c20-4729-9b21-730bf97a4ef3" type="bool">
+                                <expr>MCP_UnlockRoll</expr>
+                            </parameter>
+                            <parameter name="StateChangeEmit" oid="dbbe4993-d669-4cc5-8485-8702f8367115" type="bool"/>
+                        </outputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <line oid="0471d040-6b10-4f24-8d69-0e0803bc0edf">
+                    <pathFromRoot value="6"/>
+                    <properties name="line">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <points>
+                            <point>
+                                <x>
+                                    <init>-360.0</init>
+                                </x>
+                                <y>
+                                    <init>-110.0</init>
+                                </y>
+                            </point>
+                            <point>
+                                <x>
+                                    <init>360.0</init>
+                                </x>
+                                <y>
+                                    <init>-110.0</init>
+                                </y>
+                            </point>
+                        </points>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <lineStipple>
+                            <init>0</init>
+                        </lineStipple>
+                        <lineCap>
+                            <init>round</init>
+                        </lineCap>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <outlineOpacity>
+                            <init>255</init>
+                        </outlineOpacity>
+                    </properties>
+                </line>
+                <referenceContainer oid="3f6375a3-7f2f-4f1c-89b3-d3d5a1871129">
+                    <pathFromRoot value="7"/>
+                    <properties modular="false" name="HorizontalGauge_ref">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>-252.0</init>
+                            </x>
+                            <y>
+                                <init>-82.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="Gauge.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1929459002"/>
+                        <inputParameters>
+                            <parameter control="false" name="SizeX" oid="6155a022-c4b5-496b-90e0-23e66a70a071" type="real">
+                                <init>127.0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeY" oid="bcd0e24d-d81d-4d91-8788-f0195fa6a713" type="real">
+                                <init>11.0</init>
+                            </parameter>
+                            <parameter control="false" name="Style" oid="7877d93b-ba6d-45bc-aeb9-5e3d81a57d51" representation="index" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="ColorStyle" oid="d369f48c-23be-4e26-9a30-6468667d5c5d" type="int">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="BackColor" oid="435c1eb4-ca7e-4847-9f07-a6697efd1419" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="FrontColor" oid="b478dbfe-54cb-4d0f-9d88-d068bff0300d" representation="color" type="int">
+                                <init>55</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="22226ba0-8030-4da1-ad85-75c798f3ae63" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                            <parameter control="false" name="TextColor" oid="2bf2491e-24a7-4314-849b-7711e5683866" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="Value" oid="f3f6d85a-f403-418d-9afc-1d2c14ee89f1" type="real">
+                                <expr>AIRSPEED</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="MinValue" oid="3bf7eb2f-01c6-498c-b321-7c993d09b808" type="real">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="MaxValue" oid="deca867c-e075-4b0a-9aab-2cb284cf7f8b" type="real">
+                                <init>200.0</init>
+                            </parameter>
+                            <parameter control="false" name="Orientation" oid="d97c8e64-c266-43f7-85f5-ea5b5e5b589e" representation="index" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="ShowGraduation" oid="c9dadbce-3cc1-467b-a9ce-0ef61fee824f" representation="index" type="int">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="ShowValue" oid="5bcd882a-15e7-46fa-9321-306bf8764ec6" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="c2ea84ed-d7c4-4a9f-9daa-7e55a6e624a0" representation="as_string" type="char^255">
+                                <init>[80,108,97,110,101,32,83,112,101,101,100,0]</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="bb496e6f-ebfd-4579-8c61-71e3a9670e4f">
+                    <pathFromRoot value="8"/>
+                    <properties modular="false" name="HorizontalGauge_ref">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>-37.0</init>
+                            </x>
+                            <y>
+                                <init>-82.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="Gauge.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1929459002"/>
+                        <inputParameters>
+                            <parameter control="false" name="SizeX" oid="6155a022-c4b5-496b-90e0-23e66a70a071" type="real">
+                                <init>134.0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeY" oid="bcd0e24d-d81d-4d91-8788-f0195fa6a713" type="real">
+                                <init>11.0</init>
+                            </parameter>
+                            <parameter control="false" name="Style" oid="7877d93b-ba6d-45bc-aeb9-5e3d81a57d51" representation="index" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="ColorStyle" oid="d369f48c-23be-4e26-9a30-6468667d5c5d" type="int">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="BackColor" oid="435c1eb4-ca7e-4847-9f07-a6697efd1419" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="FrontColor" oid="b478dbfe-54cb-4d0f-9d88-d068bff0300d" representation="color" type="int">
+                                <init>45</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="22226ba0-8030-4da1-ad85-75c798f3ae63" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                            <parameter control="false" name="TextColor" oid="2bf2491e-24a7-4314-849b-7711e5683866" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="Value" oid="f3f6d85a-f403-418d-9afc-1d2c14ee89f1" type="real">
+                                <expr>ALTITUDE</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="MinValue" oid="3bf7eb2f-01c6-498c-b321-7c993d09b808" type="real">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="MaxValue" oid="deca867c-e075-4b0a-9aab-2cb284cf7f8b" type="real">
+                                <init>2000.0</init>
+                            </parameter>
+                            <parameter control="false" name="Orientation" oid="d97c8e64-c266-43f7-85f5-ea5b5e5b589e" representation="index" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="ShowGraduation" oid="c9dadbce-3cc1-467b-a9ce-0ef61fee824f" representation="index" type="int">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="ShowValue" oid="5bcd882a-15e7-46fa-9321-306bf8764ec6" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="c2ea84ed-d7c4-4a9f-9daa-7e55a6e624a0" representation="as_string" type="char^255">
+                                <init>[80,108,97,110,101,32,65,108,116,105,116,117,100,101,0]</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="06677720-455d-4d39-88aa-56810ffa58dc">
+                    <pathFromRoot value="9"/>
+                    <properties modular="false" name="NumericDisplay_ref">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>234.0</init>
+                            </x>
+                            <y>
+                                <init>-62.5</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="NumericDisplay.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1403237424"/>
+                        <inputParameters>
+                            <parameter control="false" name="Value" oid="a3a5f970-1420-4fe1-9bd8-e35a8f306807" type="real">
+                                <expr>ROLL</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="ValueColor" oid="b982d917-8d18-417d-b064-017d245af51c" representation="color" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="BackColor" oid="3626f080-6df7-44a5-a206-b03d79290764" representation="color" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="NumberFormat" oid="9ca35185-6fbd-4767-aa97-1ff4ae261528" representation="index" type="int">
+                                <init>3</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="3d8e3172-2c79-48a9-a235-d6bba2894b8d" representation="as_string" type="char^255">
+                                <init>[82,111,108,108,0]</init>
+                            </parameter>
+                            <parameter control="false" name="LegendColor" oid="e83a7fd8-ed56-419c-8274-f0026bf8b7bf" representation="color" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="Unit" oid="fe4bc7f8-1d1c-4907-9b1c-0110346f9c12" representation="as_string" type="char^255">
+                                <init>[176,0]</init>
+                            </parameter>
+                            <parameter control="false" name="UnitColor" oid="dc370f04-f53b-4986-b9a3-b1a7f5789537" representation="color" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="b4a39410-bf6a-4c05-8956-31515a1c7ee6" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                            <parameter control="false" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
+                                <init>57.0</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="4f0b31b1-456b-4ecd-b737-95da95c4a22f">
+                    <pathFromRoot value="10"/>
+                    <properties modular="false" name="NumericDisplay_ref">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>234.0</init>
+                            </x>
+                            <y>
+                                <init>-90.5</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="NumericDisplay.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1403237424"/>
+                        <inputParameters>
+                            <parameter control="false" name="Value" oid="a3a5f970-1420-4fe1-9bd8-e35a8f306807" type="real">
+                                <expr>PITCH</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="ValueColor" oid="b982d917-8d18-417d-b064-017d245af51c" representation="color" type="int">
+                                <init>1</init>
+                            </parameter>
+                            <parameter control="false" name="BackColor" oid="3626f080-6df7-44a5-a206-b03d79290764" representation="color" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="NumberFormat" oid="9ca35185-6fbd-4767-aa97-1ff4ae261528" representation="index" type="int">
+                                <init>3</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="3d8e3172-2c79-48a9-a235-d6bba2894b8d" representation="as_string" type="char^255">
+                                <init>[80,105,116,99,104,0]</init>
+                            </parameter>
+                            <parameter control="false" name="LegendColor" oid="e83a7fd8-ed56-419c-8274-f0026bf8b7bf" representation="color" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="Unit" oid="fe4bc7f8-1d1c-4907-9b1c-0110346f9c12" representation="as_string" type="char^255">
+                                <init>[176,0]</init>
+                            </parameter>
+                            <parameter control="false" name="UnitColor" oid="dc370f04-f53b-4986-b9a3-b1a7f5789537" representation="color" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="b4a39410-bf6a-4c05-8956-31515a1c7ee6" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                            <parameter control="false" name="Width" oid="081b8163-a890-4fc0-b2ea-edd5a62a2d99" type="real">
+                                <init>57.0</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="708ae551-eda5-4051-8da6-4a24c584c4eb">
+                    <pathFromRoot value="11"/>
+                    <properties modular="false" name="Graph_4x1000">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>-330.0</init>
+                            </x>
+                            <y>
+                                <init>90.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="Graph_F_T.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1041320290"/>
+                        <inputParameters>
+                            <parameter control="false" name="SizeX" oid="357e94ac-dc05-4a5d-80f0-0cc55c1804e1" type="real">
+                                <init>245.0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeY" oid="24803017-818d-41f0-95d8-f7ef8f27046f" type="real">
+                                <init>152.0</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="10d13da3-f6b4-49d9-8e5b-31d302d0540c" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                            <parameter control="false" name="TextColor" oid="3455db48-6657-4308-b8ff-11cc1a26e6e7" representation="color" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="BackColor" oid="c3522a1e-e52a-4fbe-8843-f1b7a65d7ba3" representation="color" type="int">
+                                <init>3</init>
+                            </parameter>
+                            <parameter control="false" name="MinY" oid="0702253e-21de-4a26-9333-3fdfe35725b2" type="real">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="MaxY" oid="9a64efc4-632f-441a-864f-094628885358" type="real">
+                                <init>200.0</init>
+                            </parameter>
+                            <parameter control="false" name="CyclePeriod" oid="62c7666d-dcea-42f6-9857-8cb3a57dc622" type="real">
+                                <init>1.0</init>
+                            </parameter>
+                            <parameter control="false" name="ShowCrossline" oid="e8512c36-212a-4de7-a360-0a71e3240c8c" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="NbCurves" oid="693e07f5-4b7e-4b4f-9683-3de34c8f174e" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="CurveColor1" oid="8425a577-dd61-4279-a99e-bc9fea4cff8c" representation="color" type="int">
+                                <init>51</init>
+                            </parameter>
+                            <parameter control="false" name="CurveColor2" oid="66dd7e1e-0350-4b71-bc1c-19cc15220874" representation="color" type="int">
+                                <init>65</init>
+                            </parameter>
+                            <parameter control="false" name="CurveColor3" oid="82d7777e-3471-42c6-93b6-965213331f9d" representation="color" type="int">
+                                <init>21</init>
+                            </parameter>
+                            <parameter control="false" name="CurveColor4" oid="fb89e6b8-7075-4391-b7ee-0a3e0eb4ddf3" representation="color" type="int">
+                                <init>31</init>
+                            </parameter>
+                            <parameter control="false" name="CurvePointKind1" oid="8ef047a3-5a93-40f9-b7f2-4243f40cc26f" representation="index" type="int">
+                                <init>5</init>
+                            </parameter>
+                            <parameter control="false" name="CurvePointKind2" oid="2eaec361-2abf-4930-b07b-e06050f5748a" representation="index" type="int">
+                                <init>5</init>
+                            </parameter>
+                            <parameter control="false" name="CurvePointKind3" oid="8fe35517-1a2e-4c80-acef-918dbaea5fab" representation="index" type="int">
+                                <init>5</init>
+                            </parameter>
+                            <parameter control="false" name="CurvePointKind4" oid="629e6fa3-a56b-4035-9a0f-b96e408943c6" representation="index" type="int">
+                                <init>5</init>
+                            </parameter>
+                            <parameter control="false" name="CurveLegend1" oid="0377cdee-0218-40d9-a9a3-2c538a4f3c25" representation="as_string" type="char^255">
+                                <init>[80,108,97,110,101,32,83,112,101,101,100,0]</init>
+                            </parameter>
+                            <parameter control="false" name="CurveLegend2" oid="3b0355b3-b657-4b52-9a94-c70cd65252ff" representation="as_string" type="char^255">
+                                <init>[84,97,114,103,101,116,32,83,112,101,101,100,0]</init>
+                            </parameter>
+                            <parameter control="false" name="CurveLegend3" oid="3573ad99-52ef-46f6-a049-24444e7fe14e" representation="as_string" type="char^255">
+                                <init>[76,101,103,101,110,100,51,0]</init>
+                            </parameter>
+                            <parameter control="false" name="CurveLegend4" oid="b1733a0c-681b-4410-bbb6-a18e1ea7fafe" representation="as_string" type="char^255">
+                                <init>[76,101,103,101,110,100,52,0]</init>
+                            </parameter>
+                            <parameter control="false" name="NbVisiblePoints" oid="014bde67-28d3-46f2-8d64-79a63143efa8" type="int">
+                                <init>100</init>
+                            </parameter>
+                            <parameter control="false" name="GridHorizontalColor" oid="d608d988-e951-43b1-89d5-22f32529a145" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="GridVerticalColor" oid="3bf00cbb-19c0-4c56-9f77-61d4d0022531" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="GridOpacity" oid="27513516-7611-4d7a-93d6-e925be98ed17" representation="opacity" type="int">
+                                <init>255</init>
+                            </parameter>
+                            <parameter control="false" name="Reset" oid="52c18966-ac7b-46a5-9cb0-76aaf06303ba" type="bool">
+                                <init>false</init>
+                            </parameter>
+                            <parameter control="false" name="Offset" oid="484f2508-106c-4102-96e5-d42838c435b8" type="int">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="Pause" oid="aa553bb8-2eee-43ed-bfbc-6076c9ce76d1" type="bool">
+                                <init>false</init>
+                            </parameter>
+                            <parameter control="false" name="Value1" oid="61fcca21-a1c7-4e1e-8b61-d309eda0ff9a" type="real">
+                                <expr>AIRSPEED</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="Value2" oid="41093892-5972-4419-b3f0-048a78ddf7d7" type="real">
+                                <expr>MCP_Speed</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="Value3" oid="13e3cf3b-2050-47cc-8cc5-4d572ec8d9ea" type="real">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="Value4" oid="242a31ca-1c52-4f7a-8380-40a38be1f354" type="real">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="57d7ff12-dd74-4174-8136-8199647a0f9e" representation="as_string" type="char^255">
+                                <init>[67,111,109,112,97,114,101,100,32,83,112,101,101,100,115,0]</init>
+                            </parameter>
+                            <parameter control="false" name="LabelX" oid="d3fb0752-3ac9-46d8-94e2-ee7a78afecee" representation="as_string" type="char^20">
+                                <init>[67,121,99,108,101,115,0]</init>
+                            </parameter>
+                            <parameter control="false" name="LabelY" oid="01aecdb3-e647-4f71-addd-86557c179be3" representation="as_string" type="char^20">
+                                <init>[75,84,83,0]</init>
+                            </parameter>
+                            <parameter control="false" name="LegendPosX" oid="c86c6333-9d9e-4fc4-a7d4-75203967e7e6" type="real">
+                                <init>44.0</init>
+                            </parameter>
+                            <parameter control="false" name="LegendPosY" oid="3a9d735f-27d8-404f-bf86-04a376d7ac5b" type="real">
+                                <init>-36.0</init>
+                            </parameter>
+                            <parameter control="false" name="ColorStyle" oid="7c4e7a99-e05e-4eae-b3ad-4e20ea43eb30" type="int">
+                                <init>0</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <referenceContainer oid="68959b55-824d-498c-a3da-cfe30b89ee0b">
+                    <pathFromRoot value="12"/>
+                    <properties modular="false" name="Graph_4x1000">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>55.0</init>
+                            </x>
+                            <y>
+                                <init>90.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="Graph_F_T.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="1041320290"/>
+                        <inputParameters>
+                            <parameter control="false" name="SizeX" oid="357e94ac-dc05-4a5d-80f0-0cc55c1804e1" type="real">
+                                <init>245.0</init>
+                            </parameter>
+                            <parameter control="false" name="SizeY" oid="24803017-818d-41f0-95d8-f7ef8f27046f" type="real">
+                                <init>152.0</init>
+                            </parameter>
+                            <parameter control="false" name="Font" oid="10d13da3-f6b4-49d9-8e5b-31d302d0540c" representation="font" type="int">
+                                <init>20</init>
+                            </parameter>
+                            <parameter control="false" name="TextColor" oid="3455db48-6657-4308-b8ff-11cc1a26e6e7" representation="color" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="BackColor" oid="c3522a1e-e52a-4fbe-8843-f1b7a65d7ba3" representation="color" type="int">
+                                <init>3</init>
+                            </parameter>
+                            <parameter control="false" name="MinY" oid="0702253e-21de-4a26-9333-3fdfe35725b2" type="real">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="MaxY" oid="9a64efc4-632f-441a-864f-094628885358" type="real">
+                                <init>5000.0</init>
+                            </parameter>
+                            <parameter control="false" name="CyclePeriod" oid="62c7666d-dcea-42f6-9857-8cb3a57dc622" type="real">
+                                <init>1.0</init>
+                            </parameter>
+                            <parameter control="false" name="ShowCrossline" oid="e8512c36-212a-4de7-a360-0a71e3240c8c" type="bool">
+                                <init>true</init>
+                            </parameter>
+                            <parameter control="false" name="NbCurves" oid="693e07f5-4b7e-4b4f-9683-3de34c8f174e" type="int">
+                                <init>2</init>
+                            </parameter>
+                            <parameter control="false" name="CurveColor1" oid="8425a577-dd61-4279-a99e-bc9fea4cff8c" representation="color" type="int">
+                                <init>41</init>
+                            </parameter>
+                            <parameter control="false" name="CurveColor2" oid="66dd7e1e-0350-4b71-bc1c-19cc15220874" representation="color" type="int">
+                                <init>47</init>
+                            </parameter>
+                            <parameter control="false" name="CurveColor3" oid="82d7777e-3471-42c6-93b6-965213331f9d" representation="color" type="int">
+                                <init>21</init>
+                            </parameter>
+                            <parameter control="false" name="CurveColor4" oid="fb89e6b8-7075-4391-b7ee-0a3e0eb4ddf3" representation="color" type="int">
+                                <init>31</init>
+                            </parameter>
+                            <parameter control="false" name="CurvePointKind1" oid="8ef047a3-5a93-40f9-b7f2-4243f40cc26f" representation="index" type="int">
+                                <init>5</init>
+                            </parameter>
+                            <parameter control="false" name="CurvePointKind2" oid="2eaec361-2abf-4930-b07b-e06050f5748a" representation="index" type="int">
+                                <init>5</init>
+                            </parameter>
+                            <parameter control="false" name="CurvePointKind3" oid="8fe35517-1a2e-4c80-acef-918dbaea5fab" representation="index" type="int">
+                                <init>5</init>
+                            </parameter>
+                            <parameter control="false" name="CurvePointKind4" oid="629e6fa3-a56b-4035-9a0f-b96e408943c6" representation="index" type="int">
+                                <init>5</init>
+                            </parameter>
+                            <parameter control="false" name="CurveLegend1" oid="0377cdee-0218-40d9-a9a3-2c538a4f3c25" representation="as_string" type="char^255">
+                                <init>[80,108,97,110,101,32,65,108,116,105,116,117,100,101,0]</init>
+                            </parameter>
+                            <parameter control="false" name="CurveLegend2" oid="3b0355b3-b657-4b52-9a94-c70cd65252ff" representation="as_string" type="char^255">
+                                <init>[84,97,114,103,101,116,32,65,108,116,105,116,117,100,101,0]</init>
+                            </parameter>
+                            <parameter control="false" name="CurveLegend3" oid="3573ad99-52ef-46f6-a049-24444e7fe14e" representation="as_string" type="char^255">
+                                <init>[76,101,103,101,110,100,51,0]</init>
+                            </parameter>
+                            <parameter control="false" name="CurveLegend4" oid="b1733a0c-681b-4410-bbb6-a18e1ea7fafe" representation="as_string" type="char^255">
+                                <init>[76,101,103,101,110,100,52,0]</init>
+                            </parameter>
+                            <parameter control="false" name="NbVisiblePoints" oid="014bde67-28d3-46f2-8d64-79a63143efa8" type="int">
+                                <init>100</init>
+                            </parameter>
+                            <parameter control="false" name="GridHorizontalColor" oid="d608d988-e951-43b1-89d5-22f32529a145" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="GridVerticalColor" oid="3bf00cbb-19c0-4c56-9f77-61d4d0022531" representation="color" type="int">
+                                <init>-1</init>
+                            </parameter>
+                            <parameter control="false" name="GridOpacity" oid="27513516-7611-4d7a-93d6-e925be98ed17" representation="opacity" type="int">
+                                <init>255</init>
+                            </parameter>
+                            <parameter control="false" name="Reset" oid="52c18966-ac7b-46a5-9cb0-76aaf06303ba" type="bool">
+                                <init>false</init>
+                            </parameter>
+                            <parameter control="false" name="Offset" oid="484f2508-106c-4102-96e5-d42838c435b8" type="int">
+                                <init>0</init>
+                            </parameter>
+                            <parameter control="false" name="Pause" oid="aa553bb8-2eee-43ed-bfbc-6076c9ce76d1" type="bool">
+                                <init>false</init>
+                            </parameter>
+                            <parameter control="false" name="Value1" oid="61fcca21-a1c7-4e1e-8b61-d309eda0ff9a" type="real">
+                                <expr>ALTITUDE</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="Value2" oid="41093892-5972-4419-b3f0-048a78ddf7d7" type="real">
+                                <expr>MCP_Altitude</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="Value3" oid="13e3cf3b-2050-47cc-8cc5-4d572ec8d9ea" type="real">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="Value4" oid="242a31ca-1c52-4f7a-8380-40a38be1f354" type="real">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="Legend" oid="57d7ff12-dd74-4174-8136-8199647a0f9e" representation="as_string" type="char^255">
+                                <init>[67,111,109,112,97,114,101,100,32,65,108,116,105,116,117,100,101,115,0]</init>
+                            </parameter>
+                            <parameter control="false" name="LabelX" oid="d3fb0752-3ac9-46d8-94e2-ee7a78afecee" representation="as_string" type="char^20">
+                                <init>[67,121,99,108,101,115,0]</init>
+                            </parameter>
+                            <parameter control="false" name="LabelY" oid="01aecdb3-e647-4f71-addd-86557c179be3" representation="as_string" type="char^20">
+                                <init>[70,84,0]</init>
+                            </parameter>
+                            <parameter control="false" name="LegendPosX" oid="c86c6333-9d9e-4fc4-a7d4-75203967e7e6" type="real">
+                                <init>44.0</init>
+                            </parameter>
+                            <parameter control="false" name="LegendPosY" oid="3a9d735f-27d8-404f-bf86-04a376d7ac5b" type="real">
+                                <init>-36.0</init>
+                            </parameter>
+                            <parameter control="false" name="ColorStyle" oid="7c4e7a99-e05e-4eae-b3ad-4e20ea43eb30" type="int">
+                                <init>0</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+                <bitmap oid="1ce0d05d-9fbd-4688-8062-3f9b7826a291">
+                    <pathFromRoot value="13"/>
+                    <properties name="bitmap">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>210.0</init>
+                            </x>
+                            <y>
+                                <init>-300.0</init>
+                            </y>
+                        </position>
+                        <textureId>
+                            <init>0</init>
+                        </textureId>
+                    </properties>
+                </bitmap>
+                <referenceContainer oid="6c1ade0b-7c4c-4c65-a0f8-a7bbeacd501c">
+                    <pathFromRoot value="14"/>
+                    <properties modular="false" name="glTF_Business_Jet">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>-1.0</init>
+                            </x>
+                            <y>
+                                <init>-13.0</init>
+                            </y>
+                        </origin>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <file name="GltfImporter.wgfx" path="$(RAPID_PROTOTYPER)\Widgets"/>
+                        <crc value="4171972742"/>
+                        <inputParameters>
+                            <parameter control="false" name="Path" oid="7ce18660-a5b6-4c77-8fb1-4fd6e03679d0" representation="as_path" type="char^512">
+                                <expr>glTF_PATH</expr>
+                                <init>[66,117,115,105,110,101,115,115,95,74,101,116,46,103,108,98,0]</init>
+                            </parameter>
+                            <parameter control="false" name="Scale" oid="d56e513b-158c-4e2c-87ab-052156b9c7b1" type="float32">
+                                <init>0.3</init>
+                            </parameter>
+                            <parameter control="false" name="XOrigin" oid="1e2cfcef-3b90-4bbe-a0e0-80a4f5b2c650" type="float32">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="YOrigin" oid="efa39040-d9ee-4bf4-8829-1316f3cf3a40" type="float32">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="ZOrigin" oid="1059cff5-5a41-458f-b6ef-45d9da2e301d" type="float32">
+                                <init>-10.0</init>
+                            </parameter>
+                            <parameter control="false" name="XRotate" oid="c2212473-35b5-4d1c-925c-22c32eabcd6a" type="float32">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="YRotate" oid="d6ba63fa-2760-4cd2-bcb8-5f068f0926fe" type="float32">
+                                <init>90.0</init>
+                            </parameter>
+                            <parameter control="false" name="ZRotate" oid="b3a69fa8-5b38-4d84-954e-bf4e27131987" type="float32">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="MeshReflect" oid="bc890edb-c001-4087-8524-10f5060c57ec" type="bool">
+                                <init>false</init>
+                            </parameter>
+                            <parameter control="false" name="XRotateObj" oid="3ba043f0-09bc-46fc-b333-c3a9565b6fb1" type="float32">
+                                <expr>-PITCH</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="YRotateObj" oid="d0d29692-e9cf-4e9e-81a1-d101fa262fe3" type="float32">
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="ZRotateObj" oid="4477ca5f-71b0-44c7-98e0-ede26cf84233" type="float32">
+                                <expr>ROLL</expr>
+                                <init>0.0</init>
+                            </parameter>
+                            <parameter control="false" name="ResetObjectRotation" oid="667affae-fea1-43fa-a928-77193e174c2a" type="bool">
+                                <init>false</init>
+                            </parameter>
+                        </inputParameters>
+                    </properties>
+                    <children/>
+                </referenceContainer>
+            </children>
+        </layer>
+    </children>
+</specification>
+
+<!-- crc32 : 1707233883 -->
+

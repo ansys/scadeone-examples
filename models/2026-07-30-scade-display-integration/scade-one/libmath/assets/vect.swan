@@ -1,0 +1,753 @@
+-- version swan: 2025.2 graph: 2.1
+function #pragma doc Builds an array of N elements, where each element value is the previous element plus Inc, first element being StartIdx #end BuildArray <<N>> (StartValue: 'T;
+                                                                                                                                                                   Increment: 'T;)
+  returns (Output: 'T^N;)
+  where 'T numeric
+{
+  diagram
+    (#1 $N1 block (mapfold SumDup) <<N>>
+    #pragma diagram {"xy":"H83345;V23150","wh":"27150;21060"} #end)
+    (#2 expr StartValue
+    #pragma diagram {"xy":"H16110;V18175","wh":"14000;3200"} #end)
+    (#3 expr Increment
+    #pragma diagram {"dir":"es","xy":"H46565;V58550","wh":"3200;14000"} #end)
+    (#4 def Output
+    #pragma diagram {"xy":"H136000;V26590","wh":"10000;3200"} #end)
+    (#5 def _
+    #pragma diagram {"xy":"H134700;V19450"} #end)
+    (#7 expr #6 ^ (N)
+      where
+        (#6 group)
+    #pragma diagram {"dir":"es","xy":"H46835;V44020","wh":"7000;10000"} #end)
+    (#8 expr (Increment :> 'T)
+    #pragma diagram {"xy":"H23150;V23820","wh":"20000;3200"} #end)
+    (#11 expr #10 - #9
+      where
+        (#10 group)
+        (#9 group)
+    #pragma diagram {"xy":"H47670;V19445"} #end)
+    
+    (#12 wire #1 .(1) => #5
+    #pragma diagram {"wp":"v-5700|#1 #5"} #end)
+    (#13 wire #8 => #9
+    #pragma diagram {"wp":"#8 h6260 v-2475 #9"} #end)
+    (#14 wire #7 => #1 .(2)
+    #pragma diagram {"wp":"#7 v-12208 #1"} #end)
+    (#15 wire #11 => #1 .(1))
+    (#16 wire #3 => #6
+    #pragma diagram {"wp":"#3 v-2030 h270 #6"} #end)
+    (#17 wire #1 .(2) => #4
+    #pragma diagram {"wp":"v1440|#1 #4"} #end)
+    (#18 wire #2 => #10
+    #pragma diagram {"wp":"#2 h16300 v-630 #10"} #end)
+}
+
+function #pragma doc Computes the determinant of a square matrix of type 'T^2^2 #end Det2x2 (A: 'T^2^2;)
+  returns (Det: 'T;)
+  where 'T numeric
+{
+  diagram
+    (let Det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
+    #pragma diagram {"xy":"H0;V0","wh":"50000;3200"} #end)
+}
+
+function #pragma doc Computes the determinant of a square matrix of type 'T^3^3 #end Det3x3 (A: 'T^3^3;)
+  returns (Det: 'T;)
+  where 'T numeric
+{
+  diagram
+    (let
+        Det = A[0][0] * C00 + A[0][1] * C01 + A[0][2] * C02;
+        C00 = A[1][1] * A[2][2] - A[1][2] * A[2][1];
+        C01 = -A[1][0] * A[2][2] + A[1][2] * A[2][0];
+        C02 = A[1][0] * A[2][1] - A[1][1] * A[2][0];
+    #pragma diagram {"xy":"H0;V0","wh":"56000;9797"} #end)
+    
+    (var
+        C00: 'T;
+        C01: 'T;
+        C02: 'T;)
+}
+
+function #pragma doc Computes the determinant of a square matrix of type 'T^4^4 #end Det4x4 (A: 'T^4^4;)
+  returns (Det: 'T;)
+  where 'T numeric
+{
+  diagram
+    (let
+        Det = A[0][0] * C00 + A[0][1] * C01 + A[0][2] * C02 + A[0][3] * C03;
+        C00 = A[1][1] * C0011 + A[2][1] * C0021 + A[3][1] * C0031;
+        C0011 = A[2][2] * A[3][3] - A[2][3] * A[3][2];
+        C0021 = -A[1][2] * A[3][3] + A[1][3] * A[3][2];
+        C0031 = A[1][2] * A[2][3] - A[1][3] * A[2][2];
+        C01 = A[1][0] * C0110 + A[2][0] * C0120 + A[3][0] * C0130;
+        C0110 = -A[2][2] * A[3][3] + A[2][3] * A[3][2];
+        C0120 = A[1][2] * A[3][3] - A[1][3] * A[3][2];
+        C0130 = -A[1][2] * A[2][3] + A[1][3] * A[2][2];
+        C02 = A[1][0] * C0210 + A[2][0] * C0220 + A[3][0] * C0230;
+        C0210 = A[2][1] * A[3][3] - A[2][3] * A[3][1];
+        C0220 = -A[1][1] * A[3][3] + A[1][3] * A[3][1];
+        C0230 = A[1][1] * A[2][3] - A[1][3] * A[2][1];
+        C03 = A[1][0] * C0310 + A[2][0] * C0320 + A[3][0] * C0330;
+        C0310 = -A[2][1] * A[3][2] + A[2][2] * A[3][1];
+        C0320 = A[1][1] * A[3][2] - A[1][2] * A[3][1];
+        C0330 = -A[1][1] * A[2][2] + A[1][2] * A[2][1];
+    #pragma diagram {"xy":"H0;V0","wh":"70000;33970"} #end)
+    
+    (var
+        C00: 'T;
+        C01: 'T;
+        C02: 'T;
+        C03: 'T;
+        C0330: 'T;
+        C0320: 'T;
+        C0310: 'T;
+        C0230: 'T;
+        C0220: 'T;
+        C0210: 'T;
+        C0130: 'T;
+        C0120: 'T;
+        C0110: 'T;
+        C0031: 'T;
+        C0021: 'T;
+        C0011: 'T;)
+}
+
+function #pragma doc Inverses a square matrix of type real^2^2
+         
+         Error output is set to true when the determinant
+         of the matrix is lower or equal to Epsilon input
+         
+         It is assumed that Epsilon is a positive value #end Inv2x2 (A: 'T^2^2;
+                                                                     Epsilon: 'T;)
+  returns (InvA: 'T^2^2;
+           Error: bool;)
+  where 'T float
+{
+  diagram
+    (#1 $N1 block Det2x2
+    #pragma diagram {"xy":"H38765;V11770","wh":"17730;14020"} #end)
+    (#2 expr A
+    #pragma diagram {"xy":"H17690;V11775"} #end)
+    (#3 def Det
+    #pragma diagram {"xy":"H60090;V11775"} #end)
+    (#4 def Error
+    #pragma diagram {"xy":"H88090;V26850","wh":"10000;3200"} #end)
+    (#5 expr if Det < 0.0 then -Det else Det
+    #pragma diagram {"xy":"H52020;V25610","wh":"36000;3200"} #end)
+    (#6 expr Epsilon
+    #pragma diagram {"xy":"H52630;V32415","wh":"12000;3200"} #end)
+    (#9 expr #8 <= #7
+      where
+        (#8 group)
+        (#7 group)
+    #pragma diagram {"xy":"H72270;V26855"} #end)
+    (assume
+           $A1: Epsilon >= 0.0;
+    #pragma diagram {"xy":"H1000;V4000","wh":"30000;3200"} #end)
+    
+    (#10 wire #1 .(Det) => #3
+    #pragma diagram {"wp":"v5|#1 #3"} #end)
+    (#11 wire #9 => #4)
+    (#12 wire #2 => #1 .(A))
+    (#13 wire #6 => #7
+    #pragma diagram {"wp":"#6 h5820 v-3660 #7"} #end)
+    (#14 wire #5 => #8
+    #pragma diagram {"wp":"#5 h3250 v-2428 h-6500 v1773 #8"} #end)
+    
+    (var
+        Det: 'T;)
+    (activate #15 $IfBlock1
+      if Error
+      then
+        {
+          diagram
+            (let InvA = 0.0^2^2;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v-4280","wh":"82000;7200"} #end
+        }
+      else
+        {
+          diagram
+            (let InvA = [[A[1][1] / Det, -A[0][1] / Det], [-A[1][0] / Det, A[0][0] / Det]];
+            #pragma diagram {"xy":"h0;v0","wh":"78000;4219"} #end)
+        #pragma diagram {"xy":"h0;v7630","wh":"82000;8219"} #end
+        }
+    #pragma diagram {"xy":"H3700;V-11100","wh":"82000;23478"} #end)
+}
+
+function #pragma doc Inverses a square matrix of type real^3^3
+         
+         Error output is set to true when the determinant
+         of the matrix is lower or equal to Epsilon input
+         
+         It is assumed that Epsilon is a positive value #end Inv3x3 (A: 'T^3^3;
+                                                                     Epsilon: 'T;)
+  returns (InvA: 'T^3^3;
+           Error: bool;)
+  where 'T float
+{
+  diagram
+    (#3 expr #2 <= #1
+      where
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H72270;V26855"} #end)
+    (#4 expr Epsilon
+    #pragma diagram {"xy":"H52630;V32415","wh":"12000;3200"} #end)
+    (#5 expr if Det < 0.0 then -Det else Det
+    #pragma diagram {"xy":"H52020;V25610","wh":"36000;3200"} #end)
+    (#6 def Error
+    #pragma diagram {"xy":"H88090;V26850","wh":"10000;3200"} #end)
+    (#7 def Det
+    #pragma diagram {"xy":"H60090;V11775"} #end)
+    (#8 expr A
+    #pragma diagram {"xy":"H17690;V11775"} #end)
+    (#9 $N1 block Det3x3
+    #pragma diagram {"xy":"H38765;V11770","wh":"17730;14020"} #end)
+    (assume
+           $A1: Epsilon >= 0.0;
+    #pragma diagram {"xy":"H1000;V-23000","wh":"30000;3200"} #end)
+    
+    (#10 wire #4 => #1
+    #pragma diagram {"wp":"#4 h5820 v-3660 #1"} #end)
+    (#11 wire #9 .(Det) => #7
+    #pragma diagram {"wp":"v5|#9 #7"} #end)
+    (#12 wire #8 => #9 .(A))
+    (#13 wire #5 => #2
+    #pragma diagram {"wp":"#5 h3250 v-2428 h-6500 v1773 #2"} #end)
+    (#14 wire #3 => #6)
+    
+    (var
+        Det: 'T;)
+    (activate #15 $IfBlock1
+      if Error
+      then
+        {
+          diagram
+            (let InvA = 0.0^3^3;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v-16366","wh":"54000;7200"} #end
+        }
+      else
+        {
+          diagram
+            (let
+                InvA = [[C00 / Det, C10 / Det, C20 / Det], [C01 / Det, C11 / Det, C21 / Det], [C02 / Det, C12 / Det, C22 / Det]];
+                C00 = A[1][1] * A[2][2] - A[1][2] * A[2][1];
+                C01 = -A[1][0] * A[2][2] + A[1][2] * A[2][0];
+                C02 = A[1][0] * A[2][1] - A[1][1] * A[2][0];
+                C10 = -A[0][1] * A[2][2] + A[0][2] * A[2][1];
+                C11 = A[0][0] * A[2][2] - A[0][2] * A[2][0];
+                C12 = -A[0][0] * A[2][1] + A[2][0] * A[0][1];
+                C20 = A[0][1] * A[1][2] - A[0][2] * A[1][1];
+                C21 = -A[0][0] * A[1][2] + A[0][2] * A[1][0];
+                C22 = A[0][0] * A[1][1] - A[0][1] * A[1][0];
+            #pragma diagram {"xy":"h0;v0","wh":"50000;28392"} #end)
+            
+            (var
+                C00: 'T;
+                C01: 'T;
+                C02: 'T;
+                C10: 'T;
+                C11: 'T;
+                C12: 'T;
+                C20: 'T;
+                C21: 'T;
+                C22: 'T;)
+        #pragma diagram {"xy":"h0;v7630","wh":"54000;32392"} #end
+        }
+    #pragma diagram {"xy":"H-17200;V4300","wh":"54000;47651"} #end)
+}
+
+function #pragma doc Inverses a square matrix of type real^4^4
+         
+         Error output is set to true when the determinant
+         of the matrix is lower or equal to Epsilon input
+         
+         It is assumed that Epsilon is a positive value #end Inv4x4 (A: 'T^4^4;
+                                                                     Epsilon: 'T;)
+  returns (InvA: 'T^4^4;
+           Error: bool;)
+  where 'T float
+{
+  diagram
+    (#3 expr #2 <= #1
+      where
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H72270;V26855"} #end)
+    (#4 expr Epsilon
+    #pragma diagram {"xy":"H52630;V32415","wh":"12000;3200"} #end)
+    (#5 expr if Det < 0.0 then -Det else Det
+    #pragma diagram {"xy":"H52020;V25720","wh":"36000;3200"} #end)
+    (#6 def Error
+    #pragma diagram {"xy":"H88090;V26850","wh":"10000;3200"} #end)
+    (#7 def Det
+    #pragma diagram {"xy":"H60090;V11775"} #end)
+    (#8 expr A
+    #pragma diagram {"xy":"H17690;V11775"} #end)
+    (#9 $N1 block Det4x4
+    #pragma diagram {"xy":"H38765;V11770","wh":"17730;14020"} #end)
+    (assume
+           $A1: Epsilon >= 0.0;
+    #pragma diagram {"xy":"H1000;V-12000","wh":"30000;3200"} #end)
+    
+    (#10 wire #3 => #6)
+    (#11 wire #9 .(Det) => #7
+    #pragma diagram {"wp":"v5|#9 #7"} #end)
+    (#12 wire #8 => #9 .(A))
+    (#13 wire #4 => #1
+    #pragma diagram {"wp":"#4 h5820 v-3660 #1"} #end)
+    (#14 wire #5 => #2
+    #pragma diagram {"wp":"#5 h3250 v-2482 h-6500 v1717 #2"} #end)
+    
+    (var
+        Det: 'T;)
+    (activate #15 $IfBlock1
+      if Error
+      then
+        {
+          diagram
+            (let InvA = 0.0^4^4;
+            #pragma diagram {"xy":"h0;v0","wh":"22000;3200"} #end)
+        #pragma diagram {"xy":"h0;v-3370","wh":"28000;7200"} #end
+        }
+      else
+        {
+          diagram
+            (let
+                InvA = [[C00 / Det, C10 / Det, C20 / Det, C30 / Det], [C01 / Det, C11 / Det, C21 / Det, C31 / Det], [C02 / Det, C12 / Det, C22 / Det, C32 / Det], [C03 / Det, C13 / Det, C23 / Det, C33 / Det]];
+                C00 = A[1][1] * C0011 + A[2][1] * C0021 + A[3][1] * C0031;
+                C0011 = A[2][2] * A[3][3] - A[2][3] * A[3][2];
+                C0021 = -A[1][2] * A[3][3] + A[1][3] * A[3][2];
+                C0031 = A[1][2] * A[2][3] - A[1][3] * A[2][2];
+                C01 = A[1][0] * C0110 + A[2][0] * C0120 + A[3][0] * C0130;
+                C0110 = -A[2][2] * A[3][3] + A[2][3] * A[3][2];
+                C0120 = A[1][2] * A[3][3] - A[1][3] * A[3][2];
+                C0130 = -A[1][2] * A[2][3] + A[1][3] * A[2][2];
+                C02 = A[1][0] * C0210 + A[2][0] * C0220 + A[3][0] * C0230;
+                C0210 = A[2][1] * A[3][3] - A[2][3] * A[3][1];
+                C0220 = -A[1][1] * A[3][3] + A[1][3] * A[3][1];
+                C0230 = A[1][1] * A[2][3] - A[1][3] * A[2][1];
+                C03 = A[1][0] * C0310 + A[2][0] * C0320 + A[3][0] * C0330;
+                C0310 = -A[2][1] * A[3][2] + A[2][2] * A[3][1];
+                C0320 = A[1][1] * A[3][2] - A[1][2] * A[3][1];
+                C0330 = -A[1][1] * A[2][2] + A[1][2] * A[2][1];
+                C10 = A[0][1] * C1001 + A[2][1] * C1021 + A[3][1] * C1031;
+                C1001 = -A[2][2] * A[3][3] + A[2][3] * A[3][2];
+                C1021 = A[0][2] * A[3][3] - A[0][3] * A[3][2];
+                C1031 = -A[0][2] * A[2][3] + A[0][3] * A[2][2];
+                C11 = A[0][0] * C1100 + A[2][0] * C1120 + A[3][0] * C1130;
+                C1100 = A[2][2] * A[3][3] - A[2][3] * A[3][2];
+                C1120 = -A[0][2] * A[3][3] + A[0][3] * A[3][2];
+                C1130 = A[0][2] * A[2][3] - A[0][3] * A[2][2];
+                C12 = A[0][0] * C1200 + A[2][0] * C1220 + A[3][0] * C1230;
+                C1200 = -A[2][1] * A[3][3] + A[2][3] * A[3][1];
+                C1220 = A[0][1] * A[3][3] - A[0][3] * A[3][1];
+                C1230 = -A[0][1] * A[2][3] + A[0][3] * A[2][1];
+                C13 = A[0][0] * C1300 + A[2][0] * C1320 + A[3][0] * C1330;
+                C1300 = A[2][1] * A[3][2] - A[2][2] * A[3][1];
+                C1320 = -A[0][1] * A[3][2] + A[0][2] * A[3][1];
+                C1330 = A[0][1] * A[2][2] - A[0][2] * A[2][1];
+                C20 = A[0][1] * C2001 + A[1][1] * C2011 + A[3][1] * C2031;
+                C2001 = A[1][2] * A[3][3] - A[1][3] * A[3][2];
+                C2011 = -A[0][2] * A[3][3] + A[0][3] * A[3][2];
+                C2031 = A[0][2] * A[1][3] - A[0][3] * A[1][2];
+                C21 = A[0][0] * C2100 + A[1][0] * C2110 + A[3][0] * C2130;
+                C2100 = -A[1][2] * A[3][3] + A[1][3] * A[3][2];
+                C2110 = A[0][2] * A[3][3] - A[0][3] * A[3][2];
+                C2130 = -A[0][2] * A[1][3] + A[0][3] * A[1][2];
+                C22 = A[0][0] * C2200 + A[1][0] * C2210 + A[3][0] * C2230;
+                C2200 = A[1][1] * A[3][3] - A[1][3] * A[3][1];
+                C2210 = -A[0][1] * A[3][3] + A[0][3] * A[3][1];
+                C2230 = A[0][1] * A[1][3] - A[0][3] * A[1][1];
+                C23 = A[0][0] * C2300 + A[1][0] * C2310 + A[3][0] * C2330;
+                C2300 = -A[1][1] * A[3][2] + A[1][2] * A[3][1];
+                C2310 = A[0][1] * A[3][2] - A[0][2] * A[3][1];
+                C2330 = -A[0][1] * A[1][2] + A[0][2] * A[1][1];
+                C30 = A[0][1] * C3001 + A[1][1] * C3011 + A[2][1] * C3021;
+                C3001 = -A[1][2] * A[2][3] + A[1][3] * A[2][2];
+                C3011 = A[0][2] * A[2][3] - A[0][3] * A[2][2];
+                C3021 = -A[0][2] * A[1][3] + A[0][3] * A[1][2];
+                C31 = A[0][0] * C3100 + A[1][0] * C3110 + A[2][0] * C3120;
+                C3100 = A[1][2] * A[2][3] - A[1][3] * A[2][2];
+                C3110 = -A[0][2] * A[2][3] + A[0][3] * A[2][2];
+                C3120 = A[0][2] * A[1][3] - A[0][3] * A[1][2];
+                C32 = A[0][0] * C3200 + A[1][0] * C3210 + A[2][0] * C3220;
+                C3200 = -A[1][1] * A[2][3] + A[1][3] * A[2][1];
+                C3210 = A[0][1] * A[2][3] - A[0][3] * A[2][1];
+                C3220 = -A[0][1] * A[1][3] + A[0][3] * A[1][1];
+                C33 = A[0][0] * C3300 + A[1][0] * C3310 + A[2][0] * C3320;
+                C3300 = A[1][1] * A[2][2] - A[1][2] * A[2][1];
+                C3310 = -A[0][1] * A[2][2] + A[0][2] * A[2][1];
+                C3320 = A[0][1] * A[1][2] - A[0][2] * A[1][1];
+            #pragma diagram {"xy":"h2100;v-9730","wh":"62000;132522"} #end)
+            
+            (var
+                C00: 'T;
+                C01: 'T;
+                C02: 'T;
+                C10: 'T;
+                C11: 'T;
+                C12: 'T;
+                C20: 'T;
+                C21: 'T;
+                C22: 'T;
+                C03: 'T;
+                C13: 'T;
+                C23: 'T;
+                C30: 'T;
+                C31: 'T;
+                C32: 'T;
+                C33: 'T;
+                C0011: 'T;
+                C0021: 'T;
+                C0031: 'T;
+                C0110: 'T;
+                C0120: 'T;
+                C0130: 'T;
+                C0210: 'T;
+                C0220: 'T;
+                C0230: 'T;
+                C0310: 'T;
+                C0320: 'T;
+                C0330: 'T;
+                C1001: 'T;
+                C1021: 'T;
+                C1031: 'T;
+                C1100: 'T;
+                C1120: 'T;
+                C1130: 'T;
+                C1200: 'T;
+                C1220: 'T;
+                C1230: 'T;
+                C1300: 'T;
+                C1320: 'T;
+                C1330: 'T;
+                C2001: 'T;
+                C2031: 'T;
+                C2011: 'T;
+                C2100: 'T;
+                C2110: 'T;
+                C2130: 'T;
+                C2200: 'T;
+                C2210: 'T;
+                C2230: 'T;
+                C2300: 'T;
+                C2310: 'T;
+                C2330: 'T;
+                C3001: 'T;
+                C3011: 'T;
+                C3021: 'T;
+                C3100: 'T;
+                C3110: 'T;
+                C3120: 'T;
+                C3200: 'T;
+                C3220: 'T;
+                C3210: 'T;
+                C3300: 'T;
+                C3310: 'T;
+                C3320: 'T;)
+        #pragma diagram {"xy":"h0;v7630","wh":"28000;6400"} #end
+        #pragma diagram detached #end
+        }
+    #pragma diagram {"xy":"H-2100;V2100","wh":"28000;21659"} #end)
+}
+
+function #pragma doc Computes the sum of two matrices of type 'T^n^m #end MatAdd <<m, n>> (A: 'T^n^m;
+                                                                                           B: 'T^n^m;)
+  returns (C: 'T^n^m;)
+  where 'T numeric
+{
+  diagram
+    (#1 $N1 block (map VectAdd <<n>> ) <<m>>
+    #pragma diagram {"xy":"H37125;V20585","wh":"26090;22650"} #end)
+    (#2 expr A
+    #pragma diagram {"xy":"H12400;V16530"} #end)
+    (#3 expr B
+    #pragma diagram {"xy":"H12410;V24215"} #end)
+    (#4 def C
+    #pragma diagram {"xy":"H63270;V20505"} #end)
+    
+    (#5 wire #3 => #1 .(2))
+    (#6 wire #1 .(1) => #4
+    #pragma diagram {"wp":"v-2080|#1 #4"} #end)
+    (#7 wire #2 => #1 .(1))
+}
+
+function #pragma doc Computes the matrix product A*B, 
+         matrixes (m,n) implemented as 'T^n^m #end MatProd <<m, n, p>> (A: 'T^n^m;
+                                                                        B: 'T^p^n;)
+  returns (C: 'T^p^m;)
+  where 'T numeric
+{
+  diagram
+    (#1 $N1 block (map VectMatProd <<n, p>> ) <<m>>
+    #pragma diagram {"xy":"H124485;V41540","wh":"66570;47780"} #end)
+    (#2 expr A
+    #pragma diagram {"xy":"H32510;V29235"} #end)
+    (#3 expr B
+    #pragma diagram {"xy":"H32240;V53845"} #end)
+    (#4 def C
+    #pragma diagram {"xy":"H192290;V40875"} #end)
+    (#6 expr #5 ^ (m)
+      where
+        (#5 group)
+    #pragma diagram {"xy":"H63810;V53975","wh":"10000;7000"} #end)
+    
+    (#7 wire #6 => #1 .(2))
+    (#8 wire #1 .(1) => #4
+    #pragma diagram {"wp":"v-2665|#1 #4"} #end)
+    (#9 wire #2 => #1 .(1))
+    (#10 wire #3 => #5
+    #pragma diagram {"wp":"#3 h12785 v130 #5"} #end)
+}
+
+function #pragma doc Computes the difference of two matrices of type 'T^n^m #end MatSub <<m, n>> (A: 'T^n^m;
+                                                                                                  B: 'T^n^m;)
+  returns (C: 'T^n^m;)
+  where 'T numeric
+{
+  diagram
+    (#1 $N1 block (map VectSub <<n>> ) <<m>>
+    #pragma diagram {"xy":"H37045;V20505","wh":"25930;22490"} #end)
+    (#2 expr B
+    #pragma diagram {"xy":"H12410;V24210"} #end)
+    (#3 expr A
+    #pragma diagram {"xy":"H12410;V16535"} #end)
+    (#4 def C
+    #pragma diagram {"xy":"H63270;V20505"} #end)
+    
+    (#5 wire #2 => #1 .(2))
+    (#6 wire #1 .(1) => #4
+    #pragma diagram {"wp":"v-2000|#1 #4"} #end)
+    (#7 wire #3 => #1 .(1))
+}
+
+function #pragma doc Computes the product of matrix by vector, 
+         matrix (m,n) implemented as 'T^n^m #end MatVectProd <<m, n>> (A: 'T^n^m;
+                                                                       V: 'T^n;)
+  returns (R: 'T^m;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr A
+    #pragma diagram {"xy":"H21390;V30030"} #end)
+    (#2 expr V
+    #pragma diagram {"xy":"H21390;V42200"} #end)
+    (#3 def R
+    #pragma diagram {"xy":"H128790;V36115"} #end)
+    (#4 $N1 block (map ScalProd <<n>> ) <<m>>
+    #pragma diagram {"xy":"H80860;V36195","wh":"42920;36570"} #end)
+    (#6 expr #5 ^ (m)
+      where
+        (#5 group)
+    #pragma diagram {"xy":"H44760;V42330","wh":"10000;7000"} #end)
+    
+    (#7 wire #1 => #4 .(1))
+    (#8 wire #2 => #5
+    #pragma diagram {"wp":"#2 h8685 v130 #5"} #end)
+    (#9 wire #6 => #4 .(2))
+    (#10 wire #4 .(1) => #3
+    #pragma diagram {"wp":"v-2080|#4 #3"} #end)
+}
+
+inline function #pragma doc Computes the scalar product of vectors V and W:
+                sp = V[0]*W[0]+...+V[N-1]*W[N-1] #end ScalProd <<n>> (V: 'T^n;
+                                                                      W: 'T^n;)
+  returns (SP: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 $N1 block (fold ({op_expr%+%op_expr})) <<n>>
+    #pragma diagram {"xy":"H113770;V35455","wh":"30320;28210"} #end)
+    (#2 $N2 block (map ({op_expr%*%op_expr})) <<n>>
+    #pragma diagram {"xy":"H57415;V40215","wh":"30330;28210"} #end)
+    (#3 expr V
+    #pragma diagram {"xy":"H20070;V35325"} #end)
+    (#4 expr W
+    #pragma diagram {"xy":"H20070;V44845"} #end)
+    (#5 def SP
+    #pragma diagram {"xy":"H161330;V35325"} #end)
+    (#6 expr (0 :> 'T)
+    #pragma diagram {"xy":"H80890;V30690","wh":"14000;3200"} #end)
+    
+    (#7 wire #3 => #2 .(1))
+    (#8 wire #1 .(1) => #5
+    #pragma diagram {"wp":"v-2130|#1 #5"} #end)
+    (#9 wire #6 => #1 .(1))
+    (#10 wire #4 => #2 .(2))
+    (#11 wire #2 .(1) => #1 .(2)
+    #pragma diagram {"wp":"v-1290|#2 #1"} #end)
+}
+
+function #pragma doc This operator selects DstSize elements with specified indices from a source array of size SrcSize. #end Selector <<SrcSize, DstSize>> (Input: 'T^SrcSize;
+                                                                                                                                                            Indices: 'I^DstSize;
+                                                                                                                                                            Default: 'T;)
+  returns (Output: 'T^DstSize;)
+  where 'I integer
+{
+  diagram
+    (#1 $N1 block (map SelectorHelper <<SrcSize>> ) <<DstSize>>
+    #pragma diagram {"xy":"H88505;V16935","wh":"27410;17090"} #end)
+    (#2 expr Input
+    #pragma diagram {"xy":"H17740;V12565","wh":"10000;3200"} #end)
+    (#3 expr Indices
+    #pragma diagram {"dir":"es","xy":"H50535;V57450","wh":"3200;12000"} #end)
+    (#4 expr Default
+    #pragma diagram {"dir":"es","xy":"H61655;V57430","wh":"3200;12000"} #end)
+    (#5 def Output
+    #pragma diagram {"xy":"H140500;V16800","wh":"10000;3200"} #end)
+    (#7 expr #6 ^ (DstSize)
+      where
+        (#6 group)
+    #pragma diagram {"xy":"H40110;V12675","wh":"16000;7000"} #end)
+    (#9 expr #8 ^ (DstSize)
+      where
+        (#8 group)
+    #pragma diagram {"dir":"es","xy":"H61695;V56210","wh":"7000;16000"} #end)
+    
+    (#10 wire #9 => #1 .(3)
+    #pragma diagram {"wp":"#9 v-26916 #1"} #end)
+    (#11 wire #2 => #6
+    #pragma diagram {"wp":"#2 h6185 v110 #6"} #end)
+    (#12 wire #1 .(1) => #5
+    #pragma diagram {"wp":"v-2135|#1 #5"} #end)
+    (#13 wire #7 => #1 .(1)
+    #pragma diagram {"wp":"#7 h9505 v3373 #1"} #end)
+    (#14 wire #3 => #1 .(2)
+    #pragma diagram {"wp":"#3 v-33529 #1"} #end)
+    (#15 wire #4 => #8
+    #pragma diagram {"wp":"#4 v-2250 h2100 v14750 h-2060 #8"} #end)
+}
+
+inline function SelectorHelper <<DstSize>> (Input: 'T^DstSize;
+                                            Index: 'I;
+                                            Default: 'T;)
+  returns (Output: 'T;)
+  where 'I integer
+{
+  diagram
+    (#1 $N1 block ({op_expr%function a_1, b_1, c => (a_1 . [b_1] default c)%op_expr})
+    #pragma diagram {"xy":"H75410;V20375","wh":"20800;13390"} #end)
+    (#2 expr Input
+    #pragma diagram {"xy":"H18000;V20240","wh":"10000;3200"} #end)
+    (#3 expr Index
+    #pragma diagram {"dir":"es","xy":"H71710;V39960","wh":"3200;10000"} #end)
+    (#4 expr Default
+    #pragma diagram {"dir":"es","xy":"H78850;V53230","wh":"3200;12000"} #end)
+    (#5 def Output
+    #pragma diagram {"xy":"H134680;V20240","wh":"10000;3200"} #end)
+    
+    (#6 wire #2 => #1 .(a_1))
+    (#7 wire #3 => #1 .(b_1)
+    #pragma diagram {"wp":"#3 v-3472 h-9700 v-10416 #1"} #end)
+    (#8 wire #1 .(1) => #5
+    #pragma diagram {"wp":"v-135|#1 #5"} #end)
+    (#9 wire #4 => #1 .(c)
+    #pragma diagram {"wp":"#4 v-17687 h-15840 v-6139 #1"} #end)
+}
+
+inline function SumDup (a: 'T;
+                        b: 'T;)
+  returns (s1: 'T;
+           s2: 'T;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr a
+    #pragma diagram {"xy":"H13730;V13625"} #end)
+    (#2 expr b
+    #pragma diagram {"xy":"H13730;V24740"} #end)
+    (#5 expr #4 + #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H47940;V14950"} #end)
+    (#6 def s1
+    #pragma diagram {"xy":"H79940;V14950"} #end)
+    (#7 def s2
+    #pragma diagram {"xy":"H79940;V24740"} #end)
+    
+    (#8 wire #2 => #3
+    #pragma diagram {"wp":"#2 h14105 v-7890 #3"} #end)
+    (#9 wire #5 => #6, #7
+    #pragma diagram {"wp":"#5 h13000[#6, v9790 #7]"} #end)
+    (#10 wire #1 => #4
+    #pragma diagram {"wp":"#1 h14105 v-575 #4"} #end)
+}
+
+function #pragma doc Computes the sum of two vectors of type 'T^n #end VectAdd <<n>> (U: 'T^n;
+                                                                                      V: 'T^n;)
+  returns (W: 'T^n;)
+  where 'T numeric
+{
+  diagram
+    (#1 $N1 block (map ({op_expr%+%op_expr})) <<n>>
+    #pragma diagram {"xy":"H39630;V21905","wh":"21060;22650"} #end)
+    (#2 expr U
+    #pragma diagram {"xy":"H13720;V17865"} #end)
+    (#3 expr V
+    #pragma diagram {"xy":"H13730;V25535"} #end)
+    (#4 def W
+    #pragma diagram {"xy":"H63530;V21825"} #end)
+    
+    (#5 wire #1 .(1) => #4
+    #pragma diagram {"wp":"v-2080|#1 #4"} #end)
+    (#6 wire #2 => #1 .(1))
+    (#7 wire #3 => #1 .(2))
+}
+
+function #pragma doc Computes the product of matrix by vector, 
+         matrix (m,n) implemented as 'T^n^m #end VectMatProd <<m, n>> (V: 'T^m;
+                                                                       A: 'T^n^m;)
+  returns (R: 'T^n;)
+  where 'T numeric
+{
+  diagram
+    (#1 expr A
+    #pragma diagram {"xy":"H42560;V48815"} #end)
+    (#2 expr V
+    #pragma diagram {"xy":"H42560;V60985"} #end)
+    (#3 def R
+    #pragma diagram {"xy":"H168480;V54900"} #end)
+    (#4 $N1 block (map ScalProd <<m>> ) <<n>>
+    #pragma diagram {"xy":"H120520;V55035","wh":"42760;36670"} #end)
+    (#6 expr #5 ^ (n)
+      where
+        (#5 group)
+    #pragma diagram {"xy":"H76510;V61120","wh":"10000;7000"} #end)
+    (#7 $N2 block {text%transpose%text}
+    #pragma diagram {"xy":"H76465;V48680","wh":"12000;7000"} #end)
+    
+    (#8 wire #2 => #5
+    #pragma diagram {"wp":"#2 h13975 v135 #5"} #end)
+    (#9 wire #1 => #7 .(1))
+    (#10 wire #4 .(1) => #3
+    #pragma diagram {"wp":"v-2135|#4 #3"} #end)
+    (#11 wire #6 => #4 .(2))
+    (#12 wire #7 .(1) => #4 .(1)
+    #pragma diagram {"wp":"v0|#7 #4"} #end)
+}
+
+function #pragma doc Computes the difference of two vectors of type 'T^n #end VectSub <<n>> (U: 'T^n;
+                                                                                             V: 'T^n;)
+  returns (W: 'T^n;)
+  where 'T numeric
+{
+  diagram
+    (#1 $N1 block (map ({op_expr%function a_1, b_1 => a_1 - b_1%op_expr})) <<n>>
+    #pragma diagram {"xy":"H39550;V21825","wh":"20900;22490"} #end)
+    (#2 expr V
+    #pragma diagram {"xy":"H13720;V25535"} #end)
+    (#3 def W
+    #pragma diagram {"xy":"H63530;V21825"} #end)
+    (#4 expr U
+    #pragma diagram {"xy":"H13720;V17860"} #end)
+    
+    (#5 wire #2 => #1 .(2))
+    (#6 wire #1 .(1) => #3
+    #pragma diagram {"wp":"v-2000|#1 #3"} #end)
+    (#7 wire #4 => #1 .(1))
+}

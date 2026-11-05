@@ -80,6 +80,7 @@ linkcheck_ignore = [
     "https://www.ansys.com/products/embedded-software/ansys-scade-suite",
     "https://www.ansys.com/*",
     # AIS Knowledge links are external and should not be checked
+    "https://innovation.ansys.com/public/articles/*",
     "https://innovationspace.ansys.com/knowledge/wp-content/*",
     "https://courses.ansys.com/index.php/embedded-software/*",
 ]

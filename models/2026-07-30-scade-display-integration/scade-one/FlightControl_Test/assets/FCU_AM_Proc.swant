@@ -1,0 +1,19 @@
+-- version swan: 2025.2 graph: 2.1 swant: 1.1
+use FlightControl;
+
+_harness AlarmManager
+{
+  diagram
+    (#0 block FlightControl::FCU
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H0;V0","wh":"20000;14000"} #end)
+    (#1 block (_source FCU_AM_Proc_AlarmManager)
+    #pragma diagram {"xy":"H-35000;V0","wh":"12000;7000"} #end)
+    (#3 block (_oracle FCU_AM_Proc_AlarmManager_checks)
+    #pragma diagram {"xy":"H35000;V0","wh":"12000;7000"} #end)
+    
+    (#2 wire #1 => #0
+    #pragma diagram {"wp":"v0|#1 #0"} #end)
+    (#4 wire #0 => #3
+    #pragma diagram {"wp":"v0|#0 #3"} #end)
+}

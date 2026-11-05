@@ -1,0 +1,29 @@
+{
+  "Version": "1.0",
+  "Name": "FlightControl_Test",
+  "Dependencies": [
+    "..\\FlightControl\\FlightControl.sproj"
+  ],
+  "Resources": [
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\FCU_AM_Proc\\AlarmManager.sd",
+      "Key": "FCU_AM_Proc_AlarmManager"
+    },
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\FCU_AM_Proc\\AlarmManager_checks.sd",
+      "Key": "FCU_AM_Proc_AlarmManager_checks"
+    },
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\FCU_FC_Proc\\FlightControler.sd",
+      "Key": "FCU_FC_Proc_FlightControler"
+    },
+    {
+      "Kind": "SimulationData",
+      "Path": "resources\\FCU_FC_Proc\\FlightControler_checks.sd",
+      "Key": "FCU_FC_Proc_FlightControler_checks"
+    }
+  ]
+}

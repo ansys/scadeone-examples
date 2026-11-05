@@ -1,0 +1,819 @@
+-- version swan: 2025.2 graph: 2.1
+use FlightControl::AlarmConstants as FlightControl_AlarmConstants;
+
+use FlightControl::RegulationConstants as FlightControl_RegulationConstants;
+
+use FlightControl::UnitConversionsConstants as FlightControl_UnitConversionsConstants;
+
+use Flows;
+
+use LUT_1;
+
+use Digital;
+
+use Math::Trigo::Cordic as Trigo;
+
+use Math::Common as Math;
+
+use linear;
+
+use pwlinear;
+
+node AlarmManager (speedSensor: float32;
+                   speedSetpoint: float32;
+                   altSetpoint: float32;
+                   altSensor: float32;)
+  returns (JV_Speed_Alarm: bool;
+           JV_Alti_Alarm: bool;)
+{
+  diagram
+    (#1 $N1 block (AlarmManagerSingle \ AlarmThreshold: FlightControl_AlarmConstants::alarmSpeedThreshold, AlarmConfirmedTimer: FlightControl_AlarmConstants::alarmSpeedTimer)
+    #pragma diagram {"xy":"H63630;V18255","wh":"43820;23970"} #end)
+    (#2 $N2 block (AlarmManagerSingle \ AlarmThreshold: FlightControl_AlarmConstants::alarmAltThreshold, AlarmConfirmedTimer: FlightControl_AlarmConstants::alarmAltTimer)
+    #pragma diagram {"xy":"H63765;V50800","wh":"43550;23980"} #end)
+    (#3 expr speedSensor
+    #pragma diagram {"xy":"H21270;V14365","wh":"16000;3200"} #end)
+    (#4 expr speedSetpoint
+    #pragma diagram {"xy":"H20220;V22095","wh":"18000;3200"} #end)
+    (#5 def JV_Speed_Alarm
+    #pragma diagram {"xy":"H110240;V18395","wh":"18000;3200"} #end)
+    (#6 expr altSensor
+    #pragma diagram {"xy":"H22420;V46700","wh":"14000;3200"} #end)
+    (#7 expr altSetpoint
+    #pragma diagram {"xy":"H21270;V54795","wh":"16000;3200"} #end)
+    (#8 def JV_Alti_Alarm
+    #pragma diagram {"xy":"H109690;V50775","wh":"18000;3200"} #end)
+    
+    (#9 wire #2 .(AlarmConfirmed) => #8
+    #pragma diagram {"wp":"v-25|#2 #8"} #end)
+    (#10 wire #1 .(AlarmConfirmed) => #5
+    #pragma diagram {"wp":"v140|#1 #5"} #end)
+    (#11 wire #4 => #1 .(Setpoint))
+    (#12 wire #3 => #1 .(Sensor))
+    (#13 wire #6 => #2 .(Sensor))
+    (#14 wire #7 => #2 .(Setpoint))
+}
+
+node AlarmManagerSingle (Sensor: float32;
+                         Setpoint: float32;
+                         AlarmThreshold: float32;
+                         AlarmConfirmedTimer: int32;)
+  returns (AlarmConfirmed: bool;)
+{
+  diagram
+    (#1 def Alarm
+    #pragma diagram {"xy":"H83600;V18390","wh":"10000;3200"} #end)
+    (#2 expr Sensor
+    #pragma diagram {"xy":"H17450;V14420","wh":"10000;3200"} #end)
+    (#3 expr Setpoint
+    #pragma diagram {"xy":"H16350;V22095","wh":"12000;3200"} #end)
+    (#4 $N1 block (DetectRegulationError \ Thresh: AlarmThreshold)
+    #pragma diagram {"xy":"H50800;V18385","wh":"32960;22650"} #end)
+    
+    (#9 wire #2 => #4 .(WatchedInput))
+    (#10 wire #3 => #4 .(ReferenceInput))
+    (#11 wire #4 .(Alarm) => #1
+    #pragma diagram {"wp":"v5|#4 #1"} #end)
+    
+    (var
+        Alarm: bool;)
+    (automaton #0 $AlarmMgt
+      initial state #5 AlarmDetection
+      #pragma diagram {"xy":"h-2250;v2230","wh":"90000;14078"} #end :
+        diagram
+          (#6 def AlarmConfirmed
+          #pragma diagram {"xy":"h32000;v0","wh":"18000;3200"} #end)
+          (#7 expr Flows::Times $N2 (AlarmConfirmedTimer, Alarm) or (false -> pre AlarmConfirmed)
+          #pragma diagram {"xy":"h-15000;v0","wh":"52000;6078"} #end)
+          
+          (#8 wire #7 => #6)
+      :1: #5 unless if (not Alarm)
+      restart #5
+      #pragma diagram {"tp":"h26250;v7039|#5 v2000 h10500 h36750;v7039|#5"} #end;
+    #pragma diagram {"xy":"H4400;V-13200","wh":"102500;26539"} #end)
+}
+
+function AltContrib (altTarget: float32;
+                     altSensor: float32;)
+  returns (altContrib: float32;)
+{
+  diagram
+    (#1 $N1 block (linear::Gain \ Gain: FlightControl_RegulationConstants::altKp)
+    #pragma diagram {"xy":"H70510;V17860","wh":"19480;18420"} #end)
+    (#4 expr #3 - #2
+      where
+        (#3 group)
+        (#2 group)
+    #pragma diagram {"xy":"H42380;V17860"} #end)
+    (#5 expr altTarget
+    #pragma diagram {"xy":"H13690;V10980","wh":"14000;3200"} #end)
+    (#6 expr altSensor
+    #pragma diagram {"xy":"H12890;V23945","wh":"14000;3200"} #end)
+    (#7 def altContrib
+    #pragma diagram {"xy":"H130000;V18655","wh":"14000;3200"} #end)
+    
+    (#8 wire #6 => #2
+    #pragma diagram {"wp":"#6 h10645 v-4185 #2"} #end)
+    (#9 wire #1 .(G_Output) => #7
+    #pragma diagram {"wp":"v795|#1 #7"} #end)
+    (#10 wire #4 => #1 .(G_Input))
+    (#11 wire #5 => #3
+    #pragma diagram {"wp":"#5 h9845 v4980 #3"} #end)
+}
+
+node ComputePitchRoll (speed: float32;
+                       MCP_UnlockRoll: bool;
+                       altitude: float32;)
+  returns (pitch: float32;
+           roll: float32;)
+{
+  diagram
+    (#1 expr 50.0
+    #pragma diagram {"xy":"H117940;V104880"} #end)
+    (#2 expr MCP_UnlockRoll
+    #pragma diagram {"xy":"H25120;V91625","wh":"18000;3200"} #end)
+    (#6 expr if #5 then #4 else #3
+      where
+        (#5 group)
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H230130;V101360"} #end)
+    (#7 def roll
+    #pragma diagram {"xy":"H255240;V101365"} #end)
+    (#8 $N1 block Digital::FallingEdge
+    #pragma diagram {"xy":"H55505;V91970","wh":"8990;7400"} #end)
+    (#10 expr (#9 :> float32)
+      where
+        (#9 group)
+    #pragma diagram {"xy":"H127465;V83845","wh":"16000;7000"} #end)
+    (#11 expr 10.0
+    #pragma diagram {"xy":"H178900;V109750"} #end)
+    (#12 $N2 block Trigo::Sine
+    #pragma diagram {"xy":"H160680;V98320","wh":"26720;13760"} #end)
+    (#13 $N3 block pwlinear::ClockCounter
+    #pragma diagram {"xy":"H90595;V97155","wh":"34030;17510"} #end)
+    (#16 expr #15 / #14
+      where
+        (#15 group)
+        (#14 group)
+    #pragma diagram {"xy":"H137770;V98480"} #end)
+    (#19 expr #18 * #17
+      where
+        (#18 group)
+        (#17 group)
+    #pragma diagram {"xy":"H196340;V99825"} #end)
+    (#20 expr MCP_UnlockRoll
+    #pragma diagram {"xy":"H202280;V85275","wh":"18000;3200"} #end)
+    (#21 expr 0.0
+    #pragma diagram {"xy":"H213590;V102765"} #end)
+    (#22 expr 0.002 * 20.0
+    #pragma diagram {"xy":"H158540;V50700","wh":"16000;3200"} #end)
+    (#23 expr altitude
+    #pragma diagram {"xy":"H54240;V16275","wh":"12000;3200"} #end)
+    (#24 expr speed
+    #pragma diagram {"xy":"H55890;V50355","wh":"10000;3200"} #end)
+    (#25 def pitch
+    #pragma diagram {"xy":"H256000;V35745","wh":"10000;3200"} #end)
+    (#26 $N4 block (pwlinear::LimiterUnSymmetrical \ LowLimit: 0.01, HighLimit: 10000.0)
+    #pragma diagram {"xy":"H84915;V50820","wh":"18690;14440"} #end)
+    (#27 expr 0.0
+    #pragma diagram {"xy":"H0;V0"} #end)
+    (#30 expr #29 / #28
+      where
+        (#29 group)
+        (#28 group)
+    #pragma diagram {"xy":"H221700;V35775"} #end)
+    (#31 $N5 block (UnitConvert \ Factor: FlightControl_UnitConversionsConstants::RDtoDEG)
+    #pragma diagram {"xy":"H191240;V34610","wh":"24080;14760"} #end)
+    (#34 expr #33 pre #32
+      where
+        (#33 group)
+        (#32 group)
+    #pragma diagram {"xy":"H77530;V25640"} #end)
+    (#37 expr #36 - #35
+      where
+        (#36 group)
+        (#35 group)
+    #pragma diagram {"xy":"H102200;V17490"} #end)
+    (#40 expr #39 / #38
+      where
+        (#39 group)
+        (#38 group)
+    #pragma diagram {"xy":"H123370;V34510"} #end)
+    (#41 $N6 block Trigo::ArcTan
+    #pragma diagram {"xy":"H150315;V34530","wh":"27150;14440"} #end)
+    
+    (#42 wire #11 => #17
+    #pragma diagram {"wp":"#11 h5720 v-8025 #17"} #end)
+    (#43 wire #41 => #31 .(in)
+    #pragma diagram {"wp":"v0|#41 #31"} #end)
+    (#44 wire #40 => #41)
+    (#45 wire #24 => #26 .(LUS_Input))
+    (#46 wire #13 .(Count) => #9
+    #pragma diagram {"wp":"v-1315|#13 h5928 v-11995 #9"} #end)
+    (#47 wire #27 => #33
+    #pragma diagram {"wp":"#27 h24120 v23740 #33"} #end)
+    (#48 wire #1 => #14
+    #pragma diagram {"wp":"#1 h6715 v-4500 #14"} #end)
+    (#49 wire #12 => #18
+    #pragma diagram {"wp":"v-395|#12 #18"} #end)
+    (#50 wire #10 => #15
+    #pragma diagram {"wp":"#10 h3500 v7317 h-6695 v5418 #15"} #end)
+    (#51 wire #37 => #39
+    #pragma diagram {"wp":"#37 h7085 v15120 #39"} #end)
+    (#52 wire #16 => #12)
+    (#53 wire #19 => #4
+    #pragma diagram {"wp":"#19 h21520 v-365 #4"} #end)
+    (#54 wire #22 => #28
+    #pragma diagram {"wp":"#22 h44950 v-13025 #28"} #end)
+    (#55 wire #34 => #35
+    #pragma diagram {"wp":"#34 h8335 v-6250 #35"} #end)
+    (#56 wire #31 .(out) => #29
+    #pragma diagram {"wp":"v-735|#31 #29"} #end)
+    (#57 wire #8 => #13 .(Reset)
+    #pragma diagram {"wp":"v65|#8 #13"} #end)
+    (#58 wire #21 => #3
+    #pragma diagram {"wp":"#21 h5270 v495 #3"} #end)
+    (#59 wire #30 => #25)
+    (#60 wire #26 .(LUS_Output) => #38
+    #pragma diagram {"wp":"v0|#26 h12055 v-14410 #38"} #end)
+    (#61 wire #2 => #8)
+    (#62 wire #6 => #7)
+    (#63 wire #23 => #32, #36
+    #pragma diagram {"wp":"#23 h4150[v11265 #32, h21540 v-685 #36]"} #end)
+    (#64 wire #20 => #5
+    #pragma diagram {"wp":"#20 h20350 #5"} #end)
+}
+
+node Confirmator (Signal: bool;
+                  ConfirmThreshold: int32;)
+  returns (ConfirmedSignal: bool;)
+{
+  diagram
+    (#2 expr not #1
+      where
+        (#1 group)
+    #pragma diagram {"xy":"H48000;V57810"} #end)
+    (#4 $N1 block (activate pwlinear::ClockCounter every #3 last (0_i32))
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H85330;V57810","wh":"40640;24760"} #end)
+    (#7 expr #6 >= #5
+      where
+        (#6 group)
+        (#5 group)
+    #pragma diagram {"xy":"H136640;V59135"} #end)
+    (#10 expr #9 pre #8
+      where
+        (#9 group)
+        (#8 group)
+    #pragma diagram {"xy":"H27340;V21695"} #end)
+    (#12 expr not #11
+      where
+        (#11 group)
+    #pragma diagram {"xy":"H72870;V30560"} #end)
+    (#15 expr #14 and #13
+      where
+        (#14 group)
+        (#13 group)
+    #pragma diagram {"xy":"H52480;V30295"} #end)
+    (#16 expr Signal
+    #pragma diagram {"xy":"H22750;V57815","wh":"10000;3200"} #end)
+    (#17 expr ConfirmThreshold
+    #pragma diagram {"xy":"H108260;V81890","wh":"20000;3200"} #end)
+    (#18 def ConfirmedSignal
+    #pragma diagram {"xy":"H172440;V59135","wh":"20000;3200"} #end)
+    (#19 expr false
+    #pragma diagram {"xy":"H0;V0","wh":"10000;3200"} #end)
+    
+    (#20 wire #16 => #13, #1
+    #pragma diagram {"wp":"#16 h6295[v-25620 #13, #1]"} #end)
+    (#21 wire #19 => #9
+    #pragma diagram {"wp":"#19 h6505 v19795 #9"} #end)
+    (#22 wire #17 => #5
+    #pragma diagram {"wp":"#17 h8190 v-20855 #5"} #end)
+    (#23 wire #15 => #11
+    #pragma diagram {"wp":"#15 h6460 v265 #11"} #end)
+    (#24 wire #12 => #3
+    #pragma diagram {"wp":"#12 h3500 v9185 h-16860 v8185 #3"} #end)
+    (#25 wire #7 => #18, #8
+    #pragma diagram {"wp":"#7 h3500[#18, v-41940 h-134635 v6400 #8]"} #end)
+    (#26 wire #4 .(1) => #6
+    #pragma diagram {"wp":"v-2575|#4 #6"} #end)
+    (#27 wire #2 => #4 .(1))
+    (#28 wire #10 => #14
+    #pragma diagram {"wp":"#10 h7570 v6700 #14"} #end)
+}
+
+function DetectRegulationError (WatchedInput: float32;
+                                ReferenceInput: float32;
+                                Thresh: float32;)
+  returns (Alarm: bool;)
+{
+  diagram
+    (#1 expr WatchedInput
+    #pragma diagram {"xy":"H22360;V10715","wh":"16000;3200"} #end)
+    (#2 expr ReferenceInput
+    #pragma diagram {"xy":"H21260;V25535","wh":"18000;3200"} #end)
+    (#3 expr Thresh
+    #pragma diagram {"xy":"H91270;V36910","wh":"10000;3200"} #end)
+    (#4 def Alarm
+    #pragma diagram {"xy":"H138890;V20505","wh":"10000;3200"} #end)
+    (#5 $N1 block Math::Abs
+    #pragma diagram {"xy":"H70910;V18915","wh":"18680;14710"} #end)
+    (#8 expr #7 - #6
+      where
+        (#7 group)
+        (#6 group)
+    #pragma diagram {"xy":"H46350;V18790"} #end)
+    (#11 expr #10 > #9
+      where
+        (#10 group)
+        (#9 group)
+    #pragma diagram {"xy":"H118850;V20505"} #end)
+    
+    (#12 wire #2 => #6
+    #pragma diagram {"wp":"#2 h3550 v-4845 #6"} #end)
+    (#13 wire #11 => #4)
+    (#14 wire #1 => #7
+    #pragma diagram {"wp":"#1 h6995 v6175 #7"} #end)
+    (#15 wire #8 => #5)
+    (#16 wire #3 => #9
+    #pragma diagram {"wp":"#3 h10290 v-14505 #9"} #end)
+    (#17 wire #5 => #10
+    #pragma diagram {"wp":"v-310|#5 #10"} #end)
+}
+
+node DisplayLogic (speedSensor: float32;
+                   altSensor: float32;
+                   MCP_UnlockRoll: bool;)
+  returns (SDY_Airspeed: float32;
+           SDY_Pitch_Angle: float32;
+           SDY_Roll_Angle: float32;
+           SDY_Alti: float32;
+           SDY_Baro_Scale: float32;)
+{
+  diagram
+    (#1 expr MCP_UnlockRoll
+    #pragma diagram {"xy":"H14910;V43520","wh":"18000;3200"} #end)
+    (#2 expr speedSensor
+    #pragma diagram {"xy":"H16560;V13095","wh":"16000;3200"} #end)
+    (#3 expr altSensor
+    #pragma diagram {"xy":"H17660;V73155","wh":"14000;3200"} #end)
+    (#4 def SDY_Airspeed
+    #pragma diagram {"xy":"H126080;V12835","wh":"16000;3200"} #end)
+    (#5 def SDY_Pitch_Angle
+    #pragma diagram {"xy":"H127730;V38765","wh":"20000;3200"} #end)
+    (#6 def SDY_Roll_Angle
+    #pragma diagram {"xy":"H127180;V48025","wh":"18000;3200"} #end)
+    (#7 def SDY_Alti
+    #pragma diagram {"xy":"H123880;V72895","wh":"12000;3200"} #end)
+    (#8 def SDY_Baro_Scale
+    #pragma diagram {"xy":"H127180;V90355","wh":"18000;3200"} #end)
+    (#9 $N1 block (UnitConvert \ Factor: FlightControl_UnitConversionsConstants::MtoFT)
+    #pragma diagram {"xy":"H59005;V72890","wh":"25030;16300"} #end)
+    (#10 $N2 block ComputePitchRoll
+    #pragma diagram {"xy":"H59005;V43525","wh":"25030;27410"} #end)
+    (#11 $N3 block (UnitConvert \ Factor: FlightControl_UnitConversionsConstants::KMHtoKTS)
+    #pragma diagram {"xy":"H59005;V12830","wh":"25030;15240"} #end)
+    (#14 expr #13 / #12
+      where
+        (#13 group)
+        (#12 group)
+    #pragma diagram {"xy":"H105620;V90485"} #end)
+    (#15 expr 100.0
+    #pragma diagram {"xy":"H83520;V95355","wh":"10000;3200"} #end)
+    
+    (#16 wire #15 => #12
+    #pragma diagram {"wp":"#15 h7550 v-2970 #12"} #end)
+    (#17 wire #14 => #8
+    #pragma diagram {"wp":"#14 h5280 v-130 #8"} #end)
+    (#18 wire #2 => #11 .(in), #10 .(speed)
+    #pragma diagram {"wp":"#2 h3600[#11, v21958 #10]"} #end)
+    (#19 wire #3 => #9 .(in), #10 .(altitude)
+    #pragma diagram {"wp":"#3 h15387[#9, v-21162 #10]"} #end)
+    (#20 wire #1 => #10 .(MCP_UnlockRoll))
+    (#21 wire #9 .(out) => #13, #7
+    #pragma diagram {"wp":"v4150|#9 h11775[v11545 #13, h19550 v-4145 #7]"} #end)
+    (#22 wire #10 .(roll) => #6
+    #pragma diagram {"wp":"v4500|#10 #6"} #end)
+    (#23 wire #10 .(pitch) => #5
+    #pragma diagram {"wp":"v-4760|#10 #5"} #end)
+    (#24 wire #11 .(out) => #4
+    #pragma diagram {"wp":"v5|#11 #4"} #end)
+}
+
+node FCU (speed: float32;
+          altitude: float32;
+          MCPaltitude: float32;
+          MCPspeed: float32;
+          AutoPilot: bool;
+          MCP_UnlockRoll: bool;)
+  returns (throttleCmd: float32;
+           elevatorCmd: float32;
+           SDY_Airspeed: float32;
+           SDY_Pitch_Angle: float32;
+           SDY_Roll_Angle: float32;
+           SDY_Alti: float32;
+           SDY_Baro_Scale: float32;
+           JV_Speed_Alarm: bool;
+           JV_Alti_Alarm: bool;)
+{
+  diagram
+    (#1 expr SpeedTarget
+    #pragma diagram {"xy":"H126260;V20295","wh":"16000;3200"} #end)
+    (#2 expr AltitudeTarget
+    #pragma diagram {"xy":"H124610;V28125","wh":"18000;3200"} #end)
+    (#3 expr MCP_UnlockRoll
+    #pragma diagram {"xy":"H126300;V115495","wh":"18000;3200"} #end)
+    (#4 $N1 block DisplayLogic
+    #pragma diagram {"xy":"H167745;V105570","wh":"29270;40380"} #end)
+    (#5 $N2 block AlarmManager
+    #pragma diagram {"xy":"H167480;V64825","wh":"29260;31910"} #end)
+    (#6 expr speed
+    #pragma diagram {"xy":"H129660;V12305","wh":"10000;3200"} #end)
+    (#7 expr altitude
+    #pragma diagram {"xy":"H128010;V36380","wh":"12000;3200"} #end)
+    (#8 def throttleCmd
+    #pragma diagram {"xy":"H203050;V17330","wh":"16000;3200"} #end)
+    (#9 def elevatorCmd
+    #pragma diagram {"xy":"H203050;V30825","wh":"16000;3200"} #end)
+    (#10 def JV_Speed_Alarm
+    #pragma diagram {"xy":"H204700;V59400","wh":"18000;3200"} #end)
+    (#11 def JV_Alti_Alarm
+    #pragma diagram {"xy":"H204150;V69985","wh":"18000;3200"} #end)
+    (#12 def SDY_Airspeed
+    #pragma diagram {"xy":"H203330;V91945","wh":"16000;3200"} #end)
+    (#13 def SDY_Pitch_Angle
+    #pragma diagram {"xy":"H204980;V98555","wh":"20000;3200"} #end)
+    (#14 def SDY_Roll_Angle
+    #pragma diagram {"xy":"H204430;V105435","wh":"18000;3200"} #end)
+    (#15 def SDY_Alti
+    #pragma diagram {"xy":"H201130;V112050","wh":"12000;3200"} #end)
+    (#16 def SDY_Baro_Scale
+    #pragma diagram {"xy":"H204430;V118930","wh":"18000;3200"} #end)
+    (#17 $N3 block FlightController
+    #pragma diagram {"xy":"H167745;V24210","wh":"29270;40120"} #end)
+    
+    (#36 wire #4 .(SDY_Pitch_Angle) => #13
+    #pragma diagram {"wp":"v-7015|#4 #13"} #end)
+    (#37 wire #6 => #17 .(speedSensor), #5 .(speedSensor), #4 .(speedSensor)
+    #pragma diagram {"wp":"#6 h12044[h4517[#17, v41304 #5], v79898 #4]"} #end)
+    (#38 wire #4 .(SDY_Baro_Scale) => #16
+    #pragma diagram {"wp":"v13360|#4 #16"} #end)
+    (#39 wire #7 => #17 .(altSensor), #5 .(altSensor), #4 .(altSensor)
+    #pragma diagram {"wp":"#7 h5919[h2259[#17, v39661 #5], v67469 #4]"} #end)
+    (#40 wire #17 .(elevatorCmd) => #9
+    #pragma diagram {"wp":"v6615|#17 #9"} #end)
+    (#41 wire #2 => #17 .(altTarget), #5 .(altSetpoint)
+    #pragma diagram {"wp":"#2 h10836[#17, v40439 #5]"} #end)
+    (#42 wire #3 => #4 .(MCP_UnlockRoll))
+    (#43 wire #5 .(JV_Speed_Alarm) => #10
+    #pragma diagram {"wp":"v-5425|#5 #10"} #end)
+    (#44 wire #1 => #17 .(speedSTarget), #5 .(speedSetpoint)
+    #pragma diagram {"wp":"#1 h14702[#17, v40791 #5]"} #end)
+    (#45 wire #17 .(throttleCmd) => #8
+    #pragma diagram {"wp":"v-6880|#17 #8"} #end)
+    (#46 wire #4 .(SDY_Airspeed) => #12
+    #pragma diagram {"wp":"v-13625|#4 #12"} #end)
+    (#47 wire #4 .(SDY_Roll_Angle) => #14
+    #pragma diagram {"wp":"v-135|#4 #14"} #end)
+    (#48 wire #5 .(JV_Alti_Alarm) => #11
+    #pragma diagram {"wp":"v5160|#5 #11"} #end)
+    (#49 wire #4 .(SDY_Alti) => #15
+    #pragma diagram {"wp":"v6480|#4 #15"} #end)
+    
+    (var
+        SpeedTarget: float32;
+        AltitudeTarget: float32;)
+    (automaton #0 $FlightMode
+      initial state #19 MANUAL
+      #pragma diagram {"xy":"h53295;v0","wh":"74000;16400"} #end :
+        diagram
+          (#20 def AltitudeTarget
+          #pragma diagram {"xy":"h24000;v-2600","wh":"18000;3200"} #end)
+          (#21 def SpeedTarget
+          #pragma diagram {"xy":"h22300;v2600","wh":"16000;3200"} #end)
+          (#22 expr speed -> last 'SpeedTarget
+          #pragma diagram {"xy":"h-12700;v2600","wh":"30000;3200"} #end)
+          (#23 expr altitude -> last 'AltitudeTarget
+          #pragma diagram {"xy":"h-15000;v-2600","wh":"36000;3200"} #end)
+          
+          (#24 wire #22 => #21)
+          (#25 wire #23 => #20)
+      state #18 AUTOPILOT
+      #pragma diagram {"xy":"h-42705;v0","wh":"95180;39320"} #end :
+        diagram
+          (#26 def SpeedTarget
+          #pragma diagram {"xy":"h35490;v8700","wh":"16000;3200"} #end)
+          (#27 def AltitudeTarget
+          #pragma diagram {"xy":"h34590;v-8700","wh":"18000;3200"} #end)
+          (#28 expr MCPaltitude
+          #pragma diagram {"xy":"h-35590;v-8700","wh":"16000;3200"} #end)
+          (#29 expr MCPspeed
+          #pragma diagram {"xy":"h-31690;v8700","wh":"12000;3200"} #end)
+          (#30 $N4 block (UnitConvert \ Factor: FlightControl_UnitConversionsConstants::FTtoM)
+          #pragma diagram {"xy":"h-1450;v-8700","wh":"18680;13920"} #end)
+          (#31 $N5 block (UnitConvert \ Factor: FlightControl_UnitConversionsConstants::KTStoKMH)
+          #pragma diagram {"xy":"h450;v8700","wh":"18680;13920"} #end)
+          
+          (#32 wire #30 .(out) => #27
+          #pragma diagram {"wp":"v0|#30 #27"} #end)
+          (#33 wire #31 .(out) => #26
+          #pragma diagram {"wp":"v0|#31 #26"} #end)
+          (#34 wire #29 => #31 .(in))
+          (#35 wire #28 => #30 .(in))
+      :1: #19 unless if (AutoPilot)
+      restart #18
+      #pragma diagram {"tp":"h-37000;v-6100|#19 h47590;v-6100|#18"} #end;
+      :1: #18 unless if (not AutoPilot)
+      restart #19
+      #pragma diagram {"tp":"h47590;v-2033|#18 h-37000;v-2033|#19"} #end;
+    #pragma diagram {"xy":"H0;V0","wh":"188590;47320"} #end)
+}
+
+node FlightController (speedSensor: float32;
+                       speedSTarget: float32;
+                       altTarget: float32;
+                       altSensor: float32;)
+  returns (throttleCmd: float32;
+           elevatorCmd: float32;)
+{
+  diagram
+    (#1 $N1 block SpeedContrib
+    #pragma diagram {"xy":"H46965;V17200","wh":"28470;19740"} #end)
+    (#2 $N2 block AltContrib
+    #pragma diagram {"xy":"H47495;V53180","wh":"28470;19740"} #end)
+    (#5 expr #4 + #3
+      where
+        (#4 group)
+        (#3 group)
+    #pragma diagram {"xy":"H101120;V18125"} #end)
+    (#6 $N3 block (pwlinear::LimiterUnSymmetrical \ LowLimit: -FlightControl_RegulationConstants::ElevatorLimit, HighLimit: FlightControl_RegulationConstants::ElevatorLimit)
+    #pragma diagram {"xy":"H137055;V52655","wh":"30850;22910"} #end)
+    (#7 $N4 block (pwlinear::LimiterUnSymmetrical \ LowLimit: 0.0, HighLimit: 1.0)
+    #pragma diagram {"xy":"H137055;V18520","wh":"30850;22920"} #end)
+    (#8 expr speedSTarget
+    #pragma diagram {"xy":"H14150;V13890","wh":"16000;3200"} #end)
+    (#9 expr speedSensor
+    #pragma diagram {"xy":"H14970;V20240","wh":"16000;3200"} #end)
+    (#10 expr altTarget
+    #pragma diagram {"xy":"H15800;V49875","wh":"14000;3200"} #end)
+    (#11 expr altSensor
+    #pragma diagram {"xy":"H15800;V56225","wh":"14000;3200"} #end)
+    (#12 def throttleCmd
+    #pragma diagram {"xy":"H171030;V18125","wh":"16000;3200"} #end)
+    (#13 def elevatorCmd
+    #pragma diagram {"xy":"H171030;V52255","wh":"16000;3200"} #end)
+    (#18 expr #17 - #16
+      where
+        (#17 group)
+        (#16 group)
+    #pragma diagram {"xy":"H101120;V59550"} #end)
+    
+    (#19 wire #8 => #1 .(speedTarget))
+    (#20 wire #5 => #7 .(LUS_Input))
+    (#21 wire #7 .(LUS_Output) => #12
+    #pragma diagram {"wp":"v-395|#7 #12"} #end)
+    (#22 wire #18 => #6 .(LUS_Input))
+    (#23 wire #1 .(speedContrib) => #16, #4
+    #pragma diagram {"wp":"v5870|#1 h5865[h7730 v38380 #16, v-6845 #4]"} #end)
+    (#24 wire #6 .(LUS_Output) => #13
+    #pragma diagram {"wp":"v-400|#6 #13"} #end)
+    (#25 wire #2 .(altContrib) => #17, #3
+    #pragma diagram {"wp":"v-5870|#2 h20795[v10340 #17, h7730 v-27285 #3]"} #end)
+    (#26 wire #9 => #1 .(speedSensor))
+    (#27 wire #11 => #2 .(altSensor))
+    (#28 wire #10 => #2 .(altTarget))
+}
+
+node InputsAcquisitions (speed: float32;
+                         MCPaltitude: float32;
+                         MCPspeed: float32;
+                         Autopilot: bool;
+                         altitude: float32;)
+  returns (speedSensor: float32;
+           speedSetpoint: float32;
+           altSetpoint: float32;
+           altSensor: float32;)
+{
+  diagram
+    (#1 $N1 block SetPointMgt
+    #pragma diagram {"xy":"H96440;V32410","wh":"25300;22120"} #end)
+    (#2 $N2 block (UnitConvert \ Factor: FlightControl_UnitConversionsConstants::KTStoKMH)
+    #pragma diagram {"xy":"H51065;V32415","wh":"18690;14710"} #end)
+    (#3 $N3 block (UnitConvert \ Factor: FlightControl_UnitConversionsConstants::FTtoM)
+    #pragma diagram {"xy":"H51065;V92205","wh":"18690;14710"} #end)
+    (#4 $N4 block SetPointMgt
+    #pragma diagram {"xy":"H98030;V92210","wh":"25300;22120"} #end)
+    (#5 expr speed
+    #pragma diagram {"xy":"H27260;V12040","wh":"10000;3200"} #end)
+    (#6 def speedSensor
+    #pragma diagram {"xy":"H128170;V12040","wh":"16000;3200"} #end)
+    (#7 expr MCPspeed
+    #pragma diagram {"xy":"H25610;V32415","wh":"12000;3200"} #end)
+    (#8 expr Autopilot
+    #pragma diagram {"xy":"H24540;V53575","wh":"14000;3200"} #end)
+    (#9 expr altitude
+    #pragma diagram {"xy":"H25610;V72100","wh":"12000;3200"} #end)
+    (#10 expr MCPaltitude
+    #pragma diagram {"xy":"H23960;V92205","wh":"16000;3200"} #end)
+    (#11 def altSensor
+    #pragma diagram {"xy":"H127070;V72100","wh":"14000;3200"} #end)
+    (#12 def altSetpoint
+    #pragma diagram {"xy":"H128170;V92205","wh":"16000;3200"} #end)
+    (#13 def speedSetpoint
+    #pragma diagram {"xy":"H129270;V32415","wh":"18000;3200"} #end)
+    
+    (#14 wire #7 => #2 .(in))
+    (#15 wire #1 .(InputSetPoint) => #13
+    #pragma diagram {"wp":"v5|#1 #13"} #end)
+    (#16 wire #5 => #6, #1 .(Input)
+    #pragma diagram {"wp":"#5 h6230[#6, v12020 #1]"} #end)
+    (#17 wire #2 .(out) => #1 .(MCPInput)
+    #pragma diagram {"wp":"v-991|#2 #1"} #end)
+    (#18 wire #8 => #1 .(AutoPilot), #4 .(AutoPilot)
+    #pragma diagram {"wp":"#8 h30715[h14023 v-14787 #1, v29000 #4]"} #end)
+    (#19 wire #4 .(InputSetPoint) => #12
+    #pragma diagram {"wp":"v-5|#4 #12"} #end)
+    (#20 wire #9 => #11, #4 .(Input)
+    #pragma diagram {"wp":"#9 h16622[#11, v11475 #4]"} #end)
+    (#21 wire #10 => #3 .(in))
+    (#22 wire #3 .(out) => #4 .(MCPInput)
+    #pragma diagram {"wp":"v0|#3 #4"} #end)
+}
+
+node MemorizeSetPoint (in: float32;
+                       trigger: bool;
+                       init: float32;)
+  returns (out: float32;)
+{
+  diagram
+    (#1 $N1 block linear::MemoryBasic
+    #pragma diagram {"xy":"H59135;V14420","wh":"17890;14180"} #end)
+    (#2 $N2 block Digital::RisingEdge
+    #pragma diagram {"xy":"H43790;V47230","wh":"17880;14180"} #end)
+    (#3 expr in
+    #pragma diagram {"xy":"H21400;V14155"} #end)
+    (#4 expr trigger
+    #pragma diagram {"xy":"H19550;V46965","wh":"12000;3200"} #end)
+    (#5 expr init
+    #pragma diagram {"xy":"H21200;V31090"} #end)
+    (#6 def out
+    #pragma diagram {"xy":"H80990;V14155"} #end)
+    
+    (#7 wire #3 => #1 .(BM_Input))
+    (#8 wire #2 => #1 .(Write)
+    #pragma diagram {"wp":"v0|#2 h2000 v-10773 h-6540 v-17218 #1"} #end)
+    (#9 wire #5 => #1 .(Init)
+    #pragma diagram {"wp":"#5 h12985 v-14393 #1"} #end)
+    (#10 wire #4 => #2)
+    (#11 wire #1 .(Memorized) => #6
+    #pragma diagram {"wp":"v-265|#1 #6"} #end)
+}
+
+node PIRegulator (Target: float32;
+                  measure: float32;
+                  HighLimit: float32;
+                  LowLimit: float32;
+                  DeltaT: float32;
+                  Kp: float32;
+                  Ki: float32;)
+  returns (out: float32;)
+{
+  diagram
+    (#3 expr #2 + #1
+      where
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H143190;V19315"} #end)
+    (#6 expr #5 - #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H36830;V17330"} #end)
+    (#7 $N1 block (linear::Gain \ Gain: Ki)
+    #pragma diagram {"xy":"H64160;V46170","wh":"19480;17360"} #end)
+    (#8 $N2 block (linear::Gain \ Gain: Kp)
+    #pragma diagram {"xy":"H64160;V17335","wh":"19480;15770"} #end)
+    (#9 $N3 block (linear::IntegrFwd \ Reset: false, TimeCycle: DeltaT, LowLimit: LowLimit, HiLimit: HighLimit)
+    #pragma diagram {"xy":"H103720;V47230","wh":"39320;21060"} #end)
+    (#10 $N4 block (pwlinear::LimiterUnSymmetrical \ LowLimit: LowLimit, HighLimit: HighLimit)
+    #pragma diagram {"xy":"H170395;V19450","wh":"26090;16300"} #end)
+    (#11 expr Target
+    #pragma diagram {"xy":"H13220;V9925","wh":"10000;3200"} #end)
+    (#12 expr measure
+    #pragma diagram {"xy":"H12670;V24475","wh":"12000;3200"} #end)
+    (#13 def out
+    #pragma diagram {"xy":"H196880;V19185"} #end)
+    
+    (#14 wire #6 => #7 .(G_Input), #8 .(G_Input)
+    #pragma diagram {"wp":"#6 h7795[v28840 #7, #8]"} #end)
+    (#15 wire #3 => #10 .(LUS_Input))
+    (#16 wire #7 .(G_Output) => #9 .(U)
+    #pragma diagram {"wp":"v0|#7 #9"} #end)
+    (#17 wire #9 .(Y) => #1
+    #pragma diagram {"wp":"v0|#9 h7405 v-26015 #1"} #end)
+    (#18 wire #8 .(G_Output) => #2
+    #pragma diagram {"wp":"v80|#8 #2"} #end)
+    (#19 wire #12 => #4
+    #pragma diagram {"wp":"#12 h8080 v-5245 #4"} #end)
+    (#20 wire #10 .(LUS_Output) => #13
+    #pragma diagram {"wp":"v-265|#10 #13"} #end)
+    (#21 wire #11 => #5
+    #pragma diagram {"wp":"#11 h8305 v5505 #5"} #end)
+}
+
+node SetPointMgt (Input: float32;
+                  MCPInput: float32;
+                  AutoPilot: bool;)
+  returns (InputSetPoint: float32;)
+{
+  diagram
+    (#4 expr if #3 then #2 else #1
+      where
+        (#3 group)
+        (#2 group)
+        (#1 group)
+    #pragma diagram {"xy":"H97660;V30430"} #end)
+    (#5 $N1 block MemorizeSetPoint
+    #pragma diagram {"xy":"H58605;V43260","wh":"28470;14180"} #end)
+    (#7 expr not #6
+      where
+        (#6 group)
+    #pragma diagram {"xy":"H32660;V52385"} #end)
+    (#8 expr AutoPilot
+    #pragma diagram {"xy":"H9980;V52520","wh":"14000;3200"} #end)
+    (#9 expr Input
+    #pragma diagram {"xy":"H12180;V40875","wh":"10000;3200"} #end)
+    (#10 expr MCPInput
+    #pragma diagram {"xy":"H65040;V18655","wh":"12000;3200"} #end)
+    (#11 expr AutoPilot
+    #pragma diagram {"xy":"H64490;V7275","wh":"14000;3200"} #end)
+    (#12 def InputSetPoint
+    #pragma diagram {"xy":"H125040;V30295","wh":"18000;3200"} #end)
+    
+    (#13 wire #5 .(out) => #1
+    #pragma diagram {"wp":"v0|#5 h9910 v-10930 #1"} #end)
+    (#14 wire #9 => #5 .(in), #5 .(init)
+    #pragma diagram {"wp":"#9 h3250[#5, v1733 #5]"} #end)
+    (#15 wire #10 => #2
+    #pragma diagram {"wp":"#10 h12310 v9875 #2"} #end)
+    (#16 wire #8 => #6
+    #pragma diagram {"wp":"#8 h6840 v-135 #6"} #end)
+    (#17 wire #11 => #3
+    #pragma diagram {"wp":"#11 h27670 #3"} #end)
+    (#18 wire #7 => #5 .(trigger)
+    #pragma diagram {"wp":"#7 h4855 v-3767 #5"} #end)
+    (#19 wire #4 => #12
+    #pragma diagram {"wp":"#4 h8190 v-135 #12"} #end)
+}
+
+node SpeedContrib (speedTarget: float32;
+                   speedSensor: float32;)
+  returns (speedContrib: float32;)
+{
+  diagram
+    (#1 $N1 block (LUT_1::LUT1D <<4>>  \ X: FlightControl_RegulationConstants::Xtable, Y: FlightControl_RegulationConstants::Ytable)
+    #pragma diagram {"xy":"H131495;V30030","wh":"34030;24240"} #end)
+    (#2 $N2 block (PIRegulator \ HighLimit: FlightControl_RegulationConstants::speedMax, LowLimit: FlightControl_RegulationConstants::speedMin, DeltaT: 0.02, Kp: FlightControl_RegulationConstants::speedKp, Ki: FlightControl_RegulationConstants::speedKi)
+    #pragma diagram {"xy":"H62835;V30030","wh":"61810;23700"} #end)
+    (#3 expr speedSensor
+    #pragma diagram {"xy":"H15500;V33735","wh":"16000;3200"} #end)
+    (#4 expr speedTarget
+    #pragma diagram {"xy":"H15500;V26065","wh":"16000;3200"} #end)
+    (#5 def speedContrib
+    #pragma diagram {"xy":"H166820;V30030","wh":"16000;3200"} #end)
+    
+    (#6 wire #4 => #2 .(Target))
+    (#7 wire #3 => #2 .(measure))
+    (#8 wire #2 .(out) => #1 .(X_In)
+    #pragma diagram {"wp":"v0|#2 #1"} #end)
+    (#9 wire #1 .(Y_Out) => #5
+    #pragma diagram {"wp":"v0|#1 #5"} #end)
+}
+
+function UnitConvert (in: float32;
+                      Factor: float32;)
+  returns (out: float32;)
+{
+  diagram
+    (#1 expr in
+    #pragma diagram {"xy":"H12670;V10450"} #end)
+    (#2 expr Factor
+    #pragma diagram {"xy":"H11370;V25005","wh":"10000;3200"} #end)
+    (#3 def out
+    #pragma diagram {"xy":"H54800;V17860"} #end)
+    (#6 expr #5 * #4
+      where
+        (#5 group)
+        (#4 group)
+    #pragma diagram {"xy":"H34970;V17990"} #end)
+    
+    (#7 wire #2 => #4
+    #pragma diagram {"wp":"#2 h8300 v-5115 #4"} #end)
+    (#8 wire #6 => #3
+    #pragma diagram {"wp":"#6 h6915 v-130 #3"} #end)
+    (#9 wire #1 => #5
+    #pragma diagram {"wp":"#1 h8150 v5640 #5"} #end)
+}

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project id="1" oid_count="129">
+	<props>
+		<Prop id="1" name="@STUDIO:PRODUCT">
+			<value>RAPIDPROTO</value>
+		</Prop>
+		<Prop id="3" name="@RAPIDPROTO:RELEASE">
+			<value>25.2</value>
+		</Prop>
+		<Prop id="4" name="@RAPIDPROTO:RATIO">
+			<value>1.0</value>
+			<value>1.0</value>
+		</Prop>
+		<Prop id="5" name="@RAPIDPROTO:DEFAULTCOLORTABLE">
+			<value>Widgets_colors.sct</value>
+			<value>Styles_colors.sct</value>
+		</Prop>
+		<Prop id="6" name="@RAPIDPROTO:DEFAULTLWTABLE">
+			<value>Widgets_line_width.swt</value>
+		</Prop>
+		<Prop id="7" name="@RAPIDPROTO:DEFAULTLSTABLE">
+			<value>Widgets_line_stipple.sst</value>
+		</Prop>
+		<Prop id="8" name="@RAPIDPROTO:TEXTURETABLE">
+			<value>Widgets_textures.stt</value>
+			<value>texture_table.stt</value>
+		</Prop>
+		<Prop id="9" name="@RAPIDPROTO:FONTTABLE">
+			<value>Widgets_fonts.sft</value>
+		</Prop>
+		<Prop id="14" name="@RAPIDPROTO:CONFTARGET">
+			<value>SuiteCosimulation</value>
+			<configuration>13</configuration>
+		</Prop>
+		<Prop id="15" name="CONFIGURATIONS">
+			<value>13</value>
+			<value>22</value>
+			<value>30</value>
+			<value>42</value>
+			<value>63</value>
+			<value>70</value>
+			<value>100</value>
+			<value>110</value>
+		</Prop>
+		<Prop id="16" name="@RAPIDPROTO:CONFSOURCE">
+			<configuration>13</configuration>
+		</Prop>
+		<Prop id="17" name="@RAPIDPROTO:KCGTEMPLATE">
+			<configuration>13</configuration>
+		</Prop>
+		<Prop id="18" name="@RAPIDPROTO:APPPERIODICITY">
+			<value>33</value>
+			<configuration>13</configuration>
+		</Prop>
+		<Prop id="19" name="@RAPIDPROTO:INTEGRATIONMODE">
+			<value>asynchronous</value>
+			<configuration>13</configuration>
+		</Prop>
+		<Prop id="20" name="@RAPIDPROTO:POINTERID">
+			<value>0</value>
+			<configuration>13</configuration>
+		</Prop>
+		<Prop id="21" name="@RAPIDPROTO:KEYBOARDID">
+			<value>0</value>
+			<configuration>13</configuration>
+		</Prop>
+		<Prop id="23" name="@RAPIDPROTO:CONFTARGET">
+			<value>Windows</value>
+			<configuration>22</configuration>
+		</Prop>
+		<Prop id="24" name="@RAPIDPROTO:CONFSOURCE">
+			<configuration>22</configuration>
+		</Prop>
+		<Prop id="25" name="@RAPIDPROTO:KCGTEMPLATE">
+			<configuration>22</configuration>
+		</Prop>
+		<Prop id="26" name="@RAPIDPROTO:CONFOUTPUT">
+			<value>%ModelName%_Exe</value>
+			<configuration>22</configuration>
+		</Prop>
+		<Prop id="27" name="@RAPIDPROTO:APPPERIODICITY">
+			<value>33</value>
+			<configuration>22</configuration>
+		</Prop>
+		<Prop id="28" name="@RAPIDPROTO:POINTERID">
+			<value>0</value>
+			<configuration>22</configuration>
+		</Prop>
+		<Prop id="29" name="@RAPIDPROTO:KEYBOARDID">
+			<value>0</value>
+			<configuration>22</configuration>
+		</Prop>
+		<Prop id="31" name="@RAPIDPROTO:CONFTARGET">
+			<value>Android</value>
+			<configuration>30</configuration>
+		</Prop>
+		<Prop id="32" name="@RAPIDPROTO:CONFSOURCE">
+			<configuration>30</configuration>
+		</Prop>
+		<Prop id="33" name="@RAPIDPROTO:KCGTEMPLATE">
+			<configuration>30</configuration>
+		</Prop>
+		<Prop id="34" name="@RAPIDPROTO:CONFOUTPUT">
+			<value>%ModelName%_%Target%</value>
+			<configuration>30</configuration>
+		</Prop>
+		<Prop id="35" name="@RAPIDPROTO:APPPERIODICITY">
+			<value>33</value>
+			<configuration>30</configuration>
+		</Prop>
+		<Prop id="43" name="@RAPIDPROTO:CONFTARGET">
+			<value>FMU</value>
+			<configuration>42</configuration>
+		</Prop>
+		<Prop id="44" name="@RAPIDPROTO:CONFSOURCE">
+			<configuration>42</configuration>
+		</Prop>
+		<Prop id="45" name="@RAPIDPROTO:KCGTEMPLATE">
+			<configuration>42</configuration>
+		</Prop>
+		<Prop id="46" name="@RAPIDPROTO:CONFOUTPUT">
+			<value>%ModelName%_%Target%</value>
+			<configuration>42</configuration>
+		</Prop>
+		<Prop id="47" name="@RAPIDPROTO:APPPERIODICITY">
+			<value>33</value>
+			<configuration>42</configuration>
+		</Prop>
+		<Prop id="71" name="@RAPIDPROTO:CONFTARGET">
+			<value>Windows</value>
+		</Prop>
+		<Prop id="72" name="@RAPIDPROTO:CONFSOURCE">
+			<value>ControlPanel.rgfx</value>
+		</Prop>
+		<Prop id="73" name="@RAPIDPROTO:KCGTEMPLATE"/>
+		<Prop id="74" name="@RAPIDPROTO:CONFOUTPUT">
+			<value>%ModelName%_Exe</value>
+		</Prop>
+		<Prop id="75" name="@RAPIDPROTO:APPPERIODICITY">
+			<value>33</value>
+		</Prop>
+		<Prop id="76" name="@RAPIDPROTO:POINTERID">
+			<value>0</value>
+		</Prop>
+		<Prop id="77" name="@RAPIDPROTO:KEYBOARDID">
+			<value>0</value>
+		</Prop>
+		<Prop id="80" name="@RAPIDPROTO:SCADESUITEPROJECTS">
+			<value>FlightControl.etp</value>
+		</Prop>
+		<Prop id="92" name="@RAPIDPROTO:GRADIENTTABLE"/>
+		<Prop id="93" name="@RAPIDPROTO:GLOBALDEFS"/>
+		<Prop id="101" name="@RAPIDPROTO:CONFTARGET">
+			<value>ScadeOneCosimulation</value>
+			<configuration>100</configuration>
+		</Prop>
+		<Prop id="102" name="@RAPIDPROTO:CONFSOURCE">
+			<value>ControlPanel.rgfx</value>
+			<configuration>100</configuration>
+		</Prop>
+		<Prop id="103" name="@RAPIDPROTO:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>100</configuration>
+		</Prop>
+		<Prop id="104" name="@RAPIDPROTO:KCGTEMPLATE">
+			<configuration>100</configuration>
+		</Prop>
+		<Prop id="105" name="@RAPIDPROTO:INTEGRATIONMODE">
+			<value>asynchronous</value>
+			<configuration>100</configuration>
+		</Prop>
+		<Prop id="106" name="@RAPIDPROTO:POINTERID">
+			<value>0</value>
+			<configuration>100</configuration>
+		</Prop>
+		<Prop id="107" name="@RAPIDPROTO:KEYBOARDID">
+			<value>0</value>
+			<configuration>100</configuration>
+		</Prop>
+		<Prop id="108" name="@RAPIDPROTO:CONFOUTPUT">
+			<value>..\scade-one\%ModelName%_%Target%</value>
+			<configuration>100</configuration>
+		</Prop>
+		<Prop id="109" name="@RAPIDPROTO:CONFPANELNAME">
+			<value>%ModelName%</value>
+			<configuration>100</configuration>
+		</Prop>
+	</props>
+	<roots>
+		<Folder id="48" extensions="rgfx;wgfx" name="Model Files">
+			<elements>
+				<FileRef id="49" persistAs="ControlPanel.rgfx">
+					<props>
+						<Prop id="54" name="@RAPIDPROTO:MODELCOLORTABLE"/>
+						<Prop id="57" name="@RAPIDPROTO:MODELLWTABLE"/>
+						<Prop id="60" name="@RAPIDPROTO:MODELLSTABLE"/>
+					</props>
+				</FileRef>
+			</elements>
+		</Folder>
+		<Folder id="50" extensions="etp" name="Libraries">
+			<elements>
+				<FileRef id="51" persistAs="$(RAPID_PROTOTYPER)\Widgets\libWidgets.etp"/>
+			</elements>
+		</Folder>
+		<Folder id="94" extensions="sct;sft;sgt;sst;stt;swt" name="Resource Files">
+			<elements>
+				<FileRef id="95" persistAs="texture_table.stt"/>
+			</elements>
+		</Folder>
+	</roots>
+	<configurations>
+		<Configuration id="13" name="SCADE Suite Co-simulation"/>
+		<Configuration id="22" name="Windows"/>
+		<Configuration id="30" name="Android"/>
+		<Configuration id="42" name="FMU"/>
+		<Configuration id="100" name="ScadeOneCosimulation"/>
+	</configurations>
+</Project>
