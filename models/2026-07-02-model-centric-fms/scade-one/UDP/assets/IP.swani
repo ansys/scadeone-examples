@@ -1,0 +1,9 @@
+-- version swan: 2027.0 graph: 2.1
+type address = {address: uint8^4, port: uint16};
+
+const sentinel = {address: [198,51,100,0], port:0}: address 
+-- Reserved for documentation/example use 
+-- Should not be assigned to real hosts
+-- See RFC 5737 / RFC 3849
+
+;

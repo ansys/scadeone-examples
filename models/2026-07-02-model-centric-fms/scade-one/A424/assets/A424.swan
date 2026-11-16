@@ -1,0 +1,754 @@
+-- version swan: 2027.0 graph: 2.1
+use Str32 as Str;
+
+node read_char (c: Char::t;)
+  returns (o: t_reader default = Reading {};)
+{
+  diagram
+    (var
+        icao last = Str::empty;
+        name last= Str::empty;
+        trim last = 0;
+        done default = false;
+        lat last = 0;
+        lon last = 0;
+        length last = 0;
+        elev last = 0;
+        surf last = Runway::UNKNOWN;
+        width last = 0;
+        heading last = 0;)
+    (automaton #0
+      initial state #1 B0
+      #pragma diagram {"xy":"h-208496;v978","wh":"14000;12000"} #end :
+      state #2 A_B1
+      #pragma diagram {"xy":"h-192977;v-24465","wh":"12000;12000"} #end :
+      state #4 Error
+      #pragma diagram {"xy":"h-81993;v978","wh":"206275;12000"} #end :
+        diagram
+          (let o = Error{};
+          #pragma diagram {"xy":"h-89138;v0","wh":"20000;3200"} #end)
+      state #6 AP_ICAO
+      #pragma diagram {"xy":"h-159539;v-33285","wh":"38000;17797"} #end :
+        diagram
+          (let icao = 
+               Str::append_char(
+                   Str::empty pre icao
+                   , c
+               );
+          #pragma diagram {"xy":"h0;v0","wh":"30000;9797"} #end)
+      state #7 R_B1
+      #pragma diagram {"xy":"h-184539;v26078","wh":"12000;12000"} #end :
+      state #9 RW_ICAO
+      #pragma diagram {"xy":"h-141131;v23179","wh":"38000;17797"} #end :
+        diagram
+          (let icao = 
+               Str::append_char(
+                   Str::empty pre icao
+                   , c
+               );
+          #pragma diagram {"xy":"h0;v0","wh":"30000;9797"} #end)
+      state #11 AP_NAME
+      #pragma diagram {"xy":"h-105206;v-24294","wh":"58000;19657"} #end :
+        diagram
+          (let name = 
+               Str::append_char(
+                   Str::empty pre name
+                   , c
+               );
+               trim = if c <> ' ' then 0 else 1 pre trim+1;
+          #pragma diagram {"xy":"h0;v0","wh":"50000;11657"} #end)
+      state #13 AP_LAT
+      #pragma diagram {"xy":"h-25447;v-43008","wh":"76000;14078"} #end :
+        diagram
+          (let 
+           name = (last'name with .sz = last'name.sz - last'trim) pre name;
+           lat, done = lat_lon(c, true);
+          #pragma diagram {"xy":"h-1000;v0","wh":"66000;6078"} #end)
+      state #23 RW_SP1
+      #pragma diagram {"xy":"h-41227;v24958","wh":"12000;12000"} #end :
+      state #15 AP_LON
+      #pragma diagram {"xy":"h-3847;v-27401","wh":"44000;12000"} #end :
+        diagram
+          (let lon, done = lat_lon(c, false);
+          #pragma diagram {"xy":"h0;v0","wh":"36000;3200"} #end)
+      state #16 AP_SP1
+      #pragma diagram {"xy":"h-57447;v-26645","wh":"12000;12000"} #end :
+      state #17 AP_SP2
+      #pragma diagram {"xy":"h-38647;v-26645","wh":"12000;12000"} #end :
+      state #18 AP_SP3
+      #pragma diagram {"xy":"h-17222;v-12833","wh":"12000;12000"} #end :
+      state #19 AP_SP4
+      #pragma diagram {"xy":"h1578;v-12833","wh":"12000;12000"} #end :
+      state #21 AP_ELEV
+      #pragma diagram {"xy":"h110422;v-15555","wh":"134000;14078"} #end :
+        diagram
+          (let 
+               elev, done = elevation(c);
+               o = if c = '\x0A' then Field { Airport{ icao: (icao.cd[0..3]), name: name, lat:lat, lon:lon, elev_ft:elev } } else Reading{};
+          #pragma diagram {"xy":"h0;v0","wh":"126000;6078"} #end)
+      state #29 RW_ID
+      #pragma diagram {"xy":"h-84679;v23179","wh":"58000;19657"} #end :
+        diagram
+          (let name = 
+               Str::append_char(
+                   Str::empty pre name
+                   , c
+               );
+               trim = if c <> ' ' then 0 else 1 pre trim+1;
+          #pragma diagram {"xy":"h0;v0","wh":"50000;11657"} #end)
+      state #31 RW_LAT
+      #pragma diagram {"xy":"h-9227;v40965","wh":"76000;14078"} #end :
+        diagram
+          (let 
+           name = (last'name with .sz = last'name.sz - last'trim) pre name;
+           lat, done = lat_lon(c, true);
+          #pragma diagram {"xy":"h-1000;v0","wh":"66000;6078"} #end)
+      state #32 RW_SP2
+      #pragma diagram {"xy":"h-19397;v24958","wh":"12000;12000"} #end :
+      state #34 RW_LON
+      #pragma diagram {"xy":"h14432;v27626","wh":"44000;12000"} #end :
+        diagram
+          (let lon, done = lat_lon(c, false);
+          #pragma diagram {"xy":"h0;v0","wh":"36000;3200"} #end)
+      state #26 RW_SP3
+      #pragma diagram {"xy":"h2432;v14302","wh":"12000;12000"} #end :
+      state #27 RW_SP4
+      #pragma diagram {"xy":"h20907;v14302","wh":"12000;12000"} #end :
+      state #30 RW_ELEV
+      #pragma diagram {"xy":"h64422;v5226","wh":"42000;14078"} #end :
+        diagram
+          (let 
+               elev, done = elevation(c);
+          #pragma diagram {"xy":"h0;v0","wh":"34000;6078"} #end)
+      state #33 RW_LENGTH
+      #pragma diagram {"xy":"h63117;v44036","wh":"44000;12219"} #end :
+        diagram
+          (let 
+           length, done = number(c, 5, 0) ;
+          #pragma diagram {"xy":"h0;v0","wh":"36000;4219"} #end)
+      state #37 RW_SURF
+      #pragma diagram {"xy":"h110423;v7116","wh":"34000;12219"} #end :
+        diagram
+          (let 
+               surf = surface(c);
+          #pragma diagram {"xy":"h0;v0","wh":"26000;4219"} #end)
+      state #40 RW_WIDTH
+      #pragma diagram {"xy":"h119628;v30718","wh":"56000;15938"} #end :
+        diagram
+          (let 
+           width, done = number(c, 3, 0) ;
+          #pragma diagram {"xy":"h-7000;v-1859","wh":"34000;4219"} #end)
+      state #42 RW_HDG
+      #pragma diagram {"xy":"h186138;v22386","wh":"68000;21516"} #end :
+        diagram
+          (let 
+           heading, done = number(c, 4, 0) ;
+           o = if c = '\x0A' then Field { 
+                   Runway{ icao: (icao.cd[0..3]), id: name.cd[0..3], 
+                   lat_thr:lat, lon_thr:lon, elev_thr_ft:elev, 
+                   length_ft: length, width_ft: width, surface: surf, 
+                   heading_deg10: heading } } else Reading{};
+          #pragma diagram {"xy":"h0;v0","wh":"60000;13516"} #end)
+      state #41 RW_SP5
+      #pragma diagram {"xy":"h63117;v24968","wh":"12000;12000"} #end :
+      :1: #1 until if (c = 'A')
+      restart #2
+      #pragma diagram {"tp":"h7000;v-3728|#1 h500 h500 h500 h3510 h3510;v-6858 v-6858 v-667 v-667 h0;v6000|#2"} #end;
+      :1: #2 until if (c = 'P')
+      restart #6
+      #pragma diagram {"tp":"h6000;v-2961|#2 h2812 h2812 h-19000;v5859|#6"} #end;
+      :2: #1 until if (c = 'R')
+      restart #7
+      #pragma diagram {"tp":"h-142;v6000|#1 v500 v500 v500 v3386 h6025;v3386 h6025 h6025 h6025;v1414 v1414 v667 v667 h0;v-6000|#7"} #end;
+      :1: #7 until if (c = 'W')
+      restart #9
+      #pragma diagram {"tp":"h6000;v0|#7 h6136 h6136 h-19000;v2899|#9"} #end;
+      :4: #1 until 
+      restart #4
+      #pragma diagram {"tp":"h7000;v0|#1 h5456 h5456 h-103138;v0|#4"} #end;
+      :2: #7 until 
+      restart #4
+      #pragma diagram {"tp":"h2704;v-6000|#7 v-4367 v-4367 h-99842;v6000|#4"} #end;
+      :2: #2 until 
+      restart #4
+      #pragma diagram {"tp":"h3338;v6000|#2 v500 v500 v500 v3608 h7215;v3608 h7215 h29253 h29253 h29253 h2728 h2728;v1364 v1364 v667 v667 h0;v-6000|#4"} #end;
+      :2: #6 until if (cycles(4))
+      restart #11
+      #pragma diagram {"tp":"h19000;v4031|#6 h2111 h2111 h-29000;v-4961|#11"} #end;
+      :1: #11 until if (cycles(32))
+      restart #13
+      #pragma diagram {"tp":"h28567;v-9828|#11 v-500 v-500 v-500 v-3693 h5596;v-3693 h5596 h667 h667 h-38000;v0|#13"} #end;
+      :1: #13 until if (done)
+      restart #16
+      #pragma diagram {"tp":"h-32000;v7039|#13 v1108 v1108 h0;v-6000|#16"} #end;
+      :1: #16 until if (c = ' ')
+      restart #17
+      #pragma diagram {"tp":"h6000;v0|#16 h2267 h2267 h-6000;v0|#17"} #end;
+      :1: #17 until if (c=' ')
+      restart #15
+      #pragma diagram {"tp":"h6000;v-378|#17 h2267 h2267 h-22000;v378|#15"} #end;
+      :2: #16 until 
+      restart #4
+      #pragma diagram {"tp":"h-2184;v6000|#16 v5208 v5208 h22363;v-6000|#4"} #end;
+      :2: #17 until 
+      restart #4
+      #pragma diagram {"tp":"h16;v6000|#17 v5208 v5208 h43363;v-6000|#4"} #end;
+      :1: #18 until if (c = ' ')
+      restart #19
+      #pragma diagram {"tp":"h6000;v0|#18 h2267 h2267 h-6000;v0|#19"} #end;
+      :1: #15 until if (done)
+      restart #18
+      #pragma diagram {"tp":"h-13375;v6000|#15 v856 v856 h0;v-6000|#18"} #end;
+      :1: #19 until if (c = ' ')
+      restart #21
+      #pragma diagram {"tp":"h6000;v-841|#19 h11948 h11948 h-67000;v1881|#21"} #end;
+      :1: #9 until if (cycles(4))
+      restart #29
+      #pragma diagram {"tp":"h19000;v172|#9 h2817 h2817 h-29000;v171|#29"} #end;
+      :2: #21 until if (last'done and c <> ' ')
+      restart #4
+      #pragma diagram {"tp":"h-67000;v5305|#21 h-500 h-500 h-500 h-6781 h-6781;v1871 v3743 v3743 h-2608;v1871 h-2608 h-667 h-667 h103138;v0|#4"} #end;
+      :1: #21 until if (last'done and c = '\x0A')
+      restart #1
+      #pragma diagram {"tp":"h-66561;v-7039|#21 v-500 v-11219 v-5109 v-10219 h-10219;v-5109 h-20437 h-10219 h-84164 h-31863 h-75907 h-19549;v9775 v37953 v667 v667 h0;v-6000|#1"} #end;
+      :1: #29 until if (cycles(4))
+      restart #31
+      #pragma diagram {"tp":"h28540;v9828|#29 v500 v500 v500 v3228 h3456;v3228 h3456 h667 h667 h-38000;v0|#31"} #end;
+      :1: #31 until if (done)
+      restart #23
+      #pragma diagram {"tp":"h-32000;v-7039|#31 v-989 v-989 h0;v6000|#23"} #end;
+      :1: #23 until if (c = ' ')
+      restart #32
+      #pragma diagram {"tp":"h6000;v500|#23 h3277 h3277 h-6000;v500|#32"} #end;
+      :1: #32 until if (c = ' ')
+      restart #34
+      #pragma diagram {"tp":"h6000;v1334|#32 h1943 h1943 h-22000;v-1334|#34"} #end;
+      :2: #23 until 
+      restart #4
+      #pragma diagram {"tp":"h596;v-6000|#23 v-3993 v-3993 h41363;v6000|#4"} #end;
+      :2: #32 until 
+      restart #4
+      #pragma diagram {"tp":"h766;v-6000|#32 v-3993 v-3993 h63363;v6000|#4"} #end;
+      :1: #4 until if (c= '\x0A')
+      restart #1
+      #pragma diagram {"tp":"h-103138;v3500|#4 h-5455 h-5455 h7000;v3500|#1"} #end;
+      :1: #34 until if (done)
+      restart #26
+      #pragma diagram {"tp":"h-14000;v-6000|#34 v-441 v-441 h-2000;v6000|#26"} #end;
+      :1: #26 until if (c = ' ')
+      restart #27
+      #pragma diagram {"tp":"h6000;v500|#26 h2158 h2158 h-6000;v500|#27"} #end;
+      :1: #27 until if (c = ' ')
+      restart #30
+      #pragma diagram {"tp":"h6000;v-4018|#27 h5505 h5505 h-21000;v5057|#30"} #end;
+      :2: #41 until if (c <> ' ')
+      restart #4
+      #pragma diagram {"tp":"h-6000;v782|#41 h-500 h-500 h-500 h-8878 h-8878;v-3879 v-7757 v-7757 h-7358;v-3879 h-7358 h-667 h-667 h103138;v1500|#4"} #end;
+      :1: #33 until if (done)
+      restart #40
+      #pragma diagram {"tp":"h22000;v-5729|#33 h2170 h2170 h-28000;v7589|#40"} #end;
+      :1: #40 until if (done)
+      restart #37
+      #pragma diagram {"tp":"h-9205;v-7969|#40 v-3174 v-3174 h0;v6110|#37"} #end;
+      :1: #37 until if (cycles(8))
+      restart #42
+      #pragma diagram {"tp":"h17000;v5310|#37 h8239 h8239 h-34000;v-9959|#42"} #end;
+      :2: #42 until if (done and c = '\x0A')
+      restart #1
+      #pragma diagram {"tp":"h-277;v10758|#42 v500 v500 v500 v10053 h-20106;v10053 h-20107 h-86081 h-86081 h-86081 h-53772 h-53772;v-24244 v-24244 v-2642 h1321;v-2642 h1321 h667 h667 h-7000;v0|#1"} #end;
+      :3: #1 until if (c = '\x0A')
+      restart #1
+      #pragma diagram {"tp":"h-7000;v-228|#1 h-500 h-500 h-500 h-1571 h-1571;v-1750 v-3500 v-3500 h1524;v-1750 h3047 h3047 h1524;v1364 v1364 v667 v667 h-2500;v-6000|#1"} #end;
+      :1: #30 until if (done)
+      restart #41
+      #pragma diagram {"tp":"h-1305;v7039|#30 v2234 v2234 h0;v-6000|#41"} #end;
+      :1: #41 until if (c = ' ')
+      restart #33
+      #pragma diagram {"tp":"h0;v6000|#41 v2319 v2319 h0;v-6110|#33"} #end;
+    #pragma diagram {"xy":"H167639;V13750","wh":"448277;117500"} #end)
+}
+
+inline node cycles (n: uint32;)
+  returns (over:bool;)
+{
+  diagram
+    (activate #0
+      if (n <= 0) pre over
+      then
+        {
+          diagram
+            (let over = true;
+            #pragma diagram {"xy":"h-12346;v0","wh":"20000;3200"} #end)
+        #pragma diagram {"xy":"h0;v-10000","wh":"50000;7200"} #end
+        }
+      else
+        {
+          diagram
+            (let c = n pre c -1;
+             over = c <= 0;
+            #pragma diagram {"xy":"h-11458;v-4388","wh":"22000;4219"} #end)
+            
+            (var
+                c;)
+        #pragma diagram {"xy":"h0;v7459","wh":"50000;20000"} #end
+        }
+    #pragma diagram {"xy":"H-39362;V-57062","wh":"50000;34919"} #end)
+}
+
+node lat_lon (c: Char::t;
+              is_lat: bool;)
+  returns (angle: float64 last = 0;
+           done:bool default = false;)
+{
+  diagram
+    (var
+        sign last = 1;
+        deg;
+        min last = 0;
+        sec last = 0;)
+    (automaton #1
+      state #3 sign
+      #pragma diagram {"xy":"h0;v30449","wh":"104000;15938"} #end :
+        diagram
+          (let 
+               sign = if c = 'S' or c = 'W' then -1 else 1;
+               angle = sign * ((last'deg:>float64) + (last'min:>float64) / 60 + (last'sec:>float64) / 3600);
+               done = true;
+          #pragma diagram {"xy":"h0;v0","wh":"96000;7938"} #end)
+      initial state #5 deg
+      #pragma diagram {"xy":"h-15264;v-32418","wh":"46000;15999"} #end :
+        diagram
+          (let 
+           digit, _ = Char::to_digit(c);
+           deg = (0 pre deg * 10) + digit;
+          #pragma diagram {"xy":"h-2000;v960","wh":"34000;6078"} #end)
+          
+          (var
+              digit;)
+      state #7 min
+      #pragma diagram {"xy":"h-8038;v-12712","wh":"46000;15999"} #end :
+        diagram
+          (let 
+           digit, _ = Char::to_digit(c);
+           min = (0 pre min * 10) + digit;
+          #pragma diagram {"xy":"h-2000;v960","wh":"34000;6078"} #end)
+          
+          (var
+              digit;)
+      state #9 sec
+      #pragma diagram {"xy":"h-6525;v7923","wh":"51925;17858"} #end :
+        diagram
+          (let 
+           digit, _ = Char::to_digit(c);
+           sec = (0 pre sec * 10) + digit;
+          #pragma diagram {"xy":"h-4962;v960","wh":"34000;7938"} #end)
+          
+          (var
+              digit;)
+      :1: #9 until if (cycles(2))
+      restart #3
+      #pragma diagram {"tp":"h0;v8929|#9 v1876 v1876 h-6525;v-7969|#3"} #end;
+      :1: #5 until if (false pre is_lat pre true)
+      restart #7
+      #pragma diagram {"tp":"h3612;v7999|#5 v1236 v1236 h-3612;v-7999|#7"} #end;
+      :1: #7 until if (cycles(2))
+      restart #9
+      #pragma diagram {"tp":"h0;v8000|#7 v1236 v1236 h-1512;v-8929|#9"} #end;
+    #pragma diagram {"xy":"H-8286;V37377","wh":"112000;88835"} #end)
+}
+
+node elevation (c: Char::t;)
+  returns (elev: int32 last = 0;
+           done: bool last = false;)
+{
+  diagram
+    (var
+        sign;)
+    (automaton #0
+      initial state #2 sign
+      #pragma diagram {"xy":"h-38616;v-18783","wh":"48000;14414"} #end :
+        diagram
+          (let sign = if c = '-' then -1 else 1;
+          #pragma diagram {"xy":"h0;v1607","wh":"40000;3200"} #end)
+      state #4 digits
+      #pragma diagram {"xy":"h26616;v-15994","wh":"72000;19657"} #end :
+        diagram
+          (let 
+           digit, is_digit = Char::to_digit(c);
+           di32 = (digit :> int32);
+           d = sign * di32 -> di32;
+           elev = if is_digit then (0 pre elev * 10) + d else 0 pre elev;
+           done = cycles(5);
+          #pragma diagram {"xy":"h0;v0","wh":"64000;11657"} #end)
+          
+          (var
+              digit;
+              di32;
+              d;
+              is_digit;)
+      state #5 done
+      #pragma diagram {"xy":"h30012;v12915","wh":"40000;26000"} #end :
+      :1: #2 until 
+      restart #4
+      #pragma diagram {"tp":"h24000;v84|#2 h1744 h1744 h-36000;v-2705|#4"} #end;
+      :1: #4 until if (done)
+      restart #5
+      #pragma diagram {"tp":"h3396;v9828|#4 v2027 v2027 h0;v-13000|#5"} #end;
+    #pragma diagram {"xy":"H161113;V4285","wh":"133232;59980"} #end)
+}
+
+node surface (c: Char::t;)
+  returns (o: Runway::surface_type default = Runway::UNKNOWN;)
+{
+  diagram
+    (automaton #1
+      initial state #2 Start
+      #pragma diagram {"xy":"h-117200;v-66400","wh":"12000;12000"} #end :
+      state #3 A
+      #pragma diagram {"xy":"h-88650;v-66400","wh":"12000;12000"} #end :
+      state #4 AS
+      #pragma diagram {"xy":"h-61400;v-66400","wh":"12000;12000"} #end :
+      state #5 ASP
+      #pragma diagram {"xy":"h-34150;v-66400","wh":"12000;12000"} #end :
+      state #6 ASPH
+      #pragma diagram {"xy":"h-6900;v-66400","wh":"12000;12000"} #end :
+      state #7 ASPHA
+      #pragma diagram {"xy":"h20350;v-66400","wh":"12000;12000"} #end :
+      state #8 ASPHAL
+      #pragma diagram {"xy":"h47600;v-66400","wh":"12000;12000"} #end :
+      state #9 Done
+      #pragma diagram {"xy":"h114550;v6100","wh":"17300;157000"} #end :
+      state #10 ASPHALT
+      #pragma diagram {"xy":"h81012;v-75725","wh":"12000;12000"} #end :
+      state #11 CONCR
+      #pragma diagram {"xy":"h20575;v-45200","wh":"12000;12000"} #end :
+      state #12 CONCRET
+      #pragma diagram {"xy":"h75075;v-45200","wh":"12000;12000"} #end :
+      state #13 CO
+      #pragma diagram {"xy":"h-61175;v-45200","wh":"12000;12000"} #end :
+      state #14 CONC
+      #pragma diagram {"xy":"h-6675;v-45200","wh":"12000;12000"} #end :
+      state #15 C
+      #pragma diagram {"xy":"h-88425;v-45200","wh":"12000;12000"} #end :
+      state #16 CONCRE
+      #pragma diagram {"xy":"h47825;v-45200","wh":"12000;12000"} #end :
+      state #17 CON
+      #pragma diagram {"xy":"h-33925;v-45200","wh":"12000;12000"} #end :
+      state #18 G
+      #pragma diagram {"xy":"h-88650;v-24925","wh":"12000;12000"} #end :
+      state #19 GR
+      #pragma diagram {"xy":"h-61400;v-24925","wh":"12000;12000"} #end :
+      state #20 GRASS_
+      #pragma diagram {"xy":"h47600;v-24925","wh":"12000;12000"} #end :
+      state #21 GRAS
+      #pragma diagram {"xy":"h-6900;v-24925","wh":"12000;12000"} #end :
+      state #22 GRASS__
+      #pragma diagram {"xy":"h74850;v-24925","wh":"12000;12000"} #end :
+      state #23 GRA
+      #pragma diagram {"xy":"h-34150;v-24925","wh":"12000;12000"} #end :
+      state #24 GRASS
+      #pragma diagram {"xy":"h20350;v-24925","wh":"12000;12000"} #end :
+      state #25 GRAVEL
+      #pragma diagram {"xy":"h47825;v-3825","wh":"12000;12000"} #end :
+      state #26 GRAVEL_
+      #pragma diagram {"xy":"h75075;v-3825","wh":"12000;12000"} #end :
+      state #27 GRAVE
+      #pragma diagram {"xy":"h20575;v-3825","wh":"12000;12000"} #end :
+      state #28 GRAV
+      #pragma diagram {"xy":"h-6675;v-3825","wh":"12000;12000"} #end :
+      state #0 D
+      #pragma diagram {"xy":"h-88650;v16550","wh":"12000;12000"} #end :
+      state #29 DI
+      #pragma diagram {"xy":"h-61400;v16550","wh":"12000;12000"} #end :
+      state #30 DIRT__
+      #pragma diagram {"xy":"h47600;v16550","wh":"12000;12000"} #end :
+      state #31 DIRT
+      #pragma diagram {"xy":"h-6900;v16550","wh":"12000;12000"} #end :
+      state #32 DIRT___
+      #pragma diagram {"xy":"h74850;v16550","wh":"12000;12000"} #end :
+      state #33 DIR
+      #pragma diagram {"xy":"h-34150;v16550","wh":"12000;12000"} #end :
+      state #34 DIRT_
+      #pragma diagram {"xy":"h20350;v16550","wh":"12000;12000"} #end :
+      state #35 SAND___
+      #pragma diagram {"xy":"h75075;v37450","wh":"12000;12000"} #end :
+      state #36 SAN
+      #pragma diagram {"xy":"h-33925;v37450","wh":"12000;12000"} #end :
+      state #37 SAND
+      #pragma diagram {"xy":"h-6675;v37450","wh":"12000;12000"} #end :
+      state #38 SAND__
+      #pragma diagram {"xy":"h47825;v37450","wh":"12000;12000"} #end :
+      state #39 SA
+      #pragma diagram {"xy":"h-61175;v37450","wh":"12000;12000"} #end :
+      state #40 SAND_
+      #pragma diagram {"xy":"h20575;v37450","wh":"12000;12000"} #end :
+      state #41 S
+      #pragma diagram {"xy":"h-88425;v37450","wh":"12000;12000"} #end :
+      state #42 SNOW_
+      #pragma diagram {"xy":"h20350;v58025","wh":"12000;12000"} #end :
+      state #43 SN
+      #pragma diagram {"xy":"h-61400;v58025","wh":"12000;12000"} #end :
+      state #44 SNO
+      #pragma diagram {"xy":"h-34150;v58025","wh":"12000;12000"} #end :
+      state #45 SNOW___
+      #pragma diagram {"xy":"h74850;v58025","wh":"12000;12000"} #end :
+      state #46 SNOW
+      #pragma diagram {"xy":"h-6900;v58025","wh":"12000;12000"} #end :
+      state #47 SNOW__
+      #pragma diagram {"xy":"h47600;v58025","wh":"12000;12000"} #end :
+      state #48 WATER__
+      #pragma diagram {"xy":"h74850;v78600","wh":"12000;12000"} #end :
+      state #49 WAT
+      #pragma diagram {"xy":"h-34150;v78600","wh":"12000;12000"} #end :
+      state #50 WATE
+      #pragma diagram {"xy":"h-6900;v78600","wh":"12000;12000"} #end :
+      state #51 WATER_
+      #pragma diagram {"xy":"h47600;v78600","wh":"12000;12000"} #end :
+      state #52 WA
+      #pragma diagram {"xy":"h-61400;v78600","wh":"12000;12000"} #end :
+      state #53 WATER
+      #pragma diagram {"xy":"h20350;v78600","wh":"12000;12000"} #end :
+      state #54 W
+      #pragma diagram {"xy":"h-88650;v78600","wh":"12000;12000"} #end :
+      :1: #2 until if (c = 'A')
+      restart #3
+      #pragma diagram {"tp":"h6000;v0|#2 h5517 h5517 h-6000;v0|#3"} #end;
+      :1: #3 until if (c = 'S')
+      restart #4
+      #pragma diagram {"tp":"h6000;v0|#3 h5083 h5083 h-6000;v0|#4"} #end;
+      :1: #15 until if (c = 'O')
+      restart #13
+      #pragma diagram {"tp":"h6000;v0|#15 h5083 h5083 h-6000;v0|#13"} #end;
+      :1: #4 until if (c = 'P')
+      restart #5
+      #pragma diagram {"tp":"h6000;v1000|#4 h5083 h5083 h-6000;v1000|#5"} #end;
+      :1: #5 until if (c = 'H')
+      restart #6
+      #pragma diagram {"tp":"h6000;v500|#5 h5083 h5083 h-6000;v500|#6"} #end;
+      :1: #6 until if (c = 'A')
+      restart #7
+      #pragma diagram {"tp":"h6000;v0|#6 h5083 h5083 h-6000;v0|#7"} #end;
+      :1: #7 until if (c = 'L')
+      restart #8
+      #pragma diagram {"tp":"h6000;v0|#7 h5083 h5083 h-6000;v0|#8"} #end;
+      :1: #8 until if (c = 'T')
+      restart #10
+      #pragma diagram {"tp":"h6000;v-4662|#8 h7138 h7138 h-6000;v4662|#10"} #end;
+      :1: #10 until if (c = ' ')
+      {
+        let o = Runway::ASPHALT;
+      }
+      restart #9
+      #pragma diagram {"tp":"h6000;v4663|#10 h6296 h6296 h-8650;v-77162|#9"} #end;
+      :2: #2 until if (c = 'C')
+      restart #15
+      #pragma diagram {"tp":"h-50;v6000|#2 v500 v500 v500 v5850 h10412;v5850 h10412 h667 h667 h-6000;v-2000|#15"} #end;
+      :1: #13 until if (c = 'N')
+      restart #17
+      #pragma diagram {"tp":"h6000;v-500|#13 h5083 h5083 h-6000;v-500|#17"} #end;
+      :1: #17 until if (c = 'C')
+      restart #14
+      #pragma diagram {"tp":"h6000;v0|#17 h5083 h5083 h-6000;v0|#14"} #end;
+      :1: #14 until if (c = 'R')
+      restart #11
+      #pragma diagram {"tp":"h6000;v0|#14 h5083 h5083 h-6000;v0|#11"} #end;
+      :1: #11 until if (c = 'E')
+      restart #16
+      #pragma diagram {"tp":"h6000;v-1000|#11 h5083 h5083 h-6000;v-1000|#16"} #end;
+      :1: #16 until if (c = 'T')
+      restart #12
+      #pragma diagram {"tp":"h6000;v0|#16 h5083 h5083 h-6000;v0|#12"} #end;
+      :1: #12 until if (c = 'E')
+      {
+        let o = Runway::CONCRETE;
+      }
+      restart #9
+      #pragma diagram {"tp":"h6000;v0|#12 h8275 h8275 h-8650;v-51300|#9"} #end;
+      :1: #24 until if (c = ' ')
+      restart #20
+      #pragma diagram {"tp":"h6000;v-1000|#24 h5083 h5083 h-6000;v-1000|#20"} #end;
+      :1: #20 until if (c = ' ')
+      restart #22
+      #pragma diagram {"tp":"h6000;v0|#20 h5083 h5083 h-6000;v0|#22"} #end;
+      :1: #18 until if (c = 'R')
+      restart #19
+      #pragma diagram {"tp":"h6000;v0|#18 h5083 h5083 h-6000;v0|#19"} #end;
+      :1: #19 until if (c = 'A')
+      restart #23
+      #pragma diagram {"tp":"h6000;v-500|#19 h5083 h5083 h-6000;v-500|#23"} #end;
+      :1: #21 until if (c = 'S')
+      restart #24
+      #pragma diagram {"tp":"h6000;v0|#21 h5083 h5083 h-6000;v0|#24"} #end;
+      :1: #23 until if (c = 'S')
+      restart #21
+      #pragma diagram {"tp":"h6000;v0|#23 h5083 h5083 h-6000;v0|#21"} #end;
+      :1: #28 until if (c = 'E')
+      restart #27
+      #pragma diagram {"tp":"h6000;v0|#28 h5083 h5083 h-6000;v0|#27"} #end;
+      :1: #27 until if (c = 'L')
+      restart #25
+      #pragma diagram {"tp":"h6000;v-1000|#27 h5083 h5083 h-6000;v-1000|#25"} #end;
+      :1: #25 until if (c = ' ')
+      restart #26
+      #pragma diagram {"tp":"h6000;v0|#25 h5083 h5083 h-6000;v0|#26"} #end;
+      :3: #2 until if (c = 'G')
+      restart #18
+      #pragma diagram {"tp":"h-50;v6000|#2 v500 v500 v500 v16488 h10300;v16488 h10300 h667 h667 h-6000;v-1000|#18"} #end;
+      :2: #23 until if (c = 'V')
+      restart #28
+      #pragma diagram {"tp":"h-100;v6000|#23 v500 v500 v500 v6800 h9788;v6800 h9788 h667 h667 h-6000;v0|#28"} #end;
+      :1: #22 until if (c = ' ')
+      {
+        let o = Runway::GRASS;
+      }
+      restart #9
+      #pragma diagram {"tp":"h6000;v0|#22 h8350 h8350 h-8650;v-31025|#9"} #end;
+      :1: #26 until if (c = ' ')
+      {
+        let o = Runway::GRAVEL;
+      }
+      restart #9
+      #pragma diagram {"tp":"h6000;v0|#26 h8275 h8275 h-8650;v-9925|#9"} #end;
+      :1: #34 until if (c = ' ')
+      restart #30
+      #pragma diagram {"tp":"h6000;v-1000|#34 h5083 h5083 h-6000;v-1000|#30"} #end;
+      :1: #30 until if (c = ' ')
+      restart #32
+      #pragma diagram {"tp":"h6000;v0|#30 h5083 h5083 h-6000;v0|#32"} #end;
+      :1: #0 until if (c = 'I')
+      restart #29
+      #pragma diagram {"tp":"h6000;v0|#0 h5083 h5083 h-6000;v0|#29"} #end;
+      :1: #29 until if (c = 'R')
+      restart #33
+      #pragma diagram {"tp":"h6000;v-500|#29 h5083 h5083 h-6000;v-500|#33"} #end;
+      :1: #31 until if (c = ' ')
+      restart #34
+      #pragma diagram {"tp":"h6000;v0|#31 h5083 h5083 h-6000;v0|#34"} #end;
+      :1: #33 until if (c = 'T')
+      restart #31
+      #pragma diagram {"tp":"h6000;v0|#33 h5083 h5083 h-6000;v0|#31"} #end;
+      :4: #2 until if (c = 'D')
+      restart #0
+      #pragma diagram {"tp":"h-50;v6000|#2 v500 v25317 v12158 v18238 h10300;v18238 h10300 h667 h667 h-6000;v-2500|#0"} #end;
+      :1: #32 until if (c = ' ')
+      {
+        let o = Runway::DIRT;
+      }
+      restart #9
+      #pragma diagram {"tp":"h6000;v0|#32 h8350 h8350 h-8650;v10450|#9"} #end;
+      :2: #10 until if (c = 'C')
+      {
+        let o = Runway::ASPHALT_CONCRETE;
+      }
+      restart #9
+      #pragma diagram {"tp":"h-262;v6000|#10 v500 v500 v500 v1562 h2583;v1562 h5167 h5167 h2583;v-994 v-1987 v-1987 h3825;v-994 h3825 h667 h667 h-8650;v-77162|#9"} #end;
+      :1: #39 until if (c = 'N')
+      restart #36
+      #pragma diagram {"tp":"h6000;v-500|#39 h5083 h5083 h-6000;v-500|#36"} #end;
+      :1: #41 until if (c = 'A')
+      restart #39
+      #pragma diagram {"tp":"h6000;v0|#41 h5083 h5083 h-6000;v0|#39"} #end;
+      :1: #40 until if (c = ' ')
+      restart #38
+      #pragma diagram {"tp":"h6000;v-1000|#40 h5083 h5083 h-6000;v-1000|#38"} #end;
+      :1: #37 until if (c = ' ')
+      restart #40
+      #pragma diagram {"tp":"h6000;v0|#37 h5083 h5083 h-6000;v0|#40"} #end;
+      :1: #36 until if (c = 'D')
+      restart #37
+      #pragma diagram {"tp":"h6000;v0|#36 h5083 h5083 h-6000;v0|#37"} #end;
+      :1: #38 until if (c = ' ')
+      restart #35
+      #pragma diagram {"tp":"h6000;v0|#38 h5083 h5083 h-6000;v0|#35"} #end;
+      :1: #35 until if (c = ' ')
+      {
+        let o = Runway::SAND;
+      }
+      restart #9
+      #pragma diagram {"tp":"h6000;v0|#35 h8275 h8275 h-8650;v31350|#9"} #end;
+      :5: #2 until if (c = 'S')
+      restart #41
+      #pragma diagram {"tp":"h-50;v6000|#2 v500 v37800 v18400 v20825 h10412;v20825 h10412 h667 h667 h-6000;v500|#41"} #end;
+      :1: #46 until if (c = ' ')
+      restart #42
+      #pragma diagram {"tp":"h6000;v0|#46 h5083 h5083 h-6000;v0|#42"} #end;
+      :1: #44 until if (c = 'W')
+      restart #46
+      #pragma diagram {"tp":"h6000;v0|#44 h5083 h5083 h-6000;v0|#46"} #end;
+      :1: #43 until if (c = 'O')
+      restart #44
+      #pragma diagram {"tp":"h6000;v-500|#43 h5083 h5083 h-6000;v-500|#44"} #end;
+      :1: #47 until if (c = ' ')
+      restart #45
+      #pragma diagram {"tp":"h6000;v0|#47 h5083 h5083 h-6000;v0|#45"} #end;
+      :1: #42 until if (c = ' ')
+      restart #47
+      #pragma diagram {"tp":"h6000;v-1000|#42 h5083 h5083 h-6000;v-1000|#47"} #end;
+      :1: #45 until if (c = ' ')
+      {
+        let o = Runway::SNOW;
+      }
+      restart #9
+      #pragma diagram {"tp":"h6000;v0|#45 h8350 h8350 h-8650;v51925|#9"} #end;
+      :2: #41 until if (c = 'N')
+      restart #43
+      #pragma diagram {"tp":"h175;v6000|#41 v500 v500 v500 v6288 h9425;v6288 h9425 h667 h667 h-6000;v-500|#43"} #end;
+      :1: #52 until if (c = 'T')
+      restart #49
+      #pragma diagram {"tp":"h6000;v-500|#52 h5083 h5083 h-6000;v-500|#49"} #end;
+      :1: #54 until if (c = 'A')
+      restart #52
+      #pragma diagram {"tp":"h6000;v0|#54 h5083 h5083 h-6000;v0|#52"} #end;
+      :1: #53 until if (c = ' ')
+      restart #51
+      #pragma diagram {"tp":"h6000;v-1000|#53 h5083 h5083 h-6000;v-1000|#51"} #end;
+      :1: #50 until if (c = 'R')
+      restart #53
+      #pragma diagram {"tp":"h6000;v0|#50 h5083 h5083 h-6000;v0|#53"} #end;
+      :1: #49 until if (c = 'E')
+      restart #50
+      #pragma diagram {"tp":"h6000;v0|#49 h5083 h5083 h-6000;v0|#50"} #end;
+      :1: #51 until if (c = ' ')
+      restart #48
+      #pragma diagram {"tp":"h6000;v0|#51 h5083 h5083 h-6000;v0|#48"} #end;
+      :6: #2 until if (c = 'W')
+      restart #54
+      #pragma diagram {"tp":"h-50;v6000|#2 v500 v64867 v31933 v20600 h10300;v20600 h10300 h667 h667 h-6000;v-500|#54"} #end;
+      :1: #48 until if (c = ' ')
+      {
+        let o = Runway::WATER;
+      }
+      restart #9
+      #pragma diagram {"tp":"h6000;v0|#48 h8350 h8350 h-8650;v72500|#9"} #end;
+    #pragma diagram {"xy":"H70750;V41600","wh":"254400;177200"} #end)
+}
+
+node number (c: Char::t;
+             nb_digits : uint32;
+             init: 'T;)
+  returns (o: 'T last = init;
+           done:bool last = false;)
+  where 'T unsigned
+{
+  diagram
+    (var
+        digit;)
+    (automaton #0
+      initial state #2 reading
+      #pragma diagram {"xy":"h-25500;v0","wh":"50000;17797"} #end :
+        diagram
+          (let 
+               
+               digit, _ = Char::to_digit(c);
+               o = (last'o * 10) + (digit :> 'T) ;
+          #pragma diagram {"xy":"h0;v0","wh":"42000;9797"} #end)
+      state #3 done
+      #pragma diagram {"xy":"h30500;v0","wh":"12000;12000"} #end :
+      :1: #2 until if (cycles(nb_digits))
+      {
+        let done = true;
+      }
+      restart #3
+      #pragma diagram {"tp":"h25000;v0|#2 h8333 h8333 h-6000;v0|#3"} #end;
+    #pragma diagram {"xy":"H3093;V-19188","wh":"109000;34000"} #end)
+}

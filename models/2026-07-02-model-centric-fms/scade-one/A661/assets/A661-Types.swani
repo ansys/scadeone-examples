@@ -1,0 +1,20 @@
+-- version swan: 2027.0 graph: 2.1
+type fr180_4 = uint32 -- an angle coded on a uint32
+;
+
+type fr32768 = uint32 -- a distance in miles coded on a uint 32
+;
+
+type enable = enum {False, True, TrueWithValidation};
+
+type halo = enum {No_Halo, Halo, Halo_Same_Level};
+
+type toggle_state = enum {Unselected, Selected};
+
+type opening_mode = enum {Open_Up, Open_Down};
+
+type editbox_inner_state = enum {Editbox_Open, Editbox_Confirmed, Editbox_Aborted};
+
+type alignment_lcr = enum {lcr_left, lcr_right, lcr_center};
+
+type alignment_lrtb = enum {lrtb_left, lrtb_right, lrtb_top, lrtb_bottom};

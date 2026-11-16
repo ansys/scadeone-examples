@@ -1,0 +1,12 @@
+-- version swan: 2027.0 graph: 2.1
+type t = char;
+
+function to_u8 (c: t;)
+  returns (o: uint8;);
+
+function of_u8 (u : uint8;)
+  returns (c: t;);
+
+function to_digit (c:t;)
+  returns (digit: uint8;
+           is_digit: bool;);

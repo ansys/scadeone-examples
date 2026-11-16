@@ -1,0 +1,61 @@
+-- version swan: 2027.0 graph: 2.1
+use Runway as Ord;
+
+use Str32Array as StrArray;
+
+const N: uint16 = 16;
+
+type t = {sz:uint16, d: Ord::t^N};
+
+const empty = {sz: 0, d: Ord::d^N } : t;
+
+function is_empty (s: t;)
+  returns (e:bool;);
+
+inline function singleton (v: Ord::t;)
+  returns (s: t;);
+
+type add_status = AlreadyIn {} | Inserted{} | CarryOverflow {Ord::t};
+
+function add (s_in *: t;
+              v: Ord::t;)
+  returns (s_out at s_in:t;
+           status: add_status;);
+
+inline function mem (s: t;
+                     v:Ord::t;)
+  returns (in_mem:bool;);
+
+function add_array <<M>> (s_in: t;
+                          a: Ord::t^M;)
+  returns (s_out:t;
+           status: add_status^M;);
+
+function intersection (a:t;
+                       b:t;)
+  returns (i:t;);
+
+type remove_status = Removed {} | NotInSet {};
+
+function remove (s_in: t;
+                 v: Ord::t;)
+  returns (s_out:t;
+           status: remove_status;);
+
+function union (a: t;
+                b:t;)
+  returns (u:t;
+           carry:t;);
+
+function union_one (a: t;
+                    ai_in: uint32;
+                    b:t;
+                    bi_in: uint32;)
+  returns (u:t;
+           ai_out:uint32;
+           bi_out:uint32;);
+
+const d = empty;
+
+function ids_as_string_array (s_in:t;)
+  returns (ids: StrArray::t;);

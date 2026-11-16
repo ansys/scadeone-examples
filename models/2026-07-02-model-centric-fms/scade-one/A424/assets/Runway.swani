@@ -1,0 +1,26 @@
+-- version swan: 2027.0 graph: 2.1
+use ICAO;
+
+type t = {icao: ICAO::t, id: char^4, length_ft: uint32, width_ft: uint16, surface: surface_type, lat_thr: float64, lon_thr: float64, elev_thr_ft: int32, heading_deg10: uint16};
+
+type surface_type =  enum {
+  ASPHALT,
+  CONCRETE,
+  ASPHALT_CONCRETE,
+  GRASS,
+  GRAVEL,
+  DIRT,
+  SAND,
+  SNOW,
+  WATER,
+  UNKNOWN
+};
+
+const d = {icao: '\x00'^4, id: '\x00'^4, length_ft:0, width_ft:0, surface:UNKNOWN, lat_thr: 0, lon_thr: 0, elev_thr_ft: 0, heading_deg10: 0}:t
+;
+
+function cmp (a:t delay0;
+              b:t delay0;)
+  returns (ord:order;);
+
+type order = enum {Smaller, Equal, Bigger};

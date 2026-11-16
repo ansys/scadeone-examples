@@ -1,0 +1,132 @@
+-- version swan: 2027.0 graph: 2.1
+use Buf;
+
+use Str32 as Str;
+
+use Str32Array as StrArray;
+
+use A661::Types as T;
+
+function mk_block <<NB_CMDS>> (layer_id: uint8;
+                               ctx: uint16;
+                               cmds : Runtime_Command^NB_CMDS;)
+  returns (b: Block_Structure;);
+
+type #pragma doc Table 6.5.4.1-1 – Block Structure Exchanged Between UA and CDS at Runtime #end Block_Structure = {layer_id: uint8, context_nb: uint16, nb_cmds: uint16, cmds: Runtime_Command^MAX_NB_CMDS};
+
+type #pragma doc Table 6.5.4.1-2 – Runtime Block Commands #end Runtime_Command = SetParameter{Set_Parameter_Structure} | WidgetEvent{Widget_Event_Structure} | UARequest{UA_request_Structure} | CDSNotification{CDS_Notification_Structure} | ErrorNotification{ Error_Notification_Structure };
+
+type Widget_Event_Structure = {wid: uint16, event_origin: uint16, event: Event_Structure};
+
+type UA_request_Structure = int32;
+
+type Set_Parameter_Structure =  {wid: uint16, nb_params: uint16, params: rt_param^MAX_NB_PARAMS};
+
+type Event_Structure = Selection{} | StringChange{Str::t} | StringConfirmed{Str::t} | StateChange{T::toggle_state} | SelEntryChange{uint16};
+
+type CDS_Notification_Structure = int32;
+
+type Error_Notification_Structure = int32;
+
+const MAX_NB_CMDS: uint16 = 24;
+
+const MAX_NB_PARAMS: uint16 = 20;
+
+const MAX_BLOCK_LOAD_SZ: uint16 = 1024;
+
+const MAX_BLOCK_SZ = MAX_BLOCK_LOAD_SZ + 12;
+
+function sp_header (wid: uint16 delay0;
+                    buf_in *:Buf::t delay0;)
+  returns (buf_out at buf_in :Buf::t delay0;);
+
+inline function sp_write_size (buf_before:Buf::t delay0;
+                               buf_after *:Buf::t delay0;)
+  returns (buf_out at buf_after:Buf::t ;);
+
+function encode_block (blk: Block_Structure delay0;
+                       buf_in *: Buf::t delay0;)
+  returns (buf_out at buf_in: Buf::t;);
+
+function encode_runtime_command (cmd: Runtime_Command delay0;
+                                 buf_in *: Buf::t delay0;)
+  returns (buf_out at buf_in: Buf::t;);
+
+type block_reader = Done{Block_Structure} | Reading{} | Error {} ;
+
+node decode_block (b: uint8;)
+  returns (out: block_reader;);
+
+type rt_param =
+    Visible {bool}
+  | Enable {T::enable}
+
+  | String {Str::t}
+  | LabelString {Str::t}
+  | FormatString {Str::t}
+  | LegendString {Str::t}
+
+  | EntryList {StrArray::t}
+
+  | PosX {int32}
+  | PosY {int32}
+  | PosXY {int32^2}
+
+  | SizeX {uint32}
+  | SizeY {uint32}
+  | SizeXY {uint32^2}
+
+  | SelectingAreaWidth {uint32}
+  | SelectingAreaHeight {uint32}
+
+  | LegendAreaSizeX {uint32}
+
+  | Prp_Sceen_X {int32}
+  | Prp_Sceen_Y {int32}
+  | Prp_Sceen_XY {int32^2}
+
+  | StyleSet {uint16}
+  | ColorIndex {uint8}
+  | FillIndex {uint8}
+  | Filled {bool}
+  | Font {uint8}
+
+  | NextFocusedWidget {uint16}
+  | NumberOfEntries {uint16}
+  | SelectedEntry {uint16}
+  | OpeningEntry {uint16}
+  | StartCursorPos {uint16}
+  | MapSynchronizationNumber {uint16}
+
+  | Alignment {T::alignment_lcr}
+  | LegendPosition {T::alignment_lrtb}
+  | OpeningMode {T::opening_mode}
+  | AutomaticFocusMotion {bool}
+  | EntryValidation {bool}
+  | InnerStateEdit {T::editbox_inner_state}
+  | Halo {T::halo}
+
+  | RotationAngle {T::fr180_4}
+  | Orientation {T::fr180_4}
+  | AC_Orientation {T::fr180_4}
+
+  | Range {T::fr32768}
+  | ScreenRange {uint32}
+
+  | Value {float32}
+
+  | Prp_Lat {T::fr180_4}
+  | Prp_Long {T::fr180_4}
+  | Prp_Lat_Long {T::fr180_4^2}
+
+  | AC_Lat {T::fr180_4}
+  | AC_Long {T::fr180_4}
+  | AC_Lat_Long {T::fr180_4^2};
+
+function encode_rt_param (msg: rt_param delay0;
+                          buf_in * : Buf::t delay0;)
+  returns (buf_out at buf_in: Buf::t;);
+
+function mk_sp <<NB_PARAMS>> (wid: uint16;
+                              params : rt_param^NB_PARAMS;)
+  returns (out: Runtime_Command;);

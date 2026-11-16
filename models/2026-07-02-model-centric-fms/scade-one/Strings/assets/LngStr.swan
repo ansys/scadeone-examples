@@ -1,0 +1,103 @@
+-- version swan: 2027.0 graph: 2.1
+function cmp (a: t;
+              b: t;)
+  returns (ord: order;)
+{
+  diagram
+    (activate $ActivateIf0
+       if a.sz < b.sz
+       then
+         {
+           diagram
+             (#0 def ord
+             #pragma diagram {"xy":"h-5725;v0"} #end)
+             (#1 expr Smaller
+             #pragma diagram {"xy":"h-32025;v0","wh":"12000;3200"} #end)
+             
+             (#2 wire #1 => #0)
+         #pragma diagram {"xy":"h0;v-20569","wh":"97850;7200"} #end
+         }
+       elsif a.sz > b.sz
+       then
+         {
+           diagram
+             (#3 expr Bigger
+             #pragma diagram {"xy":"h-31025;v0","wh":"10000;3200"} #end)
+             (#4 def ord
+             #pragma diagram {"xy":"h-5725;v0"} #end)
+             
+             (#5 wire #3 => #4)
+         #pragma diagram {"xy":"h0;v-9169","wh":"97850;7200"} #end
+         }
+       else
+         {
+           diagram
+             (#6 expr forward
+               <<M>> with <<ii>> [A] = (map Char::to_u8) <<M>> (a.cd); [B] = (map Char::to_u8) <<M>> (b.cd);
+               diagram
+                 (var
+                     o;)
+                 (let o = if A < B then Smaller else if A > B then Bigger else Equal;
+                 #pragma diagram {"xy":"h-6012;v0","wh":"36000;7938"} #end)
+               until ii >= a.sz - 1 or o <> Equal
+               returns (o)
+             #pragma diagram {"xy":"h-6212;v-1000","wh":"78625;24738"} #end)
+             (#8 def ord
+             #pragma diagram {"xy":"h42225;v0"} #end)
+             
+             (#9 wire #6 .(2) => #8
+             #pragma diagram {"wp":"v1000|#6 #8"} #end)
+         #pragma diagram {"xy":"h0;v13000","wh":"97850;28738"} #end
+         }
+    #pragma diagram {"xy":"H-12125;V-13981","wh":"97850;57738"} #end)
+}
+
+function append_char (s_in: t;
+                      c: Char::t;)
+  returns (s_out: t;)
+{
+  diagram
+    (#0 def s_out
+    #pragma diagram {"xy":"H35450;V-15450","wh":"10000;3200"} #end)
+    (#1 expr {#2}: t
+      where
+        (#2 group)
+    #pragma diagram {"xy":"H13450;V-15450","wh":"10000;10000"} #end)
+    (#3 expr s_in.sz + 1
+    #pragma diagram {"xy":"H-14350;V-18550","wh":"16000;3200"} #end)
+    (#4 expr s_in.cd
+    #pragma diagram {"xy":"H-42350;V-14850","wh":"12000;3200"} #end)
+    (#5 expr #6 with [s_in.sz] = #7
+      where
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H-16350;V-12950","wh":"16000;7000"} #end)
+    (#8 expr c
+    #pragma diagram {"xy":"H-40350;V-11050"} #end)
+    
+    (#9 wire #1 => #0)
+    (#10 wire #3 => #2 .(sz))
+    (#11 wire #4 => #6)
+    (#12 wire #5 => #2 .(cd))
+    (#13 wire #8 => #7)
+}
+
+function mk <<N>> (c: Char::t^N;)
+  returns (s: t;)
+{
+  diagram
+    (#0 def s
+    #pragma diagram {"xy":"H20575;V6550"} #end)
+    (#1 expr {#2}: t
+      where
+        (#2 group)
+    #pragma diagram {"xy":"H1425;V6550","wh":"10000;10000"} #end)
+    (#3 expr N
+    #pragma diagram {"xy":"H-37750;V3350"} #end)
+    (#4 expr c @ ('\x00'^(M - N))
+    #pragma diagram {"xy":"H-39175;V10350","wh":"22000;3200"} #end)
+    
+    (#5 wire #1 => #0)
+    (#6 wire #3 => #2 .(sz))
+    (#7 wire #4 => #2 .(cd))
+}

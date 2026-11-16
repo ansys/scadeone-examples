@@ -1,0 +1,8 @@
+-- version swan: 2027.0 graph: 2.1
+type t = float32;
+
+function to_u32 (c: t;)
+  returns (o: uint32;);
+
+function of_u32 (u : uint32;)
+  returns (c: t;);

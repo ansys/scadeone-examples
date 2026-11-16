@@ -1,0 +1,229 @@
+-- version swan: 2027.0 graph: 2.1
+inline function unchecked_write_byte_at (buf_in * : t;
+                                         b: uint8;
+                                         pos: index;)
+  returns (buf_out at buf_in: t;)
+{
+  diagram
+    (#3 def buf_out
+    #pragma diagram {"xy":"H-1550;V-1150","wh":"12000;3200"} #end)
+    (#7 expr buf_in
+    #pragma diagram {"xy":"H-84850;V-3050","wh":"10000;3200"} #end)
+    (#8 expr b
+    #pragma diagram {"xy":"H-55250;V750"} #end)
+    (#5 expr
+      #6 with
+        .bytes[pos] = #9;
+          where
+            (#6 group)
+            (#9 group)
+      #pragma diagram {"xy":"H-26650;V-1150","wh":"16000;7000"} #end)
+    
+    (#10 wire #5 => #3)
+    (#11 wire #7 => #6)
+    (#0 wire #8 => #9)
+}
+
+function unchecked_append_byte (buf_in * : t;
+                                b: uint8;)
+  returns (buf_out at buf_in: t;)
+{
+  diagram
+    (#0 expr
+      #1 with
+        .sz = #2;
+          where
+            (#1 group)
+            (#2 group)
+      #pragma diagram {"xy":"H-28950;V15650","wh":"16000;7000"} #end)
+    (#3 def buf_out
+    #pragma diagram {"xy":"H-2950;V15650","wh":"12000;3200"} #end)
+    (#4 expr buf_in.sz + 1
+    #pragma diagram {"xy":"H-61450;V17550","wh":"18000;3200"} #end)
+    (#5 block unchecked_write_byte_at
+    #pragma diagram {"xy":"H-65050;V8500","wh":"25200;9900"} #end)
+    (#6 expr buf_in
+    #pragma diagram {"xy":"H-103050;V12200","wh":"10000;3200"} #end)
+    (#7 expr b
+    #pragma diagram {"xy":"H-102050;V4800"} #end)
+    (#8 expr buf_in.sz
+    #pragma diagram {"xy":"H-105050;V8500","wh":"14000;3200"} #end)
+    
+    (#9 wire #5 => #1
+    #pragma diagram {"wp":"v0|#5 h7750 v5250 #1"} #end)
+    (#10 wire #0 => #3)
+    (#11 wire #4 => #2)
+    (#12 wire #6 => #5 .(buf_in))
+    (#13 wire #7 => #5 .(b))
+    (#14 wire #8 => #5 .(pos))
+}
+
+function write <<N>> (buf_in * : t;
+                      bytes: uint8^N;)
+  returns (buf_out at buf_in: t;)
+{
+  diagram
+    (activate #0
+       if buf_in.sz + N > MAX
+       then
+         {
+           diagram
+             (let buf_out = (buf_in with .overflow = true);
+             #pragma diagram {"xy":"h-18550;v0","wh":"48000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-11520","wh":"89100;7200"} #end
+         }
+       else
+         {
+           diagram
+             (#1 expr forward
+               <<N>> with [B] = bytes;
+               diagram
+                 (let buf = unchecked_append_byte(last'buf, B);
+                 #pragma diagram {"xy":"h0;v0","wh":"48000;3200"} #end)
+               returns (buf: last = buf_in)
+             #pragma diagram {"xy":"h-14250;v0","wh":"56600;19200"} #end)
+             (#10 def buf_out
+             #pragma diagram {"xy":"h36550;v0","wh":"12000;3200"} #end)
+             
+             (#11 wire #1 => #10
+             #pragma diagram {"wp":"v0|#1 #10"} #end)
+         #pragma diagram {"xy":"h0;v7380","wh":"89100;23200"} #end
+         }
+     #pragma diagram {"xy":"H1850;V-10914","wh":"89100;37959"} #end)
+}
+
+inline function mk <<N>> (bytes: uint8^N;)
+  returns (buf_out: t;)
+{
+  diagram
+    (#0 block write <<N>> 
+    #pragma diagram {"xy":"H-800;V-8900","wh":"20000;14000"} #end)
+    (#1 expr ! empty
+    #pragma diagram {"xy":"H-28900;V-5100","wh":"12000;3200"} #end)
+    (#2 expr bytes
+    #pragma diagram {"xy":"H-29900;V-14300","wh":"10000;3200"} #end)
+    (#3 def buf_out
+    #pragma diagram {"xy":"H22200;V-10600","wh":"12000;3200"} #end)
+    
+    (#4 wire #1 => #0 .(buf_in))
+    (#5 wire #2 => #0 .(bytes))
+    (#6 wire #0 => #3
+    #pragma diagram {"wp":"v-1700|#0 #3"} #end)
+}
+
+function write_at <<N>> (buf_in * : t;
+                         bytes: uint8^N;
+                         pos: index;)
+  returns (buf_out at buf_in: t;)
+{
+  diagram
+    (activate #0
+       if pos + N > MAX
+       then
+         {
+           diagram
+             (let buf_out = (buf_in with * .overflow = true);
+             #pragma diagram {"xy":"h-38800;v0","wh":"50000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-14450","wh":"131600;7200"} #end
+         }
+       else
+         {
+           diagram
+             (#1 expr forward
+               <<N>> with <<ii>> [B] = bytes;
+               diagram
+                 (let buf = unchecked_write_byte_at(last'buf, B, pos + ii);
+                 #pragma diagram {"xy":"h0;v0","wh":"58000;3200"} #end)
+               returns (buf: last = buf_in)
+             #pragma diagram {"xy":"h-30500;v-2850","wh":"66600;19200"} #end)
+             (#9 def buf_out
+             #pragma diagram {"xy":"h57800;v8950","wh":"12000;3200"} #end)
+             (#13 expr max(pos + N, buf_in.sz)
+             #pragma diagram {"xy":"h-10200;v10850","wh":"26000;3200"} #end)
+             (#10 expr
+               #14 with*
+                 .sz = #15;
+                   where
+                     (#14 group)
+                     (#15 group)
+               #pragma diagram {"xy":"h27300;v8950","wh":"16000;7000"} #end)
+             
+             (#16 wire #1 => #14
+             #pragma diagram {"wp":"v7950|#1 h8250 v1950 #14"} #end)
+             (#17 wire #10 => #9)
+             (#18 wire #13 => #15)
+         #pragma diagram {"xy":"h0;v7459","wh":"131600;28900"} #end
+         }
+     #pragma diagram {"xy":"H15600;V-11394","wh":"131600;43819"} #end)
+}
+
+function write_n <<N>> (buf_in * : t;
+                        bytes: uint8^N;
+                        n: uint16;)
+  returns (buf_out at buf_in: t;)
+{
+  diagram
+    (activate #0
+       if buf_in.sz + (n :> uint32) > MAX
+       then
+         {
+           diagram
+             (let buf_out = (buf_in with * .overflow = true);
+             #pragma diagram {"xy":"h-17550;v0","wh":"50000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-12450","wh":"89100;7200"} #end
+         }
+       else
+         {
+           diagram
+             (#1 expr forward
+               <<N>> with <<ii>> [B] = bytes;
+               unless ii >= n
+               diagram
+                 (let buf = unchecked_append_byte(last'buf, B);
+                 #pragma diagram {"xy":"h0;v0","wh":"48000;3200"} #end)
+               returns (buf: last = buf_in)
+             #pragma diagram {"xy":"h-14250;v0","wh":"56600;20900"} #end)
+             (#9 def buf_out
+             #pragma diagram {"xy":"h36550;v0","wh":"12000;3200"} #end)
+             
+             (#10 wire #1 .(2) => #9
+             #pragma diagram {"wp":"v0|#1 #9"} #end)
+         #pragma diagram {"xy":"h0;v7459","wh":"89100;24900"} #end
+         }
+     #pragma diagram {"xy":"H1850;V-10830","wh":"89100;39819"} #end)
+}
+
+inline function max (a: 'N;
+                     b: 'N;)
+  returns (m: 'N;)
+  where 'N numeric
+{
+  diagram
+    (let m = if a > b then a else b;
+    #pragma diagram {"xy":"H-22550;V-12150","wh":"34000;3200"} #end)
+}
+
+inline function current_pos (buf: t;)
+  returns (pos: index;)
+{
+  diagram
+    (let pos = buf.sz;
+    #pragma diagram {"xy":"H-41950;V-23350","wh":"22000;3200"} #end)
+}
+
+function write_test (buf_in * : t;
+                     bytes: uint8^4;)
+  returns (buf_out at buf_in: t;)
+{
+  diagram
+    (#0 block write <<4>> 
+    #pragma diagram {"xy":"H-20125;V325","wh":"20000;7000"} #end)
+    (#1 def buf_out
+    #pragma diagram {"xy":"H11375;V325","wh":"12000;3200"} #end)
+    (#2 expr (buf_in, bytes)
+    #pragma diagram {"xy":"H-55625;V325","wh":"20000;3200"} #end)
+    
+    (#3 wire #2 => #0)
+    (#4 wire #0 => #1
+    #pragma diagram {"wp":"v0|#0 #1"} #end)
+}

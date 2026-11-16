@@ -1,0 +1,12 @@
+-- version swan: 2027.0 graph: 2.0
+use Str32 as Str;
+
+node to_uint32 (b: uint8;)
+  returns (u: uint32;);
+
+node to_uint16 (b: uint8;)
+  returns (u: uint16;);
+
+node to_str (b: uint8;)
+  returns (s: Str::t;
+           complete: bool;);

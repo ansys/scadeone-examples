@@ -1,0 +1,20 @@
+-- version swan: 2027.0 graph: 2.1
+use Char;
+
+type t = Char::t^M;
+
+function cmp (a:t;
+              b:t;)
+  returns (ord:order;);
+
+type order = enum {Smaller, Equal, Bigger};
+
+const d = '\x00'^M;
+
+const M: uint16 = 4
+;
+
+const empty = '\x00'^M;
+
+function mk <<N>> (c: Char::t^N;)
+  returns (s: t;);

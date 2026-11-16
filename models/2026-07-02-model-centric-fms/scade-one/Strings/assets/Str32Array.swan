@@ -1,0 +1,33 @@
+-- version swan: 2027.0 graph: 2.1
+function mk <<N>> (strs: Str::t^N;)
+  returns (o: t;)
+{
+  diagram
+    (#0 def o
+    #pragma diagram {"xy":"H36575;V-24100"} #end)
+    (#1 expr strs @ (Str::empty^(M - N))
+    #pragma diagram {"xy":"H-25625;V-10400","wh":"30000;3200"} #end)
+    (#2 expr {#3}: t
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H15575;V-24100","wh":"10000;10000"} #end)
+    (#4 expr N
+    #pragma diagram {"xy":"H-14625;V-35800"} #end)
+    (#5 expr forward
+      <<M>> with <<ii>> 
+      diagram
+        (var
+            idx;)
+        (let idx = ii;
+        #pragma diagram {"xy":"h0;v0","wh":"18000;3200"} #end)
+      returns ([idx])
+    #pragma diagram {"xy":"H-24925;V-24100","wh":"28600;19200"} #end)
+    
+    (#7 wire #2 => #0)
+    (#8 wire #4 => #3 .(sz)
+    #pragma diagram {"wp":"#4 h7800 v9033 #3"} #end)
+    (#9 wire #1 => #3 .(a)
+    #pragma diagram {"wp":"#1 h16400 v-11033 #3"} #end)
+    (#10 wire #5 => #3 .(idx)
+    #pragma diagram {"wp":"v0|#5 #3"} #end)
+}

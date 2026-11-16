@@ -1,0 +1,9 @@
+-- version swan: 2027.0 graph: 2.0
+use Str32 as Str;
+
+const M: uint16 = 18;
+
+type t = {sz:uint16, idx: uint16 ^ M, a: Str::t ^ M};
+
+function mk <<N>> (strs: Str::t^N;)
+  returns (o: t;);

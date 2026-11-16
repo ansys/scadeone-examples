@@ -1,0 +1,17 @@
+{
+  "Version": "1.0",
+  "Name": "Strings",
+  "Dependencies": [],
+  "Resources": [
+    {
+      "Kind": "SourceFile",
+      "Path": "resources\\char.c",
+      "Key": ""
+    },
+    {
+      "Kind": "SourceFile",
+      "Path": "resources\\float.c",
+      "Key": ""
+    }
+  ]
+}

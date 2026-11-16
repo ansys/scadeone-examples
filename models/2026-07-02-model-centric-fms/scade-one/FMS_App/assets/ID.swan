@@ -1,0 +1,28 @@
+-- version swan: 2027.0 graph: 2.1
+const the_layer: uint8 = 0x1;
+
+const ICAO_EditBox = 0x0002_ui16;
+
+const RWY_ComboBox = 0x0003_ui16;
+
+const APT_Name_Label = 0x0009_ui16;
+
+const RWY_Surface_Label = 10_ui16;
+
+const RWY_Length_NumericReadout = 11_ui16;
+
+const RWY_Heading_NumericReadout = 13_ui16;
+
+const RWY_ID_Label = 12_ui16;
+
+const RWY_Info_BasicContainer = 14_ui16;
+
+const RWY_Width_NumericReadout = 17_ui16;
+
+const RWY_Elev_NumericReadout = 15_ui16;
+
+const AP_Count_NumericReadout = 32_ui16;
+
+const RW_Count_NumericReadout = 33_ui16;
+
+const Cycle_Count_NumericReadout = 31_ui16;

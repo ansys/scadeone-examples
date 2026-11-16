@@ -1,0 +1,933 @@
+-- version swan: 2027.0 graph: 2.1
+use A661::Const as C;
+
+use A661::Const::Param as P;
+
+use A661::Encode;
+
+use A661::Decode;
+
+use A661::Const::Evt as EVT;
+
+use Float32 as Float;
+
+function mk_block <<NB_CMDS>> (layer_id: uint8;
+                               ctx: uint16;
+                               cmds: Runtime_Command^NB_CMDS;)
+  returns (b: Block_Structure;)
+{
+  diagram
+    (#0 def b
+    #pragma diagram {"xy":"H4700;V-9467"} #end)
+    (#1 expr {#2}: Block_Structure
+      where
+        (#2 group)
+    #pragma diagram {"xy":"H-16050;V-9467","wh":"20000;29100"} #end)
+    (#3 expr layer_id
+    #pragma diagram {"xy":"H-49100;V-22850","wh":"12000;3200"} #end)
+    (#4 expr ctx
+    #pragma diagram {"xy":"H-47100;V-15050"} #end)
+    (#5 expr cmds @ (cmds[0]^(MAX_NB_CMDS - NB_CMDS))
+    #pragma diagram {"xy":"H-59250;V550","wh":"44000;3200"} #end)
+    (#6 expr NB_CMDS
+    #pragma diagram {"xy":"H-49100;V-7250","wh":"12000;3200"} #end)
+    
+    (#7 wire #1 => #0)
+    (#8 wire #3 => #2 .(layer_id))
+    (#9 wire #4 => #2 .(context_nb))
+    (#10 wire #6 => #2 .(nb_cmds))
+    (#11 wire #5 => #2 .(cmds))
+}
+
+function pad <<N>> (in: uint8^N;)
+  returns (buf: uint8^(MAX_BLOCK_SZ);
+           sz: uint32;)
+{
+  diagram
+    (let
+        buf = in @ (0x00^(MAX_BLOCK_SZ - N));
+        sz = N;
+    #pragma diagram {"xy":"H-54885;V-22481","wh":"44000;6078"} #end)
+}
+
+function encode_block (blk: Block_Structure;
+                       buf_in *: Buf::t;)
+  returns (buf_out at buf_in: Buf::t;)
+{
+  diagram
+    (#2 expr forward $WriteCommands
+      <<MAX_NB_CMDS>> with <<ii>> [cmd] = blk.cmds;
+      unless ii >= blk.nb_cmds
+      diagram
+        (let buf = encode_runtime_command (cmd, last'buf); 
+        #pragma diagram {"xy":"h0;v0","wh":"52000;3200"} #end)
+      returns (buf: last = header)
+    #pragma diagram {"xy":"H-1714;V44751","wh":"60600;20900"} #end)
+    (#20 expr [C::END_BLOCK, 0, 0, 0]
+    #pragma diagram {"xy":"H15586;V32201","wh":"26000;3200"} #end)
+    (#0 $WriteFooter block Buf::write <<4>> 
+    #pragma diagram {"xy":"H51086;V43001","wh":"12000;7000"} #end)
+    (#9 $ComputeBlockSize block ({op_expr%function buf => Buf::current_pos(buf) - !buf_in.sz%op_expr})
+    #pragma diagram {"xy":"H87334;V46140","wh":"45946;9178"} #end)
+    (#10 block Encode::of_uint32
+    #pragma diagram {"xy":"H120682;V46140","wh":"12000;7000"} #end)
+    (#8 expr [C::BEGIN_BLOCK, blk.layer_id] @ Encode::of_uint16(blk.context_nb) @ (0^4)
+    #pragma diagram {"xy":"H-34462;V21529","wh":"38000;6078"} #end)
+    (#18 def buf_out
+    #pragma diagram {"xy":"H177682;V44730","wh":"12000;3200"} #end)
+    (#29 $WriteHeader block Buf::write <<8>> 
+    #pragma diagram {"xy":"H18863;V19269","wh":"12000;7000"} #end)
+    (#30 expr buf_in
+    #pragma diagram {"xy":"H-8637;V16590","wh":"10000;3200"} #end)
+    (#31 def header
+    #pragma diagram {"xy":"H46363;V19269","wh":"10000;3200"} #end)
+    (#11 $WriteBlockSize block (Buf::write_at <<4>>  \ pos: 4)
+    #pragma diagram {"xy":"H149182;V44730","wh":"12000;13918"} #end)
+    
+    (#12 wire #10 => #11 .(bytes)
+    #pragma diagram {"wp":"v0|#10 #11"} #end)
+    (#13 wire #2 .(2) => #0 .(buf_in)
+    #pragma diagram {"wp":"v-500|#2 #0"} #end)
+    (#14 wire #9 => #10
+    #pragma diagram {"wp":"v0|#9 #10"} #end)
+    (#15 wire #20 => #0 .(bytes)
+    #pragma diagram {"wp":"#20 h7888 v9550 #0"} #end)
+    (#16 wire #0 => #9
+    #pragma diagram {"wp":"v1025|#0 #9"} #end)
+    (#19 wire #11 => #18
+    #pragma diagram {"wp":"v-0|#11 #18"} #end)
+    (#33 wire #30 => #29 .(buf_in)
+    #pragma diagram {"wp":"#30 h9750 v2570 #29"} #end)
+    (#34 wire #8 => #29 .(bytes))
+    (#35 wire #29 => #31
+    #pragma diagram {"wp":"v0|#29 #31"} #end)
+    (#17 wire #0 => #11 .(buf_in)
+    #pragma diagram {"wp":"v-2475|#0 #11"} #end)
+    
+    (var
+        header;)
+}
+
+function encode_runtime_command (cmd: Runtime_Command;
+                                 buf_in *: Buf::t;)
+  returns (buf_out at buf_in: Buf::t;)
+{
+  diagram
+    (activate #6 $ActivateWhen0 when cmd match
+       | SetParameter {sps} :
+         {
+           diagram
+             (#0 block encode_set_parameter
+             #pragma diagram {"xy":"h1450;v-25","wh":"20847;7000"} #end)
+             (#1 expr buf_in
+             #pragma diagram {"xy":"h-34373;v1925","wh":"10000;3200"} #end)
+             (#2 def buf_out
+             #pragma diagram {"xy":"h33373;v-25","wh":"12000;3200"} #end)
+             (#3 expr sps
+             #pragma diagram {"xy":"h-33373;v-1775"} #end)
+             
+             (#4 wire #0 => #2
+             #pragma diagram {"wp":"v0|#0 #2"} #end)
+             (#5 wire #1 => #0 .(buf_in))
+             (#10 wire #3 => #0 .(sps))
+         #pragma diagram {"xy":"h0;v-21479","wh":"82747;11050"} #end
+         }
+       | WidgetEvent {} :
+         {
+           diagram
+             (let buf_out = buf_in;
+             #pragma diagram {"xy":"h0;v0","wh":"32000;4219"} #end)
+         #pragma diagram {"xy":"h0;v-7644","wh":"82747;8219"} #end
+         }
+       | UARequest {} :
+         {
+           diagram
+             (let buf_out = buf_in;
+             #pragma diagram {"xy":"h0;v0","wh":"32000;4219"} #end)
+         #pragma diagram {"xy":"h0;v4775","wh":"82747;8219"} #end
+         }
+       | CDSNotification :
+         {
+           diagram
+             (let buf_out = buf_in;
+             #pragma diagram {"xy":"h0;v0","wh":"32000;4219"} #end)
+         #pragma diagram {"xy":"h0;v17194","wh":"82747;8219"} #end
+         }
+       | ErrorNotification :
+         {
+           diagram
+             (let buf_out = buf_in;
+             #pragma diagram {"xy":"h0;v0","wh":"32000;4219"} #end)
+         #pragma diagram {"xy":"h0;v29613","wh":"82747;8219"} #end
+         }
+     #pragma diagram {"xy":"H-49605;V49159","wh":"82747;67445"} #end)
+}
+
+function encode_set_parameter (sps: Set_Parameter_Structure;
+                               buf_in *: Buf::t;)
+  returns (buf_out at buf_in: Buf::t;)
+{
+  diagram
+    (#0 block sp_write_size
+    #pragma diagram {"xy":"H-9296;V3060","wh":"14285;7000"} #end)
+    (#1 expr !buf_in
+    #pragma diagram {"xy":"H-36938;V6960","wh":"12000;3200"} #end)
+    (#2 expr forward
+      <<MAX_NB_PARAMS>> with <<ii>> [param] = sps.params;
+      unless ii >= sps.nb_params
+      diagram
+        (let buf = encode_rt_param(param, last'buf);
+        #pragma diagram {"xy":"h0;v0","wh":"46000;3200"} #end)
+      returns (buf: last = sp_header(sps.wid, buf_in))
+    #pragma diagram {"xy":"H-60238;V-7590","wh":"54600;20900"} #end)
+    (#10 def buf_out
+    #pragma diagram {"xy":"H20346;V3060","wh":"12000;3200"} #end)
+    
+    (#11 wire #2 .(2) => #0 .(buf_after)
+    #pragma diagram {"wp":"v9400|#2 #0"} #end)
+    (#12 wire #1 => #0 .(buf_before)
+    #pragma diagram {"wp":"#1 h8750 v-2650 #0"} #end)
+    (#13 wire #0 => #10
+    #pragma diagram {"wp":"v0|#0 #10"} #end)
+}
+
+function sp_header (wid: uint16;
+                    buf_in *: Buf::t;)
+  returns (buf_out at buf_in: Buf::t;)
+{
+  diagram
+    (#0 expr Encode::of_uint16(C::CMD_SET_PARAMETER) @ [0, 0] @ Encode::of_uint16(wid) @ [0, 0]
+    #pragma diagram {"xy":"H-5375;V-56203","wh":"44000;7938"} #end)
+    (#1 expr buf_in
+    #pragma diagram {"xy":"H-22375;V-45175","wh":"10000;3200"} #end)
+    (#2 block Buf::write <<8>> 
+    #pragma diagram {"xy":"H31944;V-46175","wh":"12000;8249"} #end)
+    (#3 def buf_out
+    #pragma diagram {"xy":"H54655;V-45175","wh":"12000;3200"} #end)
+    
+    (#4 wire #1 => #2 .(buf_in))
+    (#5 wire #0 => #2 .(bytes)
+    #pragma diagram {"wp":"#0 h7160 v7348 #2"} #end)
+    (#6 wire #2 => #3
+    #pragma diagram {"wp":"v1000|#2 #3"} #end)
+}
+
+inline function sp_write_size (buf_before: Buf::t;
+                               buf_after *: Buf::t;)
+  returns (buf_out at buf_after: Buf::t;)
+{
+  diagram
+    (#0 expr Buf::current_pos(buf_before)
+    #pragma diagram {"xy":"H-5848;V12225","wh":"32000;3200"} #end)
+    (#1 expr #2 :> uint16
+      where
+        (#2 group)
+    #pragma diagram {"xy":"H52152;V10325","wh":"16000;7000"} #end)
+    (#3 def buf_out
+    #pragma diagram {"xy":"H161652;V5625","wh":"12000;3200"} #end)
+    (#4 expr Buf::current_pos(buf_before) + 2
+    #pragma diagram {"xy":"H79152;V5625","wh":"36000;3200"} #end)
+    (#5 block Encode::of_uint16
+    #pragma diagram {"xy":"H91152;V11225","wh":"12000;7000"} #end)
+    (#6 expr #7 - #8
+      where
+        (#7 group)
+        (#8 group)
+    #pragma diagram {"xy":"H27152;V10325"} #end)
+    (#9 block Buf::write_at <<2>> 
+    #pragma diagram {"xy":"H130152;V5625","wh":"20000;14000"} #end)
+    (#10 expr buf_after
+    #pragma diagram {"xy":"H90152;V958","wh":"14000;3200"} #end)
+    (#11 expr Buf::current_pos(buf_after)
+    #pragma diagram {"xy":"H-4848;V8425","wh":"30000;3200"} #end)
+    
+    (#12 wire #4 => #9 .(pos))
+    (#13 wire #0 => #8)
+    (#14 wire #9 => #3
+    #pragma diagram {"wp":"v0|#9 #3"} #end)
+    (#15 wire #5 => #9 .(bytes)
+    #pragma diagram {"wp":"v-1050|#5 #9"} #end)
+    (#16 wire #6 => #2)
+    (#17 wire #1 => #5)
+    (#18 wire #11 => #7)
+    (#19 wire #10 => #9 .(buf_in))
+}
+
+node decode_block (b: uint8;)
+  returns (out: block_reader default = Reading {};)
+{
+  diagram
+    (var
+        sz: uint32 last = 0;
+        layer_id last = 0;
+        context_number last = 0;
+        nb_cmds;
+        cmds last = ErrorNotification {0}^MAX_NB_CMDS;)
+    (automaton #11 $Block
+       initial state #1 Start
+       #pragma diagram {"xy":"h222500;v-2372","wh":"28000;12000"} #end :
+         diagram
+           (let nb_cmds = 0;
+           #pragma diagram {"xy":"h0;v0","wh":"20000;3200"} #end)
+       state #2 LayerID_1B
+       #pragma diagram {"xy":"h188500;v-2372","wh":"28000;11200"} #end :
+         diagram
+           (let layer_id = b;
+           #pragma diagram {"xy":"h0;v0","wh":"20000;3200"} #end)
+       state #0 Load
+       #pragma diagram {"xy":"h-1500;v-2372","wh":"60000;46797"} #end :
+         diagram
+           (activate #16 when decode_runtime_command(b) match
+              | RCDone {cmd} :
+                {
+                  diagram
+                    (let
+                        nb_cmds = last 'nb_cmds + 1;
+                        cmds = (last 'cmds with [last 'nb_cmds] = cmd);
+                    #pragma diagram {"xy":"h0;v0","wh":"48000;6078"} #end)
+                #pragma diagram {"xy":"h0;v-7300","wh":"52000;10078"} #end
+                }
+              | RCReading {} :
+                {
+                #pragma diagram {"xy":"h0;v4799","wh":"52000;6400"} #end
+                }
+              | RCError {} :
+                {
+                  diagram
+                    (let out = Error {};
+                    #pragma diagram {"xy":"h-2000;v0","wh":"22000;3200"} #end)
+                #pragma diagram {"xy":"h0;v15458","wh":"52000;7200"} #end
+                }
+            #pragma diagram {"xy":"h0;v-341","wh":"52000;38116"} #end)
+       state #3 Footer
+       #pragma diagram {"xy":"h-59500;v-2372","wh":"35800;12000"} #end :
+       state #10 BlockSize_4B
+       #pragma diagram {"xy":"h68500;v-2372","wh":"67000;15300"} #end :
+         diagram
+           (#5 block Decode::to_uint32
+           #pragma diagram {"xy":"h0;v0","wh":"12000;7300"} #end)
+           (#6 def sz
+           #pragma diagram {"xy":"h25500;v0"} #end)
+           (#7 expr b
+           #pragma diagram {"xy":"h-25500;v0"} #end)
+           
+           (#8 wire #5 => #6
+           #pragma diagram {"wp":"v0|#5 #6"} #end)
+           (#9 wire #7 => #5)
+       state #4 Padding_2B
+       #pragma diagram {"xy":"h-105500;v-2372","wh":"35800;12000"} #end :
+       state #12 Padding3
+       #pragma diagram {"xy":"h-185500;v-2372","wh":"102000;11200"} #end :
+         diagram
+           (let out = Done {layer_id: layer_id, context_nb: context_number, nb_cmds: nb_cmds, cmds: cmds};
+           #pragma diagram {"xy":"h0;v0","wh":"94000;3200"} #end)
+       state #14 ContextNumber_2B
+       #pragma diagram {"xy":"h138500;v-2372","wh":"52000;11200"} #end :
+         diagram
+           (let context_number = Decode::to_uint16(b);
+           #pragma diagram {"xy":"h0;v0","wh":"44000;3200"} #end)
+       :1: #1 until if (b = C::BEGIN_BLOCK)
+       restart #2
+       #pragma diagram {"tp":"h-14000;v0|#1 h-2000 h-2000 h14000;v0|#2"} #end;
+       :1: #14 until if (cycles(2))
+       restart #10
+       #pragma diagram {"tp":"h-26000;v97|#14 h-3500 h-3500 h33500;v97|#10"} #end;
+       :1: #0 until if (cycles(sz - 12))
+       restart #3
+       #pragma diagram {"tp":"h-30000;v0|#0 h-3367 h-3367 h17900;v0|#3"} #end;
+       :1: #10 until if (cycles(4_ui32))
+       restart #0
+       #pragma diagram {"tp":"h-33500;v0|#10 h-2167 h-2167 h30000;v0|#0"} #end;
+       :1: #3 until if (b = C::END_BLOCK)
+       restart #4
+       #pragma diagram {"tp":"h-17900;v97|#3 h-3400 h-3400 h17900;v97|#4"} #end;
+       :1: #4 until if (cycles(2_ui32))
+       restart #12
+       #pragma diagram {"tp":"h-17900;v97|#4 h-3700 h-3700 h51000;v97|#12"} #end;
+       :2: #2 until 
+       restart #14
+       #pragma diagram {"tp":"h-14000;v97|#2 h-3333 h-3333 h26000;v97|#14"} #end;
+       :1: #12 until 
+       restart #1
+       #pragma diagram {"tp":"h-283;v5600|#12 v500 v500 v500 v10521 h21043;v10522 h21043 h108637 h108637 h108637 h20143 h20143;v-10072 v-10071 v-667 v-667 h0;v6000|#1"} #end;
+     #pragma diagram {"xy":"H19283;V19729","wh":"481000;59542"} #end)
+}
+
+node decode_runtime_command (b: uint8;)
+  returns (out: runtime_command_reader default = RCReading {};)
+{
+  diagram
+    (var
+        cmd_type;)
+    (automaton #0 $Command
+       initial state #1 Start
+       #pragma diagram {"xy":"h-54050;v-11930","wh":"46000;11200"} #end :
+         diagram
+           (let cmd_type = Decode::to_uint16(b);
+           #pragma diagram {"xy":"h0;v0","wh":"38000;3200"} #end)
+       state #2 WidgetEvent
+       #pragma diagram {"xy":"h38050;v32381","wh":"78000;57522"} #end :
+         diagram
+           (activate #8 when decode_widget_event(b) match
+              | WEDone {we} :
+                {
+                  diagram
+                    (let out = RCDone {WidgetEvent {Widget_Event_Structure group (we)}};
+                    #pragma diagram {"xy":"h0;v0","wh":"66000;3200"} #end)
+                #pragma diagram {"xy":"h0;v-8000","wh":"70000;7200"} #end
+                }
+              | WEReading :
+                {
+                  diagram
+                    (let out = RCReading {};
+                    #pragma diagram {"xy":"h-15781;v-300","wh":"26000;3200"} #end)
+                #pragma diagram {"xy":"h0;v3359","wh":"70000;7800"} #end
+                }
+              | WEError :
+                {
+                  diagram
+                    (let out = RCError {};
+                    #pragma diagram {"xy":"h-17447;v0","wh":"24000;3200"} #end)
+                #pragma diagram {"xy":"h0;v14719","wh":"70000;7200"} #end
+                }
+            #pragma diagram {"xy":"h0;v-6442","wh":"70000;36638"} #end)
+       state #3 SetParameter
+       #pragma diagram {"xy":"h12817;v-39142","wh":"27533;12000"} #end :
+       state #4 LayerEvent
+       #pragma diagram {"xy":"h17741;v-5713","wh":"37382;12953"} #end :
+       state #5 Exception
+       #pragma diagram {"xy":"h17741;v-22666","wh":"37382;12953"} #end :
+       state #6 UaRequest
+       #pragma diagram {"xy":"h12817;v-55142","wh":"27533;12000"} #end :
+       :1: #1 until if (cycles(2))
+         :1: if (cmd_type = C::NOTIFY_WIDGET_EVENT)
+         restart #2
+         :2: if (cmd_type = C::NOTIFY_LAYER_EVENT)
+         restart #4
+         :3: if (cmd_type = C::NOTIFY_EXCEPTION)
+         restart #5
+         :4: if (cmd_type = C::CMD_SET_PARAMETER)
+         restart #3
+         :5: if (cmd_type = C::CMD_UA_REQUEST)
+         restart #6 end
+       #pragma diagram {"tp":"h23000;v-44|#1 h4350 h4350 h-2000;v-44|h-16000;v-11930[h21;v2000 v167 v14270 v6969 v10453 h6514;v10453 h6514 h667 h667 h-39000;v0|#2, h2000;v1456 h4350 h4350 h-18691;v-4761|#4, h2000;v-1544 h167 h167 h167 h2662 h2662;v-583 v-1167 v-1167 h2613;v-583 h2613 h667 h667 h-18691;v5692|#5, h1324;v-2000 v-167 v-8515 v-4091 v-6136 h5863;v-6136 h5863 h667 h667 h-13767;v168|#3, h-1676;v-2000 v-167 v-13848 v-6757 v-10136 h7363;v-10136 h7363 h667 h667 h-13767;v168|#6]"} #end;
+     #pragma diagram {"xy":"H21979;V25450","wh":"162100;130285"} #end)
+}
+
+node decode_widget_event (b: uint8;)
+  returns (out: widget_event_reader default = WEReading {};)
+{
+  diagram
+    (var
+        cmd_size;
+        widget_id last = 0;
+        event_origin last = 0;
+        event_ident last = 0;)
+    (automaton #0
+       initial state #1 CommandSize
+       #pragma diagram {"xy":"h18172;v-56374","wh":"96700;16930"} #end :
+         diagram
+           (let
+               cmd_size = Decode::to_uint16(b);
+               _ = cmd_size;
+           #pragma diagram {"xy":"h-20350;v1426","wh":"48000;6078"} #end)
+       state #7 EventIdent
+       #pragma diagram {"xy":"h21680;v3591","wh":"50000;12000"} #end :
+         diagram
+           (let event_ident = Decode::to_uint16(b);
+           #pragma diagram {"xy":"h0;v0","wh":"42000;3200"} #end)
+       state #3 WidgetIdent
+       #pragma diagram {"xy":"h20680;v-34601","wh":"48000;12000"} #end :
+         diagram
+           (let widget_id = Decode::to_uint16(b);
+           #pragma diagram {"xy":"h0;v0","wh":"40000;3200"} #end)
+       state #5 EventOrigin
+       #pragma diagram {"xy":"h21680;v-14026","wh":"50000;12000"} #end :
+         diagram
+           (let event_origin = Decode::to_uint16(b);
+           #pragma diagram {"xy":"h0;v0","wh":"42000;3200"} #end)
+       state #10 Selection
+       #pragma diagram {"xy":"h-39662;v57352","wh":"44000;15938"} #end :
+         diagram
+           (let out = WEReading {} -> WEDone {wid: widget_id, event_origin: event_origin, event: Selection {}};
+           #pragma diagram {"xy":"h0;v0","wh":"36000;7938"} #end)
+       state #11 StringChange
+       #pragma diagram {"xy":"h19680;v53633","wh":"62000;23376"} #end :
+         diagram
+           (let
+               s, complete = Decode::to_str(b);
+               out = if complete then WEDone {wid: widget_id, event_origin: event_origin, event: StringChange {Str::t group (s)}} else WEReading {};
+           #pragma diagram {"xy":"h0;v0","wh":"54000;15376"} #end)
+           
+           (var
+               s;
+               complete;)
+       state #14 StringConfirmed
+       #pragma diagram {"xy":"h28680;v27768","wh":"64000;23376"} #end :
+         diagram
+           (let
+               s, complete = Decode::to_str(b);
+               out = if complete then WEDone {wid: widget_id, event_origin: event_origin, event: StringConfirmed {Str::t group (s)}} else WEReading {};
+           #pragma diagram {"xy":"h0;v0","wh":"56000;15376"} #end)
+           
+           (var
+               s;
+               complete;)
+       state #15 SelEntryChange
+       #pragma diagram {"xy":"h-50346;v12316","wh":"50000;23353"} #end :
+         diagram
+           (let
+               idx = Decode::to_uint16(b);
+               out = WEReading {} -> WEDone {wid: widget_id, event_origin: event_origin, event: SelEntryChange {idx}};
+           #pragma diagram {"xy":"h0;v1848","wh":"42000;11657"} #end)
+           
+           (var
+               idx;)
+       :1: #3 until if (cycles(2))
+       restart #5
+       #pragma diagram {"tp":"h2000;v6000|#3 v2858 v2858 h1000;v-6000|#5"} #end;
+       :1: #1 until if (cycles(2))
+       restart #3
+       #pragma diagram {"tp":"h2508;v8465|#1 v2436 v2436 h0;v-6000|#3"} #end;
+       :1: #5 until if (cycles(2))
+       restart #7
+       #pragma diagram {"tp":"h0;v6000|#5 v1872 v1872 h0;v-6000|#7"} #end;
+       :1: #7 until if (cycles(2))
+         :1: if (event_ident = EVT::SELECTION)
+         restart #10
+         :2: if (event_ident = EVT::STRING_CHANGE)
+         restart #11
+         :3: if (event_ident = EVT::STRING_CONFIRMED)
+         restart #14
+         :4: if (event_ident = EVT::SEL_ENTRY_CHANGE)
+         restart #15 end
+       #pragma diagram {"tp":"h-25000;v52|#7 h-500 h-500 h-500 h-1533 h-1533;v5675 v5675 v333 v333 h0;v-2000|h-7886;v17993[h-2000;v1650 h-167 h-167 h-167 h-1784 h-1784;v3567 v3567 v9052 v9052 v9052 v1709 h-854;v1709 h-854 h-667 h-667 h22000;v0|#10, h0;v2000 v7317 v7317 h-27566;v-11688|#11, h2000;v44 h855 h855 h-32000;v-9732|#14, h-2000;v-1350 h-167 h-167 h-167 h-4034 h-4034;v2000 v4000 v720 v720 v720 v2560 h-7680;v1280 h-16320 h-6250 h-6250 h-6250 h-14910 h-3840;v-1115 v-2229 v-1607 v-1607 v-1607 v-5442 h1303;v-2721 h1303 h667 h667 h-25000;v0|#15]"} #end;
+     #pragma diagram {"xy":"H10953;V14357","wh":"167909;138643"} #end)
+}
+
+inline node cycles (n: uint32;)
+  returns (over: bool;)
+{
+  diagram
+    (activate #0
+       if (n <= 0) pre over
+       then
+         {
+           diagram
+             (let over = true;
+             #pragma diagram {"xy":"h-12346;v0","wh":"20000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-10000","wh":"50000;7200"} #end
+         }
+       else
+         {
+           diagram
+             (let
+                 c = n pre c - 1;
+                 over = c <= 0;
+             #pragma diagram {"xy":"h-11458;v-4388","wh":"22000;4219"} #end)
+             
+             (var
+                 c;)
+         #pragma diagram {"xy":"h0;v7459","wh":"50000;20000"} #end
+         }
+     #pragma diagram {"xy":"H-39362;V-57062","wh":"50000;34919"} #end)
+}
+
+type runtime_command_reader = RCDone { Runtime_Command } | RCReading {} | RCError {};
+
+type widget_event_reader = WEDone { Widget_Event_Structure } | WEReading {} | WEError {};
+
+function encode_rt_param (msg: rt_param;
+                          buf_in * : Buf::t;)
+  returns (buf_out at buf_in: Buf::t;)
+{
+  diagram
+    (activate #0 when msg match
+       | Visible {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::VISIBLE, Encode::of_bool(x));
+             #pragma diagram {"xy":"h-12000;v0","wh":"72000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-267233","wh":"100000;7200"} #end
+         }
+       | Enable {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::ENABLE, Encode::of_enable(x));
+             #pragma diagram {"xy":"h-12000;v0","wh":"72000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-256333","wh":"100000;7200"} #end
+         }
+       | PosX {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::POS_X, (x :> uint32));
+             #pragma diagram {"xy":"h-15000;v0","wh":"66000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-245433","wh":"100000;7200"} #end
+         }
+       | PosY {y} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::POS_Y, (y :> uint32));
+             #pragma diagram {"xy":"h-15000;v0","wh":"66000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-234533","wh":"100000;7200"} #end
+         }
+       | PosXY {xy} :
+         {
+           diagram
+             (let buf_out = Encode::ps_8Bytes(buf_in, P::POS_XY, (xy[0] :> uint32), (xy[1] :> uint32));
+             #pragma diagram {"xy":"h-4000;v0","wh":"88000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-223633","wh":"100000;7200"} #end
+         }
+       | SizeX {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::SIZE_X, x);
+             #pragma diagram {"xy":"h-20000;v0","wh":"56000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-212733","wh":"100000;7200"} #end
+         }
+       | SizeY {y} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::SIZE_Y, y);
+             #pragma diagram {"xy":"h-20000;v0","wh":"56000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-201833","wh":"100000;7200"} #end
+         }
+       | SizeXY {xy} :
+         {
+           diagram
+             (let buf_out = Encode::ps_8Bytes(buf_in, P::SIZE_XY, xy[0], xy[1]);
+             #pragma diagram {"xy":"h-15000;v0","wh":"66000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-190933","wh":"100000;7200"} #end
+         }
+       | SelectingAreaWidth {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::SELECTING_WIDTH, x);
+             #pragma diagram {"xy":"h-16000;v0","wh":"64000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-180033","wh":"100000;7200"} #end
+         }
+       | SelectingAreaHeight {y} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::SELECTING_HEIGHT, y);
+             #pragma diagram {"xy":"h-15000;v0","wh":"66000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-169133","wh":"100000;7200"} #end
+         }
+       | StyleSet {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_2Bytes(buf_in, P::STYLE_SET, x);
+             #pragma diagram {"xy":"h-19000;v0","wh":"58000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-158233","wh":"100000;7200"} #end
+         }
+       | NextFocusedWidget {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_2Bytes(buf_in, P::NEXT_FOCUSED_WIDGET, x);
+             #pragma diagram {"xy":"h-14000;v0","wh":"68000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-147333","wh":"100000;7200"} #end
+         }
+       | NumberOfEntries {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_2Bytes(buf_in, P::NUMBER_OF_ENTRIES, x);
+             #pragma diagram {"xy":"h-15000;v0","wh":"66000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-136433","wh":"100000;7200"} #end
+         }
+       | SelectedEntry {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_2Bytes(buf_in, P::SELECTED_ENTRY, x);
+             #pragma diagram {"xy":"h-16000;v0","wh":"64000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-125533","wh":"100000;7200"} #end
+         }
+       | OpeningEntry {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_2Bytes(buf_in, P::OPENING_ENTRY, x);
+             #pragma diagram {"xy":"h-17000;v0","wh":"62000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-114633","wh":"100000;7200"} #end
+         }
+       | Alignment {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::ALIGNMENT, Encode::of_alignment_lcr(x));
+             #pragma diagram {"xy":"h-7000;v0","wh":"82000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-103733","wh":"100000;7200"} #end
+         }
+       | OpeningMode {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::OPENING_MODE, Encode::of_opening_mode(x));
+             #pragma diagram {"xy":"h-6000;v0","wh":"84000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-92833","wh":"100000;7200"} #end
+         }
+       | AutomaticFocusMotion {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::AUTO_FOCUS_MOTION, Encode::of_bool(x));
+             #pragma diagram {"xy":"h-8000;v0","wh":"80000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-81933","wh":"100000;7200"} #end
+         }
+       | EntryList {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_StringArray(buf_in, P::STRING_ARRAY, x);
+             #pragma diagram {"xy":"h-15000;v0","wh":"66000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-71033","wh":"100000;7200"} #end
+         }
+       | EntryValidation {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::ENTRY_VALID, Encode::of_bool(x));
+             #pragma diagram {"xy":"h-10000;v0","wh":"76000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-60133","wh":"100000;7200"} #end
+         }
+       | String {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_String(buf_in, P::STRING, x);
+             #pragma diagram {"xy":"h-20000;v0","wh":"56000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-49233","wh":"100000;7200"} #end
+         }
+       | ColorIndex {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::COLOR_INDEX, x);
+             #pragma diagram {"xy":"h-18000;v0","wh":"60000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-38333","wh":"100000;7200"} #end
+         }
+       | Font {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::FONT, x);
+             #pragma diagram {"xy":"h-22000;v0","wh":"52000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-27433","wh":"100000;7200"} #end
+         }
+       | StartCursorPos {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_2Bytes(buf_in, P::CURSOR_POS, x);
+             #pragma diagram {"xy":"h-18000;v0","wh":"60000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-16533","wh":"100000;7200"} #end
+         }
+       | LabelString {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_String(buf_in, P::STRING, x);
+             #pragma diagram {"xy":"h-20000;v0","wh":"56000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-5633","wh":"100000;7200"} #end
+         }
+       | InnerStateEdit {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::INNER_STATE_EDIT, Encode::of_editbox_inner_state(x));
+             #pragma diagram {"xy":"h-1000;v0","wh":"94000;3200"} #end)
+         #pragma diagram {"xy":"h0;v5267","wh":"100000;7200"} #end
+         }
+       | Filled {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::FILLED, Encode::of_bool(x));
+             #pragma diagram {"xy":"h-13000;v0","wh":"70000;3200"} #end)
+         #pragma diagram {"xy":"h0;v16167","wh":"100000;7200"} #end
+         }
+       | FillIndex {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::FILL_INDEX, x);
+             #pragma diagram {"xy":"h-19000;v0","wh":"58000;3200"} #end)
+         #pragma diagram {"xy":"h0;v27067","wh":"100000;7200"} #end
+         }
+       | Halo {h} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::HALO, Encode::of_halo(h));
+             #pragma diagram {"xy":"h-14000;v0","wh":"68000;3200"} #end)
+         #pragma diagram {"xy":"h0;v37967","wh":"100000;7200"} #end
+         }
+       | Prp_Sceen_X {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::PRP_SCREEN_X, (x :> uint32));
+             #pragma diagram {"xy":"h-12000;v-509","wh":"72000;3200"} #end)
+         #pragma diagram {"xy":"h0;v49377","wh":"100000;8219"} #end
+         }
+       | Prp_Sceen_Y {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::PRP_SCREEN_Y, (x :> uint32));
+             #pragma diagram {"xy":"h-12000;v-509","wh":"72000;3200"} #end)
+         #pragma diagram {"xy":"h0;v61296","wh":"100000;8219"} #end
+         }
+       | Prp_Sceen_XY {xy} :
+         {
+           diagram
+             (let buf_out = Encode::ps_8Bytes(buf_in, P::PRP_SCREEN_XY, (xy[0] :> uint32), (xy[1] :> uint32));
+             #pragma diagram {"xy":"h0;v-509","wh":"96000;3200"} #end)
+         #pragma diagram {"xy":"h0;v73215","wh":"100000;8219"} #end
+         }
+       | Range {r} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::RANGE, r);
+             #pragma diagram {"xy":"h-21000;v-509","wh":"54000;3200"} #end)
+         #pragma diagram {"xy":"h0;v85134","wh":"100000;8219"} #end
+         }
+       | ScreenRange {sr} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::SCREEN_RANGE, sr);
+             #pragma diagram {"xy":"h-17000;v-509","wh":"62000;3200"} #end)
+         #pragma diagram {"xy":"h0;v97053","wh":"100000;8219"} #end
+         }
+       | MapSynchronizationNumber {n} :
+         {
+           diagram
+             (let buf_out = Encode::ps_2Bytes(buf_in, P::MAP_SYNCHRONIZATION_NUMBER, n);
+             #pragma diagram {"xy":"h-11000;v-509","wh":"74000;3200"} #end)
+         #pragma diagram {"xy":"h0;v108972","wh":"100000;8219"} #end
+         }
+       | Prp_Lat {lat} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::PRP_LAT, lat);
+             #pragma diagram {"xy":"h-19000;v-509","wh":"58000;3200"} #end)
+         #pragma diagram {"xy":"h0;v120891","wh":"100000;8219"} #end
+         }
+       | Prp_Long {long} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::PRP_LONG, long);
+             #pragma diagram {"xy":"h-18000;v-509","wh":"60000;3200"} #end)
+         #pragma diagram {"xy":"h0;v132810","wh":"100000;8219"} #end
+         }
+       | Prp_Lat_Long {ll} :
+         {
+           diagram
+             (let buf_out = Encode::ps_8Bytes(buf_in, P::PRP_LAT_LONG, ll[0], ll[1]);
+             #pragma diagram {"xy":"h-12000;v-1440","wh":"72000;3200"} #end)
+         #pragma diagram {"xy":"h0;v145658","wh":"100000;10078"} #end
+         }
+       | Orientation {o} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::ORIENTATION, o);
+             #pragma diagram {"xy":"h-18000;v-510","wh":"60000;3200"} #end)
+         #pragma diagram {"xy":"h0;v158507","wh":"100000;8219"} #end
+         }
+       | AC_Lat {lat} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::AC_LAT, lat);
+             #pragma diagram {"xy":"h-19000;v-510","wh":"58000;3200"} #end)
+         #pragma diagram {"xy":"h0;v170426","wh":"100000;8219"} #end
+         }
+       | AC_Long {long} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::AC_LONG, long);
+             #pragma diagram {"xy":"h-18000;v-510","wh":"60000;3200"} #end)
+         #pragma diagram {"xy":"h0;v182345","wh":"100000;8219"} #end
+         }
+       | AC_Lat_Long {ll} :
+         {
+           diagram
+             (let buf_out = Encode::ps_8Bytes(buf_in, P::AC_LAT_LONG, ll[0], ll[1]);
+             #pragma diagram {"xy":"h-13000;v-1440","wh":"70000;3200"} #end)
+         #pragma diagram {"xy":"h0;v195193","wh":"100000;10078"} #end
+         }
+       | AC_Orientation {o} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::AC_ORIENTATION, o);
+             #pragma diagram {"xy":"h-16000;v-510","wh":"64000;3200"} #end)
+         #pragma diagram {"xy":"h0;v208042","wh":"100000;8219"} #end
+         }
+       | RotationAngle {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::ORIENTATION, x);
+             #pragma diagram {"xy":"h-18000;v0","wh":"60000;3200"} #end)
+         #pragma diagram {"xy":"h0;v219451","wh":"100000;7200"} #end
+         }
+       | Value {f} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::VALUE, Float::to_u32(f));
+             #pragma diagram {"xy":"h-14000;v0","wh":"68000;3200"} #end)
+         #pragma diagram {"xy":"h0;v230351","wh":"100000;7200"} #end
+         }
+       | LegendAreaSizeX {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_4Bytes(buf_in, P::LEGEND_AREA_SIZE_X, x);
+             #pragma diagram {"xy":"h-15000;v0","wh":"66000;3200"} #end)
+         #pragma diagram {"xy":"h0;v241251","wh":"100000;7200"} #end
+         }
+       | LegendPosition {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_1Byte(buf_in, P::LEGEND_POSITION, Encode::of_alignment_lrtb(x));
+             #pragma diagram {"xy":"h-4000;v0","wh":"88000;3200"} #end)
+         #pragma diagram {"xy":"h0;v252151","wh":"100000;7200"} #end
+         }
+       | FormatString {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_String(buf_in, P::FORMAT_STRING, x);
+             #pragma diagram {"xy":"h-17000;v0","wh":"62000;3200"} #end)
+         #pragma diagram {"xy":"h0;v263051","wh":"100000;7200"} #end
+         }
+       | LegendString {x} :
+         {
+           diagram
+             (let buf_out = Encode::ps_String(buf_in, P::STRING, x);
+             #pragma diagram {"xy":"h-20000;v0","wh":"56000;3200"} #end)
+         #pragma diagram {"xy":"h0;v273951","wh":"100000;7200"} #end
+         }
+     #pragma diagram {"xy":"H50000;V274033","wh":"100000;555103"} #end)
+}
+
+function mk_sp <<NB_PARAMS>> (wid: uint16;
+                              params: rt_param^NB_PARAMS;)
+  returns (out: Runtime_Command;)
+{
+  diagram
+    (#0 expr wid
+    #pragma diagram {"xy":"H-31121;V-11070"} #end)
+    (#1 expr #2 @ #3
+      where
+        (#2 group)
+        (#3 group)
+    #pragma diagram {"xy":"H-32121;V-5470"} #end)
+    (#4 expr NB_PARAMS
+    #pragma diagram {"xy":"H-34121;V-14770","wh":"14000;3200"} #end)
+    (#5 expr params
+    #pragma diagram {"xy":"H-58121;V-7370","wh":"10000;3200"} #end)
+    (#6 expr Visible {false}^(MAX_NB_PARAMS - NB_PARAMS)
+    #pragma diagram {"xy":"H-75121;V-3570","wh":"44000;3200"} #end)
+    (#7 def out
+    #pragma diagram {"xy":"H65479;V-11070"} #end)
+    (assume $NotTooManyParameters: #9 ; 
+      where
+        (#9 group)
+    #pragma diagram {"xy":"H-34241;V-35870"} #end)
+    (#10 expr NB_PARAMS <= MAX_NB_PARAMS
+    #pragma diagram {"xy":"H-67241;V-35870","wh":"30000;3200"} #end)
+    (#11 expr SetParameter {#12}
+      where
+        (#12 group)
+    #pragma diagram {"xy":"H38479;V-11070","wh":"22000;10000"} #end)
+    
+    (#13 wire #1 => #12 .(params)
+    #pragma diagram {"wp":"#1 h50600 v-4267 #12"} #end)
+    (#14 wire #6 => #3)
+    (#15 wire #5 => #2)
+    (#16 wire #0 => #12 .(wid)
+    #pragma diagram {"wp":"#0 h6017 v6600 h46833 v-3933 #12"} #end)
+    (#17 wire #4 => #12 .(nb_params)
+    #pragma diagram {"wp":"#4 h13050 v-2300 h35300 v3333 #12"} #end)
+    (#18 wire #10 => #9)
+    (#19 wire #11 => #7)
+}

@@ -1,0 +1,13 @@
+-- version swan: 2027.0 graph: 2.1
+use Airport;
+
+use Runway;
+
+use Char;
+
+type t = Airport {Airport::t} | Runway{Runway::t};
+
+type t_reader = Field{t} | Reading{} | Error{} ;
+
+node read_char (c: Char::t;)
+  returns (o: t_reader;);

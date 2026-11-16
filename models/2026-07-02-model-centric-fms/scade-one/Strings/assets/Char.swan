@@ -1,0 +1,18 @@
+-- version swan: 2027.0 graph: 2.1
+function to_digit (c:t;)
+  returns (digit: uint8;
+           is_digit: bool;)
+{
+  diagram
+    (let
+     u = to_u8(c);
+     is_digit, digit = if  u>= code_0 and u <= code_9 then (true, u - code_0) else (false, 0);
+    #pragma diagram {"xy":"H-16020;V-14181","wh":"88000;6078"} #end)
+    
+    (var
+        u;)
+}
+
+const code_0 = 0x30_ui8;
+
+const code_9 = 0x39_ui8;

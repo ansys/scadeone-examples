@@ -1,0 +1,89 @@
+-- version swan: 2027.0 graph: 2.1
+use Str32 as Str;
+
+use A661::Types as T;
+
+use Buf;
+
+use Str32Array as StrArray;
+
+function of_uint16 (in:uint16;)
+  returns (out:uint8^2;);
+
+function of_uint32 (in:uint32;)
+  returns (out:uint8^4;);
+
+function of_uint64 (in:uint64;)
+  returns (out:uint8^8;);
+
+function of_int64 (in:int64;)
+  returns (out:uint8^8;);
+
+function of_str (in: Str::t;)
+  returns (o: uint8^(Str::M););
+
+function nb_bytes_to_word (sz : uint16;)
+  returns (missing:uint16;);
+
+function of_bool (b:bool;)
+  returns (o: uint8;);
+
+function of_enable (b:T::enable;)
+  returns (o: uint8;);
+
+function of_halo (b:T::halo;)
+  returns (o: uint8;);
+
+function ps_1Byte (buf_in *: Buf::t delay0;
+                   ident: uint16 delay0;
+                   value: uint8 delay0;)
+  returns (buf_out at buf_in: Buf::t;);
+
+function ps_2Bytes (buf_in *: Buf::t delay0;
+                    ident: uint16 delay0;
+                    value: uint16 delay0;)
+  returns (buf_out at buf_in: Buf::t;);
+
+function ps_4Bytes (buf_in *: Buf::t delay0;
+                    ident: uint16 delay0;
+                    value: uint32 delay0;)
+  returns (buf_out at buf_in: Buf::t;);
+
+function ps_String (buf_in *: Buf::t delay0;
+                    ident: uint16 delay0;
+                    s: Str::t delay0;)
+  returns (buf_out at buf_in: Buf::t;);
+
+function ps_8Bytes (buf_in *: Buf::t delay0;
+                    ident: uint16 delay0;
+                    v1: uint32 delay0;
+                    v2 : uint32 delay0;)
+  returns (buf_out at buf_in: Buf::t;);
+
+function write_to_buffer <<N, BUF_MAX_SZ>> (to_write: uint8^N;
+                                            sz_to_write : 'SZ;
+                                            buf_in : uint8^BUF_MAX_SZ;
+                                            buf_sz_in : 'SZ;)
+  returns (buf_out: uint8^BUF_MAX_SZ;
+           buf_sz_out : 'SZ;)
+  where 'SZ unsigned;
+
+function of_alignment_lcr (a: T::alignment_lcr;)
+  returns (o: uint8;);
+
+function of_opening_mode (m: T::opening_mode;)
+  returns (o: uint8;);
+
+function ps_StringArray (buf_in *: Buf::t delay0;
+                         ident: uint16 delay0;
+                         sa: StrArray::t delay0;)
+  returns (buf_out at buf_in: Buf::t;);
+
+function of_editbox_inner_state (m: T::editbox_inner_state;)
+  returns (o: uint8;);
+
+function of_alignment_lrtb (a: T::alignment_lrtb;)
+  returns (o: uint8;);
+
+function of_float32 (in:float32;)
+  returns (out:uint8^4;);

@@ -1,0 +1,17 @@
+{
+  "Version": "1.0",
+  "Name": "UDP",
+  "Dependencies": [],
+  "Resources": [
+    {
+      "Kind": "HeaderFile",
+      "Path": "resources\\udp.h",
+      "Key": ""
+    },
+    {
+      "Kind": "SourceFile",
+      "Path": "resources\\udp.c",
+      "Key": ""
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+-- version swan: 2027.0 graph: 2.1
+use IP;
+
+const #pragma cg C:const #end BUFFER_SZ: uint16 = 1036;
+
+type socket;
+
+function #pragma cg keep #end send_to (s_in : socket;
+                                       dest: IP::address;
+                                       buffer: uint8^BUFFER_SZ;
+                                       sz : uint32;)
+  returns (s_out : socket;
+           sz_sent: uint32;);
+
+function #pragma cg keep #end mk_socket (sess : session;)
+  returns (s: socket;);
+
+function #pragma cg keep #end close (s: socket;)
+  returns ();
+
+function #pragma cg keep #end bind (s_in: socket;
+                                    local_address: IP::address;)
+  returns (s_out: socket;);
+
+function #pragma cg keep #end recv_from (s_in: socket;)
+  returns (s_out : socket;
+           buffer: uint8^BUFFER_SZ;
+           sz : uint32;
+           from : IP::address;);
+
+function #pragma cg keep #end startup ()
+  returns (wsa: session;);
+
+type session;
+
+function #pragma cg keep #end cleanup (sess: session;)
+  returns ();

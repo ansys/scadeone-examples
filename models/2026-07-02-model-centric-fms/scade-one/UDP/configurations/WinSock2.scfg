@@ -1,0 +1,12 @@
+{
+  "version": "1.0",
+  "kind": "Build",
+  "properties": {
+    "env_path_dirs": [],
+    "include_dirs": [],
+    "linker_flags": "-lws2_32",
+    "object_files": [],
+    "preprocessor_defs": [],
+    "user_config_header_files": []
+  }
+}

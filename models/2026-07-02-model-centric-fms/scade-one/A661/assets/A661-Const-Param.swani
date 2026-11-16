@@ -1,0 +1,700 @@
+-- version swan: 2027.0 graph: 2.0
+const WP_3D_VERTICES_BUFFER: uint16 = 0xB12A;
+
+const AC_LAT: uint16 = 0xB010;
+
+const AC_LAT_LONG: uint16 = 0xB030;
+
+const AC_LONG: uint16 = 0xB020;
+
+const AC_ORIENTATION: uint16 = 0xB040;
+
+const AC3D_POSITION: uint16 = 0xB74F;
+
+const ACTIVE: uint16 = 0xB719;
+
+const ACTIVE_CAMERA_ID: uint16 = 0xB71A;
+
+const ACTIVE_TABBED_PANEL: uint16 = 0xB050;
+
+const ALIGNMENT: uint16 = 0xB49A;
+
+const ALLOW_CHANGE: uint16 = 0xB6A1;
+
+const ALPHA_MASK: uint16 = 0xB060;
+
+const ALTERN_PICTURE_REFERENCE: uint16 = 0xB080;
+
+const ALTERN_SYMBOL_REFERENCE: uint16 = 0xB4C1;
+
+const ALTERNATE_FLAG: uint16 = 0xB088;
+
+const ANIMATION_DELAY: uint16 = 0xB702;
+
+const ANIMATION_DURATION: uint16 = 0xB703;
+
+const ANIMATION_FLAG: uint16 = 0xB090;
+
+const ANIMATION_LAW_REF: uint16 = 0xB704;
+
+const ANIMATION_REPETITION: uint16 = 0xB705;
+
+const ANIMATION_STATE: uint16 = 0xB706;
+
+const ANIMATION_TYPE: uint16 = 0xB098;
+
+const APP_DATA: uint16 = 0xB6D0;
+
+const ATTENUATION: uint16 = 0xB74A;
+
+const ATTENUATION_TYPE: uint16 = 0xB74B;
+
+const AUTO_CLOSURE: uint16 = 0xB1C2;
+
+const AUTO_FOCUS_MOTION: uint16 = 0xB2B9;
+
+const BLINKING_TYPE: uint16 = 0xB0A8;
+
+const BLOCKED_BUFFER_OF_MAP3D_ITEMS: uint16 = 0xB761;
+
+const BLOCKED_BUFFER_OF_MAPITEM: uint16 = 0xB121;
+
+const BLOCKED_BUFFER_OF_MAPVERT_ITEMS: uint16 = 0xB126;
+
+const BOUND_SIZE_X: uint16 = 0xB0E0;
+
+const BOUND_SIZE_XY: uint16 = 0xB100;
+
+const BOUND_SIZE_Y: uint16 = 0xB0F0;
+
+const BOUND_X: uint16 = 0xB0B0;
+
+const BOUND_XY: uint16 = 0xB0D0;
+
+const BOUND_Y: uint16 = 0xB0C0;
+
+const BOUNDARY_ARRAY: uint16 = 0xB6C1;
+
+const BOUNDARY_CHECK_MODE: uint16 = 0xB122;
+
+const BROADCAST_DATA: uint16 = 0xB0C2;
+
+const BUFFER_OF_FILL_STYLES: uint16 = 0xB0F8;
+
+const BUFFER_OF_MAPITEM: uint16 = 0xB120;
+
+const BUFFER_OF_MAPITEM3D: uint16 = 0xB760;
+
+const BUFFER_OF_MAPVERT_ITEMS: uint16 = 0xB125;
+
+const BUFFER_OF_PARAM: uint16 = 0xB110;
+
+const BUTTON_POS: uint16 = 0xB641;
+
+const BUTTON_SIZE: uint16 = 0xB642;
+
+const CACHING_ENABLE: uint16 = 0xB117;
+
+const CAGED_POINTER_ID_ARRAY: uint16 = 0xB6A3;
+
+const CAMERA_BEARING_PITCH_DISTANCE: uint16 = 0xB742;
+
+const CAMERA_FAR: uint16 = 0xB71F;
+
+const CAMERA_HORZ_FIELD_OF_VIEW: uint16 = 0xB720;
+
+const CAMERA_LOOKAT_ITEM: uint16 = 0xB730;
+
+const CAMERA_LOOKAT_POINT: uint16 = 0xB72F;
+
+const CAMERA_MAX_BEARING_ALLOWED: uint16 = 0xB724;
+
+const CAMERA_MAX_DIST_ALLOWED: uint16 = 0xB725;
+
+const CAMERA_MAX_HORZ_FIELD_OF_VIEW: uint16 = 0xB743;
+
+const CAMERA_MAX_PITCH_ALLOWED: uint16 = 0xB726;
+
+const CAMERA_MAX_ROLL_ALLOWED: uint16 = 0xB727;
+
+const CAMERA_MAX_VERT_FIELD_OF_VIEW: uint16 = 0xB744;
+
+const CAMERA_MIN_BEARING_ALLOWED: uint16 = 0xB728;
+
+const CAMERA_MIN_DIST_ALLOWED: uint16 = 0xB729;
+
+const CAMERA_MIN_HORZ_FIELD_OF_VIEW: uint16 = 0xB745;
+
+const CAMERA_MIN_PITCH_ALLOWED: uint16 = 0xB72A;
+
+const CAMERA_MIN_ROLL_ALLOWED: uint16 = 0xB72B;
+
+const CAMERA_MIN_VERT_FIELD_OF_VIEW: uint16 = 0xB746;
+
+const CAMERA_NEAR: uint16 = 0xB72C;
+
+const CAMERA_ORIENTATION: uint16 = 0xB71E;
+
+const CAMERA_POSITION: uint16 = 0xB71C;
+
+const CAMERA_REPOSITION_ITEM: uint16 = 0xB747;
+
+const CAMERA_REPOSITION_ITEM_CANCELLED: uint16 = 0xB748;
+
+const CAMERA_REPOSITION_POINT: uint16 = 0xB749;
+
+const CAMERA_ROLL: uint16 = 0xB741;
+
+const CAMERA_VERT_FIELD_OF_VIEW: uint16 = 0xB72E;
+
+const CENTER_X: uint16 = 0xB130;
+
+const CENTER_XY: uint16 = 0xB150;
+
+const CENTER_Y: uint16 = 0xB140;
+
+const CLAMPING: uint16 = 0xB501;
+
+const CLEAR: uint16 = 0xB000;
+
+const CLOSED: uint16 = 0xB1E2;
+
+const COARSE_PAGE_DELTA: uint16 = 0xB6E3;
+
+const COLOR_INDEX: uint16 = 0xB160;
+
+const COLUMN_ALIGNMENT_ARRAY: uint16 = 0xB499;
+
+const COLUMN_ENABLE_ARRAY: uint16 = 0xB1A9;
+
+const COLUMN_WIDTH_ARRAY: uint16 = 0xB44F;
+
+const CONE_FOCUS: uint16 = 0xB74C;
+
+const CRP_LAT: uint16 = 0xB162;
+
+const CRP_LAT_LONG: uint16 = 0xB166;
+
+const CRP_LONG: uint16 = 0xB164;
+
+const CURSOR_INDEX: uint16 = 0xB6A0;
+
+const CURSOR_POS: uint16 = 0xB170;
+
+const CURSOR_POS_BYTE: uint16 = 0xB172;
+
+const DEFAULT_ENTRY_INDEX: uint16 = 0xB4B6;
+
+const DEFAULT_ENTRY_STYLE: uint16 = 0xB4B5;
+
+const DEFAULT_TEXT_STRING: uint16 = 0xB4B4;
+
+const DEFAULT_TEXT_STYLE: uint16 = 0xB4B3;
+
+const DIRECTION: uint16 = 0xB713;
+
+const EFFECTIVITY_ARRAY: uint16 = 0xB6C8;
+
+const ENABLE: uint16 = 0xB180;
+
+const ENABLE_AREA: uint16 = 0xB1A2;
+
+const ENABLE_ENTRY_ARRAY: uint16 = 0xB1A8;
+
+const ENABLE_HANDLER: uint16 = 0xB1A1;
+
+const ENABLE_RESIZE: uint16 = 0xB001;
+
+const END_ANGLE: uint16 = 0xB1B0;
+
+const END_SCALED_VALUE: uint16 = 0xB505;
+
+const END_VALUE: uint16 = 0xB503;
+
+const ENTRY_ARRAY: uint16 = 0xB190;
+
+const ENTRY_POP_UP_ARRAY: uint16 = 0xB1C0;
+
+const ENTRY_VALID: uint16 = 0xB570;
+
+const EVENT_FLAG: uint16 = 0xB1D0;
+
+const EXCLUDED_POINTER_ID_ARRAY: uint16 = 0xB6A5;
+
+const EXCLUDED_REGIONS_LIST: uint16 = 0xB6C9;
+
+const FILL_INDEX: uint16 = 0xB1E0;
+
+const FILLED: uint16 = 0xB1E1;
+
+const FINE_PAGE_DELTA: uint16 = 0xB6E2;
+
+const FIRST_ACCESS_ENTRY: uint16 = 0xB1F0;
+
+const FIRST_ACCESS_UA_ENTRY: uint16 = 0xB1F8;
+
+const FIRST_VISIBLE_COLUMN: uint16 = 0xB201;
+
+const FIRST_VISIBLE_ENTRY: uint16 = 0xB200;
+
+const FONT: uint16 = 0xB590;
+
+const FORMAT_STRING: uint16 = 0xB550;
+
+const FRAME_X: uint16 = 0xB210;
+
+const FRAME_XY: uint16 = 0xB230;
+
+const FRAME_Y: uint16 = 0xB220;
+
+const FROM_ANGLE: uint16 = 0xB707;
+
+const FROM_SCALE_X: uint16 = 0xB708;
+
+const FROM_SCALE_XY: uint16 = 0xB715;
+
+const FROM_SCALE_Y: uint16 = 0xB709;
+
+const FROM_VALUE: uint16 = 0xB70A;
+
+const FROM_VALUE_X: uint16 = 0xB70B;
+
+const FROM_VALUE_XY: uint16 = 0xB717;
+
+const FROM_VALUE_Y: uint16 = 0xB70C;
+
+const HALO: uint16 = 0xB1E8;
+
+const HEADER_STRING: uint16 = 0xB494;
+
+const HOME_X: uint16 = 0xB219;
+
+const HOME_Y: uint16 = 0xB21A;
+
+const HORIZONTAL_SCROLL: uint16 = 0xB217;
+
+const HORIZONTAL_SCROLL_PERCENTAGE: uint16 = 0xB308;
+
+const HORIZONTAL_SCROLL_TYPE: uint16 = 0xB4B8;
+
+const INDEX_OF_FREQUENCY: uint16 = 0xB091;
+
+const INDICES_ARRAY: uint16 = 0xB526;
+
+const INDICES_ARRAY_SEQ: uint16 = 0xB527;
+
+const INITIAL_FOCUS: uint16 = 0xB6B0;
+
+const INNER_RADIUS: uint16 = 0xB240;
+
+const INNER_STATE_CHECK: uint16 = 0xB244;
+
+const INNER_STATE_EDIT: uint16 = 0xB248;
+
+const INNER_STATE_TOGGLE: uint16 = 0xB258;
+
+const INSET_SIZE: uint16 = 0xB051;
+
+const INTERVALS_ARRAY: uint16 = 0xB073;
+
+const ITEM_SPACING: uint16 = 0xB5C1;
+
+const KEY_ARRAY: uint16 = 0xB700;
+
+const LAYOUT: uint16 = 0xB5F0;
+
+const LAYOUT_ENABLE_ARRAY: uint16 = 0xB002;
+
+const LAYOUT_SIZE_ARRAY: uint16 = 0xB003;
+
+const LAYOUT_STYLE_ARRAY: uint16 = 0xB004;
+
+const LEGEND_ALIGNMENT: uint16 = 0xB49B;
+
+const LEGEND_AREA_SIZE_X: uint16 = 0xB451;
+
+const LEGEND_POSITION: uint16 = 0xB260;
+
+const LEGEND_REMOVED: uint16 = 0xB452;
+
+const LIGHT_BEARING: uint16 = 0xB735;
+
+const LIGHT_BEARING_PITCH: uint16 = 0xB74D;
+
+const LIGHT_PITCH: uint16 = 0xB736;
+
+const LIGHT_POSITION: uint16 = 0xB731;
+
+const LINE_DELTA_X: uint16 = 0xB211;
+
+const LINE_DELTA_Y: uint16 = 0xB212;
+
+const LINE_LENGTH: uint16 = 0xB270;
+
+const LOOP_FLAG: uint16 = 0xB272;
+
+const LSB_MULTIPLE: uint16 = 0xB631;
+
+const MAJOR_TICK_INTERVAL: uint16 = 0xB600;
+
+const MAJOR_TICK_REFERENCE: uint16 = 0xB608;
+
+const MAP_SYNCHRONIZATION_NUMBER: uint16 = 0xB277;
+
+const MAP3D_SCALE_FACTOR: uint16 = 0xB750;
+
+const MAP3D_SCALE_FACTOR_REF_ALT: uint16 = 0xB738;
+
+const MAPGRID_CELLSIZE: uint16 = 0xB274;
+
+const MAPGRID_INCREMENT_X: uint16 = 0xB275;
+
+const MAPGRID_INCREMENT_Y: uint16 = 0xB276;
+
+const MAPGRID_OFFSET: uint16 = 0xB278;
+
+const MAPGRID_OFFSET_X: uint16 = 0xB279;
+
+const MAPGRID_OFFSET_Y: uint16 = 0xB27A;
+
+const MASK_3D_TYPE: uint16 = 0xB281;
+
+const MASK_ENABLED: uint16 = 0xB290;
+
+const MASK_INCLUDE: uint16 = 0xB283;
+
+const MASK_INTERSECTION: uint16 = 0xB284;
+
+const MASK_ORIENTATION: uint16 = 0xB282;
+
+const MASK_REFERENCE: uint16 = 0xB280;
+
+const MAX_VALUE: uint16 = 0xB610;
+
+const MENU_HORIZONTAL: uint16 = 0xB640;
+
+const MIN_VALUE: uint16 = 0xB620;
+
+const MINMAX_VALUES: uint16 = 0xB580;
+
+const MINOR_TICK_MULTIPLE: uint16 = 0xB630;
+
+const MULTI_STATE_VALUE: uint16 = 0xB5A0;
+
+const NEGATIVE_STRING: uint16 = 0xB4D4;
+
+const NEXT_FOCUS_IN_APP_ID: uint16 = 0xB2BA;
+
+const NEXT_FOCUS_IN_ID: uint16 = 0xB2BC;
+
+const NEXT_FOCUS_IN_LAYER_ID: uint16 = 0xB2BB;
+
+const NEXT_FOCUSED_WIDGET: uint16 = 0xB2B8;
+
+const NUMBER_OF_CAGED_POINTERS: uint16 = 0xB6A2;
+
+const NUMBER_OF_COLUMNS: uint16 = 0xB2A1;
+
+const NUMBER_OF_ENTRIES: uint16 = 0xB2A0;
+
+const NUMBER_OF_EXCLUDED_POINTERS: uint16 = 0xB6A4;
+
+const NUMBER_OF_INTERVALS: uint16 = 0xB072;
+
+const NUMBER_OF_KEYS: uint16 = 0xB701;
+
+const NUMBER_OF_PICTURES: uint16 = 0xB2A2;
+
+const NUMBER_OF_POINTERS_ALLOWED: uint16 = 0xB6A6;
+
+const NUMBER_OF_STATES: uint16 = 0xB5A1;
+
+const NUMBER_OF_SYMBOLS: uint16 = 0xB2A4;
+
+const NUMBER_OF_TICS_COARSE: uint16 = 0xB0A2;
+
+const NUMBER_OF_TICS_FINE: uint16 = 0xB0A4;
+
+const NUMBER_OF_TOUCH_POINTS: uint16 = 0xB0A0;
+
+const NUMBER_OF_TURNS: uint16 = 0xB714;
+
+const NUMBER_OF_UA_ENTRIES: uint16 = 0xB2A8;
+
+const NUMBER_OF_VISIBLE_CHILDREN: uint16 = 0xB5D0;
+
+const NUMERIC_MASK: uint16 = 0xB2B0;
+
+const OPEN_ENTRY_ARRAY: uint16 = 0xB627;
+
+const OPENING_ENTRY: uint16 = 0xB560;
+
+const OPENING_MODE: uint16 = 0xB561;
+
+const ORIENTATION: uint16 = 0xB2C0;
+
+const OUTER_RADIUS: uint16 = 0xB2D0;
+
+const PAGE_CONTROL_POSITION: uint16 = 0xB6E1;
+
+const PAGE_DELTA_X: uint16 = 0xB213;
+
+const PAGE_DELTA_Y: uint16 = 0xB214;
+
+const PAGE_WRAP_TYPE: uint16 = 0xB6E0;
+
+const PARAM_BUFFER_INDEX: uint16 = 0xB111;
+
+const PARENT_ENTRY_ARRAY: uint16 = 0xB628;
+
+const PICTURE_ARRAY: uint16 = 0xB2E0;
+
+const PICTURE_ENTRY_ARRAY: uint16 = 0xB2E8;
+
+const PICTURE_POSITION: uint16 = 0xB2F1;
+
+const PICTURE_REFERENCE: uint16 = 0xB2F0;
+
+const POPUP_POS_X: uint16 = 0xB1C3;
+
+const POPUP_POS_Y: uint16 = 0xB1C4;
+
+const POPUP_SIZE_X: uint16 = 0xB1C5;
+
+const POPUP_SIZE_Y: uint16 = 0xB1C6;
+
+const POS_X: uint16 = 0xB300;
+
+const POS_X2: uint16 = 0xB330;
+
+const POS_X3: uint16 = 0xB360;
+
+const POS_XY: uint16 = 0xB320;
+
+const POS_XY2: uint16 = 0xB350;
+
+const POS_XY3: uint16 = 0xB380;
+
+const POS_Y: uint16 = 0xB310;
+
+const POS_Y2: uint16 = 0xB340;
+
+const POS_Y3: uint16 = 0xB370;
+
+const POSITIVE_STRING: uint16 = 0xB4D3;
+
+const PRIMITIVE_TYPE: uint16 = 0xB6F0;
+
+const PRP_LAT: uint16 = 0xB390;
+
+const PRP_LAT_LONG: uint16 = 0xB3B0;
+
+const PRP_LONG: uint16 = 0xB3A0;
+
+const PRP_SCREEN_X: uint16 = 0xB3C0;
+
+const PRP_SCREEN_XY: uint16 = 0xB3E0;
+
+const PRP_SCREEN_Y: uint16 = 0xB3D0;
+
+const PRP_X: uint16 = 0xB3B2;
+
+const PRP_XY: uint16 = 0xB3B4;
+
+const PRP_Y: uint16 = 0xB3B3;
+
+const PRP3D_POSITION: uint16 = 0xB73F;
+
+const RADIUS: uint16 = 0xB3F0;
+
+const RANGE: uint16 = 0xB400;
+
+const RANGE_X: uint16 = 0xB402;
+
+const RANGE_XY: uint16 = 0xB404;
+
+const RANGE_Y: uint16 = 0xB403;
+
+const REF_POS_X: uint16 = 0xB690;
+
+const REF_POS_XY: uint16 = 0xB691;
+
+const REF_POS_Y: uint16 = 0xB692;
+
+const REFRESH: uint16 = 0xB670;
+
+const RENDER_SEQUENTIAL: uint16 = 0xB6F1;
+
+const REORDER: uint16 = 0xB0AB;
+
+const RESET_WITH_INTERACTION: uint16 = 0xB070;
+
+const RGBA_COLOR: uint16 = 0xB737;
+
+const ROTATION_ANGLE: uint16 = 0xB410;
+
+const SCALE_X: uint16 = 0xB0AC;
+
+const SCALE_XY: uint16 = 0xB0AE;
+
+const SCALE_Y: uint16 = 0xB0AD;
+
+const SCALE_Z: uint16 = 0xB0AF;
+
+const SCREEN_RANGE: uint16 = 0xB420;
+
+const SELECT_ALL: uint16 = 0xB438;
+
+const SELECTED_COLUMN: uint16 = 0xB42F;
+
+const SELECTED_ENTRY: uint16 = 0xB430;
+
+const SELECTED_ENTRY_ARRAY: uint16 = 0xB439;
+
+const SELECTING_HEIGHT: uint16 = 0xB431;
+
+const SELECTING_WIDTH: uint16 = 0xB432;
+
+const SHEET_SIZE_X: uint16 = 0xB215;
+
+const SHEET_SIZE_Y: uint16 = 0xB216;
+
+const SHIFT_FIRST_VISIBLE_ENTRY: uint16 = 0xB440;
+
+const SHOW_FAIL: uint16 = 0xB671;
+
+const SHOW_MAJOR_LABELS: uint16 = 0xB601;
+
+const SHUFFLE_TO_FIT_MODE: uint16 = 0xB5E0;
+
+const SIZE_TO_FIT_MODE: uint16 = 0xB5C0;
+
+const SIZE_X: uint16 = 0xB450;
+
+const SIZE_XY: uint16 = 0xB470;
+
+const SIZE_Y: uint16 = 0xB460;
+
+const SOURCE_DX: uint16 = 0xB662;
+
+const SOURCE_DXDY: uint16 = 0xB665;
+
+const SOURCE_DY: uint16 = 0xB663;
+
+const SOURCE_REF: uint16 = 0xB666;
+
+const SOURCE_X: uint16 = 0xB660;
+
+const SOURCE_XY: uint16 = 0xB664;
+
+const SOURCE_Y: uint16 = 0xB661;
+
+const START_ANGLE: uint16 = 0xB480;
+
+const START_SCALED_VALUE: uint16 = 0xB504;
+
+const START_VALUE: uint16 = 0xB502;
+
+const STOP_BACKWARD: uint16 = 0xB6B2;
+
+const STOP_FORWARD: uint16 = 0xB6B1;
+
+const STRING: uint16 = 0xB490;
+
+const STRING_ALTERNATE: uint16 = 0xB498;
+
+const STRING_ARRAY: uint16 = 0xB4A0;
+
+const STYLE_SET: uint16 = 0xB4B0;
+
+const STYLE_SET_ARRAY: uint16 = 0xB4B1;
+
+const STYLE_SET_ARRAY_SIZE: uint16 = 0xB4B2;
+
+const SYMBOL_ENTRY_ARRAY: uint16 = 0xB2E9;
+
+const SYMBOL_POSITION: uint16 = 0xB4C2;
+
+const SYMBOL_REFERENCE: uint16 = 0xB4C0;
+
+const SYNC_FRAME: uint16 = 0xB4C7;
+
+const TAB_DIRECTION_WIDGET_ID_ARRAY: uint16 = 0xB672;
+
+const TAB_POSITION: uint16 = 0xB052;
+
+const TARGET_WIDGET_ID: uint16 = 0xB650;
+
+const TICS_COARSE: uint16 = 0xB4D0;
+
+const TICS_COARSE_8BYTE: uint16 = 0xB4D2;
+
+const TICS_COARSE_ARRAY: uint16 = 0xB0A6;
+
+const TICS_FINE: uint16 = 0xB4E0;
+
+const TICS_FINE_8BYTE: uint16 = 0xB4E2;
+
+const TICS_FINE_ARRAY: uint16 = 0xB0AA;
+
+const TIMEOUT_VALUE: uint16 = 0xB071;
+
+const TO_ANGLE: uint16 = 0xB70D;
+
+const TO_SCALE_X: uint16 = 0xB70E;
+
+const TO_SCALE_XY: uint16 = 0xB716;
+
+const TO_SCALE_Y: uint16 = 0xB70F;
+
+const TO_VALUE: uint16 = 0xB710;
+
+const TO_VALUE_X: uint16 = 0xB711;
+
+const TO_VALUE_XY: uint16 = 0xB718;
+
+const TO_VALUE_Y: uint16 = 0xB712;
+
+const TRANSLATION_X: uint16 = 0xB4F0;
+
+const TRANSLATION_XY: uint16 = 0xB510;
+
+const TRANSLATION_Y: uint16 = 0xB500;
+
+const TREE_NODE_STYLE_ARRAY: uint16 = 0xB629;
+
+const UA_POSITION_FLAG: uint16 = 0xB1C1;
+
+const UNSELECT_ALL: uint16 = 0xB43A;
+
+const VALUE: uint16 = 0xB520;
+
+const VALUE_8BYTE: uint16 = 0xB522;
+
+const VERTEX_BUFFER_IDENT: uint16 = 0xB648;
+
+const VERTICAL_SCROLL: uint16 = 0xB218;
+
+const VERTICAL_SCROLL_PERCENTAGE: uint16 = 0xB318;
+
+const VERTICAL_SCROLL_TYPE: uint16 = 0xB4B9;
+
+const VERTICES_ARRAY: uint16 = 0xB528;
+
+const VERTICES_ARRAY_SEQ: uint16 = 0xB529;
+
+const VISIBLE: uint16 = 0xB530;
+
+const VISIBLE_CHILD: uint16 = 0xB540;
+
+const VISIBLE_CHILD_ARRAY: uint16 = 0xB005;
+
+const VISIBLE_CHILD_INDEX: uint16 = 0xB680;
+
+const WALL_DIRECTION: uint16 = 0xB174;
+
+const WALL_MODE: uint16 = 0xB173;
+
+const WORD_WRAP: uint16 = 0xB4A8;
+
+const WRAP_STYLE: uint16 = 0xB4A9;

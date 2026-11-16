@@ -1,0 +1,157 @@
+-- version swan: 2027.0 graph: 2.1 swant: 1.1
+use A424;
+
+use Str32 as Str;
+
+use Runway;
+
+_harness harness_read_char
+{
+  diagram
+    (#0 block A424::read_char
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-525;V9055","wh":"20000;14000"} #end)
+    (#1 expr 'A' pre 'P' pre 
+             'L' pre 'F' pre 'M' pre 'N' pre 
+             'N' pre 'I' pre 'C' pre 'E' pre ' ' pre 'C' pre 'O' pre 'T' pre 'E' pre ' ' pre 'D' pre ' ' pre 'A' pre 'Z' pre 'U' pre 'R' pre 
+             -- padd to 32 bytes with spaces
+             ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre 
+             '4' pre '3' pre '4' pre '0' pre '0' pre '0' pre 'N' pre ' ' pre ' ' pre 
+             '0' pre '0' pre '7' pre '1' pre '2' pre '0' pre '0' pre 'E' pre ' ' pre ' ' pre 
+             '+' pre '0' pre '0' pre '1' pre '2' pre '7' pre 
+             ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre ' ' pre '\x10' pre
+             --RWLFMN04L 434000N  0071200E  +00127 03200060ASPHALT 0843   \n
+             
+             'R' pre 'W' pre 'L' pre 'F' pre 'M' pre 'N' pre '0' pre '4' pre 'L' pre ' ' pre 
+             '4' pre '3' pre '4' pre '0' pre '0' pre '0' pre 'N' pre ' ' pre ' ' pre 
+             '0' pre '0' pre '7' pre '1' pre '2' pre '0' pre '0' pre 'E' pre ' ' pre ' ' pre 
+             '+' pre '0' pre '0' pre '1' pre '2' pre '7' pre ' ' pre 
+             '0' pre '3' pre '2' pre '0' pre '0' pre 
+             '0' pre '6' pre '0' pre
+             'A' pre 'S' pre 'P' pre 'H' pre 'A' pre 'L' pre 'T' pre ' ' pre
+             '0' pre '8' pre '4' pre '3' pre
+             ' ' pre ' ' pre ' ' pre '\x10'
+    #pragma diagram {"xy":"H-89025;V9055","wh":"126000;39549"} #end)
+    (#2 def res
+    #pragma diagram {"xy":"H28975;V9055"} #end)
+    (let _stop_condition = _current_cycle >= 131;
+    #pragma diagram {"xy":"H10788;V27230","wh":"46000;3200"} #end)
+    
+    (#3 wire #0 => #2
+    #pragma diagram {"wp":"v0|#0 #2"} #end)
+    (#4 wire #1 => #0)
+    
+    (var
+        res;)
+    (activate #5 when res match
+      | A424::Field { f } :
+        {
+          diagram
+            (activate #6 when f match
+              | A424::Airport {x} :
+                {
+                  diagram
+                    (#7 expr _current_cycle = 71
+                    #pragma diagram {"xy":"h17300;v10874","wh":"22000;3200"} #end)
+                    (assert $airport: #9 ; 
+                      where
+                        (#9 group)
+                    #pragma diagram {"xy":"h77700;v0"} #end)
+                    (#10 block {text%(and)%text}
+                    #pragma diagram {"xy":"h50200;v0","wh":"12000;26098"} #end)
+                    (#27 expr x.lat >= 43.6666 and x.lat <= 43.6667
+                    #pragma diagram {"xy":"h8300;v-10874","wh":"40000;3200"} #end)
+                    (#28 expr Str::cmp(x.name, Str::mk<<16>>(['N','I','C','E',' ','C','O','T','E',' ','D',' ','A','Z','U','R'])) = Str::Equal
+                    #pragma diagram {"xy":"h-27700;v-6524","wh":"112000;3200"} #end)
+                    (#29 expr x.icao = ['L','F','M','N']
+                    #pragma diagram {"xy":"h13300;v-2175","wh":"30000;4219"} #end)
+                    (#30 expr x.elev_ft = 127
+                    #pragma diagram {"xy":"h18300;v2175","wh":"20000;3200"} #end)
+                    (#31 expr x.lon >= 7.1999 and x.lon <= 7.2001
+                    #pragma diagram {"xy":"h9300;v6524","wh":"38000;3200"} #end)
+                    
+                    (#32 wire #28 => #10 .(3))
+                    (#33 wire #7 => #10 .(1))
+                    (#34 wire #29 => #10 .(2))
+                    (#35 wire #30 => #10 .(4))
+                    (#36 wire #10 => #9
+                    #pragma diagram {"wp":"v0|#10 #9"} #end)
+                    (#37 wire #27 => #10 .(5))
+                    (#38 wire #31 => #10 .(6))
+                #pragma diagram {"xy":"h0;v-19613","wh":"171400;30098"} #end
+                }
+              | A424::Runway {x} :
+                {
+                  diagram
+                    (#11 expr _current_cycle = 131
+                    #pragma diagram {"xy":"h-16150;v17047","wh":"24000;3200"} #end)
+                    (assert $runway: #13 ; 
+                      where
+                        (#13 group)
+                    #pragma diagram {"xy":"h46150;v395"} #end)
+                    (#14 block {text%(and)%text}
+                    #pragma diagram {"xy":"h18650;v395","wh":"12000;36954"} #end)
+                    (#39 expr x.icao = ['L','F','M','N']
+                    #pragma diagram {"xy":"h-19150;v-16763","wh":"30000;4219"} #end)
+                    (#40 expr x.id = ['0','4','L','\x00']
+                    #pragma diagram {"xy":"h-19150;v-12553","wh":"30000;3200"} #end)
+                    (#44 expr x.elev_thr_ft = 127
+                    #pragma diagram {"xy":"h-15150;v-8853","wh":"22000;3200"} #end)
+                    (#45 expr x.lon_thr >= 7.1999 and x.lon_thr <= 7.2001
+                    #pragma diagram {"xy":"h-27150;v-5153","wh":"46000;3200"} #end)
+                    (#46 expr x.lat_thr >= 43.6666 and x.lat_thr <= 43.6667
+                    #pragma diagram {"xy":"h-28150;v-1453","wh":"48000;3200"} #end)
+                    (#50 expr x.heading_deg10 = 843
+                    #pragma diagram {"xy":"h-16150;v2247","wh":"24000;3200"} #end)
+                    (#51 expr x.length_ft = 3200
+                    #pragma diagram {"xy":"h-15150;v5947","wh":"22000;3200"} #end)
+                    (#52 expr x.width_ft = 60
+                    #pragma diagram {"xy":"h-14150;v9647","wh":"20000;3200"} #end)
+                    (#54 expr x.surface = Runway::ASPHALT
+                    #pragma diagram {"xy":"h-19150;v13347","wh":"30000;3200"} #end)
+                    
+                    (#41 wire #11 => #14 .(1))
+                    (#42 wire #14 => #13
+                    #pragma diagram {"wp":"v0|#14 #13"} #end)
+                    (#43 wire #39 => #14 .(2))
+                    (#47 wire #40 => #14 .(3))
+                    (#48 wire #46 => #14 .(4))
+                    (#49 wire #45 => #14 .(5))
+                    (#53 wire #44 => #14 .(6))
+                    (#55 wire #51 => #14 .(7))
+                    (#56 wire #52 => #14 .(8))
+                    (#57 wire #54 => #14 .(9))
+                    (#58 wire #50 => #14 .(10))
+                #pragma diagram {"xy":"h0;v20508","wh":"171400;41744"} #end
+                }
+            #pragma diagram {"xy":"h0;v0","wh":"171400;82761"} #end)
+        #pragma diagram {"xy":"h0;v-7700","wh":"175400;86761"} #end
+        }
+      | A424::Reading {} :
+        {
+          diagram
+            (assert $reading: #16 ; 
+              where
+                (#16 group)
+            #pragma diagram {"xy":"h30000;v0"} #end)
+            (#17 expr _current_cycle <> 71 and _current_cycle <> 131
+            #pragma diagram {"xy":"h-12000;v0","wh":"48000;3200"} #end)
+            
+            (#18 wire #17 => #16)
+        #pragma diagram {"xy":"h0;v43140","wh":"175400;7200"} #end
+        }
+      | A424::Error {} :
+        {
+          diagram
+            (#19 expr false
+            #pragma diagram {"xy":"h-12000;v0","wh":"10000;3200"} #end)
+            (assert $error: #21 ; 
+              where
+                (#21 group)
+            #pragma diagram {"xy":"h11000;v0"} #end)
+            
+            (#22 wire #19 => #21)
+        #pragma diagram {"xy":"h0;v54199","wh":"175400;7200"} #end
+        }
+    #pragma diagram {"xy":"H-39412;V100002","wh":"175400;115599"} #end)
+}

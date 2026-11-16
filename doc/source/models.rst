@@ -41,6 +41,16 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
 
         :fas:`fa-solid fa-newspaper` `Companion article <https://innovation.ansys.com/public/articles/topic/from-equations-to-execution-modeling-and-integrating-a-satellite-controller-with-scade-one-expu/>`__
 
+    .. grid-item-card:: A Model-Centric Flight Management System Architecture
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2026-07-02-model-centric-fms.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2026-07-02-model-centric-fms>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2026-07-02-model-centric-fms>`
+
+        :fas:`fa-solid fa-newspaper` `Companion article <https://innovation.ansys.com/public/articles/topic/a-model-centric-flight-management-system-architecture-expu/>`__
+
     .. grid-item-card:: Control software for a rice cooker with Scade One
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2026-04-10-rice-cooker.jpg
