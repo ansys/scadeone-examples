@@ -33,6 +33,7 @@ It implements a simplified Flight Management System (FMS) User Application in Sw
 | `scade-one/UDP` | UDP sockets (imported operators, WinSock2), with test |
 | `scade-one/File` | File reading (imported operators) |
 | `scade-one/Strings` | Fixed-size string library |
+| `scade-one/start_scade_one.bat` | Starts Scade One with `FMS_DATA_DIR` set to the `data` folder |
 | `scade-a661` | ARINC 661 User Application Definition File sources and scripts |
 | `data` | Navigation database `f-424` and the script that generates it |
 
@@ -56,21 +57,44 @@ FMS_App ──> A661 ──> Strings
    - Run `.\scade-a661\start_a661_server.bat [ANSYS_INSTALL_DIR]`.
    - The server window opens and listens for the User Application on UDP port 1231.
 
-3. Tell the model where the navigation database is.
-   - Set the environment variable `FMS_DATA_DIR` to the absolute path of the `data`
-     folder, then start Scade One from that environment. For example:
+3. Start Scade One with `FMS_DATA_DIR` set.
+   - The model reads the navigation database `data\f-424` from the folder given by the
+     environment variable `FMS_DATA_DIR`. It must be an absolute path, and it must be
+     defined **before** Scade One starts: the simulator runs from a temporary folder,
+     and inherits its environment from Scade One.
+   - Easiest: run `.\scade-one\start_scade_one.bat [SCADE_ONE_INSTALL_DIR]`
+     (default: `%ProgramFiles%\ANSYS Inc\v271\Scade One`). It sets `FMS_DATA_DIR` to
+     this example's `data` folder and opens `FMS_App.sproj` in Scade One.
+   - Alternatively, define the variable permanently, then close and restart Scade One:
 
      ```bat
-     set FMS_DATA_DIR=C:\path\to\2026-07-02-model-centric-fms\data
+     setx FMS_DATA_DIR "C:\path\to\2026-07-02-model-centric-fms\data"
      ```
 
-   - If `FMS_DATA_DIR` is not set, the file `f-424` is searched in the current
-     directory of the simulation.
+     Note that `set FMS_DATA_DIR=...` only applies to the current console: it has no
+     effect on a Scade One instance started from the Start menu.
 
-4. In **Scade One**, open project `.\scade-one\FMS_App\FMS_App.sproj`.
+4. In **Scade One**, open project `.\scade-one\FMS_App\FMS_App.sproj` (already open if
+   you used `start_scade_one.bat`).
    - Run job `RunWithServer`.
-   - The model loads the navigation database, then connects to the ARINC 661 server.
+   - **Expect about 1-2 minutes before anything happens on the display.** Scade One
+     first generates the code and compiles the simulator; during that time the User
+     Application is not running yet, and the server window keeps showing `cycle 0`.
+     You can follow the progress in the job output in Scade One.
+   - The model then loads the navigation database, and connects to the ARINC 661 server.
      Enter an ICAO airport code (for example `LFBO`) in the display, and select a runway.
+
+### Troubleshooting
+
+- The display stays empty after the simulator has started, or no airport is found:
+  the navigation database was probably not loaded. Check that `FMS_DATA_DIR` was set
+  before Scade One was started (see step 3). The simulator prints one of these messages
+  on its standard error:
+
+  ```
+  FMS: environment variable FMS_DATA_DIR is not set; cannot open f-424.
+  FMS: cannot open 'C:\...\f-424'.
+  ```
 
 ### Tests
 
