@@ -1,0 +1,797 @@
+-- version swan: 2027.0 graph: 2.1
+use Str32 as Str;
+
+function is_empty (s: t;)
+  returns (e: bool;)
+{
+  diagram
+    (let e = s.sz = 0;
+    #pragma diagram {"xy":"H-58350;V-103050","wh":"20000;3200"} #end)
+}
+
+inline function singleton (v: Ord::t;)
+  returns (s: t;)
+{
+  diagram
+    (#0 def s
+    #pragma diagram {"xy":"H9950;V-23650"} #end)
+    (#1 expr {#2}: t
+      where
+        (#2 group)
+    #pragma diagram {"xy":"H-9050;V-23650","wh":"10000;10000"} #end)
+    (#3 expr [v] @ (Ord::d^(N - 1))
+    #pragma diagram {"xy":"H-40850;V-21150","wh":"24000;3200"} #end)
+    (#4 expr 1
+    #pragma diagram {"xy":"H-32850;V-26150"} #end)
+    
+    (#5 wire #1 => #0)
+    (#6 wire #3 => #2 .(d))
+    (#7 wire #4 => #2 .(sz))
+}
+
+function add (s_in * : t;
+              v: Ord::t;)
+  returns (s_out at s_in: t;
+           status: add_status;)
+{
+  diagram
+    (#0 expr if #1 then #2 else #3
+      where
+        (#1 group)
+        (#2 group)
+        (#3 group)
+    #pragma diagram {"xy":"H58339;V38088"} #end)
+    (#4 expr
+      #5 with
+        .sz = #6;
+          where
+            (#5 group)
+            (#6 group)
+      #pragma diagram {"xy":"H83339;V36188","wh":"16000;7000"} #end)
+    (#7 def status
+    #pragma diagram {"xy":"H-2661;V106915","wh":"10000;3200"} #end)
+    (#8 expr status = Inserted
+    #pragma diagram {"xy":"H27839;V30588","wh":"20000;3200"} #end)
+    (#9 expr forward
+      <<N>> with <<ii>>
+      diagram
+        (#10 expr ! #11
+          where
+            (#11 group)
+        #pragma diagram {"xy":"h7936;v-49407"} #end)
+        (#12 def v_tmp
+        #pragma diagram {"xy":"h28936;v-59067","wh":"10000;3200"} #end)
+        (#13 block ({op_expr%function s => (s.d . [ii] default Ord::d)%op_expr})
+        #pragma diagram {"xy":"h-21538;v-59067","wh":"19948;7319"} #end)
+        (#14 expr last 's_tmp
+        #pragma diagram {"xy":"h-55011;v-49407","wh":"16000;3200"} #end)
+        (#15 expr ! #16
+          where
+            (#16 group)
+        #pragma diagram {"xy":"h7936;v-59067"} #end)
+        (#17 expr #18 . sz
+          where
+            (#18 group)
+        #pragma diagram {"xy":"h-16564;v-49407","wh":"10000;7000"} #end)
+        (#19 def sz_tmp
+        #pragma diagram {"xy":"h28936;v-49407","wh":"10000;3200"} #end)
+        
+        (#20 wire #15 => #12)
+        (#21 wire #13 => #16
+        #pragma diagram {"wp":"v0|#13 #16"} #end)
+        (#22 wire #17 => #11)
+        (#23 wire #14 => #18, #13
+        #pragma diagram {"wp":"#14 h9250[#18, v-9660 #13]"} #end)
+        (#24 wire #10 => #19)
+        
+        (var
+            v_tmp;
+            sz_tmp;
+            status;)
+        (automaton #25 $Insert
+           initial state #63 Walk
+           #pragma cg default #end
+           #pragma diagram {"xy":"h-27238;v0","wh":"219050;86548"} #end :
+             diagram
+               (automaton #26 $Walk
+                  state #49 InsertSmaller
+                  #pragma diagram {"xy":"h35025;v14736","wh":"133000;41076"} #end :
+                    diagram
+                      (let status = if sz_tmp >= N then CarryOverflow {Ord::t group (v_current)} else Inserted;
+                      #pragma diagram {"xy":"h24925;v12569","wh":"58000;7938"} #end)
+                      (#28 expr last 's_tmp
+                      #pragma diagram {"xy":"h-28500;v-12878","wh":"16000;3200"} #end)
+                      (#29 block ({op_expr%function s => (s.d . [ii] default Ord::d)%op_expr})
+                      #pragma diagram {"xy":"h3858;v-12878","wh":"14285;7319"} #end)
+                      (#30 def s_tmp
+                      #pragma diagram {"xy":"h31500;v-3219","wh":"10000;3200"} #end)
+                      (#31 expr ! #32
+                        where
+                          (#32 group)
+                      #pragma diagram {"xy":"h32500;v-12878"} #end)
+                      (#33 expr
+                        #34 with
+                          .d[ii] = #35;
+                            where
+                              (#34 group)
+                              (#35 group)
+                        #pragma diagram {"xy":"h3000;v-3219","wh":"16000;7000"} #end)
+                      (#36 expr #37 pre #38
+                        where
+                          (#37 group)
+                          (#38 group)
+                      #pragma diagram {"xy":"h-26500;v-1319"} #end)
+                      (#39 expr v
+                      #pragma diagram {"xy":"h-52500;v-3219"} #end)
+                      (#40 def v_current
+                      #pragma diagram {"xy":"h55500;v-12878","wh":"14000;3200"} #end)
+                      (#41 expr v_current
+                      #pragma diagram {"xy":"h-55500;v581","wh":"14000;3200"} #end)
+                      
+                      (#42 wire #29 => #32
+                      #pragma diagram {"wp":"v0|#29 #32"} #end)
+                      (#43 wire #31 => #40)
+                      (#44 wire #33 => #30)
+                      (#45 wire #28 => #34, #29
+                      #pragma diagram {"wp":"#28 h9250[v7760 #34, #29]"} #end)
+                      (#46 wire #39 => #37)
+                      (#47 wire #36 => #35)
+                      (#48 wire #41 => #38)
+                      
+                      (var
+                          v_current;)
+                  initial state #51 Before
+                  #pragma cg default #end
+                  #pragma diagram {"xy":"h-73525;v0","wh":"56000;12219"} #end :
+                    diagram
+                      (let status = CarryOverflow {Ord::t group (v)};
+                      #pragma diagram {"xy":"h0;v0","wh":"48000;4219"} #end)
+                  state #62 AppendLarger
+                  #pragma diagram {"xy":"h25525;v-22538","wh":"114000;25472"} #end :
+                    diagram
+                      (let status = if sz_tmp >= N then CarryOverflow {Ord::t group (v)} else Inserted;
+                      #pragma diagram {"xy":"h28000;v4767","wh":"50000;7938"} #end)
+                      (#53 expr
+                        #54 with
+                          .d[ii] = #55;
+                            where
+                              (#54 group)
+                              (#55 group)
+                        #pragma diagram {"xy":"h-17000;v-5236","wh":"16000;7000"} #end)
+                      (#56 expr last 's_tmp
+                      #pragma diagram {"xy":"h-45000;v-7136","wh":"16000;3200"} #end)
+                      (#57 def s_tmp
+                      #pragma diagram {"xy":"h8000;v-5236","wh":"10000;3200"} #end)
+                      (#58 expr v
+                      #pragma diagram {"xy":"h-41000;v-3336"} #end)
+                      
+                      (#59 wire #56 => #54)
+                      (#60 wire #58 => #55)
+                      (#61 wire #53 => #57)
+                  :1: #51 unless if (Ord::cmp(v, v_tmp) = Ord::Smaller)
+                  restart #49
+                  #pragma diagram {"tp":"h13635;v-6109|#51 v-500 v-500 v-500 v-1517 h3034;v-1517 h3034 h9260 h6173;v1733 v3467 v433 v433 v433 v4333 h2457;v2167 h2458 h667 h667 h-66500;v-12379|#49"} #end;
+                  :3: #51 unless if (ii = sz_tmp)
+                  restart #62
+                  #pragma diagram {"tp":"h-13865;v-6109|#51 v-500 v-500 v-500 v-10517 h13479;v-10517 h13479 h8986 h19305 h-57000;v-6105|#62"} #end;
+                #pragma diagram {"xy":"h0;v0","wh":"211050;78548"} #end)
+           state #65 Drop
+           #pragma diagram {"xy":"h114762;v0","wh":"44000;14078"} #end :
+             diagram
+               (let status = AlreadyIn pre status;
+               #pragma diagram {"xy":"h0;v0","wh":"36000;6078"} #end)
+           :1: #63 unless if (Ord::cmp(v, v_tmp) = Ord::Equal and ii < sz_tmp)
+           restart #65
+           #pragma diagram {"tp":"h109525;v468|#63 h3492 h3492 h-22000;v468|#65"} #end;
+         #pragma diagram {"xy":"h0;v15453","wh":"281526;94548"} #end)
+      until ii >= sz_tmp
+      returns (s_tmp: last = s_in,
+               status)
+    #pragma diagram {"xy":"H-168624;V71551","wh":"290126;141454"} #end)
+    (#66 expr #67 . sz
+      where
+        (#67 group)
+    #pragma diagram {"xy":"H-2661;V36188","wh":"10000;7000"} #end)
+    (let s_out = (s_local at s_in);
+    #pragma diagram {"xy":"H100516;V1364","wh":"34000;3200"} #end)
+    (#69 def s_local
+    #pragma diagram {"xy":"H109339;V36188","wh":"12000;3200"} #end)
+    (#70 block ({op_expr%function x => x + 1%op_expr})
+    #pragma diagram {"xy":"H31839;V36188","wh":"12000;7000"} #end)
+    
+    (#71 wire #9 .(3) => #7
+    #pragma diagram {"wp":"v35364|#9 #7"} #end)
+    (#72 wire #4 => #69)
+    (#73 wire #8 => #1
+    #pragma diagram {"wp":"#8 h22000 #1"} #end)
+    (#74 wire #0 => #6)
+    (#75 wire #66 => #3, #70
+    #pragma diagram {"wp":"#66 h16500[v3800 #3, #70]"} #end)
+    (#76 wire #70 => #2
+    #pragma diagram {"wp":"v0|#70 #2"} #end)
+    (#77 wire #9 .(2) => #67, #5
+    #pragma diagram {"wp":"v-37263|#9 h7950[v1900 #67, v-6300 h84950 v6300 #5]"} #end)
+    
+    (var
+        s_local;)
+}
+
+function add2 (s_in * : t;
+               v: Ord::t;)
+  returns (s_out at s_in: t;
+           status: add_status;)
+{
+  diagram
+    (#0 expr forward
+      <<N>> with <<ii>> [a] = s_in.d;
+      diagram
+        (var
+            b;
+            st;)
+        (automaton #1 $Insert
+           initial state #7 Walk
+           #pragma diagram {"xy":"h-20988;v2281","wh":"138050;55595"} #end :
+             diagram
+               (automaton #3 $Walk
+                  state #2 InsertSmaller
+                  #pragma diagram {"xy":"h33025;v10899","wh":"56000;17797"} #end :
+                    diagram
+                      (let
+                          b = v pre a;
+                          st = if s_in.sz = N then CarryOverflow {Ord::t group (a)} else Inserted;
+                      #pragma diagram {"xy":"h0;v0","wh":"48000;9797"} #end)
+                  initial state #4 Before
+                  #pragma diagram {"xy":"h-35025;v0","wh":"52000;14078"} #end :
+                    diagram
+                      (let
+                          b = a;
+                          st = CarryOverflow {Ord::t group (v)};
+                      #pragma diagram {"xy":"h0;v0","wh":"44000;6078"} #end)
+                  state #6 AppendLarger
+                  #pragma diagram {"xy":"h33025;v-10899","wh":"56000;17797"} #end :
+                    diagram
+                      (let
+                          b = v pre a;
+                          st = if s_in.sz = N then CarryOverflow {Ord::t group (v)} else Inserted;
+                      #pragma diagram {"xy":"h0;v0","wh":"48000;9797"} #end)
+                  :1: #4 unless if (Ord::cmp(v, a) = Ord::Smaller)
+                  restart #2
+                  #pragma diagram {"tp":"h26000;v4520|#4 h4683 h4683 h-28000;v-6379|#2"} #end;
+                  :3: #4 unless if (ii = s_in.sz and s_in.sz <= N)
+                  restart #6
+                  #pragma diagram {"tp":"h26000;v-4359|#4 h4683 h4683 h-28000;v6540|#6"} #end;
+                #pragma diagram {"xy":"h0;v0","wh":"130050;47595"} #end)
+           state #9 Drop
+           #pragma diagram {"xy":"h75012;v2281","wh":"30000;14078"} #end :
+             diagram
+               (let
+                   b = a;
+                   st = AlreadyIn;
+               #pragma diagram {"xy":"h0;v0","wh":"22000;6078"} #end)
+           :1: #7 unless if (Ord::cmp(v, a) = Ord::Equal and ii < s_in.sz)
+           restart #9
+           #pragma diagram {"tp":"h69025;v0|#7 h3992 h3992 h-15000;v0|#9"} #end;
+         #pragma diagram {"xy":"h0;v0","wh":"188026;68157"} #end)
+      until ii >= s_in.sz
+      returns ([b default Ord::d],
+               st)
+    #pragma diagram {"xy":"H19402;V-995","wh":"196626;84157"} #end)
+    (#10 def s_out
+    #pragma diagram {"xy":"H193840;V-4666","wh":"10000;3200"} #end)
+    (#13 def status
+    #pragma diagram {"xy":"H144615;V20044","wh":"10000;3200"} #end)
+    (#14 expr
+      case #15 of
+        | Inserted : #16
+        | default : #17
+      where
+        (#15 group)
+        (#16 group)
+        (#17 group)
+    #pragma diagram {"xy":"H141615;V45084","wh":"16000;10800"} #end)
+    (#18 expr s_in.sz
+    #pragma diagram {"xy":"H111715;V48884","wh":"12000;3200"} #end)
+    (#19 expr s_in.sz + 1
+    #pragma diagram {"xy":"H109715;V45184","wh":"16000;3200"} #end)
+    (#20 expr
+      #21 with*
+        .d = #23;
+        .sz = #26;
+          where
+            (#21 group)
+            (#23 group)
+            (#26 group)
+      #pragma diagram {"xy":"H170775;V-2600","wh":"16000;10800"} #end)
+    (#27 expr s_in
+    #pragma diagram {"xy":"H142065;V-6400"} #end)
+    
+    (#22 wire #0 .(3) => #13, #15
+    #pragma diagram {"wp":"v33559|#0 h7951[v-12520 #13, h15949 #15]"} #end)
+    (#24 wire #19 => #16
+    #pragma diagram {"wp":"#19 h9450 v-100 #16"} #end)
+    (#25 wire #18 => #17)
+    (#28 wire #20 => #10
+    #pragma diagram {"wp":"#20 h6533 v-166 #10"} #end)
+    (#29 wire #0 .(2) => #23
+    #pragma diagram {"wp":"v-1605|#0 #23"} #end)
+    (#30 wire #14 => #26
+    #pragma diagram {"wp":"#14 h8080 v-43884 #26"} #end)
+    (#31 wire #27 => #21)
+}
+
+inline function mem (s: t;
+                     v: Ord::t;)
+  returns (in_mem: bool;)
+{
+  diagram
+    (#0 expr forward
+      <<N>>
+      unless is_empty(s)
+      diagram
+        (let middle = (last 'low + last 'high) / 2;
+        #pragma diagram {"xy":"h-13525;v-25523","wh":"42000;4219"} #end)
+        
+        (var
+            low last = 0;
+            high last = s.sz - 1;
+            middle;
+            mem;)
+        (activate #2 $ActivateWhen0 when Ord::cmp(v, (s.d . [middle] default Ord::d)) match
+           | Ord::Smaller :
+             {
+               diagram
+                 (let
+                     high = if middle = 0 then 0 else middle - 1;
+                     mem = false;
+                 #pragma diagram {"xy":"h0;v0","wh":"50000;6078"} #end)
+             #pragma diagram {"xy":"h0;v-10149","wh":"57000;10078"} #end
+             }
+           | Ord::Equal :
+             {
+               diagram
+                 (let mem = true;
+                 #pragma diagram {"xy":"h-12000;v0","wh":"20000;4219"} #end)
+             #pragma diagram {"xy":"h0;v3200","wh":"57000;8219"} #end
+             }
+           | Ord::Bigger :
+             {
+               diagram
+                 (let
+                     low = middle + 1;
+                     mem = false;
+                 #pragma diagram {"xy":"h-12000;v0","wh":"24000;6078"} #end)
+             #pragma diagram {"xy":"h0;v16548","wh":"57000;10078"} #end
+             }
+         #pragma diagram {"xy":"h-5025;v4544","wh":"57000;46175"} #end)
+      until mem or low > high
+      returns (mem default false)
+    #pragma diagram {"xy":"H76150;V-38375","wh":"77650;74263"} #end)
+    (#5 def in_mem
+    #pragma diagram {"xy":"H133875;V-37275","wh":"10000;3200"} #end)
+    
+    (#6 wire #0 .(3) => #5
+    #pragma diagram {"wp":"v1100|#0 #5"} #end)
+}
+
+function add_array <<M>> (s_in: t;
+                          a: Ord::t^M;)
+  returns (s_out: t;
+           status: add_status^M;)
+{
+  diagram
+    (#0 expr forward
+      <<M>> with [A] = a;
+      diagram
+        (let s, STATUS = add(s_in pre s, A);
+        #pragma diagram {"xy":"h-1000;v0","wh":"38000;4219"} #end)
+        
+        (var
+            s;
+            STATUS;)
+      returns (s,
+               [STATUS])
+    #pragma diagram {"xy":"H-6250;V-14141","wh":"48600;20619"} #end)
+    (#2 def s_out, status
+    #pragma diagram {"xy":"H39850;V-13941","wh":"18000;3200"} #end)
+    
+    (#3 wire #0 .(1, 2) => #2
+    #pragma diagram {"wp":"v200|#0 #2"} #end)
+}
+
+function intersection (a: t;
+                       b: t;)
+  returns (i: t;)
+{
+  diagram
+    (#0 expr forward
+      <<N>>
+      diagram
+        (#1 expr forward resume
+          <<N>>
+          diagram
+            (var
+                a_i last = 0_ui32;
+                b_i last = 0_ui32;
+                i_v;)
+            (automaton #8 $automaton0
+               initial state #11 SearchNextElementInSet
+               #pragma diagram {"xy":"h-19146;v-2311","wh":"69416;70744"} #end :
+                 diagram
+                   (#2 expr (a.d . [last 'a_i] default a.d[0])
+                   #pragma diagram {"xy":"h-13708;v-23822","wh":"34000;3200"} #end)
+                   (#3 expr (b.d . [last 'b_i] default b.d[0])
+                   #pragma diagram {"xy":"h-9758;v-29772","wh":"34000;3200"} #end)
+                   (#4 def a_v
+                   #pragma diagram {"xy":"h19292;v-23822"} #end)
+                   (#5 def b_v
+                   #pragma diagram {"xy":"h23242;v-29772"} #end)
+                   
+                   (#6 wire #2 => #4)
+                   (#7 wire #3 => #5)
+                   
+                   (var
+                       a_v;
+                       b_v;)
+                   (activate #9 $ActivateWhen0 when Ord::cmp(a_v, b_v) match
+                      | Ord::Equal :
+                        {
+                          diagram
+                            (let
+                                a_i = last 'a_i + 1;
+                                b_i = last 'b_i + 1;
+                                i_v = Found {Ord::t group (a_v)};
+                            #pragma diagram {"xy":"h0;v0","wh":"40000;7938"} #end)
+                        #pragma diagram {"xy":"h0;v-10919","wh":"44000;11938"} #end
+                        }
+                      | Ord::Smaller :
+                        {
+                          diagram
+                            (let
+                                a_i = last 'a_i + 1;
+                                i_v = Next;
+                            #pragma diagram {"xy":"h0;v0","wh":"30000;6078"} #end)
+                        #pragma diagram {"xy":"h0;v4289","wh":"44000;10078"} #end
+                        }
+                      | Ord::Bigger :
+                        {
+                          diagram
+                            (let
+                                b_i = last 'b_i + 1;
+                                i_v = Next;
+                            #pragma diagram {"xy":"h0;v0","wh":"30000;6078"} #end)
+                        #pragma diagram {"xy":"h0;v18567","wh":"44000;10078"} #end
+                        }
+                    #pragma diagram {"xy":"h8708;v7766","wh":"44000;47213"} #end)
+               state #13 ReachedOneSetEnd
+               #pragma diagram {"xy":"h40854;v-2311","wh":"26000;12219"} #end :
+                 diagram
+                   (let i_v = End;
+                   #pragma diagram {"xy":"h0;v0","wh":"18000;4219"} #end)
+               :1: #11 unless if (last 'a_i >= (a.sz :> uint32) or last 'b_i >= (b.sz :> uint32))
+               restart #13
+               #pragma diagram {"tp":"h-288;v35372|#11 v500 v500 v500 v1561 h3122;v1561 h3122 h8619 h8619 h8619 h5932 h2966;v-2682 v-5363 v-7793 v-7793 v-7793 v-4288 h2144;v-4288 h2144 h667 h667 h-13000;v-6|#13"} #end;
+             #pragma diagram {"xy":"h0;v0","wh":"115708;83366"} #end)
+          until i_v <> Next
+          returns (i_v)
+        #pragma diagram {"xy":"h-12750;v-29353","wh":"124308;99366"} #end)
+        (#14 def _, res
+        #pragma diagram {"xy":"h69904;v-29353","wh":"10000;3200"} #end)
+        
+        (#15 wire #1 => #14
+        #pragma diagram {"wp":"v0|#1 #14"} #end)
+        
+        (var
+            res;
+            i_d;)
+        (activate #18 when res match
+           | Found {x} :
+             {
+               diagram
+                 (let
+                     i_d = x;
+                     i_sz = last 'i_sz + 1;
+                 #pragma diagram {"xy":"h0;v0","wh":"28000;6078"} #end)
+             #pragma diagram {"xy":"h0;v-12008","wh":"48000;10078"} #end
+             }
+           | End :
+             {
+               diagram
+                 (let
+                     i_d = Ord::d;
+                     i_sz = last 'i_sz;
+                 #pragma diagram {"xy":"h0;v0","wh":"24000;6078"} #end)
+             #pragma diagram {"xy":"h0;v2270","wh":"48000;10078"} #end
+             }
+           | Next :
+             {
+               diagram
+                 (let
+                     i_d = Ord::d;
+                     i_sz = last 'i_sz;
+                 #pragma diagram {"xy":"h0;v0","wh":"44000;7938"} #end)
+             #pragma diagram {"xy":"h0;v17478","wh":"48000;11938"} #end
+             }
+         #pragma diagram {"xy":"h-12904;v54090","wh":"48000;49894"} #end)
+      returns ([i_d],
+               i_sz: last = 0)
+    #pragma diagram {"xy":"H-44058;V39843","wh":"158408;174073"} #end)
+    (#19 def i
+    #pragma diagram {"xy":"H81846;V80861"} #end)
+    (#20 expr {#21}: t
+      where
+        (#21 group)
+    #pragma diagram {"xy":"H60846;V80861","wh":"10000;10000"} #end)
+    
+    (#22 wire #0 .(2) => #21 .(sz)
+    #pragma diagram {"wp":"v43018|#0 #21"} #end)
+    (#23 wire #0 .(1) => #21 .(d)
+    #pragma diagram {"wp":"v39018|#0 #21"} #end)
+    (#24 wire #20 => #19)
+}
+
+type inter_t = End {} | Found { Ord::t } | Next {};
+
+function remove (s_in: t;
+                 v: Ord::t;)
+  returns (s_out: t;
+           status: remove_status;)
+{
+  diagram
+    (#0 expr forward
+      <<N>> with <<ii>> [a] = s_in.d; [an] = s_in.d[1 .. N - 1] @ [Ord::d];
+      diagram
+        (var
+            b;
+            s;)
+        (automaton #1
+           initial state #2 Before
+           #pragma diagram {"xy":"h-19000;v0","wh":"28000;14078"} #end :
+             diagram
+               (let
+                   b = a;
+                   s = NotInSet;
+               #pragma diagram {"xy":"h0;v0","wh":"20000;6078"} #end)
+           state #4 After
+           #pragma diagram {"xy":"h19000;v0","wh":"28000;14078"} #end :
+             diagram
+               (let
+                   b = an;
+                   s = Removed;
+               #pragma diagram {"xy":"h0;v0","wh":"20000;6078"} #end)
+           :1: #2 unless if (Ord::cmp(v, a) = Ord::Equal and ii < s_in.sz)
+           restart #4
+           #pragma diagram {"tp":"h14000;v-150|#2 h3333 h3333 h-14000;v-150|#4"} #end;
+         #pragma diagram {"xy":"h0;v0","wh":"74000;22078"} #end)
+      returns ([b],
+               s)
+    #pragma diagram {"xy":"H-13500;V-2050","wh":"82600;38478"} #end)
+    (#5 def s_out
+    #pragma diagram {"xy":"H74600;V21489","wh":"10000;3200"} #end)
+    (#6 def status
+    #pragma diagram {"xy":"H52600;V-11669","wh":"10000;3200"} #end)
+    (#7 expr status = Removed
+    #pragma diagram {"xy":"H3300;V30889","wh":"20000;3200"} #end)
+    (#8 expr if #9 then #10 else #11
+      where
+        (#9 group)
+        (#10 group)
+        (#11 group)
+    #pragma diagram {"xy":"H28000;V37389"} #end)
+    (#12 expr {#13}: t
+      where
+        (#13 group)
+    #pragma diagram {"xy":"H52600;V21489","wh":"10000;10000"} #end)
+    (#14 expr s_in.sz - 1
+    #pragma diagram {"xy":"H5300;V35489","wh":"16000;3200"} #end)
+    (#15 expr s_in.sz
+    #pragma diagram {"xy":"H7300;V39289","wh":"12000;3200"} #end)
+    
+    (#16 wire #0 .(2) => #6
+    #pragma diagram {"wp":"v-9619|#0 #6"} #end)
+    (#17 wire #12 => #5)
+    (#18 wire #7 => #9
+    #pragma diagram {"wp":"#7 h16200 #9"} #end)
+    (#19 wire #14 => #10)
+    (#20 wire #15 => #11)
+    (#21 wire #8 => #13 .(sz)
+    #pragma diagram {"wp":"#8 h11467 v-13844 #13"} #end)
+    (#22 wire #0 .(1) => #13 .(d)
+    #pragma diagram {"wp":"v17889|#0 h9900 v3817 #13"} #end)
+}
+
+function union (a: t;
+                b: t;)
+  returns (u: t;
+           carry: t;)
+{
+  diagram
+    (#0 expr (a, b)
+    #pragma diagram {"xy":"H-220175;V27150","wh":"10000;3200"} #end)
+    (#1 def carry
+    #pragma diagram {"xy":"H-136875;V30650","wh":"10000;3200"} #end)
+    (#2 block union_one
+    #pragma diagram {"xy":"H-165775;V30650","wh":"20000;14000"} #end)
+    (#3 expr (a, b)
+    #pragma diagram {"xy":"H-253675;V37650","wh":"10000;3200"} #end)
+    (#4 def u
+    #pragma diagram {"xy":"H-159775;V41150"} #end)
+    (#5 block (union_one \ ai_in: 0, bi_in: 0)
+    #pragma diagram {"xy":"H-225175;V37650","wh":"20000;14000"} #end)
+    
+    (#6 wire #5 .(ai_out, bi_out) => #2 .(ai_in, bi_in)
+    #pragma diagram {"wp":"v-3500|#5 #2"} #end)
+    (#7 wire #0 => #2 .(a, b))
+    (#8 wire #2 .(u) => #1
+    #pragma diagram {"wp":"v0|#2 #1"} #end)
+    (#9 wire #3 => #5)
+    (#10 wire #5 .(u) => #4
+    #pragma diagram {"wp":"v3500|#5 #4"} #end)
+}
+
+function union_one (a: t;
+                    ai_in: uint32;
+                    b: t;
+                    bi_in: uint32;)
+  returns (u: t;
+           ai_out: uint32;
+           bi_out: uint32;)
+{
+  diagram
+    (#0 def ai_out
+    #pragma diagram {"xy":"H-171045;V89673","wh":"10000;3200"} #end)
+    (#1 def bi_out
+    #pragma diagram {"xy":"H-171045;V129814","wh":"10000;3200"} #end)
+    (#2 expr forward
+      <<N>>
+      diagram
+        (let
+            a_v = (a.d . [last 'a_i] default a.d[0]);
+            b_v = (b.d . [last 'b_i] default b.d[0]);
+        #pragma diagram {"xy":"h20525;v-69044","wh":"44000;6078"} #end)
+        
+        (var
+            a_v;
+            b_v;
+            u_d;)
+        (automaton #4 $U
+           initial state #8 Both
+           #pragma diagram {"xy":"h-23475;v0","wh":"42100;71401"} #end :
+             diagram
+               (let u_sz = last 'u_sz + 1;
+               #pragma diagram {"xy":"h-3050;v-30101","wh":"28000;3200"} #end)
+               
+               (activate #6 $CompareU when Ord::cmp(a_v, b_v) match
+                  | Ord::Smaller :
+                    {
+                      diagram
+                        (let
+                            a_i = last 'a_i + 1;
+                            u_d = a_v;
+                        #pragma diagram {"xy":"h0;v0","wh":"26000;6078"} #end)
+                    #pragma diagram {"xy":"h0;v-12008","wh":"33000;10078"} #end
+                    }
+                  | Ord::Bigger :
+                    {
+                      diagram
+                        (let
+                            b_i = last 'b_i + 1;
+                            u_d = b_v;
+                        #pragma diagram {"xy":"h0;v0","wh":"26000;6078"} #end)
+                    #pragma diagram {"xy":"h0;v2270","wh":"33000;10078"} #end
+                    }
+                  | Ord::Equal :
+                    {
+                      diagram
+                        (let
+                            a_i = last 'a_i + 1;
+                            b_i = last 'b_i + 1;
+                            u_d = b_v;
+                        #pragma diagram {"xy":"h0;v0","wh":"26000;7938"} #end)
+                    #pragma diagram {"xy":"h0;v17478","wh":"33000;11938"} #end
+                    }
+                #pragma diagram {"xy":"h550;v6753","wh":"33000;49894"} #end)
+           state #10 Done
+           #pragma diagram {"xy":"h26525;v0","wh":"28000;12219"} #end :
+             diagram
+               (let u_d = Ord::d;
+               #pragma diagram {"xy":"h0;v0","wh":"20000;4219"} #end)
+           state #12 A
+           #pragma diagram {"xy":"h26525;v54000","wh":"36000;15938"} #end :
+             diagram
+               (let
+                   a_i = last 'a_i + 1;
+                   u_d = a_v;
+                   u_sz = last 'u_sz + 1;
+               #pragma diagram {"xy":"h0;v0","wh":"28000;7938"} #end)
+           state #14 B
+           #pragma diagram {"xy":"h26525;v-54000","wh":"36000;15938"} #end :
+             diagram
+               (let
+                   b_i = last 'b_i + 1;
+                   u_d = b_v;
+                   u_sz = last 'u_sz + 1;
+               #pragma diagram {"xy":"h0;v0","wh":"28000;7938"} #end)
+           :1: #8 unless if (last 'a_i >= (a.sz :> uint32) and last 'b_i >= (b.sz :> uint32))
+           restart #10
+           #pragma diagram {"tp":"h21050;v-42|#8 h4983 h4983 h-14000;v-42|#10"} #end;
+           :1: #12 unless if (last 'a_i >= (a.sz :> uint32))
+           restart #10
+           #pragma diagram {"tp":"h-255;v-7969|#12 v-13307 v-13307 h-255;v6110|#10"} #end;
+           :1: #14 unless if (last 'b_i >= (b.sz :> uint32))
+           restart #10
+           #pragma diagram {"tp":"h-255;v7969|#14 v13307 v13307 h-255;v-6110|#10"} #end;
+           :2: #8 unless if (last 'b_i >= (b.sz :> uint32))
+           restart #12
+           #pragma diagram {"tp":"h245;v35701|#8 v500 v500 v500 v8379 h14878;v8379 h14878 h667 h667 h-18000;v-42|#12"} #end;
+           :3: #8 unless if (last 'a_i >= (a.sz :> uint32))
+           restart #14
+           #pragma diagram {"tp":"h245;v-35701|#8 v-500 v-500 v-500 v-8421 h14878;v-8421 h14878 h667 h667 h-18000;v-42|#14"} #end;
+         #pragma diagram {"xy":"h0;v6114","wh":"97050;131938"} #end)
+      returns ([u_d],
+               u_sz: last = 0,
+               a_i: last = ai_in,
+               b_i: last = bi_in)
+    #pragma diagram {"xy":"H-249570;V149885","wh":"105650;160566"} #end)
+    (#15 def u
+    #pragma diagram {"xy":"H-150045;V207597"} #end)
+    (#16 expr {#17}: t
+      where
+        (#17 group)
+    #pragma diagram {"xy":"H-171045;V207597","wh":"10000;10000"} #end)
+    
+    (#18 wire #2 .(3) => #0
+    #pragma diagram {"wp":"v-60212|#2 #0"} #end)
+    (#19 wire #2 .(4) => #1
+    #pragma diagram {"wp":"v-20071|#2 #1"} #end)
+    (#20 wire #16 => #15)
+    (#21 wire #2 .(1) => #17 .(d)
+    #pragma diagram {"wp":"v59712|#2 #17"} #end)
+    (#22 wire #2 .(2) => #17 .(sz)
+    #pragma diagram {"wp":"v55712|#2 #17"} #end)
+}
+
+function ids_as_string_array (s_in: t;)
+  returns (ids: StrArray::t;)
+{
+  diagram
+    (#0 def ids
+    #pragma diagram {"xy":"H28600;V-1062"} #end)
+    (#1 expr {#2}: StrArray::t
+      where
+        (#2 group)
+    #pragma diagram {"xy":"H6700;V-1062","wh":"12000;13025"} #end)
+    (#3 expr s_in.sz
+    #pragma diagram {"xy":"H-47000;V-1066","wh":"60000;4219"} #end)
+    (#4 expr forward
+      <<N>> with <<ii>> [rwy] = s_in.d;
+      unless ii >= s_in.sz
+      diagram
+        (let
+            idx = 0 pre idx + 1;
+            s = Str::mk <<4>> (rwy.id);
+        #pragma diagram {"xy":"h0;v0","wh":"32000;6078"} #end)
+        
+        (var
+            idx;
+            s;)
+      returns ([idx default 0_ui16],
+               [s default Str::empty])
+    #pragma diagram {"xy":"H-40200;V26221","wh":"40600;23778"} #end)
+    (#8 def idxs, rw_ids
+    #pragma diagram {"xy":"H6700;V26221","wh":"16000;3200"} #end)
+    (#9 expr idxs @ (0_ui16^(StrArray::M - N))
+    #pragma diagram {"xy":"H-35000;V-5075","wh":"36000;3200"} #end)
+    (#10 expr rw_ids @ (Str::empty^(StrArray::M - N))
+    #pragma diagram {"xy":"H-38000;V2944","wh":"42000;3200"} #end)
+    
+    (#6 wire #1 => #0)
+    (#7 wire #3 => #2 .(sz))
+    (#11 wire #9 => #2 .(idx))
+    (#12 wire #10 => #2 .(a))
+    (#13 wire #4 .(2, 3) => #8
+    #pragma diagram {"wp":"v0|#4 #8"} #end)
+    
+    (var
+        idxs;
+        rw_ids;)
+}

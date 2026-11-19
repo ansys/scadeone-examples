@@ -1,0 +1,11 @@
+{
+  "Version": "1.0",
+  "Name": "FMS_App",
+  "Dependencies": [
+    "..\\A661\\A661.sproj",
+    "..\\UDP\\UDP.sproj",
+    "..\\FMS\\FMS.sproj",
+    "..\\File\\File.sproj"
+  ],
+  "Resources": []
+}

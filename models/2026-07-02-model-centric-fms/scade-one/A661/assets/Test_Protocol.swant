@@ -1,0 +1,572 @@
+-- version swan: 2027.0 graph: 2.1 swant: 1.1
+use Str32 as Str;
+
+use A661::RT;
+
+use Buf;
+
+use A661::Types as T;
+
+use Str32Array as StrArray;
+
+function B (u: 'U;
+            shift: 'U;)
+  returns (b: uint8;)
+  where 'U unsigned
+{
+  diagram
+    (let b = (((u lsr shift) land 0xff) :> uint8);
+    #pragma diagram {"xy":"H-16150;V-14850","wh":"48000;3200"} #end)
+}
+
+_harness harness_encode_rt_param
+{
+  diagram
+    (#0 block RT::encode_rt_param
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H0;V0","wh":"20000;14000"} #end)
+    (assert $LabelParameterStructure: #3 ; 
+      where
+        (#3 group)
+    #pragma diagram {"xy":"H76300;V0"} #end)
+    (#2 expr RT::Visible {false} pre RT::String {Str::t group (Str::mk <<5>> (['H', 'e', 'l', 'l', 'o']))} pre RT::ColorIndex {12} pre RT::Visible {true} pre RT::String {cd: 'o'^32, sz: 32} pre RT::String {Str::t group (Str::mk <<2>> (['H', 'e']))} pre RT::String {Str::t group (Str::mk <<3>> (['H', 'e', 'l']))} pre RT::String {Str::t group (Str::mk <<4>> (['H', 'e', 'l', 'l']))}
+    #pragma diagram {"xy":"H-66575;V4648","wh":"66000;15376"} #end)
+    (#4 expr Buf::mk <<4>> ([0xb5, 0x30, 0x00, 0x00]) pre Buf::mk <<4 + 5 + 1 + 2>> ([0xb4, 0x90, 0x00, 5 + 1, 0x48, 0x65, 0x6C, 0x6C, 0x6f, 0x00, 0x00, 0x00]) pre Buf::mk <<4>> ([0xb1, 0x60, 0x0C, 0x00]) pre Buf::mk <<4>> ([0xb5, 0x30, 0x01, 0x00]) pre Buf::mk <<4 + 32 + 1 + 3>> ([0xb4, 0x90, 0x00, 32 + 1, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x6f, 0x00, 0x00, 0x00, 0x00]) pre Buf::mk <<4 + 2 + 1 + 1>> ([0xb4, 0x90, 0x00, 2 + 1, 0x48, 0x65, 0x00, 0x00]) pre Buf::mk <<4 + 3 + 1 + 0>> ([0xb4, 0x90, 0x00, 3 + 1, 0x48, 0x65, 0x6C, 0x00]) pre Buf::mk <<4 + 4 + 1 + 3>> ([0xb4, 0x90, 0x00, 4 + 1, 0x48, 0x65, 0x6C, 0x6C, 0x00, 0x00, 0x00, 0x00])
+    #pragma diagram {"xy":"H-48575;V26660","wh":"102000;24673"} #end)
+    (#5 expr #6 = #7
+      where
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H44300;V0"} #end)
+    (#24 def _stop_condition
+    #pragma diagram {"xy":"H24975;V-17649","wh":"20000;3200"} #end)
+    (#25 expr _current_cycle > 8
+    #pragma diagram {"xy":"H-32561;V-17649","wh":"22000;3200"} #end)
+    (#12 expr Buf::mk <<4>> ([0xb5, 0x30, 0x01, 0x00])
+    #pragma diagram {"xy":"H-81675;V63382","wh":"40000;4219"} #end)
+    (#13 expr RT::Visible {true}
+    #pragma diagram {"xy":"H-91675;V51236","wh":"20000;3200"} #end)
+    (#14 expr #15 = #16
+      where
+        (#15 group)
+        (#16 group)
+    #pragma diagram {"xy":"H42200;V52675"} #end)
+    (#27 expr !Buf::empty
+    #pragma diagram {"xy":"H-48300;V-9544","wh":"16000;3200"} #end)
+    (#17 block RT::encode_rt_param
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-2100;V52675","wh":"20000;14000"} #end)
+    (assert $GpRectangle: #19 ; 
+      where
+        (#19 group)
+    #pragma diagram {"xy":"H74200;V52675"} #end)
+    (#20 expr !Buf::empty
+    #pragma diagram {"xy":"H-52150;V47105","wh":"16000;3200"} #end)
+    
+    (#8 wire #2 => #0 .(msg))
+    (#10 wire #0 => #6
+    #pragma diagram {"wp":"v-1900|#0 #6"} #end)
+    (#26 wire #25 => #24)
+    (#21 wire #17 => #15
+    #pragma diagram {"wp":"v-1900|#17 #15"} #end)
+    (#22 wire #13 => #17 .(msg))
+    (#9 wire #4 => #7
+    #pragma diagram {"wp":"#4 h35325 v-24760 #7"} #end)
+    (#23 wire #12 => #16
+    #pragma diagram {"wp":"#12 h85725 v-8807 #16"} #end)
+    (#29 wire #20 => #17 .(buf_in))
+    (#30 wire #14 => #19)
+    (#11 wire #5 => #3)
+    (#28 wire #27 => #0 .(buf_in)
+    #pragma diagram {"wp":"#27 h15600 v4524 #0"} #end)
+}
+
+_harness harness_encode_runtime_command
+{
+  diagram
+    (#0 block RT::encode_runtime_command
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-7975;V10150","wh":"25450;14000"} #end)
+    (#1 expr [RT::Visible {true}, RT::String {Str::t group (Str::mk <<5>> (['H', 'e', 'l', 'l', 'o']))}, RT::ColorIndex {12}]
+    #pragma diagram {"xy":"H-106464;V14111","wh":"64000;6078"} #end)
+    (#4 expr widget_id
+    #pragma diagram {"xy":"H-79464;V7525","wh":"14000;3200"} #end)
+    (#10 expr Buf::mk <<28>> ([0xCA_ui8, 0x02, 0x00, 0x1C, B(widget_id, 8), B(widget_id, 0), 0x00, 0x00, 0xb5, 0x30, 0x01, 0x00, 0xb4, 0x90, 0x00, 0x06, 0x48, 0x65, 0x6C, 0x6C, 0x6f, 0x00, 0x00, 0x00, 0xb1, 0x60, 0x0C, 0x00])
+    #pragma diagram {"xy":"H-41725;V46993","wh":"118000;17235"} #end)
+    (#17 expr #18 = #19
+      where
+        (#18 group)
+        (#19 group)
+    #pragma diagram {"xy":"H30158;V17395"} #end)
+    (assert $LabelCmdSetParameter: #21 ; 
+      where
+        (#21 group)
+    #pragma diagram {"xy":"H53000;V17395"} #end)
+    (#25 def widget_id
+    #pragma diagram {"xy":"H-51700;V-19675","wh":"14000;3200"} #end)
+    (#26 expr 0xAA1C
+    #pragma diagram {"xy":"H-88918;V-19675","wh":"10000;3200"} #end)
+    (#2 block RT::mk_sp <<3>> 
+    #pragma diagram {"xy":"H-51700;V10150","wh":"20000;14000"} #end)
+    (#28 def _stop_condition
+    #pragma diagram {"xy":"H-51700;V-28726","wh":"20000;3200"} #end)
+    (#29 expr true
+    #pragma diagram {"xy":"H-87918;V-28726"} #end)
+    (#8 expr !Buf::empty
+    #pragma diagram {"xy":"H-33400;V21050","wh":"16000;3200"} #end)
+    (#11 expr RT::mk_sp <<3>> (widget_id, [RT::Enable {T::True}, RT::EntryList {StrArray::t group (StrArray::mk <<2>> ([Str::mk <<5>> (['H', 'e', 'l', 'l', 'o']), Str::mk <<7>> (['W', 'o', 'r', 'l', 'd', ' ', '!'])]))}, RT::NumberOfEntries {2}])
+    #pragma diagram {"xy":"H-59467;V75408","wh":"138000;11657"} #end)
+    (#12 expr Buf::mk <<44>> ([0xCA_ui8, 0x02, 0x00, 0x2C, B(widget_id, 8), B(widget_id, 0), 0x00, 0x00, 0xB1, 0x80, 0x01, 0x00, 0xB4, 0xA0, 0x00, 0x02, 0x00, 0x00, 0x00, 0x06, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x08, 0x57, 0x6F, 0x72, 0x6C, 0x64, 0x20, 0x21, 0x00, 0xB2, 0xA0, 0x00, 0x02])
+    #pragma diagram {"xy":"H-55150;V124662","wh":"66000;24673"} #end)
+    (#13 expr #14 = #15
+      where
+        (#14 group)
+        (#15 group)
+    #pragma diagram {"xy":"H82058;V91145"} #end)
+    (#16 expr !Buf::empty
+    #pragma diagram {"xy":"H18500;V94800","wh":"16000;3200"} #end)
+    (assert $ComboBoxCmdSetParameter: #31 ; 
+      where
+        (#31 group)
+    #pragma diagram {"xy":"H104900;V91145"} #end)
+    (#32 block RT::encode_runtime_command
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H43925;V83900","wh":"25450;14000"} #end)
+    
+    (#22 wire #0 => #18
+    #pragma diagram {"wp":"v5345|#0 #18"} #end)
+    (#23 wire #10 => #19
+    #pragma diagram {"wp":"#10 h5441 v-27698 #19"} #end)
+    (#24 wire #17 => #21)
+    (#27 wire #26 => #25)
+    (#3 wire #1 => #2 .(params))
+    (#5 wire #4 => #2 .(wid))
+    (#6 wire #2 .(out) => #0 .(cmd)
+    #pragma diagram {"wp":"v-3000|#2 #0"} #end)
+    (#30 wire #29 => #28)
+    (#9 wire #8 => #0 .(buf_in)
+    #pragma diagram {"wp":"#8 h3850 v-7900 #0"} #end)
+    (#33 wire #13 => #31)
+    (#34 wire #16 => #32 .(buf_in)
+    #pragma diagram {"wp":"#16 h3850 v-7900 #32"} #end)
+    (#35 wire #32 => #14
+    #pragma diagram {"wp":"v5345|#32 #14"} #end)
+    (#36 wire #11 => #32 .(cmd)
+    #pragma diagram {"wp":"#11 h9983 v5492 #32"} #end)
+    (#37 wire #12 => #15
+    #pragma diagram {"wp":"#12 h90504 v-31617 #15"} #end)
+    
+    (var
+        widget_id;)
+}
+
+_harness harness_encode_block
+{
+  diagram
+    (#0 block RT::encode_block
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H32000;V-14000","wh":"20000;14000"} #end)
+    (#1 expr Buf::mk <<40>> ([0xB0_ui8, layer_id, B(context_number, 8), B(context_number, 0), B(blck_sz, 24), B(blck_sz, 16), B(blck_sz, 8), B(blck_sz, 0), 0xCA, 0x02, B(cmd_sz, 8), B(cmd_sz, 0), B(widget_id, 8), B(widget_id, 0), 0x00, 0x00, 0xb5, 0x30, 0x01, 0x00, 0xb4, 0x90, 0x00, 0x06, 0x48, 0x65, 0x6C, 0x6C, 0x6f, 0x00, 0x00, 0x00, 0xb1, 0x60, 0x0C, 0x00, 0xD0, 0x00, 0x00, 0x00])
+    #pragma diagram {"xy":"H12175;V17594","wh":"92000;24673"} #end)
+    (#2 expr widget_id
+    #pragma diagram {"xy":"H-111007;V-13800","wh":"14000;3200"} #end)
+    (#3 block RT::mk_sp <<3>> 
+    #pragma diagram {"xy":"H-89125;V-11175","wh":"20000;14000"} #end)
+    (#4 expr [RT::Visible {true}, RT::String {Str::t group (Str::mk <<5>> (['H', 'e', 'l', 'l', 'o']))}, RT::ColorIndex {12}]
+    #pragma diagram {"xy":"H-138007;V-7214","wh":"64000;6078"} #end)
+    (#5 block RT::mk_block <<1>> 
+    #pragma diagram {"xy":"H-159;V-16088","wh":"16000;18175"} #end)
+    (#17 expr #18 = #19
+      where
+        (#18 group)
+        (#19 group)
+    #pragma diagram {"xy":"H73925;V-5225"} #end)
+    (let
+        layer_id = 0x77;
+        widget_id = 0x1234;
+        context_number = 0x5678;
+        blck_sz = 40_ui32;
+        cmd_sz = 28_ui16;
+    #pragma diagram {"xy":"H-101503;V-32980","wh":"28000;11657"} #end)
+    (#6 expr context_number
+    #pragma diagram {"xy":"H-47175;V-18025","wh":"18000;3200"} #end)
+    (#7 expr layer_id
+    #pragma diagram {"xy":"H-47175;V-23575","wh":"12000;3200"} #end)
+    (assert $Block: #21 ; 
+      where
+        (#21 group)
+    #pragma diagram {"xy":"H105825;V-5225"} #end)
+    (#36 def _stop_condition
+    #pragma diagram {"xy":"H-51175;V-52654","wh":"20000;3200"} #end)
+    (#37 expr true
+    #pragma diagram {"xy":"H-76530;V-52654"} #end)
+    (#11 block ({op_expr%function x => [x]%op_expr})
+    #pragma diagram {"xy":"H-47175;V-10500","wh":"51845;7000"} #end)
+    (#12 expr !Buf::empty
+    #pragma diagram {"xy":"H1841;V-32980","wh":"16000;3200"} #end)
+    
+    (#9 wire #4 => #3 .(params))
+    (#10 wire #2 => #3 .(wid))
+    (#14 wire #7 => #5 .(layer_id))
+    (#15 wire #6 => #5 .(ctx))
+    (#16 wire #5 .(b) => #0 .(blk)
+    #pragma diagram {"wp":"v2088|#5 #0"} #end)
+    (#29 wire #0 => #18
+    #pragma diagram {"wp":"v-1708|#0 h13462 v8583 #18"} #end)
+    (#30 wire #1 => #19
+    #pragma diagram {"wp":"#1 h6875 v-20919 #19"} #end)
+    (#38 wire #37 => #36)
+    (#13 wire #3 .(out) => #11
+    #pragma diagram {"wp":"v675|#3 #11"} #end)
+    (#22 wire #11 => #5 .(cmds)
+    #pragma diagram {"wp":"v0|#11 #5"} #end)
+    (#23 wire #12 => #0 .(buf_in)
+    #pragma diagram {"wp":"#12 h7579 v14980 #0"} #end)
+    (#24 wire #17 => #21)
+    
+    (var
+        widget_id;
+        layer_id;
+        context_number;
+        blck_sz;
+        cmd_sz;)
+}
+
+_harness test_decode_block
+{
+  diagram
+    (#10 expr 0xB0 pre 0x01 pre 0x66 pre 0x66 pre 0x00 pre 0x00 pre 0x00 pre 0x18 pre 0xCC pre 0x01 pre 0x00 pre 0x0C pre 0x00 pre 0x04 pre 0x00 pre 0x07 pre 0xE0 pre 0x60 pre 0x00 pre 0x00 pre 0xD0 pre 0x00 pre 0x00 pre 0x00
+    #pragma diagram {"xy":"H-91203;V322269","wh":"72000;26533"} #end)
+    (#31 expr _current_cycle = 24
+    #pragma diagram {"xy":"H-81541;V468800","wh":"22000;3200"} #end)
+    (#0 def blk_reader
+    #pragma diagram {"xy":"H-3855;V322269","wh":"14000;3200"} #end)
+    (#32 def _stop_condition
+    #pragma diagram {"xy":"H-40325;V468800","wh":"20000;3200"} #end)
+    (#1 block RT::decode_block
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-33029;V322269","wh":"13348;7000"} #end)
+    
+    (#2 wire #1 => #0
+    #pragma diagram {"wp":"v0|#1 #0"} #end)
+    (#3 wire #10 => #1)
+    (#33 wire #31 => #32)
+    
+    (var
+        blk_reader;)
+    (activate #6 when blk_reader match
+       | RT::Reading {} :
+         {
+           diagram
+             (#4 expr _current_cycle < 24
+             #pragma diagram {"xy":"h-10612;v0","wh":"22000;3200"} #end)
+             (assert $Reading: #7 ; 
+               where
+                 (#7 group)
+             #pragma diagram {"xy":"h18388;v0"} #end)
+             
+             (#8 wire #4 => #7)
+         #pragma diagram {"xy":"h0;v-49648","wh":"93400;7200"} #end
+         }
+       | RT::Done {blk} :
+         {
+           diagram
+             (#5 expr _current_cycle = 24
+             #pragma diagram {"xy":"h-29700;v-28198","wh":"22000;3200"} #end)
+             (#9 expr blk.layer_id = 0x01
+             #pragma diagram {"xy":"h-29700;v-41698","wh":"22000;3200"} #end)
+             (#11 expr blk.nb_cmds = 0x01
+             #pragma diagram {"xy":"h-29700;v-37198","wh":"22000;3200"} #end)
+             (#12 expr blk.context_nb = 0x6666
+             #pragma diagram {"xy":"h-31700;v-32698","wh":"26000;3200"} #end)
+             (assert $Block: #14 ; 
+               where
+                 (#14 group)
+             #pragma diagram {"xy":"h30700;v-34948"} #end)
+             (#15 block {text%(and)%text}
+             #pragma diagram {"xy":"h3200;v-34948","wh":"12000;18000"} #end)
+             
+             (#16 wire #5 => #15 .(1))
+             (#17 wire #9 => #15 .(2))
+             (#18 wire #12 => #15 .(3))
+             (#19 wire #11 => #15 .(4))
+             (#20 wire #15 => #14
+             #pragma diagram {"wp":"v0|#15 #14"} #end)
+             
+             (activate #34 when blk.cmds[0] match
+                | RT::SetParameter {sp} :
+                  {
+                  #pragma diagram {"xy":"h0;v-22766","wh":"89400;6400"} #end
+                  }
+                | RT::WidgetEvent {we} :
+                  {
+                    diagram
+                      (#21 expr we.wid = 0x04
+                      #pragma diagram {"xy":"h-21700;v4083","wh":"18000;3200"} #end)
+                      (#22 expr we.event_origin = 0x07
+                      #pragma diagram {"xy":"h-25700;v-4083","wh":"26000;3200"} #end)
+                      (#23 expr we.event = RT::Selection {}
+                      #pragma diagram {"xy":"h-27700;v0","wh":"30000;3200"} #end)
+                      (assert $Event: #25 ; 
+                        where
+                          (#25 group)
+                      #pragma diagram {"xy":"h36700;v0"} #end)
+                      (#26 block {text%(and)%text}
+                      #pragma diagram {"xy":"h9200;v0","wh":"12000;12250"} #end)
+                      
+                      (#27 wire #26 => #25
+                      #pragma diagram {"wp":"v0|#26 #25"} #end)
+                      (#28 wire #21 => #26 .(1))
+                      (#29 wire #22 => #26 .(2))
+                      (#30 wire #23 => #26 .(3))
+                  #pragma diagram {"xy":"h0;v-7241","wh":"89400;16250"} #end
+                  }
+                | RT::UARequest :
+                  {
+                  #pragma diagram {"xy":"h0;v8284","wh":"89400;6400"} #end
+                  }
+                | RT::CDSNotification {} :
+                  {
+                  #pragma diagram {"xy":"h0;v18884","wh":"89400;6400"} #end
+                  }
+                | RT::ErrorNotification {} :
+                  {
+                  #pragma diagram {"xy":"h0;v29484","wh":"89400;6400"} #end
+                  }
+              #pragma diagram {"xy":"h0;v10605","wh":"89400;65369"} #end)
+         #pragma diagram {"xy":"h0;v3759","wh":"93400;91897"} #end
+         }
+       | RT::Error {} :
+         {
+         #pragma diagram {"xy":"h0;v56767","wh":"93400;6400"} #end
+         }
+     #pragma diagram {"xy":"H-66279;V402296","wh":"93400;119935"} #end)
+}
+
+_harness test_decode
+{
+  diagram
+    (#0 expr forward resume
+      <<1036>> with <<ii>> [b] = buffer;
+      unless ii >= buf_sz
+      diagram
+        (#1 block RT::decode_block
+        #pragma swt under_test #end
+        #pragma diagram {"xy":"h-18482;v-60646","wh":"13348;7000"} #end)
+        (#2 expr b
+        #pragma diagram {"xy":"h-35681;v-62546"} #end)
+        (#3 def br
+        #pragma diagram {"xy":"h418;v-60646"} #end)
+        
+        (#4 wire #2 => #1)
+        (#5 wire #1 => #3
+        #pragma diagram {"wp":"v0|#1 #3"} #end)
+        
+        (var
+            br;)
+        (activate #7 when br match
+           | RT::Done {blk} :
+             {
+               diagram
+                 (#6 expr forward
+                   <<RT::MAX_NB_CMDS>> with <<jj>> [cmd] = blk.cmds;
+                   unless jj >= blk.nb_cmds
+                   diagram
+                     (activate #13 when cmd match
+                        | RT::WidgetEvent {we} :
+                          {
+                            diagram
+                              (let found = we.event = RT::Selection {} and we.wid = 0x0004;
+                              #pragma diagram {"xy":"h0;v0","wh":"34000;7938"} #end)
+                          #pragma diagram {"xy":"h0;v-17159","wh":"38000;11938"} #end
+                          }
+                        | RT::CDSNotification :
+                          {
+                          #pragma diagram {"xy":"h0;v-4131","wh":"38000;6400"} #end
+                          }
+                        | RT::ErrorNotification :
+                          {
+                          #pragma diagram {"xy":"h0;v6128","wh":"38000;6400"} #end
+                          }
+                        | RT::SetParameter :
+                          {
+                          #pragma diagram {"xy":"h0;v16388","wh":"38000;6400"} #end
+                          }
+                        | RT::UARequest :
+                          {
+                          #pragma diagram {"xy":"h0;v26647","wh":"38000;6400"} #end
+                          }
+                      #pragma diagram {"xy":"h0;v-681","wh":"38000;59695"} #end)
+                   returns (found: last = false)
+                 #pragma diagram {"xy":"h-14341;v-803","wh":"46600;78757"} #end)
+                 (#8 def push_button_selected
+                 #pragma diagram {"xy":"h25641;v6175","wh":"24000;3200"} #end)
+                 
+                 (#9 wire #6 .(2) => #8
+                 #pragma diagram {"wp":"v6979|#6 #8"} #end)
+             #pragma diagram {"xy":"h0;v-6900","wh":"79282;86001"} #end
+             }
+           | RT::Reading :
+             {
+             #pragma diagram {"xy":"h0;v43160","wh":"79282;6400"} #end
+             }
+           | RT::Error :
+             {
+             #pragma diagram {"xy":"h0;v53419","wh":"79282;6400"} #end
+             }
+         #pragma diagram {"xy":"h-41;v251","wh":"79282;113239"} #end)
+      returns (push_button_selected: last = false)
+    #pragma diagram {"xy":"H53626;V347756","wh":"95062;152991"} #end)
+    (#10 expr [
+                  0xB0, 0x01, 0x66, 0x66, 
+                  0x00, 0x00, 0x00, 0x18, 
+                  0xCC, 0x01, 0x00, 0x0C, 
+                  0x00, 0x04, 0x00, 0x00, 
+                  0xE0, 0x60, 0x00, 0x00, 
+                  0xD0, 0x00, 0x00, 0x00
+              ] @ (0^(1036 - 24))
+    #pragma diagram {"xy":"H-94353;V272940","wh":"32000;15376"} #end)
+    (#11 def buffer
+    #pragma diagram {"xy":"H-47975;V272940","wh":"10000;3200"} #end)
+    (#12 def buf_sz
+    #pragma diagram {"xy":"H-59750;V298150","wh":"10000;3200"} #end)
+    (assert $ButtonPushed: #14 ; 
+      where
+        (#14 group)
+    #pragma diagram {"xy":"H136975;V364625"} #end)
+    (#15 expr 24
+    #pragma diagram {"xy":"H-98925;V298150"} #end)
+    
+    (#16 wire #0 .(2) => #14
+    #pragma diagram {"wp":"v16869|#0 #14"} #end)
+    (#17 wire #10 => #11)
+    (#18 wire #15 => #12)
+    
+    (var
+        buffer;
+        buf_sz;)
+}
+
+_harness test_decode_seq
+{
+  diagram
+    (#0 expr forward resume
+      <<1036>> with <<ii>> [b] = buffer;
+      unless ii >= buf_sz
+      diagram
+        (#1 block RT::decode_block
+        #pragma swt under_test #end
+        #pragma diagram {"xy":"h-16029;v-55777","wh":"13348;7000"} #end)
+        (#2 expr b
+        #pragma diagram {"xy":"h-43203;v-55777"} #end)
+        (#3 def br
+        #pragma diagram {"xy":"h11145;v-55777"} #end)
+        
+        (#4 wire #2 => #1)
+        (#5 wire #1 => #3
+        #pragma diagram {"wp":"v-0|#1 #3"} #end)
+        
+        (var
+            br;)
+        (activate #7 when br match
+           | RT::Done {blk} :
+             {
+               diagram
+                 (#6 expr forward
+                   <<RT::MAX_NB_CMDS>> with <<jj>> [cmd] = blk.cmds;
+                   unless jj >= blk.nb_cmds
+                   diagram
+                     (activate #13 when cmd match
+                        | RT::WidgetEvent {we} :
+                          {
+                            diagram
+                              (let found = we.event = RT::Selection {} and we.wid = 0x0004;
+                              #pragma diagram {"xy":"h0;v0","wh":"34000;7938"} #end)
+                          #pragma diagram {"xy":"h0;v-16841","wh":"38000;11938"} #end
+                          }
+                        | RT::CDSNotification :
+                          {
+                          #pragma diagram {"xy":"h0;v-3972","wh":"38000;6400"} #end
+                          }
+                        | RT::ErrorNotification :
+                          {
+                          #pragma diagram {"xy":"h0;v6128","wh":"38000;6400"} #end
+                          }
+                        | RT::SetParameter :
+                          {
+                          #pragma diagram {"xy":"h0;v16228","wh":"38000;6400"} #end
+                          }
+                        | RT::UARequest :
+                          {
+                          #pragma diagram {"xy":"h0;v26328","wh":"38000;6400"} #end
+                          }
+                      #pragma diagram {"xy":"h0;v0","wh":"38000;59058"} #end)
+                   returns (found: last = false)
+                 #pragma diagram {"xy":"h-20296;v0","wh":"46600;76758"} #end)
+                 (#8 def push_button_selected
+                 #pragma diagram {"xy":"h31504;v-1","wh":"24000;3200"} #end)
+                 (let block_decoded = true; 
+                 #pragma diagram {"xy":"h28595;v16978","wh":"30000;3200"} #end)
+                 
+                 (#9 wire #6 .(2) => #8
+                 #pragma diagram {"wp":"v-0|#6 #8"} #end)
+             #pragma diagram {"xy":"h0;v-6900","wh":"91191;80758"} #end
+             }
+           | RT::Reading :
+             {
+             #pragma diagram {"xy":"h0;v40538","wh":"91191;6400"} #end
+             }
+           | RT::Error :
+             {
+             #pragma diagram {"xy":"h0;v50798","wh":"91191;6400"} #end
+             }
+         #pragma diagram {"xy":"h1607;v5279","wh":"91191;107996"} #end)
+      returns (push_button_selected: last = false,
+               block_decoded: last = false)
+    #pragma diagram {"xy":"H53672;V347915","wh":"103006;136254"} #end)
+    (#10 expr [0xB0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0xCC, 0x02, 0x00, 0x08, 0xDC, 0x02, 0x00, 0x00, 0xD0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00] pre 
+              [0xB0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0xCC, 0x02, 0x00, 0x0C, 0xDC, 0x82, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xD0, 0x00, 0x00, 0x00] pre 
+              [0xB0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0xCC, 0x02, 0x00, 0x0C, 0xDC, 0x82, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xD0, 0x00, 0x00, 0x00] pre 
+              [0xB0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0xCC, 0x01, 0x00, 0x0C, 0x00, 0x04, 0x00, 0x00, 0xE0, 0x60, 0x00, 0x00, 0xD0, 0x00, 0x00, 0x00] pre 
+              [0xB0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0xCC, 0x01, 0x00, 0x0C, 0x00, 0x04, 0x00, 0x00, 0xE0, 0x60, 0x00, 0x00, 0xD0, 0x00, 0x00, 0x00] pre 
+              [0xB0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0xCC, 0x01, 0x00, 0x0C, 0x00, 0x04, 0x00, 0x00, 0xE0, 0x60, 0x00, 0x00, 0xD0, 0x00, 0x00, 0x00] pre 
+              [0xB0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0xCC, 0x01, 0x00, 0x0C, 0x00, 0x04, 0x00, 0x00, 0xE0, 0x60, 0x00, 0x00, 0xD0, 0x00, 0x00, 0x00] pre 
+              [0xB0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0xCC, 0x01, 0x00, 0x0C, 0x00, 0x04, 0x00, 0x00, 0xE0, 0x60, 0x00, 0x00, 0xD0, 0x00, 0x00, 0x00] pre 
+              [0xB0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0xCC, 0x01, 0x00, 0x0C, 0x00, 0x04, 0x00, 0x00, 0xE0, 0x60, 0x00, 0x00, 0xD0, 0x00, 0x00, 0x00]
+    #pragma diagram {"xy":"H-43631;V235171","wh":"144000;17235"} #end)
+    (#11 def buffer
+    #pragma diagram {"xy":"H92840;V235171","wh":"10000;3200"} #end)
+    (#12 def buf_sz
+    #pragma diagram {"xy":"H-50446;V301875","wh":"10000;3200"} #end)
+    (assert $ExpectedEvent: #14 ; 
+      where
+        (#14 group)
+    #pragma diagram {"xy":"H189529;V364625"} #end)
+    (#15 expr 20 pre 24
+    #pragma diagram {"xy":"H-78946;V301875","wh":"14000;3200"} #end)
+    (#17 block ({op_expr%function f => f @ (0x00_ui8^(1036 - 24))%op_expr})
+    #pragma diagram {"xy":"H58104;V235171","wh":"26471;7000"} #end)
+    (#21 def push_button_selected, block_decoded
+    #pragma diagram {"xy":"H141583;V347756","wh":"40000;3200"} #end)
+    (#22 expr block_decoded and (push_button_selected = (_current_cycle >= 4)) 
+    #pragma diagram {"xy":"H140029;V364625","wh":"66000;3200"} #end)
+    (#23 expr _current_cycle = 9
+    #pragma diagram {"xy":"H-61391;V380000","wh":"22000;3200"} #end)
+    (#24 def _stop_condition
+    #pragma diagram {"xy":"H-23891;V380000","wh":"20000;3200"} #end)
+    
+    (#16 wire #0 .(2, 3) => #21
+    #pragma diagram {"wp":"v-159|#0 #21"} #end)
+    (#25 wire #22 => #14)
+    (#26 wire #23 => #24)
+    (#19 wire #10 => #17)
+    (#18 wire #15 => #12)
+    (#20 wire #17 => #11
+    #pragma diagram {"wp":"v0|#17 #11"} #end)
+    
+    (var
+        buffer;
+        buf_sz;
+        push_button_selected;
+        block_decoded;)
+}

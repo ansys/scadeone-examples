@@ -1,0 +1,12 @@
+-- version swan: 2027.0 graph: 2.1
+const RED = 21_ui8;
+
+const GRAY10 = 5_ui8;
+
+const AMBER = 31_ui8;
+
+const DARK_GREEN = 55_ui8;
+
+const DARK_YELLOW = 45_ui8;
+
+const DARKEST_AMBER = 37_ui8;

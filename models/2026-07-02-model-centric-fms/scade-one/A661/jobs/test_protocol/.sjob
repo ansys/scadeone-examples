@@ -1,0 +1,15 @@
+{
+  "Version": "2.3",
+  "Kind": "TestExecution",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "TestProtocol",
+    "CustomArguments": "",
+    "TestResultFile": "testResults.json"
+  },
+  "InputPaths": [
+    "assets/Test_Protocol.swant"
+  ]
+}

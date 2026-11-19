@@ -1,0 +1,8 @@
+{
+  "Version": "1.0",
+  "Name": "FMS",
+  "Dependencies": [
+    "..\\A424\\A424.sproj"
+  ],
+  "Resources": []
+}

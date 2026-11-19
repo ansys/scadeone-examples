@@ -1,0 +1,9 @@
+-- version swan: 2027.0 graph: 2.1
+use ICAO;
+
+use Str32;
+
+type t = {icao: ICAO::t, name: Str32::t, lat:float64, lon:float64, elev_ft:int32};
+
+const d =  {icao: ICAO::empty, name: Str32::empty, lat:0, lon:0, elev_ft:0} : t
+;

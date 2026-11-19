@@ -1,0 +1,53 @@
+-- version swan: 2027.0 graph: 2.1
+use ICAO as K;
+
+use Airport as V;
+
+const N: uint32 = 16384;
+
+type key = K::t;
+
+type value = V::t;
+
+type pair = {k: key, v:value};
+
+type t = {sz:uint32, k: key^N, v: value^N};
+
+const empty = {sz: 0, k: K::d^N, v: V::d ^ N } : t;
+
+function is_empty (d: t;)
+  returns (e:bool;);
+
+inline function singleton (k: key;
+                           v : value;)
+  returns (d: t;);
+
+type add_status = Replaced {value /* Previous value that has been dropped*/} | Inserted{} | CarryOverflow {pair};
+
+function add (d_in *: t;
+              k: key;
+              v : value;)
+  returns (d_out at d_in:t;
+           status: add_status;);
+
+function add_array <<M>> (d_in *: t;
+                          a: pair^M;)
+  returns (d_out at d_in:t;
+           status: add_status^M;);
+
+inline function find (d: t;
+                      k:key;)
+  returns (v_opt: value_option;);
+
+inline function find_array <<M>> (d: t;
+                                  keys:key^M;)
+  returns (values: value_option^M;);
+
+type remove_status = Removed {} | NotInDict {};
+
+function remove (d_in *: t;
+                 k: key;)
+  returns (d_out at d_in:t;
+           status: remove_status;);
+
+type value_option = None{} | Value{value};

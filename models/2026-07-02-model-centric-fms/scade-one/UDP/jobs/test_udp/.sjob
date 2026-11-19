@@ -1,0 +1,19 @@
+{
+  "Version": "2.3",
+  "Kind": "Simulation",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "SimulationJob0",
+    "CustomArguments": "\n ",
+    "BuildConfiguration": "WinSock2",
+    "FileScenario": "",
+    "SimulationInputType": "Harness",
+    "TestHarness": "Test_Udp::Bidirectional",
+    "UseCycleTime": "False"
+  },
+  "InputPaths": [
+    "assets/Test_Udp.swant"
+  ]
+}

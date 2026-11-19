@@ -1,0 +1,515 @@
+-- version swan: 2027.0 graph: 2.1 swant: 1.1
+use A661::RT;
+
+use Str32 as Str;
+
+use UDP;
+
+use IP;
+
+use Buf;
+
+use ID;
+
+use Airports;
+
+use Runway;
+
+use Runways;
+
+use AirportRunways;
+
+use A661::Types as T;
+
+use Str32Array as StrArray;
+
+use ToString;
+
+use File;
+
+use A424;
+
+use Char;
+
+use Color;
+
+_harness harness_send_message
+{
+  diagram
+    (#0 def client_address
+    #pragma diagram {"xy":"H-102559;V145868","wh":"18000;3200"} #end)
+    (#1 expr {address: [127, 0, 0, 1], port: 1231}: IP::address
+    #pragma diagram {"xy":"H-147559;V153297","wh":"48000;3200"} #end)
+    (#2 expr {address: [127, 0, 0, 1], port: 1241}: IP::address
+    #pragma diagram {"xy":"H-147559;V145868","wh":"48000;3200"} #end)
+    (#4 def server_address
+    #pragma diagram {"xy":"H-102559;V153297","wh":"18000;3200"} #end)
+    
+    (#8 wire #1 => #4)
+    (#9 wire #2 => #0)
+    
+    (var
+        client_address;
+        server_address;
+        client_socket;
+        session;
+        airports last = Airports::empty;
+        runways last = AirportRunways::empty;)
+    (automaton #52 $automaton0
+       initial state #43 BindClientSocket
+       #pragma diagram {"xy":"h113003;v0","wh":"131400;24400"} #end :
+         diagram
+           (#13 block UDP::mk_socket
+           #pragma diagram {"xy":"h-16500;v-1000","wh":"12000;7000"} #end)
+           (#17 block UDP::bind
+           #pragma diagram {"xy":"h22200;v-2750","wh":"12000;7000"} #end)
+           (#20 expr client_address
+           #pragma diagram {"xy":"h-19500;v-6600","wh":"18000;3200"} #end)
+           (#23 def client_socket
+           #pragma diagram {"xy":"h52700;v-2750","wh":"18000;3200"} #end)
+           (#27 block UDP::startup
+           #pragma diagram {"xy":"h-55700;v3350","wh":"12000;7000"} #end)
+           (#29 def session
+           #pragma diagram {"xy":"h-16500;v6600","wh":"12000;3200"} #end)
+           
+           (#33 wire #13 => #17 .(s_in)
+           #pragma diagram {"wp":"v-500|#13 #17"} #end)
+           (#35 wire #20 => #17 .(local_address)
+           #pragma diagram {"wp":"#20 h14850 v2600 #17"} #end)
+           (#36 wire #17 => #23
+           #pragma diagram {"wp":"v0|#17 #23"} #end)
+           (#40 wire #27 .(wsa) => #29, #13
+           #pragma diagram {"wp":"v-550|#27 h8400[v3800 #29, h12800 v-3800 #13]"} #end)
+       state #31 Close
+       #pragma diagram {"xy":"h-84997;v0","wh":"61500;14074"} #end :
+         diagram
+           (#32 block UDP::close
+           #pragma diagram {"xy":"h16750;v0","wh":"20000;6074"} #end)
+           (#39 expr client_socket
+           #pragma diagram {"xy":"h-17750;v0","wh":"18000;3200"} #end)
+           
+           (#41 wire #39 => #32)
+       state #49 Cleanup
+       #pragma diagram {"xy":"h-152997;v0","wh":"51412;20500"} #end :
+         diagram
+           (#25 expr true
+           #pragma diagram {"xy":"h-14294;v4650"} #end)
+           (#18 def _stop_condition
+           #pragma diagram {"xy":"h11706;v4650","wh":"20000;3200"} #end)
+           (#42 block UDP::cleanup
+           #pragma diagram {"xy":"h14894;v-2750","wh":"12000;7000"} #end)
+           (#47 expr session
+           #pragma diagram {"xy":"h-15706;v-2750","wh":"12000;3200"} #end)
+           
+           (#26 wire #25 => #18)
+           (#48 wire #47 => #42 .(sess))
+       state #82 Connected
+       #pragma diagram {"xy":"h-4097;v0","wh":"78515;12000"} #end
+       #pragma diagram detached #end :
+         diagram
+           (#5 block (UDP::recv_from \ s_in: client_socket)
+           #pragma diagram {"xy":"h-36549;v64539","wh":"15457;8549"} #end)
+           (#7 def _, buffer, buf_sz, _
+           #pragma diagram {"xy":"h-1321;v64539","wh":"24000;3200"} #end)
+           (#3 expr forward resume
+             <<UDP::BUFFER_SZ>> with <<ii>> [b] = buffer;
+             unless ii >= buf_sz
+             diagram
+               (#30 block RT::decode_block
+               #pragma swt under_test #end
+               #pragma diagram {"xy":"h31540;v-157265","wh":"13348;7000"} #end)
+               (#34 expr b
+               #pragma diagram {"xy":"h5366;v-157265"} #end)
+               (#37 def br
+               #pragma diagram {"xy":"h57714;v-157265"} #end)
+               
+               (#38 wire #34 => #30)
+               (#45 wire #30 => #37
+               #pragma diagram {"wp":"v0|#30 #37"} #end)
+               
+               (var
+                   br;)
+               (activate #85 when br match
+                  | RT::Done {blk} :
+                    {
+                      diagram
+                        (#46 expr forward
+                          <<RT::MAX_NB_CMDS>> with <<jj>> [cmd] = blk.cmds;
+                          unless jj >= blk.nb_cmds
+                          diagram
+                            (activate #86 when cmd match
+                               | RT::WidgetEvent {we} :
+                                 {
+                                   diagram
+                                     (activate #87 when we.event match
+                                        | RT::Selection {} :
+                                          {
+                                          #pragma diagram {"xy":"h0;v-94715","wh":"153500;6400"} #end
+                                          }
+                                        | RT::StringChange {s} :
+                                          {
+                                          #pragma diagram {"xy":"h0;v-84115","wh":"153500;6400"} #end
+                                          }
+                                        | RT::StringConfirmed {s} :
+                                          {
+                                            diagram
+                                              (activate #88
+                                                 if we.wid = ID::ICAO_EditBox
+                                                 then
+                                                   {
+                                                     diagram
+                                                       (activate #89 when Airports::find(airports, s.cd[0 .. 3]) match
+                                                          | Airports::Value {apt} :
+                                                            {
+                                                              diagram
+                                                                (#67 block (encode_and_send_block \ socket: client_socket, address: server_address)
+                                                                #pragma diagram {"xy":"h39803;v-27455","wh":"24000;8924"} #end)
+                                                                (#68 expr RT::mk_block <<1>> (ID::the_layer, ctx, [RT::mk_sp <<1>> (ID::APT_Name_Label, [RT::String {Str::t group (apt.name)}])])
+                                                                #pragma diagram {"xy":"h-13697;v-27455","wh":"48000;9797"} #end)
+                                                                
+                                                                (#69 wire #68 => #67)
+                                                                
+                                                                (activate #90 when AirportRunways::find(runways, apt.icao) match
+                                                                   | AirportRunways::Value {rw_set} :
+                                                                     {
+                                                                       diagram
+                                                                         (#6 expr RT::mk_block <<8>> (ID::the_layer, ctx, [RT::mk_sp <<4>> (ID::RWY_ComboBox, [RT::Enable {T::True}, RT::EntryList {StrArray::t group (Runways::ids_as_string_array(rw_set))}, RT::NumberOfEntries {rw_set.sz}, RT::SelectedEntry {0}]), RT::mk_sp <<1>> (ID::RWY_Info_BasicContainer, [RT::Visible {true}])] @ runway_info(rw_set.d[0]))
+                                                                         #pragma diagram {"xy":"h-26750;v-3435","wh":"84000;19095"} #end)
+                                                                         (#22 block (encode_and_send_block \ socket: client_socket, address: server_address)
+                                                                         #pragma diagram {"xy":"h56750;v-3435","wh":"24000;8924"} #end)
+                                                                         (let runways_from_command = rw_set;
+                                                                         #pragma diagram {"xy":"h-36134;v10873","wh":"36000;4219"} #end)
+                                                                         
+                                                                         (#24 wire #6 => #22)
+                                                                     #pragma diagram {"xy":"h0;v-2200","wh":"141500;29965"} #end
+                                                                     }
+                                                                   | AirportRunways::None :
+                                                                     {
+                                                                     #pragma diagram {"xy":"h0;v20701","wh":"141500;6400"} #end
+                                                                     }
+                                                                 #pragma diagram {"xy":"h0;v8452","wh":"141500;47803"} #end)
+                                                            #pragma diagram {"xy":"h0;v-5469","wh":"145500;68708"} #end
+                                                            }
+                                                          | Airports::None {} :
+                                                            {
+                                                              diagram
+                                                                (#11 block (encode_and_send_block \ socket: client_socket, address: server_address)
+                                                                #pragma diagram {"xy":"h55750;v0","wh":"24000;8924"} #end)
+                                                                (#94 expr RT::mk_block <<1>> (ID::the_layer, ctx, [RT::mk_sp <<1>> (ID::ICAO_EditBox, [RT::LabelString {Str::t group (Str::mk <<4>> (last 'current_runways.d[0].icao))}])])
+                                                                #pragma diagram {"xy":"h-24750;v0","wh":"86000;9797"} #end)
+                                                                
+                                                                (#95 wire #94 => #11)
+                                                            #pragma diagram {"xy":"h0;v39643","wh":"145500;13797"} #end
+                                                            }
+                                                        #pragma diagram {"xy":"h0;v430","wh":"145500;93084"} #end)
+                                                   #pragma diagram {"xy":"h0;v-3200","wh":"149500;97943"} #end
+                                                   }
+                                                 else
+                                                   {
+                                                   #pragma diagram {"xy":"h0;v52831","wh":"149500;6400"} #end
+                                                   }
+                                               #pragma diagram {"xy":"h0;v-170","wh":"149500;112062"} #end)
+                                          #pragma diagram {"xy":"h0;v-18514","wh":"153500;116402"} #end
+                                          }
+                                        | RT::StateChange {toggle_state} :
+                                          {
+                                          #pragma diagram {"xy":"h0;v47087","wh":"153500;6400"} #end
+                                          }
+                                        | RT::SelEntryChange {rw_idx} :
+                                          {
+                                            diagram
+                                              (activate #92
+                                                 if we.wid = ID::RWY_ComboBox
+                                                 then
+                                                   {
+                                                     diagram
+                                                       (#44 expr RT::mk_block <<6>> (ID::the_layer, ctx, runway_info(rw))
+                                                       #pragma diagram {"xy":"h-23143;v-9382","wh":"56000;3200"} #end)
+                                                       (#51 block (encode_and_send_block \ socket: client_socket, address: server_address)
+                                                       #pragma diagram {"xy":"h32357;v-9382","wh":"24000;8924"} #end)
+                                                       (#54 def rw
+                                                       #pragma diagram {"xy":"h47143;v10344"} #end)
+                                                       (#55 expr last 'current_runways.d
+                                                       #pragma diagram {"xy":"h-37857;v8444","wh":"26000;3200"} #end)
+                                                       (#56 expr #57 .[#63] default last 'current_runways.d[0]
+                                                         where
+                                                           (#57 group)
+                                                           (#63 group)
+                                                       #pragma diagram {"xy":"h10143;v10344","wh":"46000;7000"} #end)
+                                                       (#66 expr rw_idx - 1
+                                                       #pragma diagram {"xy":"h-31857;v12244","wh":"14000;3200"} #end)
+                                                       
+                                                       (#53 wire #44 => #51)
+                                                       (#72 wire #56 => #54)
+                                                       (#78 wire #55 => #57)
+                                                       (#79 wire #66 => #63)
+                                                       
+                                                       (var
+                                                           rw;)
+                                                   #pragma diagram {"xy":"h0;v-3200","wh":"106287;31688"} #end
+                                                   }
+                                                 else
+                                                   {
+                                                   #pragma diagram {"xy":"h0;v19703","wh":"106287;6400"} #end
+                                                   }
+                                               #pragma diagram {"xy":"h0;v-170","wh":"106287;45807"} #end)
+                                          #pragma diagram {"xy":"h0;v79561","wh":"153500;50147"} #end
+                                          }
+                                      #pragma diagram {"xy":"h0;v0","wh":"153500;209268"} #end)
+                                 #pragma diagram {"xy":"h0;v-17841","wh":"157500;213268"} #end
+                                 }
+                               | RT::CDSNotification :
+                                 {
+                                 #pragma diagram {"xy":"h0;v96194","wh":"157500;6400"} #end
+                                 }
+                               | RT::ErrorNotification :
+                                 {
+                                 #pragma diagram {"xy":"h0;v106794","wh":"157500;6400"} #end
+                                 }
+                               | RT::SetParameter :
+                                 {
+                                 #pragma diagram {"xy":"h0;v117394","wh":"157500;6400"} #end
+                                 }
+                               | RT::UARequest :
+                                 {
+                                 #pragma diagram {"xy":"h0;v127994","wh":"157500;6400"} #end
+                                 }
+                             #pragma diagram {"xy":"h0;v0","wh":"157500;262387"} #end)
+                          returns (runways_from_command: last = last 'runways_from_block)
+                        #pragma diagram {"xy":"h-18950;v0","wh":"166100;280087"} #end)
+                        (#80 def runways_from_block
+                        #pragma diagram {"xy":"h91000;v0","wh":"22000;3200"} #end)
+                        
+                        (#81 wire #46 .(2) => #80
+                        #pragma diagram {"wp":"v0|#46 #80"} #end)
+                    #pragma diagram {"xy":"h0;v-7241","wh":"208000;284087"} #end
+                    }
+                  | RT::Reading :
+                    {
+                    #pragma diagram {"xy":"h0;v142203","wh":"208000;6400"} #end
+                    }
+                  | RT::Error :
+                    {
+                    #pragma diagram {"xy":"h0;v152803","wh":"208000;6400"} #end
+                    }
+                #pragma diagram {"xy":"h0;v4762","wh":"208000;312006"} #end)
+             returns (runways_from_block: last = last 'current_runways)
+           #pragma diagram {"xy":"h-11006;v258402","wh":"216600;339230"} #end)
+           (#83 def current_runways
+           #pragma diagram {"xy":"h123194;v258402","wh":"20000;3200"} #end)
+           (#12 def ctx
+           #pragma diagram {"xy":"h-12622;v-2578"} #end)
+           (#14 expr (_current_cycle :> uint16)
+           #pragma diagram {"xy":"h-43622;v-2578","wh":"30000;3200"} #end)
+           (#76 block (encode_and_send_block \ socket: client_socket, address: server_address)
+           #pragma diagram {"xy":"h-37706;v7389","wh":"24000;8924"} #end)
+           (#77 expr RT::mk_block <<3>> (ID::the_layer, ctx, [RT::mk_sp <<1>> (ID::Cycle_Count_NumericReadout, [RT::Value {(_current_cycle :> float32)}]), RT::mk_sp <<1>> (ID::AP_Count_NumericReadout, [RT::Value {(airports.sz :> float32)}]), RT::mk_sp <<1>> (ID::RW_Count_NumericReadout, [RT::Value {(runways.sz :> float32)}])])
+           #pragma diagram {"xy":"h-107381;v7389","wh":"58000;20954"} #end)
+           
+           (#10 wire #5 => #7
+           #pragma diagram {"wp":"v0|#5 #7"} #end)
+           (#84 wire #3 .(2) => #83
+           #pragma diagram {"wp":"v0|#3 #83"} #end)
+           (#15 wire #14 => #12)
+           (#96 wire #77 => #76)
+           
+           (var
+               buffer;
+               buf_sz;
+               ctx;
+               current_runways last = Runways::empty;)
+           (activate #93
+              if true -> false
+              then
+                {
+                  diagram
+                    (#16 block (encode_and_send_block \ socket: client_socket, address: server_address)
+                    #pragma diagram {"xy":"h33750;v0","wh":"24000;8924"} #end)
+                    (#19 expr RT::mk_block <<1>> (ID::the_layer, ctx, [RT::mk_sp <<1>> (ID::ICAO_EditBox, [RT::Enable {T::True}])])
+                    #pragma diagram {"xy":"h-23750;v0","wh":"44000;9797"} #end)
+                    
+                    (#21 wire #19 => #16)
+                #pragma diagram {"xy":"h0;v-3200","wh":"95500;13797"} #end
+                }
+              else
+                {
+                #pragma diagram {"xy":"h0;v10758","wh":"95500;6400"} #end
+                }
+            #pragma diagram {"xy":"h-88631;v36888","wh":"95500;27916"} #end)
+       :1: #43 until 
+       restart #82
+       #pragma diagram {"tp":"h-65700;v0|#43 h-4048 h-4048 h39257;v0|#82"} #end;
+       :1: #31 until 
+       restart #49
+       #pragma diagram {"tp":"h-30750;v169|#31 h-3848 h-3848 h25706;v169|#49"} #end;
+       :1: #82 until if (_current_cycle > 30000)
+       restart #31
+       #pragma diagram {"tp":"h-39258;v0|#82 h-3631 h-3631 h30750;v0|#31"} #end;
+     #pragma diagram {"xy":"H-130446;V191753","wh":"365406;32400"} #end)
+    (automaton #91
+       initial state #97 LoadDB
+       #pragma diagram {"xy":"h0;v-11363","wh":"119576;104599"} #end :
+         diagram
+           (#60 expr forward resume
+             <<File::BUFFER_SZ>> with <<ii>> [B] = chunk;
+             unless ii = sz
+             diagram
+               (activate #70 when A424::read_char(Char::of_u8(B)) match
+                  | A424::Field {x} :
+                    {
+                      diagram
+                        (activate #75 when x match
+                           | A424::Airport {a} :
+                             {
+                               diagram
+                                 (let apts, _ = Airports::add(last 'apts, a.icao, a);
+                                 #pragma diagram {"xy":"h-1000;v0","wh":"48000;4219"} #end)
+                             #pragma diagram {"xy":"h0;v-2170","wh":"58000;8219"} #end
+                             }
+                           | A424::Runway {rw} :
+                             {
+                               diagram
+                                 (let rws = AirportRunways::add_runway(last 'rws, rw);
+                                 #pragma diagram {"xy":"h-1000;v0","wh":"52000;3200"} #end)
+                             #pragma diagram {"xy":"h0;v9399","wh":"58000;7200"} #end
+                             }
+                         #pragma diagram {"xy":"h0;v170","wh":"58000;25997"} #end)
+                    #pragma diagram {"xy":"h0;v-6900","wh":"62000;30338"} #end
+                    }
+                  | A424::Reading {} :
+                    {
+                    #pragma diagram {"xy":"h0;v15328","wh":"62000;6400"} #end
+                    }
+                  | A424::Error {} :
+                    {
+                    #pragma diagram {"xy":"h0;v25588","wh":"62000;6400"} #end
+                    }
+                #pragma diagram {"xy":"h0;v-5641","wh":"62000;57576"} #end)
+             returns (apts: last = last 'airports,
+                      rws: last = last 'runways)
+           #pragma diagram {"xy":"h-18112;v5021","wh":"70600;86557"} #end)
+           (let f, chunk, sz = File::fread(File::fopen(424, File::Read) pre f);
+           #pragma diagram {"xy":"h-23788;v-45260","wh":"64000;6078"} #end)
+           (#71 def airports, runways
+           #pragma diagram {"xy":"h44788;v5021","wh":"22000;3200"} #end)
+           
+           (#28 wire #60 .(2, 3) => #71
+           #pragma diagram {"wp":"v0|#60 #71"} #end)
+           
+           (var
+               f;
+               chunk;
+               sz;)
+       state #98 DBLoaded
+       #pragma diagram {"xy":"h18773;v56150","wh":"32000;15026"} #end :
+       :1: #97 until if (sz < (File::BUFFER_SZ :> uint32))
+       restart #98
+       #pragma diagram {"tp":"h18773;v52299|#97 v2567 v2567 h0;v-7513|#98"} #end;
+     #pragma diagram {"xy":"H-127255;V59892","wh":"127576;135326"} #end)
+}
+
+function #pragma cg keep #end encode_and_send_block (blk: RT::Block_Structure;
+                                                     address: IP::address;
+                                                     socket: UDP::socket;)
+  returns ()
+{
+  diagram
+    (#0 block UDP::send_to
+    #pragma diagram {"xy":"H48572;V-7165","wh":"20000;20075"} #end)
+    (#1 block RT::encode_block
+    #pragma diagram {"xy":"H2472;V-1156","wh":"20000;14000"} #end)
+    (#2 expr socket
+    #pragma diagram {"xy":"H-528;V-10256","wh":"10000;3200"} #end)
+    (#3 expr address
+    #pragma diagram {"xy":"H472;V-14693","wh":"12000;3200"} #end)
+    (#4 expr !Buf::empty
+    #pragma diagram {"xy":"H-20286;V16758","wh":"16000;3200"} #end)
+    (#5 expr Buf::t group (#6)
+      where
+        (#6 group)
+    #pragma diagram {"xy":"H22522;V-156","wh":"10000;10000"} #end)
+    (#7 expr blk
+    #pragma diagram {"xy":"H-37628;V-3823"} #end)
+    
+    (#8 wire #1 => #6
+    #pragma diagram {"wp":"v1000|#1 #6"} #end)
+    (#9 wire #5 .(bytes) => #0 .(buffer)
+    #pragma diagram {"wp":"v-986|#5 #0"} #end)
+    (#10 wire #2 => #0 .(s_in))
+    (#11 wire #3 => #0 .(dest))
+    (#12 wire #7 => #1 .(blk))
+    (#13 wire #4 => #1 .(buf_in)
+    #pragma diagram {"wp":"#4 h3879 v-14803 #1"} #end)
+    (#14 wire #5 .(sz) => #0 .(sz)
+    #pragma diagram {"wp":"v1024|#5 #0"} #end)
+}
+
+function runway_info (rw: Runway::t;)
+  returns (sps: RT::Runtime_Command^6;)
+{
+  diagram
+    (#0 expr [RT::mk_sp <<1>> (ID::RWY_ID_Label, [RT::String {Str::t group (Str::mk <<4>> (rw.id))}]), RT::mk_sp <<2>> (ID::RWY_Surface_Label, [RT::String {Str::t group (ToString::surface_type(rw.surface))}, RT::ColorIndex {color}]), RT::mk_sp <<1>> (ID::RWY_Length_NumericReadout, [RT::Value {(rw.length_ft :> float32)}]), RT::mk_sp <<1>> (ID::RWY_Width_NumericReadout, [RT::Value {(rw.width_ft :> float32)}]), RT::mk_sp <<1>> (ID::RWY_Heading_NumericReadout, [RT::Value {(rw.heading_deg10 :> float32) / 10}]), RT::mk_sp <<1>> (ID::RWY_Elev_NumericReadout, [RT::Value {(rw.elev_thr_ft :> float32)}])]
+    #pragma diagram {"xy":"H-46905;V-15705","wh":"74000;37689"} #end)
+    (#1 def sps
+    #pragma diagram {"xy":"H33538;V-15705"} #end)
+    (#3 expr
+      case #4 of
+        | Runway::ASPHALT : #5
+        | Runway::CONCRETE : #6
+        | Runway::ASPHALT_CONCRETE : #7
+        | Runway::GRASS : #8
+        | Runway::GRAVEL : #9
+        | Runway::DIRT : #10
+        | Runway::SAND : #11
+        | Runway::SNOW : #12
+        | Runway::WATER : #13
+        | Runway::UNKNOWN : #14
+      where
+        (#4 group)
+        (#5 group)
+        (#6 group)
+        (#7 group)
+        (#8 group)
+        (#9 group)
+        (#10 group)
+        (#11 group)
+        (#12 group)
+        (#13 group)
+        (#14 group)
+    #pragma diagram {"xy":"H-57943;V35981","wh":"28000;41200"} #end)
+    (#15 def color
+    #pragma diagram {"xy":"H-26943;V20781","wh":"10000;3200"} #end)
+    (#16 expr Color::RED
+    #pragma diagram {"xy":"H-90943;V54981","wh":"14000;3200"} #end)
+    (#17 expr rw.surface
+    #pragma diagram {"xy":"H-90943;V12381","wh":"14000;3200"} #end)
+    (#18 expr Color::GRAY10
+    #pragma diagram {"xy":"H-92943;V24581","wh":"18000;3200"} #end)
+    (#19 expr Color::AMBER
+    #pragma diagram {"xy":"H-91943;V51181","wh":"16000;3200"} #end)
+    (#20 expr Color::DARK_GREEN
+    #pragma diagram {"xy":"H-93943;V32181","wh":"20000;3200"} #end)
+    (#21 expr Color::DARK_YELLOW
+    #pragma diagram {"xy":"H-94943;V43581","wh":"22000;3200"} #end)
+    (#22 expr Color::DARKEST_AMBER
+    #pragma diagram {"xy":"H-95943;V39781","wh":"24000;3200"} #end)
+    (#23 expr Color::GRAY10
+    #pragma diagram {"xy":"H-92943;V35981","wh":"18000;3200"} #end)
+    
+    (#2 wire #0 => #1)
+    (#24 wire #3 => #15)
+    (#25 wire #16 => #14)
+    (#26 wire #17 => #4
+    #pragma diagram {"wp":"#17 h21500 #4"} #end)
+    (#27 wire #18 => #5, #6, #7
+    #pragma diagram {"wp":"#18 h3500[h5333[v-3800 #5, #6], v3800 #7]"} #end)
+    (#28 wire #19 => #13, #12
+    #pragma diagram {"wp":"#19 h3250[#13, v-3800 #12]"} #end)
+    (#29 wire #20 => #8)
+    (#30 wire #21 => #11)
+    (#31 wire #22 => #10)
+    (#32 wire #23 => #9)
+    
+    (var
+        color;)
+}

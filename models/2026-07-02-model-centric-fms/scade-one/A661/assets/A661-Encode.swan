@@ -1,0 +1,423 @@
+-- version swan: 2027.0 graph: 2.1
+use Char;
+
+use A661::Const as C;
+
+use Float32;
+
+function of_uint16 (in: uint16;)
+  returns (out: uint8^2;)
+{
+  diagram
+    (let out = [(((in lsr 8) land 0x00ff) :> uint8), ((in land 0x00ff) :> uint8)];
+    #pragma diagram {"xy":"H-31150;V-56050","wh":"78000;3200"} #end)
+}
+
+function of_str (in: Str::t;)
+  returns (o: uint8^Str::M;)
+{
+  diagram
+    (#0 def o
+    #pragma diagram {"xy":"H33350;V8700"} #end)
+    (#5 expr in.cd
+    #pragma diagram {"xy":"H-65450;V8700","wh":"10000;3200"} #end)
+    (#6 block (mapi ({op_expr%function ii, c => if ii >= in.sz then 0_ui8 else Char::to_u8(c)%op_expr})) <<Str::M>>
+    #pragma diagram {"xy":"H-22800;V6700","wh":"50700;11000"} #end)
+    
+    (#1 wire #6 => #0
+    #pragma diagram {"wp":"v0|#6 #0"} #end)
+    (#11 wire #5 => #6 .(c))
+}
+
+function nb_bytes_to_word (sz: uint16;)
+  returns (missing: uint16;)
+{
+  diagram
+    (let missing = (4 - (sz land 0b11)) land 0b11;
+    #pragma diagram {"xy":"H-132630;V-63506","wh":"50000;6078"} #end)
+}
+
+function of_bool (b: bool;)
+  returns (o: uint8;)
+{
+  diagram
+    (let o = if b then C::TRUE else C::FALSE;
+    #pragma diagram {"xy":"H-37550;V-23850","wh":"42000;3200"} #end)
+}
+
+function of_uint32 (in: uint32;)
+  returns (out: uint8^4;)
+{
+  diagram
+    (let out = [(((in lsr 24) land 0x00ff) :> uint8), (((in lsr 16) land 0x00ff) :> uint8), (((in lsr 8) land 0x00ff) :> uint8), ((in land 0x00ff) :> uint8)];
+    #pragma diagram {"xy":"H-14750;V-7251","wh":"44000;9797"} #end)
+}
+
+function of_uint64 (in: uint64;)
+  returns (out: uint8^8;)
+{
+  diagram
+    (let out = [(((in lsr 56) land 0x00ff) :> uint8), (((in lsr 48) land 0x00ff) :> uint8), (((in lsr 40) land 0x00ff) :> uint8), (((in lsr 32) land 0x00ff) :> uint8), (((in lsr 24) land 0x00ff) :> uint8), (((in lsr 16) land 0x00ff) :> uint8), (((in lsr 8) land 0x00ff) :> uint8), ((in land 0x00ff) :> uint8)];
+    #pragma diagram {"xy":"H-21450;V6769","wh":"48000;17235"} #end)
+}
+
+function of_int64 (in: int64;)
+  returns (out: uint8^8;)
+{
+  diagram
+    (let out = of_uint64((in :> uint64));
+    #pragma diagram {"xy":"H-34050;V-28768","wh":"38000;3200"} #end)
+}
+
+function ps_1Byte (buf_in * : Buf::t;
+                   ident: uint16;
+                   value: uint8;)
+  returns (buf_out at buf_in: Buf::t;)
+{
+  diagram
+    (let buf_out = Buf::write <<4>> (buf_in, of_uint16(ident) @ [value, 0_ui8]);
+    #pragma diagram {"xy":"H-57600;V-21780","wh":"70000;6078"} #end)
+}
+
+function ps_2Bytes (buf_in * : Buf::t;
+                    ident: uint16;
+                    value: uint16;)
+  returns (buf_out at buf_in: Buf::t;)
+{
+  diagram
+    (let buf_out = Buf::write <<4>> (buf_in, of_uint16(ident) @ of_uint16(value));
+    #pragma diagram {"xy":"H-60900;V-29360","wh":"72000;4219"} #end)
+}
+
+function ps_4Bytes (buf_in * : Buf::t;
+                    ident: uint16;
+                    value: uint32;)
+  returns (buf_out at buf_in: Buf::t;)
+{
+  diagram
+    (let buf_out = Buf::write <<8>> (buf_in, of_uint16(ident) @ (0_ui8^2) @ of_uint32(value));
+    #pragma diagram {"xy":"H-26675;V-14939","wh":"88000;3200"} #end)
+}
+
+function ps_8Bytes (buf_in * : Buf::t;
+                    ident: uint16;
+                    v1: uint32;
+                    v2: uint32;)
+  returns (buf_out at buf_in: Buf::t;)
+{
+  diagram
+    (let buf_out = Buf::write <<12>> (buf_in, of_uint16(ident) @ (0_ui8^2) @ of_uint32(v1) @ of_uint32(v2));
+    #pragma diagram {"xy":"H-27625;V-10055","wh":"96000;4219"} #end)
+}
+
+function ps_String (buf_in * : Buf::t;
+                    ident: uint16;
+                    s: Str::t;)
+  returns (buf_out at buf_in: Buf::t;)
+{
+  diagram
+    (let buf_out = Buf::write_n <<4 + Str::M + 4>> (buf_in: buf_in, bytes: of_uint16(ident) @ of_uint16(s.sz + 1) @ of_str(s) @ (0x00^4), n: 4 + s.sz + 1 + nb_bytes_to_word(s.sz + 1));
+    #pragma diagram {"xy":"H-45100;V-29261","wh":"74000;11657"} #end)
+}
+
+function ps_StringArray (buf_in * : Buf::t;
+                         ident: uint16;
+                         sa: StrArray::t;)
+  returns (buf_out at buf_in: Buf::t;)
+{
+  diagram
+    (#1 expr forward
+      <<StrArray::M>> with <<ii>> [idx] = sa.idx; [s] = sa.a;
+      unless ii >= sa.sz
+      diagram
+        (let buf = ps_String(last 'buf, idx, s);
+        #pragma diagram {"xy":"h-8988;v-2369","wh":"42000;3200"} #end)
+      returns (buf: last = Buf::write <<4>> (buf_in, of_uint16(ident) @ of_uint16(sa.sz)))
+    #pragma diagram {"xy":"H-67968;V-21870","wh":"68575;25638"} #end)
+    (#2 def buf_out
+    #pragma diagram {"xy":"H-21375;V-21020","wh":"12000;3200"} #end)
+    
+    (#3 wire #1 .(2) => #2
+    #pragma diagram {"wp":"v850|#1 #2"} #end)
+}
+
+function write_to_buffer <<N, BUF_MAX_SZ>> (to_write: uint8^N;
+                                            sz_to_write: 'SZ;
+                                            buf_in: uint8^BUF_MAX_SZ;
+                                            buf_sz_in: 'SZ;)
+  returns (buf_out: uint8^BUF_MAX_SZ;
+           buf_sz_out: 'SZ;)
+  where 'SZ unsigned
+{
+  diagram
+    (#0 expr forward
+      <<BUF_MAX_SZ>> with <<ii>> [buf_byte_in] = buf_in;
+      diagram
+        (var
+            buf_byte_out;)
+        (activate #10 $ActivateIf0
+           if ii >= buf_sz_in and ii < buf_sz_in + sz_to_write
+           then
+             {
+               diagram
+                 (#1 expr #2 .[#3] default buf_byte_in
+                   where
+                     (#2 group)
+                     (#3 group)
+                 #pragma diagram {"xy":"h-2632;v-363","wh":"32000;7000"} #end)
+                 (#4 def buf_byte_out
+                 #pragma diagram {"xy":"h31356;v-363","wh":"16000;3200"} #end)
+                 (#5 expr to_write
+                 #pragma diagram {"xy":"h-27607;v-2263","wh":"12000;3200"} #end)
+                 (#6 expr ii - buf_sz_in
+                 #pragma diagram {"xy":"h-31656;v3995","wh":"16000;3200"} #end)
+                 
+                 (#7 wire #1 => #4)
+                 (#8 wire #5 => #2)
+                 (#9 wire #6 => #3
+                 #pragma diagram {"wp":"#6 h4012 v-2457 #3"} #end)
+             #pragma diagram {"xy":"h0;v-5100","wh":"86012;15189"} #end
+             }
+           else
+             {
+               diagram
+                 (let buf_byte_out = buf_byte_in;
+                 #pragma diagram {"xy":"h-15307;v-1000","wh":"34000;3200"} #end)
+             #pragma diagram {"xy":"h0;v10954","wh":"86012;9200"} #end
+             }
+         #pragma diagram {"xy":"h0;v0","wh":"86012;34108"} #end)
+      returns ([buf_byte_out])
+    #pragma diagram {"xy":"H-64068;V-14835","wh":"94612;50508"} #end)
+    (let buf_sz_out = buf_sz_in + sz_to_write;
+    #pragma diagram {"xy":"H-28150;V-50295","wh":"44000;3200"} #end)
+    (#12 def buf_out
+    #pragma diagram {"xy":"H13075;V-14635","wh":"12000;3200"} #end)
+    
+    (#13 wire #0 .(1) => #12
+    #pragma diagram {"wp":"v200|#0 #12"} #end)
+}
+
+function of_enable (b: T::enable;)
+  returns (o: uint8;)
+{
+  diagram
+    (#0 expr C::FALSE
+    #pragma diagram {"xy":"H-26300;V20475","wh":"12000;3200"} #end)
+    (#1 expr b
+    #pragma diagram {"xy":"H-21975;V3775"} #end)
+    (#2 def o
+    #pragma diagram {"xy":"H23200;V20475"} #end)
+    (#3 expr
+      case #4 of
+        | T::False : #5
+        | T::True : #6
+        | T::TrueWithValidation : #7
+      where
+        (#4 group)
+        (#5 group)
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H-2550;V22375","wh":"24000;14600"} #end)
+    (#8 expr C::TRUE
+    #pragma diagram {"xy":"H-26300;V24275","wh":"12000;3200"} #end)
+    (#9 expr C::TRUE_WITH_VALIDATION
+    #pragma diagram {"xy":"H-31300;V28075","wh":"26000;3200"} #end)
+    
+    (#10 wire #1 => #4
+    #pragma diagram {"wp":"#1 h12925 #4"} #end)
+    (#11 wire #3 => #2)
+    (#12 wire #0 => #5)
+    (#13 wire #8 => #6)
+    (#14 wire #9 => #7)
+}
+
+function of_halo (b: T::halo;)
+  returns (o: uint8;)
+{
+  diagram
+    (#0 expr C::FALSE
+    #pragma diagram {"xy":"H-26300;V20475","wh":"12000;3200"} #end)
+    (#1 expr b
+    #pragma diagram {"xy":"H-21975;V3775"} #end)
+    (#2 def o
+    #pragma diagram {"xy":"H23200;V20475"} #end)
+    (#3 expr
+      case #4 of
+        | T::No_Halo : #5
+        | T::Halo : #6
+        | T::Halo_Same_Level : #7
+      where
+        (#4 group)
+        (#5 group)
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"xy":"H-3550;V22375","wh":"22000;14600"} #end)
+    (#8 expr C::TRUE
+    #pragma diagram {"xy":"H-26300;V24275","wh":"12000;3200"} #end)
+    (#9 expr C::SAME_LEVEL
+    #pragma diagram {"xy":"H-35300;V28075","wh":"18000;3200"} #end)
+    
+    (#10 wire #1 => #4
+    #pragma diagram {"wp":"#1 h12925 #4"} #end)
+    (#11 wire #3 => #2)
+    (#12 wire #0 => #5)
+    (#13 wire #8 => #6)
+    (#14 wire #9 => #7)
+}
+
+function of_alignment_lcr (a: T::alignment_lcr;)
+  returns (o: uint8;)
+{
+  diagram
+    (#0 expr
+      case #1 of
+        | T::lcr_left : #2
+        | T::lcr_right : #3
+        | T::lcr_center : #4
+      where
+        (#1 group)
+        (#2 group)
+        (#3 group)
+        (#4 group)
+    #pragma diagram {"xy":"H-16625;V-8650","wh":"18000;14600"} #end)
+    (#5 expr a
+    #pragma diagram {"xy":"H-41625;V-18950"} #end)
+    (#6 def o
+    #pragma diagram {"xy":"H8375;V-10550"} #end)
+    (#7 expr C::LEFT
+    #pragma diagram {"xy":"H-43625;V-10550","wh":"12000;3200"} #end)
+    (#8 expr C::RIGHT
+    #pragma diagram {"xy":"H-43625;V-6750","wh":"12000;3200"} #end)
+    (#9 expr C::CENTER
+    #pragma diagram {"xy":"H-44625;V-2950","wh":"14000;3200"} #end)
+    
+    (#10 wire #5 => #1
+    #pragma diagram {"wp":"#5 h21500 #1"} #end)
+    (#11 wire #0 => #6)
+    (#12 wire #7 => #2)
+    (#13 wire #8 => #3)
+    (#14 wire #9 => #4)
+}
+
+function of_alignment_lrtb (a: T::alignment_lrtb;)
+  returns (o: uint8;)
+{
+  diagram
+    (#0 expr a
+    #pragma diagram {"xy":"H-73625;V3538"} #end)
+    (#1 def o
+    #pragma diagram {"xy":"H-23625;V11938"} #end)
+    (#2 expr C::LEFT
+    #pragma diagram {"xy":"H-75625;V11938","wh":"12000;3200"} #end)
+    (#3 expr C::RIGHT
+    #pragma diagram {"xy":"H-75625;V15738","wh":"12000;3200"} #end)
+    (#4 expr
+      case #5 of
+        | T::lrtb_left : #6
+        | T::lrtb_right : #7
+        | T::lrtb_top : #8
+        | T::lrtb_bottom : #9
+      where
+        (#5 group)
+        (#6 group)
+        (#7 group)
+        (#8 group)
+        (#9 group)
+    #pragma diagram {"xy":"H-48625;V15738","wh":"18000;18400"} #end)
+    (#10 expr C::TOP
+    #pragma diagram {"xy":"H-74625;V19538","wh":"10000;3200"} #end)
+    (#11 expr C::BOTTOM
+    #pragma diagram {"xy":"H-76625;V23338","wh":"14000;3200"} #end)
+    
+    (#12 wire #0 => #5
+    #pragma diagram {"wp":"#0 h21500 #5"} #end)
+    (#13 wire #4 => #1)
+    (#14 wire #2 => #6)
+    (#15 wire #3 => #7)
+    (#16 wire #10 => #8)
+    (#17 wire #11 => #9)
+}
+
+function of_opening_mode (m: T::opening_mode;)
+  returns (o: uint8;)
+{
+  diagram
+    (#0 expr m
+    #pragma diagram {"xy":"H-33550;V-20750"} #end)
+    (#1 def o
+    #pragma diagram {"xy":"H3150;V-9875"} #end)
+    (#2 expr C::OPEN_UP
+    #pragma diagram {"xy":"H-59525;V-17150","wh":"14000;3200"} #end)
+    (#3 expr
+      case #4 of
+        | T::Open_Up : #5
+        | T::Open_Down : #6
+      where
+        (#4 group)
+        (#5 group)
+        (#6 group)
+    #pragma diagram {"xy":"H-19375;V-9875","wh":"16000;10800"} #end)
+    (#7 expr C::OPEN_DOWN
+    #pragma diagram {"xy":"H-55850;V-6075","wh":"16000;3200"} #end)
+    
+    (#8 wire #0 => #4
+    #pragma diagram {"wp":"#0 h11675 #4"} #end)
+    (#9 wire #7 => #6)
+    (#10 wire #2 => #5
+    #pragma diagram {"wp":"#2 h5837 v7275 #5"} #end)
+    (#11 wire #3 => #1)
+}
+
+function of_editbox_inner_state (m: T::editbox_inner_state;)
+  returns (o: uint8;)
+{
+  diagram
+    (#0 expr m
+    #pragma diagram {"xy":"H-33550;V-20750"} #end)
+    (#1 def o
+    #pragma diagram {"xy":"H22450;V-12350"} #end)
+    (#2 expr
+      case #3 of
+        | T::Editbox_Open : #4
+        | T::Editbox_Confirmed : #5
+        | T::Editbox_Aborted : #6
+      where
+        (#3 group)
+        (#4 group)
+        (#5 group)
+        (#6 group)
+    #pragma diagram {"xy":"H-5550;V-10450","wh":"24000;14600"} #end)
+    (#7 expr C::EDITBOX_OPEN
+    #pragma diagram {"xy":"H-39550;V-12350","wh":"20000;3200"} #end)
+    (#8 expr C::EDITBOX_CONFIRMED
+    #pragma diagram {"xy":"H-41550;V-8550","wh":"24000;3200"} #end)
+    (#9 expr C::EDITBOX_ABORTED
+    #pragma diagram {"xy":"H-40550;V-4750","wh":"22000;3200"} #end)
+    
+    (#10 wire #0 => #3
+    #pragma diagram {"wp":"#0 h21500 #3"} #end)
+    (#11 wire #2 => #1)
+    (#12 wire #7 => #4)
+    (#13 wire #8 => #5)
+    (#14 wire #9 => #6)
+}
+
+function of_float32 (in: float32;)
+  returns (out: uint8^4;)
+{
+  diagram
+    (#0 def out
+    #pragma diagram {"xy":"H-8375;V-33075"} #end)
+    (#1 expr in
+    #pragma diagram {"xy":"H-90375;V-33075"} #end)
+    (#2 block Float32::to_u32
+    #pragma diagram {"xy":"H-64875;V-33075","wh":"12000;7000"} #end)
+    (#3 block of_uint32
+    #pragma diagram {"xy":"H-33875;V-33075","wh":"12000;7000"} #end)
+    
+    (#4 wire #1 => #2)
+    (#5 wire #2 => #3
+    #pragma diagram {"wp":"v0|#2 #3"} #end)
+    (#6 wire #3 => #0
+    #pragma diagram {"wp":"v0|#3 #0"} #end)
+}

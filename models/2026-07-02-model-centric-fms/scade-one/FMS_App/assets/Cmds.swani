@@ -1,0 +1,30 @@
+-- version swan: 2027.0 graph: 2.1
+use Cmd as V;
+
+use A661::RT;
+
+type index = uint16;
+
+type t = {sz: index, overflow:bool, values: V::t^MAX};
+
+const MAX: uint16 = RT::MAX_NB_CMDS;
+
+function write <<N>> (buf_in *: t delay0;
+                      values : V::t^N delay0;)
+  returns (buf_out at buf_in: t;);
+
+function write_n <<N>> (buf_in: t delay0;
+                        values : V::t^N delay0;
+                        n : uint16 delay0;)
+  returns (buf_out: t;);
+
+function write_at <<N>> (buf_in: t delay0;
+                         values : V::t^N delay0;
+                         pos : index delay0;)
+  returns (buf_out: t;);
+
+inline function current_pos (buf:t;)
+  returns (pos: index;);
+
+inline function mk <<N>> (values: V::t^N;)
+  returns (buf_out: t;);

@@ -22,7 +22,7 @@ This model is a companion to our [Technical Blog article](https://innovation.ans
     - Start running cycles by using the "Play" icon at the bottom right of the diagram
     - Play with the buttons in the "ControlPanel" graphical window, observe results on both graphical windows and on the Scade One diagram. A good start is to enable autopilot and set target speeds / altitude.
 
-## Instructions - Itegration on Windows host
+## Instructions - Integration on Windows host
 1. In **SCADE Display**, open project `.\scade-display\DemoPFD.etp`
     - Run job `Code Generation`
 

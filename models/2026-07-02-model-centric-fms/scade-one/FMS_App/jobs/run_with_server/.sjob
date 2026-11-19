@@ -1,0 +1,20 @@
+{
+  "Version": "2.3",
+  "Kind": "Simulation",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "RunWithServer",
+    "CustomArguments": "",
+    "BuildConfiguration": "FMS",
+    "FileScenario": "",
+    "SimulationInputType": "Harness",
+    "TestHarness": "TEST_MAP::harness_send_message",
+    "UseCycleTime": "True",
+    "CycleTime": "40"
+  },
+  "InputPaths": [
+    "assets/TEST_MAP.swant"
+  ]
+}

@@ -1,0 +1,46 @@
+-- version swan: 2027.0 graph: 2.1
+const FALSE: uint8 = 0;
+
+const TRUE: uint8 = 1;
+
+const TRUE_WITH_VALIDATION: uint8 = 2;
+
+const SAME_LEVEL: uint8 = 2;
+
+const BEGIN_BLOCK: uint8 = 0xB0 ;
+
+const END_BLOCK: uint8 = 0xD0 ;
+
+const CMD_SET_PARAMETER = 0xCA02_ui16;
+
+const CMD_UA_REQUEST = 0xCA03_ui16;
+
+const NOTIFY_WIDGET_EVENT = 0xCC01_ui16;
+
+const NOTIFY_LAYER_EVENT = 0xCC02_ui16;
+
+const NOTIFY_EXCEPTION = 0xCC03_ui16;
+
+const TOP: uint8 = 0x11
+;
+
+const BOTTOM: uint8 = 0x12
+;
+
+const LEFT: uint8 = 0x13
+;
+
+const RIGHT: uint8 = 0x14
+;
+
+const CENTER: uint8 = 0x15;
+
+const OPEN_UP = 0x16_ui8;
+
+const OPEN_DOWN = 0x18_ui8;
+
+const EDITBOX_OPEN = 0x01_ui8;
+
+const EDITBOX_CONFIRMED = 0x03_ui8;
+
+const EDITBOX_ABORTED = 0x04_ui8;

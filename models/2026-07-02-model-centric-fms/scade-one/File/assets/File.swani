@@ -1,0 +1,21 @@
+-- version swan: 2027.0 graph: 2.1
+type t 
+;
+
+type id = uint16;
+
+function #pragma cg keep #end fopen (fname : id;
+                                     mode : access;)
+  returns (f : t;);
+
+type access = enum {Read, Write, Append};
+
+function #pragma cg keep #end fclose (f:t;)
+  returns ();
+
+function #pragma cg keep #end fread (f_in: t;)
+  returns (f_out : t;
+           buffer: uint8^BUFFER_SZ;
+           sz : uint32;);
+
+const #pragma cg C:const #end BUFFER_SZ: uint16 = 32768;

@@ -1,0 +1,58 @@
+-- version swan: 2027.0 graph: 2.1
+use A424;
+
+use Char;
+
+use Airports;
+
+use AirportRunways;
+
+node load <<N>> (chunk: uint8^N;
+                 sz: uint32;)
+  returns (airports: Airports::t last = Airports::empty;
+           runways: AirportRunways::t last = AirportRunways::empty;)
+{
+  diagram
+    (#0 expr forward resume
+      <<N>> with <<ii>> [B] = chunk;
+      unless ii = sz
+      diagram
+        (activate #1 when A424::read_char(Char::of_u8(B)) match
+           | A424::Field {x} :
+             {
+               diagram
+                 (activate #2 when x match
+                    | A424::Airport {a} :
+                      {
+                        diagram
+                          (let apts, _ = Airports::add(last 'apts, a.icao, a);
+                          #pragma diagram {"xy":"h0;v0","wh":"48000;4219"} #end)
+                      #pragma diagram {"xy":"h0;v-2341","wh":"56000;8219"} #end
+                      }
+                    | A424::Runway {rw} :
+                      {
+                        diagram
+                          (let rws = AirportRunways::add_runway(last 'rws, rw);
+                          #pragma diagram {"xy":"h0;v0","wh":"52000;3200"} #end)
+                      #pragma diagram {"xy":"h0;v9569","wh":"56000;7200"} #end
+                      }
+               #pragma diagram {"xy":"h0;v0","wh":"56000;26338"} #end)
+           #pragma diagram {"xy":"h0;v-6900","wh":"60000;30338"} #end
+           }
+         | A424::Reading {} :
+           {
+           #pragma diagram {"xy":"h0;v15328","wh":"60000;6400"} #end
+           }
+         | A424::Error {} :
+           {
+           #pragma diagram {"xy":"h0;v25588","wh":"60000;6400"} #end
+           }
+    #pragma diagram {"xy":"h0;v-5641","wh":"60000;57576"} #end)
+  returns (apts: last = last 'airports, rws: last = last 'runways)
+#pragma diagram {"xy":"H-54967;V-17600","wh":"68600;86557"} #end)
+(#5 def airports, runways
+#pragma diagram {"xy":"H7558;V-5525","wh":"22000;3200"} #end)
+
+(#6 wire #0 .(2, 3) => #5
+#pragma diagram {"wp":"v12075|#0 #5"} #end)
+}

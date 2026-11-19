@@ -1,0 +1,238 @@
+-- version swan: 2027.0 graph: 2.1 swant: 1.1
+use UDP;
+
+use IP;
+
+_harness Bidirectional
+{
+  diagram
+    (#0 expr {address: [127,0,0,1], port:1241}: IP::address
+    #pragma diagram {"xy":"H-43261;V-170531","wh":"48000;3200"} #end)
+    (#1 def client_address
+    #pragma diagram {"xy":"H5433;V-170531","wh":"18000;3200"} #end)
+    (#2 def server_address
+    #pragma diagram {"xy":"H5433;V-163102","wh":"18000;3200"} #end)
+    (#3 expr 0xfc_ui8 ^ UDP::BUFFER_SZ
+    #pragma diagram {"xy":"H-59218;V-156214","wh":"28000;3200"} #end)
+    (#4 expr {address: [127,0,0,1], port:1231}: IP::address
+    #pragma diagram {"xy":"H-43261;V-163102","wh":"48000;3200"} #end)
+    (#5 def buf
+    #pragma diagram {"xy":"H433;V-156214"} #end)
+    
+    (#6 wire #0 => #1)
+    (#7 wire #3 => #5)
+    (#8 wire #4 => #2)
+    
+    (var
+        client_address;
+        server_address;
+        client_socket;
+        server_socket;
+        session;
+        buf;)
+    (automaton #32 $automaton0
+      initial state #26 CreateBoth
+      #pragma diagram {"xy":"h10162;v-88314","wh":"119676;45916"} #end :
+        diagram
+          (#9 block UDP::mk_socket
+          #pragma diagram {"xy":"h-26000;v-7623","wh":"12000;7000"} #end)
+          (#10 block UDP::bind
+          #pragma diagram {"xy":"h12400;v-7623","wh":"20000;14000"} #end)
+          (#11 expr client_address
+          #pragma diagram {"xy":"h-20718;v-523","wh":"18000;3200"} #end)
+          (#12 def client_socket
+          #pragma diagram {"xy":"h46838;v-7623","wh":"18000;3200"} #end)
+          (#13 block UDP::bind
+          #pragma diagram {"xy":"h12400;v10753","wh":"20000;14000"} #end)
+          (#14 block UDP::mk_socket
+          #pragma diagram {"xy":"h-20718;v10344","wh":"12000;7000"} #end)
+          (#15 block UDP::startup
+          #pragma diagram {"xy":"h-49837;v-2023","wh":"12000;7000"} #end)
+          (#16 def session
+          #pragma diagram {"xy":"h-23158;v-17358","wh":"12000;3200"} #end)
+          (#17 expr server_address
+          #pragma diagram {"xy":"h-17144;v17358","wh":"18000;3200"} #end)
+          (#18 def server_socket
+          #pragma diagram {"xy":"h46838;v10753","wh":"18000;3200"} #end)
+          
+          (#19 wire #9 => #10 .(s_in)
+          #pragma diagram {"wp":"v-2222|#9 #10"} #end)
+          (#20 wire #11 => #10 .(local_address))
+          (#21 wire #10 => #12
+          #pragma diagram {"wp":"v0|#10 #12"} #end)
+          (#22 wire #14 => #13 .(s_in)
+          #pragma diagram {"wp":"v0|#14 #13"} #end)
+          (#23 wire #15 .(wsa) => #14 .(sess), #16, #9
+          #pragma diagram {"wp":"v-1500|#15 h3306[h2612[h2613 v13867 #14, v-2300 #9], v-13836 #16]"} #end)
+          (#24 wire #17 => #13 .(local_address)
+          #pragma diagram {"wp":"#17 h6772 v-3303 #13"} #end)
+          (#25 wire #13 => #18
+          #pragma diagram {"wp":"v0|#13 #18"} #end)
+      state #43 SendtoServer
+      #pragma diagram {"xy":"h79206;v-46860","wh":"112912;32851"} #end :
+        diagram
+          (#27 expr client_socket
+          #pragma diagram {"xy":"h-23700;v-9123","wh":"18000;3200"} #end)
+          (#28 $S1 block UDP::send_to
+          #pragma swt under_test #end
+          #pragma diagram {"xy":"h7056;v-1538","wh":"20000;18025"} #end)
+          (#29 expr server_address
+          #pragma diagram {"xy":"h-23700;v-3637","wh":"18000;3200"} #end)
+          (#30 expr buf
+          #pragma diagram {"xy":"h-41002;v2183"} #end)
+          (#31 expr 12
+          #pragma diagram {"xy":"h-48456;v7599"} #end)
+          (assert $BytesSent: #33 ; 
+            where
+              (#33 group)
+          #pragma diagram {"xy":"h46456;v362"} #end)
+          (#34 block ({op_expr%function x => x = 12%op_expr})
+          #pragma diagram {"xy":"h28756;v362","wh":"12000;7000"} #end)
+          (#35 def _
+          #pragma diagram {"xy":"h26756;v-8951"} #end)
+          
+          (#36 wire #27 => #28 .(s_in))
+          (#37 wire #29 => #28 .(dest))
+          (#38 wire #30 => #28 .(buffer))
+          (#39 wire #31 => #28 .(sz)
+          #pragma diagram {"wp":"#31 h40163 v-2667 #28"} #end)
+          (#40 wire #28 .(sz_sent) => #34
+          #pragma diagram {"wp":"v1900|#28 #34"} #end)
+          (#41 wire #34 => #33
+          #pragma diagram {"wp":"v0|#34 #33"} #end)
+          (#42 wire #28 .(s_out) => #35
+          #pragma diagram {"wp":"v-7413|#28 #35"} #end)
+      state #57 ReceivefromClient
+      #pragma diagram {"xy":"h-31256;v-48265","wh":"96548;30476"} #end :
+        diagram
+          (#44 $R1 block UDP::recv_from
+          #pragma swt under_test #end
+          #pragma diagram {"xy":"h6699;v-2588","wh":"12000;7000"} #end)
+          (#45 expr server_socket
+          #pragma diagram {"xy":"h-19207;v-2588","wh":"18000;3200"} #end)
+          (#47 def _
+          #pragma diagram {"xy":"h30148;v3588"} #end)
+          (#48 def _
+          #pragma diagram {"xy":"h30148;v-7718"} #end)
+          (#46 def _
+          #pragma diagram {"xy":"h30148;v-2588"} #end)
+          
+          (#52 wire #45 => #44 .(s_in))
+          (#54 wire #44 .(from) => #47
+          #pragma diagram {"wp":"v1667|#44 h3738 v4508 #47"} #end)
+          (#55 wire #44 .(sz) => #48
+          #pragma diagram {"wp":"v-1667|#44 h8879 v-3464 #48"} #end)
+          (#49 wire #44 .(buffer) => #46
+          #pragma diagram {"wp":"v0|#44 #46"} #end)
+      state #61 CloseSession
+      #pragma diagram {"xy":"h79079;v49863","wh":"50879;29090"} #end :
+        diagram
+          (#58 block UDP::cleanup
+          #pragma diagram {"xy":"h11290;v-353","wh":"12000;7000"} #end)
+          (#59 expr session
+          #pragma diagram {"xy":"h-14360;v-353","wh":"12000;3200"} #end)
+          (#99 expr true
+          #pragma diagram {"xy":"h-17440;v8945"} #end)
+          (#100 def _stop_condition
+          #pragma diagram {"xy":"h11290;v8561","wh":"20000;3200"} #end)
+          
+          (#60 wire #59 => #58)
+          (#102 wire #99 => #100
+          #pragma diagram {"wp":"#99 h8866 v-383 #100"} #end)
+      state #78 SendtoClient
+      #pragma diagram {"xy":"h-63466;v1422","wh":"144393;47293"} #end :
+        diagram
+          (#62 expr client_address
+          #pragma diagram {"xy":"h-16572;v-10646","wh":"18000;3200"} #end)
+          (#63 $S2 block UDP::send_to
+          #pragma swt under_test #end
+          #pragma diagram {"xy":"h14128;v-7065","wh":"25625;24738"} #end)
+          (#64 expr server_socket
+          #pragma diagram {"xy":"h-16572;v-15296","wh":"18000;3200"} #end)
+          (#65 expr 14
+          #pragma diagram {"xy":"h-33047;v12709"} #end)
+          (#66 block ({op_expr%function x => x = 14%op_expr})
+          #pragma diagram {"xy":"h44496;v-4541","wh":"12000;7000"} #end)
+          (assert $BytesSentServer: #68 ; 
+            where
+              (#68 group)
+          #pragma diagram {"xy":"h62196;v-4541"} #end)
+          (#69 def _
+          #pragma diagram {"xy":"h42496;v-13854"} #end)
+          (#70 expr (buf[0] + 1_ui8) ^ UDP::BUFFER_SZ
+          #pragma diagram {"xy":"h-23859;v-444","wh":"36000;3200"} #end)
+          
+          (#71 wire #62 => #63 .(dest))
+          (#72 wire #64 => #63 .(s_in))
+          (#73 wire #70 => #63 .(buffer))
+          (#74 wire #65 => #63 .(sz)
+          #pragma diagram {"wp":"#65 h15094 v-9479 #63"} #end)
+          (#75 wire #63 .(s_out) => #69
+          #pragma diagram {"wp":"v-6790|#63 #69"} #end)
+          (#76 wire #63 .(sz_sent) => #66
+          #pragma diagram {"wp":"v2523|#63 #66"} #end)
+          (#77 wire #66 => #68
+          #pragma diagram {"wp":"v0|#66 #68"} #end)
+      state #82 CloseServerSocket
+      #pragma diagram {"xy":"h17509;v49694","wh":"55680;28751"} #end :
+        diagram
+          (#79 block UDP::close
+          #pragma diagram {"xy":"h9840;v-1008","wh":"12000;7000"} #end)
+          (#80 expr server_socket
+          #pragma diagram {"xy":"h-14840;v0","wh":"18000;3200"} #end)
+          
+          (#81 wire #80 => #79)
+      state #96 ReceivefromServer
+      #pragma diagram {"xy":"h67842;v-3119","wh":"66000;30475"} #end :
+        diagram
+          (#83 $R2 block UDP::recv_from
+          #pragma swt under_test #end
+          #pragma diagram {"xy":"h7425;v-2588","wh":"12000;7000"} #end)
+          (#84 expr client_socket
+          #pragma diagram {"xy":"h-19638;v-2588","wh":"18000;3200"} #end)
+          (#85 def _
+          #pragma diagram {"xy":"h25000;v-2588"} #end)
+          (#86 def _
+          #pragma diagram {"xy":"h25000;v3588"} #end)
+          (#87 def _
+          #pragma diagram {"xy":"h25000;v-8762"} #end)
+          
+          (#91 wire #84 => #83 .(s_in))
+          (#92 wire #83 .(buffer) => #85
+          #pragma diagram {"wp":"v0|#83 #85"} #end)
+          (#93 wire #83 .(from) => #86
+          #pragma diagram {"wp":"v1667|#83 h3788 v4508 #86"} #end)
+          (#94 wire #83 .(sz) => #87
+          #pragma diagram {"wp":"v-1667|#83 h2595 v-4508 #87"} #end)
+      state #103 CloseClientSocket
+      #pragma diagram {"xy":"h10307;v95936","wh":"70084;26000"} #end :
+        diagram
+          (#97 block UDP::close
+          #pragma diagram {"xy":"h21043;v0","wh":"12000;7000"} #end)
+          (#98 expr client_socket
+          #pragma diagram {"xy":"h-3638;v0","wh":"18000;3200"} #end)
+          
+          (#101 wire #98 => #97)
+      :1: #96 until 
+      restart #82
+      #pragma diagram {"tp":"h-33000;v11238|#96 h-500 h-500 h-500 h-1587 h-1587;v3173 v3173 v6284 v13902 h12660;v-14376|#82"} #end;
+      :1: #26 until 
+      restart #43
+      #pragma diagram {"tp":"h36213;v22958|#26 v690 v690 h-32831;v-16426|#43"} #end;
+      :1: #43 until 
+      restart #57
+      #pragma diagram {"tp":"h-56456;v-1296|#43 h-1911 h-1911 h48274;v108|#57"} #end;
+      :1: #82 until 
+      restart #103
+      #pragma diagram {"tp":"h0;v14376|#82 v8605 v8605 h-4152;v-13000|#103"} #end;
+      :1: #57 until 
+      restart #78
+      #pragma diagram {"tp":"h-4144;v15238|#57 v3601 v3601 h28067;v-23646|#78"} #end;
+      :1: #78 until 
+      restart #96
+      #pragma diagram {"tp":"h72196;v-4541|#78 h8850 h8850 h-33000;v0|#96"} #end;
+      :1: #103 until 
+      restart #61
+      #pragma diagram {"tp":"h30760;v-13000|#103 v-500 v-11524 v-5262 v-7893 h5286;v-7893 h5286 h667 h667 h-25440;v0|#61"} #end;
+    #pragma diagram {"xy":"H-51567;V-37095","wh":"279324;230544"} #end)
+}

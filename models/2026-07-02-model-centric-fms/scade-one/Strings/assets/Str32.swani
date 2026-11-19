@@ -1,0 +1,24 @@
+-- version swan: 2027.0 graph: 2.1
+use Char;
+
+type t = {sz: uint16, cd: Char::t^M};
+
+function cmp (a:t delay0;
+              b:t delay0;)
+  returns (ord:order;);
+
+type order = enum {Smaller, Equal, Bigger};
+
+const d = {sz : 0, cd : '\x00'^M} : t;
+
+const M: uint16 = 32 
+;
+
+const empty = {sz:0,cd:'\x00'^M} : t;
+
+function append_char (s_in: t;
+                      c : Char::t;)
+  returns (s_out: t;);
+
+function mk <<N>> (c: Char::t^N;)
+  returns (s: t;);

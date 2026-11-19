@@ -1,0 +1,90 @@
+-- version swan: 2027.0 graph: 2.0
+use Char;
+
+node to_uint32 (b: uint8;)
+  returns (u: uint32;)
+{
+  diagram
+    (let u = (0 pre u lsl 8) lor (b :> uint32);
+    #pragma diagram {"xy":"H-57500;V-29117","wh":"44000;3200"} #end)
+}
+
+node to_uint16 (b: uint8;)
+  returns (u: uint16;)
+{
+  diagram
+    (let u = (0 pre u lsl 8) lor (b :> uint16);
+    #pragma diagram {"xy":"H-31075;V-14150","wh":"44000;3200"} #end)
+}
+
+node to_str (b: uint8;)
+  returns (s: Str::t last = Str::empty;
+           complete: bool default = false;)
+{
+  diagram
+    (var
+        sz;)
+    (automaton
+      initial state #1 Size
+      #pragma diagram {"xy":"h-31350;v-17450","wh":"34000;12000"} #end :
+        diagram
+          (let sz  = to_uint16(b);
+          #pragma diagram {"xy":"h0;v400","wh":"26000;3200"} #end)
+      state #3 Data
+      #pragma diagram {"xy":"h24350;v-13950","wh":"55200;29600"} #end :
+        diagram
+          (#2 block Str::append_char
+          #pragma diagram {"xy":"h5900;v50","wh":"16000;11100"} #end)
+          (#4 expr Char::of_u8(b)
+          #pragma diagram {"xy":"h-12800;v-3100","wh":"18000;3200"} #end)
+          (#5 expr last's
+          #pragma diagram {"xy":"h-18600;v2350","wh":"10000;3200"} #end)
+          (#6 def s
+          #pragma diagram {"xy":"h19600;v-900"} #end)
+          (let complete = s.sz = sz;
+          #pragma diagram {"xy":"h-2950;v9200","wh":"28000;3200"} #end)
+          
+          (#7 wire #4 => #2 .(c))
+          (#8 wire #5 => #2 .(s_in))
+          (#9 wire #2 => #6
+          #pragma diagram {"wp":"v-950|#2 #6"} #end)
+      state #10 Overflow
+      #pragma diagram {"xy":"h28300;v11550","wh":"46000;14800"} #end :
+        diagram
+          (let complete = cycles(sz - Str::M);
+          #pragma diagram {"xy":"h0;v1800","wh":"38000;3200"} #end)
+      :1: #1 until if (cycles(2))
+      restart #3
+      #pragma diagram {"tp":"h17000;v0|#1 h3700 h3700 h-27600;v-3500|#3"} #end;
+      :1: #3 until if (cycles(Str::M))
+      restart #10
+      #pragma diagram {"tp":"h3950;v14800|#3 v1100 v1100 h0;v-7400|#10"} #end;
+    #pragma diagram {"xy":"H-6850;V-8000","wh":"111900;65500"} #end)
+}
+
+inline node cycles (n: uint16;)
+  returns (over:bool;)
+{
+  diagram
+    (activate
+      if (n <= 0) pre over
+      then
+        {
+          diagram
+            (let over = true;
+            #pragma diagram {"xy":"h-12346;v0","wh":"20000;3200"} #end)
+        #pragma diagram {"xy":"h0;v-10000","wh":"50000;7200"} #end
+        }
+      else
+        {
+          diagram
+            (let c = n pre c -1;
+             over = c <= 0;
+            #pragma diagram {"xy":"h-11458;v-4388","wh":"22000;4219"} #end)
+            
+            (var
+                c;)
+        #pragma diagram {"xy":"h0;v7459","wh":"50000;20000"} #end
+        }
+    #pragma diagram {"xy":"H-39362;V-57062","wh":"50000;34919"} #end)
+}

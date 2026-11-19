@@ -1,0 +1,28 @@
+-- version swan: 2027.0 graph: 2.1
+type index = uint32;
+
+type t = {sz: index, overflow:bool, bytes: uint8^MAX};
+
+const MAX: uint32 = 1036;
+
+function write <<N>> (buf_in *: t delay0;
+                      bytes : uint8^N delay0;)
+  returns (buf_out at buf_in: t;);
+
+const empty = {sz:0, overflow: false, bytes: 0^MAX }:t;
+
+function write_n <<N>> (buf_in *: t delay0;
+                        bytes : uint8^N delay0;
+                        n : uint16 delay0;)
+  returns (buf_out at buf_in: t;);
+
+function write_at <<N>> (buf_in *: t delay0;
+                         bytes : uint8^N delay0;
+                         pos : index delay0;)
+  returns (buf_out at buf_in: t;);
+
+inline function current_pos (buf:t;)
+  returns (pos: index;);
+
+inline function mk <<N>> (bytes : uint8^N delay0;)
+  returns (buf_out: t;);

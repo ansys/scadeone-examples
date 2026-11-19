@@ -1,0 +1,17 @@
+{
+  "Version": "1.0",
+  "Name": "File",
+  "Dependencies": [],
+  "Resources": [
+    {
+      "Kind": "HeaderFile",
+      "Path": "resources\\file.h",
+      "Key": ""
+    },
+    {
+      "Kind": "SourceFile",
+      "Path": "resources\\file.c",
+      "Key": ""
+    }
+  ]
+}

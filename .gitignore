@@ -19,6 +19,7 @@
 *.trf
 *.toremove
 *.bak
+
 # generation output directories
 models/**/Standalone/
 models/**/GCS_Exe/
@@ -27,6 +28,7 @@ models/**/ninja_gcc/
 models/**/msvc20*/
 models/**/swan_cg/
 *_ScadeOneCoSimulation/
+models/**/DF/
 
 ### Python #### Byte-compiled / optimized / DLL files
 __pycache__/

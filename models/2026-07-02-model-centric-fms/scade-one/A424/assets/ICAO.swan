@@ -1,0 +1,26 @@
+-- version swan: 2027.0 graph: 2.1
+function cmp (a: t;
+              b: t;)
+  returns (ord: order;)
+{
+  diagram
+    (#0 expr forward
+      <<M>> with [A] = a; [B] = b;
+      diagram
+        (let
+            uA, uB = (Char::to_u8(A), Char::to_u8(B));
+            o = if uA < uB then Smaller else if uA > uB then Bigger else Equal;
+        #pragma diagram {"xy":"h-1500;v200","wh":"48000;9797"} #end)
+        (var
+            uA;
+            uB;
+            o;)
+      until o <> Equal
+      returns (o)
+    #pragma diagram {"xy":"H-116214;V-2837","wh":"81601;26197"} #end)
+    (#2 def ord
+    #pragma diagram {"xy":"H-67465;V-3567"} #end)
+    
+    (#3 wire #0 .(2) => #2
+    #pragma diagram {"wp":"v-730|#0 #2"} #end)
+}

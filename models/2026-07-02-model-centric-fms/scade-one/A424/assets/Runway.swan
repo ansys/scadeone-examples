@@ -1,0 +1,57 @@
+-- version swan: 2027.0 graph: 2.1
+use Char;
+
+function cmp (a: t;
+              b: t;)
+  returns (ord: order;)
+{
+  diagram
+    (activate #4 when ICAO::cmp(a.icao, b.icao) match
+       | ICAO::Smaller :
+         {
+           diagram
+             (#3 expr Smaller
+             #pragma diagram {"xy":"h-10000;v0","wh":"12000;3200"} #end)
+             (#2 def ord
+             #pragma diagram {"xy":"h12000;v0"} #end)
+             
+             (#5 wire #3 => #2)
+         #pragma diagram {"xy":"h0;v-18999","wh":"98500;7200"} #end
+         }
+       | ICAO::Equal :
+         {
+           diagram
+             (#0 def ord
+             #pragma diagram {"xy":"h43250;v-930"} #end)
+             (#1 expr forward
+               <<4>> with [A] = a.id; [B] = b.id;
+               diagram
+                 (let
+                     uA, uB = (Char::to_u8(A), Char::to_u8(B));
+                     o = if uA < uB then Smaller else if uA > uB then Bigger else Equal;
+                 #pragma diagram {"xy":"h-7000;v0","wh":"48000;9797"} #end)
+                 (var
+                     uA;
+                     uB;
+                     o;)
+               until o <> Equal
+               returns (o)
+             #pragma diagram {"xy":"h-11950;v0","wh":"70600;25797"} #end)
+             
+             (#6 wire #1 .(2) => #0
+             #pragma diagram {"wp":"v-930|#1 #0"} #end)
+         #pragma diagram {"xy":"h0;v3359","wh":"98500;29797"} #end
+         }
+       | ICAO::Bigger :
+         {
+           diagram
+             (#7 expr Bigger
+             #pragma diagram {"xy":"h-10000;v0","wh":"10000;3200"} #end)
+             (#8 def ord
+             #pragma diagram {"xy":"h11000;v0"} #end)
+             
+             (#9 wire #7 => #8)
+         #pragma diagram {"xy":"h0;v25718","wh":"98500;7200"} #end
+         }
+  #pragma diagram {"xy":"H-76057;V31706","wh":"98500;58635"} #end)
+}
