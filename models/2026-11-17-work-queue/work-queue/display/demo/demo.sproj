@@ -1,0 +1,9 @@
+{
+  "Version": "1.0",
+  "Name": "demo",
+  "Dependencies": [
+    "..\\..\\work-queue.sproj",
+    "..\\WorkQueuePanel\\WorkQueuePanel.sproj"
+  ],
+  "Resources": []
+}

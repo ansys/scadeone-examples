@@ -1,0 +1,743 @@
+-- version swan: 2027.0 graph: 2.1 swant: 1.1
+use Dll as L;
+
+use Item;
+
+inline function slot (idx: L::index;)
+  returns (r: L::ref;)
+{
+  diagram
+    (let r = L::Ref {idx: idx, version: 0};
+    #pragma diagram {"xy":"H0;V0","wh":"40000;3200"} #end)
+}
+
+inline function slot_v (idx: L::index;
+                        version: L::version;)
+  returns (r: L::ref;)
+{
+  diagram
+    (let r = L::Ref {idx: idx, version: version};
+    #pragma diagram {"xy":"H0;V0","wh":"46000;3200"} #end)
+}
+
+-- Every slot has the same version in both lists (L::slot_info).
+
+function same_versions (a: L::list;
+                        b: L::list;)
+  returns (same: bool;)
+{
+  diagram
+    (let same = (foldi (slot_version_equal \ a: a, b: b)) <<L::N>> (true);
+    #pragma diagram {"xy":"H0;V0","wh":"72000;3200"} #end)
+}
+
+inline function slot_version_equal (idx: L::index;
+                                    acc: bool;
+                                    a: L::list;
+                                    b: L::list;)
+  returns (same: bool;)
+{
+  diagram
+    (let same = acc and L::slot_info(a, idx).version = L::slot_info(b, idx).version;
+    #pragma diagram {"xy":"H0;V0","wh":"84000;3200"} #end)
+}
+
+-- Slot `idx` is in the same state in both lists, or is `skipped`.
+
+inline function slot_equal_except (idx: L::index;
+                                   acc: bool;
+                                   a: L::list;
+                                   b: L::list;
+                                   skipped: L::index;)
+  returns (same: bool;)
+{
+  diagram
+    (let same = acc and (idx = skipped or L::slot_info(a, idx) = L::slot_info(b, idx));
+    #pragma diagram {"xy":"H0;V0","wh":"90000;3200"} #end)
+}
+
+-- The two lists are identical except, possibly, in slot `skipped`: every
+-- other slot (L::slot_info) and the endpoints, free-list head and size agree.
+-- slot_info of all N slots plus these four values observe the whole list.
+
+function same_except (a: L::list;
+                      b: L::list;
+                      skipped: L::index;)
+  returns (same: bool;)
+{
+  diagram
+    (let same = (foldi (slot_equal_except \ a: a, b: b, skipped: skipped)) <<L::N>> (true)
+       and L::front(a) = L::front(b) and L::back(a) = L::back(b)
+       and L::free_front(a) = L::free_front(b) and L::size(a) = L::size(b);
+    #pragma diagram {"xy":"H0;V0","wh":"96000;6078"} #end)
+}
+
+-- The list holds exactly `count` items: `ahead` from head to tail, `behind` from tail to head.
+
+inline function order_is (l: L::list;
+                          ahead: int32 ^ 4;
+                          behind: int32 ^ 4;
+                          count: L::index;)
+  returns (matches: bool;)
+{
+  diagram
+    (let front_values, _, front_count = L::copy_front <<4>> (l, 0);
+    #pragma diagram {"xy":"H0;V0","wh":"64000;3200"} #end)
+    (let back_values, _, back_count = L::copy_back <<4>> (l, 0);
+    #pragma diagram {"xy":"H0;V-11200","wh":"60000;3200"} #end)
+    (let matches = front_values = ahead and back_values = behind
+       and front_count = count and back_count = count and L::size(l) = count;
+    #pragma diagram {"xy":"H-1400;V-5600","wh":"70000;4219"} #end)
+    
+    (var
+        front_values: int32 ^ 4;
+        back_values: int32 ^ 4;
+        front_count: L::index;
+        back_count: L::index;)
+}
+
+-- No live item at handle `r` (L::value_at).
+
+inline function is_free (l: L::list;
+                         r: L::ref;)
+  returns (matches: bool;)
+{
+  diagram
+    (let
+       found, _ = L::value_at(l, r);
+       matches = not found;
+    #pragma diagram {"xy":"H0;V0","wh":"40000;6078"} #end)
+    
+    (var
+        found: bool;)
+}
+
+-- Nothing at handle `r`: no item, the filler value, no queue neighbours.
+
+inline function reads_nothing (l: L::list;
+                               r: L::ref;)
+  returns (matches: bool;)
+{
+  diagram
+    (let
+       found, value = L::value_at(l, r);
+       matches = not found and value = Item::DEFAULT
+         and L::next_of(l, r) = L::null() and L::prev_of(l, r) = L::null();
+    #pragma diagram {"xy":"H0;V0","wh":"80000;7938"} #end)
+    
+    (var
+        found: bool;
+        value: int32;)
+}
+
+-- The live item at handle `r` holds `value`, between `prev` and `next`.
+
+inline function item_is (l: L::list;
+                         r: L::ref;
+                         value: int32;
+                         prev: L::ref;
+                         next: L::ref;)
+  returns (matches: bool;)
+{
+  diagram
+    (let
+       found, stored = L::value_at(l, r);
+       matches = found and stored = value
+         and L::prev_of(l, r) = prev and L::next_of(l, r) = next;
+    #pragma diagram {"xy":"H0;V0","wh":"72000;7938"} #end)
+    
+    (var
+        found: bool;
+        stored: int32;)
+}
+
+-- The `next` link of slot `idx` (queue link if used, free-list link if free).
+
+inline function next_is (l: L::list;
+                         idx: L::index;
+                         expected: L::ref;)
+  returns (matches: bool;)
+{
+  diagram
+    (let matches = L::slot_info(l, idx).next = expected;
+    #pragma diagram {"xy":"H0;V0","wh":"56000;3200"} #end)
+}
+
+-- Slot `idx` is used and its `prev` link is `expected`.
+
+inline function prev_is (l: L::list;
+                         idx: L::index;
+                         expected: L::ref;)
+  returns (matches: bool;)
+{
+  diagram
+    (let matches = L::slot_info(l, idx).used and L::slot_info(l, idx).prev = expected;
+    #pragma diagram {"xy":"H0;V0","wh":"84000;3200"} #end)
+}
+
+-- Slot `idx` is free (no payload: filler value, no prev) with free-list
+-- successor `next`.
+
+inline function free_slot_is (l: L::list;
+                              idx: L::index;
+                              next: L::ref;)
+  returns (matches: bool;)
+{
+  diagram
+    (let
+       info = L::slot_info(l, idx);
+       matches = not info.used and info.value = Item::DEFAULT
+         and info.prev = L::null() and info.next = next;
+    #pragma diagram {"xy":"H0;V0","wh":"64000;7938"} #end)
+    
+    (var
+        info: L::slot_state;)
+}
+
+_harness invalid_references
+{
+  diagram
+    (let
+       after_after, after_result = L::insert_after(!populated, invalid, 99);
+       deleted, deletion = L::remove(!populated, slot(0));
+       deleted_set, deleted_set_result = L::set(!deleted, slot(0), 77);
+       deleted_remove, deleted_remove_result = L::remove(!deleted, slot(0));
+       deleted_insert, deleted_insert_result =
+          L::insert_before(!deleted, slot(0), 77);
+       after_deleted, deleted_result =
+          L::insert_after(!deleted, slot(0), 99);
+    #pragma diagram {"xy":"H0;V0","wh":"80000;17235"} #end)
+    (assert $insert_after_invalid:
+       _current_cycle = 1
+       or (after_result = L::InsertInvalidRef {} and after_after = populated);
+    #pragma diagram {"xy":"H-1300;V-13000","wh":"74000;6078"} #end)
+    (assert $insert_after_null:
+       _current_cycle <> 1
+       or (after_result = L::Inserted {ref: slot(1)}
+          and L::size(after_after) = 2
+          and L::front(after_after) = slot(1)
+          and prev_is(after_after, 0, slot(1)));
+    #pragma diagram {"xy":"H-900;V77100","wh":"60000;11657"} #end)
+    (assert
+     $freed_node_has_no_payload:
+       free_slot_is(deleted, 0, slot(1));
+     $read_deleted: is_free(deleted, slot(0)) and L::slot_info(deleted, 0).version = 1;
+     $read_null: reads_nothing(populated, L::null());
+     $read_out_of_bounds:
+       reads_nothing(populated, slot(L::N));
+     $read_max_index:
+       reads_nothing(populated, slot(4294967295));
+     $set_deleted: deleted_set_result = L::SetInvalidRef {} and deleted_set = deleted;
+     $remove_deleted:
+       deleted_remove_result = L::RemoveInvalidRef {} and deleted_remove = deleted;
+     $insert_before_deleted:
+       deleted_insert_result = L::InsertInvalidRef {} and deleted_insert = deleted;
+     $insert_after_deleted:
+       deletion = L::Removed {}
+       and deleted_result = L::InsertInvalidRef {} and after_deleted = deleted;
+    #pragma diagram {"xy":"H-3200;V28800","wh":"80000;32111"} #end)
+    (let
+       _stop_condition = _current_cycle >= 5;
+       original = L::init();
+       populated, inserted = L::insert_before(!original, L::null(), 42);
+       invalid = if _current_cycle = 1 then L::null()
+          else if _current_cycle = 2 then slot(1)
+          else if _current_cycle = 3 then slot(L::N)
+          else slot(4294967295);
+       after_insert, insertion = L::insert_before(!populated, invalid, 99);
+       after_set, modification = L::set(!populated, invalid, 99);
+       after_remove, removal = L::remove(!populated, invalid);
+    #pragma diagram {"xy":"H100;V58500","wh":"70000;20954"} #end)
+    (assert $setup_inserted: inserted = L::Inserted {ref: slot(0)};
+    #pragma diagram {"xy":"H-200;V105300","wh":"72000;3200"} #end)
+    (assert $invalid_read: is_free(populated, invalid);
+    #pragma diagram {"xy":"H-3200;V-32700","wh":"74000;3200"} #end)
+    (assert $invalid_set:
+       modification = L::SetInvalidRef {} and after_set = populated;
+    #pragma diagram {"xy":"H0;V99200","wh":"64000;4219"} #end)
+    (assert $invalid_remove:
+       removal = L::RemoveInvalidRef {} and after_remove = populated;
+    #pragma diagram {"xy":"H0;V-27200","wh":"66000;4219"} #end)
+    (assert $invalid_insert:
+       _current_cycle = 1
+       or (insertion = L::InsertInvalidRef {} and after_insert = populated);
+    #pragma diagram {"xy":"H600;V-20600","wh":"72000;6078"} #end)
+    (assert $null_position_appends:
+       _current_cycle <> 1
+       or (insertion = L::Inserted {ref: slot(1)}
+          and L::size(after_insert) = 2
+          and L::back(after_insert) = slot(1));
+    #pragma diagram {"xy":"H800;V90800","wh":"54000;9797"} #end)
+    
+    (var
+        after_after: L::list;
+        after_result: L::insert_result;
+        deleted: L::list;
+        after_deleted: L::list;
+        deletion: L::remove_result;
+        deleted_result: L::insert_result;
+        deleted_set: L::list;
+        deleted_set_result: L::set_result;
+        deleted_remove: L::list;
+        deleted_remove_result: L::remove_result;
+        deleted_insert: L::list;
+        deleted_insert_result: L::insert_result;
+        original: L::list;
+        populated: L::list;
+        inserted: L::insert_result;
+        invalid: L::ref;
+        after_insert: L::list;
+        after_set: L::list;
+        after_remove: L::list;
+        insertion: L::insert_result;
+        modification: L::set_result;
+        removal: L::remove_result;)
+}
+
+_harness capacity
+{
+  diagram
+    (let
+       front_full, front_result = L::push_front(!updated, 9);
+       back_full, back_result = L::push_back(!updated, 9);
+       after_full, after_result = L::insert_after(!updated, L::back(updated), 9);
+       null_full, null_result = L::insert_after(!updated, L::null(), 9);
+       invalid_full, invalid_result =
+          L::insert_after(!updated, slot(L::N), 9);
+    #pragma diagram {"xy":"H0;V0","wh":"76000;13516"} #end)
+    (assert $wrappers_full_unchanged:
+       L::size(updated) < L::N
+       or (front_result = L::Full {} and front_full = updated
+          and back_result = L::Full {} and back_full = updated
+          and after_result = L::Full {} and after_full = updated
+          and null_result = L::Full {} and null_full = updated);
+    #pragma diagram {"xy":"H2300;V-13800","wh":"60000;11657"} #end)
+    (assert $insert_after_invalid_precedes_full:
+       invalid_result = L::InsertInvalidRef {} and invalid_full = updated;
+    #pragma diagram {"xy":"H1600;V-35200","wh":"70000;4219"} #end)
+    (let
+       _stop_condition = _current_cycle >= (L::N :> uint64) + 2;
+       current = L::init() -> pre updated;
+       updated, result = L::insert_before(!current, L::null(), 7);
+       rejected, rejection = L::insert_before(!current, slot(L::N), 99);
+    #pragma diagram {"xy":"H2400;V14400","wh":"76000;9797"} #end)
+    (assert $invalid_position_precedes_capacity:
+       rejection = L::InsertInvalidRef {} and rejected = current;
+    #pragma diagram {"xy":"H0;V-40500","wh":"62000;4219"} #end)
+    (assert $fills_every_slot:
+       _current_cycle > (L::N :> uint64)
+       or (result = L::Inserted {ref: slot((_current_cycle - 1 :> L::index))}
+          and L::size(updated) = (_current_cycle :> L::index));
+    #pragma diagram {"xy":"H4400;V26400","wh":"80000;7938"} #end)
+    (assert $full_does_not_modify:
+       _current_cycle <= (L::N :> uint64)
+       or (result = L::Full {} and updated = current
+          and L::size(updated) = L::N and L::free_front(updated) = L::null());
+    #pragma diagram {"xy":"H4200;V-27300","wh":"68000;7938"} #end)
+    (assert $head_stays_first:
+       L::front(updated) = slot(0) and prev_is(updated, 0, L::null());
+    #pragma diagram {"xy":"H3400;V34000","wh":"78000;4219"} #end)
+    
+    (var
+        front_full: L::list;
+        back_full: L::list;
+        after_full: L::list;
+        null_full: L::list;
+        invalid_full: L::list;
+        front_result: L::insert_result;
+        back_result: L::insert_result;
+        after_result: L::insert_result;
+        null_result: L::insert_result;
+        invalid_result: L::insert_result;
+        current: L::list;
+        updated: L::list;
+        result: L::insert_result;
+        rejected: L::list;
+        rejection: L::insert_result;)
+}
+
+_harness insertion_wrappers
+{
+  diagram
+    (let
+       _stop_condition = _current_cycle >= 1;
+       empty = L::init();
+       a, ra = L::push_front(!empty, 20);
+       b, rb = L::push_back(!a, 40);
+       c, rc = L::push_front(!b, 10);
+       d, rd = L::insert_after(!c, slot(0), 30);
+       e, re = L::insert_after(!d, slot(1), 50);
+       f, rf = L::insert_after(!e, L::null(), 5);
+       back_empty, rback = L::push_back(!empty, 7);
+       after_empty, rafter = L::insert_after(!empty, L::null(), 8);
+    #pragma diagram {"xy":"H0;V0","wh":"64000;20954"} #end)
+    (assert $push_front_empty:
+       ra = L::Inserted {ref: slot(0)}
+       and L::size(a) = 1
+       and item_is(a, L::front(a), 20, L::null(), L::null());
+    #pragma diagram {"xy":"H2100;V50400","wh":"60000;9797"} #end)
+    (assert $push_back_empty:
+       rback = L::Inserted {ref: slot(0)}
+       and L::front(back_empty) = L::back(back_empty)
+       and L::size(back_empty) = 1
+       and item_is(back_empty, L::front(back_empty), 7, L::null(), L::null());
+    #pragma diagram {"xy":"H2300;V-34500","wh":"58000;11657"} #end)
+    (assert $insert_after_null_empty:
+       rafter = L::Inserted {ref: slot(0)}
+       and L::size(after_empty) = 1
+       and item_is(after_empty, L::front(after_empty), 8, L::null(), L::null());
+    #pragma diagram {"xy":"H2100;V-48300","wh":"58000;9797"} #end)
+    (assert $push_back_nonempty:
+       rb = L::Inserted {ref: slot(1)}
+       and L::size(b) = 2
+       and L::back(b) = slot(1)
+       and next_is(b, 0, slot(1))
+       and prev_is(b, 1, slot(0));
+    #pragma diagram {"xy":"H58000;V2000","wh":"44000;11657"} #end)
+    (assert $push_front_nonempty:
+       rc = L::Inserted {ref: slot(2)}
+       and L::size(c) = 3
+       and L::front(c) = slot(2)
+       and next_is(c, 2, slot(0))
+       and prev_is(c, 0, slot(2));
+    #pragma diagram {"xy":"H-56000;V2000","wh":"44000;11657"} #end)
+    (assert $insert_after_middle:
+       rd = L::Inserted {ref: slot(3)}
+       and L::size(d) = 4
+       and item_is(d, slot(3), 30, slot(0), slot(1))
+       and next_is(d, 0, slot(3))
+       and prev_is(d, 1, slot(3));
+    #pragma diagram {"xy":"H2700;V-18900","wh":"72000;13516"} #end)
+    (assert $insert_after_tail:
+       re = L::Inserted {ref: slot(4)}
+       and L::size(e) = 5
+       and L::back(e) = slot(4)
+       and next_is(e, 1, slot(4))
+       and item_is(e, slot(4), 50, slot(1), L::null());
+    #pragma diagram {"xy":"H2600;V36400","wh":"66000;13516"} #end)
+    (assert $insert_after_null_prepends:
+       rf = L::Inserted {ref: slot(5)}
+       and L::size(f) = 6
+       and L::front(f) = slot(5)
+       and L::back(f) = slot(4)
+       and prev_is(f, 2, slot(5))
+       and item_is(f, slot(5), 5, L::null(), slot(2));
+    #pragma diagram {"xy":"H2800;V19600","wh":"66000;15376"} #end)
+    
+    (var
+        empty: L::list;
+        a: L::list;
+        b: L::list;
+        c: L::list;
+        d: L::list;
+        e: L::list;
+        f: L::list;
+        back_empty: L::list;
+        after_empty: L::list;
+        ra: L::insert_result;
+        rb: L::insert_result;
+        rc: L::insert_result;
+        rd: L::insert_result;
+        re: L::insert_result;
+        rf: L::insert_result;
+        rback: L::insert_result;
+        rafter: L::insert_result;)
+}
+
+_harness harness0
+{
+  diagram
+    (let _stop_condition = _current_cycle >= 1;
+    #pragma diagram {"xy":"H-26500;V-45908","wh":"44000;3200"} #end)
+    (assert $empty_is_empty: #1 ; 
+      where
+        (#1 group)
+    #pragma diagram {"xy":"H21712;V-72200"} #end)
+    (#2 expr L::size(L::init()) = 0
+    #pragma diagram {"xy":"H-13788;V-72200","wh":"26000;3200"} #end)
+    (let
+       empty = L::init();
+       singleton, first = L::insert_before(!empty, L::null(), 10);
+       pair, second = L::insert_before(!singleton, L::null(), 30);
+       triple, middle = L::insert_before(!pair, slot(1), 20);
+       changed, modification = L::set(!triple, slot(2), 21);
+       removed, removal = L::remove(!changed, slot(2));
+       recycled, reused = L::insert_before(!removed, slot(1), 22);
+       without_head, head_removal = L::remove(!recycled, slot(0));
+       without_tail, tail_removal = L::remove(!without_head, slot(1));
+       cleared, last_removal = L::remove(!without_tail, slot_v(2, 1));
+    #pragma diagram {"xy":"H24000;V0","wh":"74000;20954"} #end)
+    (assert $initial_endpoints:
+       L::front(empty) = L::null() and L::back(empty) = L::null();
+    #pragma diagram {"xy":"H-42000;V13500","wh":"62000;4219"} #end)
+    (assert $initial_free_chain:
+       L::free_front(empty) = slot(0)
+       and next_is(empty, 0, slot(1))
+       and next_is(empty, L::N - 1, L::null())
+       and free_slot_is(empty, 0, slot(1))
+       and free_slot_is(empty, L::N - 1, L::null());
+    #pragma diagram {"xy":"H26200;V-63800","wh":"66000;9797"} #end)
+    (assert $insert_empty:
+       first = L::Inserted {ref: slot(0)}
+       and L::size(singleton) = 1
+       and L::front(singleton) = slot(0)
+       and L::back(singleton) = slot(0)
+       and item_is(singleton, slot(0), 10, L::null(), L::null());
+    #pragma diagram {"xy":"H26500;V-50000","wh":"60000;13516"} #end)
+    (assert $append:
+       second = L::Inserted {ref: slot(1)}
+       and L::size(pair) = 2
+       and L::back(pair) = slot(1)
+       and item_is(pair, slot(0), 10, L::null(), slot(1))
+       and item_is(pair, slot(1), 30, slot(0), L::null());
+    #pragma diagram {"xy":"H26800;V-19600","wh":"66000;15376"} #end)
+    (assert $insert_middle:
+       middle = L::Inserted {ref: slot(2)}
+       and L::size(triple) = 3
+       and item_is(triple, slot(0), 10, L::null(), slot(2))
+       and item_is(triple, slot(2), 20, slot(0), slot(1))
+       and item_is(triple, slot(1), 30, slot(2), L::null());
+    #pragma diagram {"xy":"H27000;V24000","wh":"72000;17235"} #end)
+    (assert $set_value_only:
+       modification = L::Set {}
+       and same_except(changed, triple, 2)
+       and L::slot_info(changed, 2) = {used: true, version: L::slot_info(triple, 2).version,
+         value: 21, prev: slot(0), next: slot(1)}: L::slot_state;
+    #pragma diagram {"xy":"H-33600;V-16000","wh":"52000;6078"} #end)
+    (assert $remove_middle:
+       removal = L::Removed {}
+       and L::size(removed) = 2
+       and is_free(removed, slot(2))
+       and next_is(removed, 0, slot(1))
+       and prev_is(removed, 1, slot(0))
+       and L::free_front(removed) = slot_v(2, 1)
+       and L::slot_info(removed, 2).version = 1
+       and next_is(removed, 2, slot(3));
+    #pragma diagram {"xy":"H26700;V45900","wh":"64000;15376"} #end)
+    (assert $reuse_freed_slot:
+       reused = L::Inserted {ref: slot_v(2, 1)}
+       and L::size(recycled) = 3
+       and L::free_front(recycled) = slot(3)
+       and item_is(recycled, slot_v(2, 1), 22, slot(0), slot(1))
+       and is_free(recycled, slot(2));
+    #pragma diagram {"xy":"H26500;V-35000","wh":"72000;11657"} #end)
+    (assert $remove_head:
+       head_removal = L::Removed {}
+       and L::size(without_head) = 2
+       and L::front(without_head) = slot_v(2, 1)
+       and prev_is(without_head, 2, L::null());
+    #pragma diagram {"xy":"H88000;V-10000","wh":"50000;9797"} #end)
+    (assert $remove_tail:
+       tail_removal = L::Removed {}
+       and L::size(without_tail) = 1
+       and L::back(without_tail) = slot_v(2, 1)
+       and item_is(without_tail, slot_v(2, 1), 22, L::null(), L::null());
+    #pragma diagram {"xy":"H26300;V62100","wh":"60000;11657"} #end)
+    (assert $remove_last:
+       last_removal = L::Removed {}
+       and L::size(cleared) = 0
+       and L::front(cleared) = L::null()
+       and L::back(cleared) = L::null()
+       and L::free_front(cleared) = slot_v(2, 2);
+    #pragma diagram {"xy":"H86000;V2000","wh":"46000;11657"} #end)
+    
+    (#3 wire #2 => #1)
+    
+    (var
+        empty: L::list;
+        singleton: L::list;
+        pair: L::list;
+        triple: L::list;
+        changed: L::list;
+        removed: L::list;
+        recycled: L::list;
+        without_head: L::list;
+        without_tail: L::list;
+        cleared: L::list;
+        first: L::insert_result;
+        second: L::insert_result;
+        middle: L::insert_result;
+        reused: L::insert_result;
+        modification: L::set_result;
+        removal: L::remove_result;
+        head_removal: L::remove_result;
+        tail_removal: L::remove_result;
+        last_removal: L::remove_result;)
+}
+
+_harness versions
+{
+  diagram
+    (let
+       _stop_condition = _current_cycle >= 1;
+       one, r1 = L::push_back(!L::init(), 10);
+       gone, _ = L::remove(!one, slot(0));
+       reused, r2 = L::push_back(!gone, 20);
+       stale_remove, stale_remove_result = L::remove(!reused, slot(0));
+       stale_set, stale_set_result = L::set(!reused, slot(0), 99);
+       stale_insert, stale_insert_result = L::insert_before(!reused, slot(0), 99);
+       stale_after, stale_after_result = L::insert_after(!reused, slot(0), 99);
+       stale_move, stale_move_result = L::move_before(!reused, slot(0), L::null());
+       at_max = L::init_at(L::MAX_VERSION);
+       filled, r3 = L::push_back(!at_max, 30);
+       wrapped, _ = L::remove(!filled, slot_v(0, L::MAX_VERSION));
+    #pragma diagram {"xy":"H0;V0","wh":"78000;24673"} #end)
+    (assert
+     $first_handle: r1 = L::Inserted {ref: slot(0)};
+     $reuse_bumps_version: r2 = L::Inserted {ref: slot_v(0, 1)}
+       and item_is(reused, slot_v(0, 1), 20, L::null(), L::null());
+     $stale_read: is_free(reused, slot(0));
+     $stale_remove: stale_remove_result = L::RemoveInvalidRef {} and stale_remove = reused;
+     $stale_set: stale_set_result = L::SetInvalidRef {} and stale_set = reused;
+     $stale_insert: stale_insert_result = L::InsertInvalidRef {} and stale_insert = reused;
+     $stale_insert_after: stale_after_result = L::InsertInvalidRef {} and stale_after = reused;
+     $stale_move: stale_move_result = L::MoveInvalidRef {} and stale_move = reused;
+     $handle_tracks_version: L::handle(reused, 0) = slot_v(0, 1) and L::handle(reused, 1) = slot(1);
+     $next_version: L::next_version(5) = 6 and L::next_version(L::MAX_VERSION) = 0;
+     $handle_at_max: r3 = L::Inserted {ref: slot_v(0, L::MAX_VERSION)};
+     $version_wraps_to_zero: L::slot_info(wrapped, 0).version = 0 and L::free_front(wrapped) = slot(0)
+       and L::size(wrapped) = 0;
+    #pragma diagram {"xy":"H-3700;V-29600","wh":"94000;28392"} #end)
+    
+    (var
+        one: L::list;
+        gone: L::list;
+        reused: L::list;
+        stale_remove: L::list;
+        stale_set: L::list;
+        stale_insert: L::list;
+        stale_after: L::list;
+        stale_move: L::list;
+        at_max: L::list;
+        filled: L::list;
+        wrapped: L::list;
+        r1: L::insert_result;
+        r2: L::insert_result;
+        r3: L::insert_result;
+        stale_remove_result: L::remove_result;
+        stale_set_result: L::set_result;
+        stale_insert_result: L::insert_result;
+        stale_after_result: L::insert_result;
+        stale_move_result: L::move_result;)
+}
+
+_harness moves
+{
+  diagram
+    (let
+       _stop_condition = _current_cycle >= 1;
+       a, _ = L::push_back(!L::init(), 10);
+       b, _ = L::push_back(!a, 20);
+       c, _ = L::push_back(!b, 30);
+       base, _ = L::push_back(!c, 40);
+       to_front, r_front = L::move_before(!base, slot(3), slot(0));
+       to_back, r_back = L::move_before(!base, slot(0), L::null());
+       forward_move, r_forward = L::move_before(!base, slot(1), slot(3));
+       backward_move, r_backward = L::move_before(!base, slot(2), slot(1));
+       onto_itself, r_itself = L::move_before(!base, slot(1), slot(1));
+       beside_itself, r_beside = L::move_before(!base, slot(1), slot(2));
+       tail_to_back, r_tail = L::move_before(!base, slot(3), L::null());
+       holed, _ = L::remove(!base, slot(2));
+       stale_target, r_stale_target = L::move_before(!holed, slot(1), slot(2));
+       stale_item, r_stale_item = L::move_before(!holed, slot(2), slot(0));
+       pair, _ = L::push_back(!a, 20);
+       swapped, r_swap = L::move_before(!pair, slot(0), L::null());
+    #pragma diagram {"xy":"H0;V0","wh":"74000;33970"} #end)
+    (assert
+     $setup: L::size(base) = 4 and L::free_front(base) = slot(4);
+     $tail_to_front: r_front = L::Moved {}
+       and order_is(to_front, [40, 10, 20, 30], [30, 20, 10, 40], 4);
+     $head_to_back: r_back = L::Moved {}
+       and order_is(to_back, [20, 30, 40, 10], [10, 40, 30, 20], 4);
+     $move_forward: r_forward = L::Moved {}
+       and order_is(forward_move, [10, 30, 20, 40], [40, 20, 30, 10], 4);
+     $move_backward: r_backward = L::Moved {}
+       and order_is(backward_move, [10, 30, 20, 40], [40, 20, 30, 10], 4);
+     $onto_itself_is_noop: r_itself = L::Moved {} and onto_itself = base;
+     $beside_itself_is_noop: r_beside = L::Moved {} and beside_itself = base;
+     $tail_to_back_is_noop: r_tail = L::Moved {} and tail_to_back = base;
+     $two_items: r_swap = L::Moved {} and order_is(swapped, [20, 10, 0, 0], [10, 20, 0, 0], 2);
+     $stale_target: r_stale_target = L::MoveInvalidRef {} and stale_target = holed;
+     $stale_item: r_stale_item = L::MoveInvalidRef {} and stale_item = holed;
+     $handles_survive_moves:
+       item_is(to_front, slot(3), 40, L::null(), slot(0))
+       and same_versions(to_front, base)
+       and L::free_front(to_front) = L::free_front(base)
+       and item_is(forward_move, slot(1), 20, slot(2), slot(3));
+    #pragma diagram {"xy":"H-4200;V-42000","wh":"90000;39549"} #end)
+    
+    (var
+        a: L::list;
+        b: L::list;
+        c: L::list;
+        base: L::list;
+        to_front: L::list;
+        to_back: L::list;
+        forward_move: L::list;
+        backward_move: L::list;
+        onto_itself: L::list;
+        beside_itself: L::list;
+        tail_to_back: L::list;
+        holed: L::list;
+        stale_target: L::list;
+        stale_item: L::list;
+        pair: L::list;
+        swapped: L::list;
+        r_front: L::move_result;
+        r_back: L::move_result;
+        r_forward: L::move_result;
+        r_backward: L::move_result;
+        r_itself: L::move_result;
+        r_beside: L::move_result;
+        r_tail: L::move_result;
+        r_stale_target: L::move_result;
+        r_stale_item: L::move_result;
+        r_swap: L::move_result;)
+}
+
+_harness copies
+{
+  diagram
+    (let
+       _stop_condition = _current_cycle >= 1;
+       empty = L::init();
+       a, _ = L::push_back(!empty, 10);
+       b, _ = L::push_back(!a, 20);
+       c, _ = L::push_back(!b, 30);
+       moved, _ = L::move_before(!c, slot(2), slot(0));
+       empty_values, empty_refs, empty_count = L::copy_front <<3>> (empty, -1);
+       front_values, front_refs, front_count = L::copy_front <<5>> (moved, -1);
+       back_values, back_refs, back_count = L::copy_back <<2>> (moved, -1);
+       one_values, one_refs, one_count = L::copy_front <<1>> (moved, -1);
+    #pragma diagram {"xy":"H0;V0","wh":"74000;20954"} #end)
+    (assert
+     $empty_list: empty_values = [-1, -1, -1]
+       and empty_refs = [L::null(), L::null(), L::null()] and empty_count = 0;
+     $list_order_and_filler: front_values = [30, 10, 20, -1, -1] and front_count = 3;
+     $handles_follow_values:
+       front_refs = [slot(2), slot(0), slot(1), L::null(), L::null()];
+     $from_the_tail_truncated: back_values = [20, 10] and back_refs = [slot(1), slot(0)]
+       and back_count = 2;
+     $single_entry: one_values = [30] and one_refs = [slot(2)] and one_count = 1;
+     $copy_leaves_list_unchanged: L::size(moved) = 3;
+    #pragma diagram {"xy":"H-3400;V-23800","wh":"82000;19095"} #end)
+    
+    (var
+        empty: L::list;
+        a: L::list;
+        b: L::list;
+        c: L::list;
+        moved: L::list;
+        empty_values: int32 ^ 3;
+        empty_refs: L::ref ^ 3;
+        empty_count: L::index;
+        front_values: int32 ^ 5;
+        front_refs: L::ref ^ 5;
+        front_count: L::index;
+        back_values: int32 ^ 2;
+        back_refs: L::ref ^ 2;
+        back_count: L::index;
+        one_values: int32 ^ 1;
+        one_refs: L::ref ^ 1;
+        one_count: L::index;)
+}

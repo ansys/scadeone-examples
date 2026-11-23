@@ -1,0 +1,11 @@
+-- version swan: 2027.0 graph: 2.1
+-- True when the item equals the wanted value.
+
+function matches (value: t;
+                  wanted: key;)
+  returns (yes: bool;)
+{
+  diagram
+    (let yes = value = wanted;
+    #pragma diagram {"xy":"H0;V0","wh":"30000;3200"} #end)
+}

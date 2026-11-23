@@ -1,0 +1,21 @@
+{
+  "JobsOrder": [
+    "jobs\\testexec_d110006\\.sjob",
+    "jobs\\testexec_d110007\\.sjob",
+    "jobs\\testexec_d110009\\.sjob",
+    "jobs\\testexec_d11000a\\.sjob",
+    "jobs\\codegen_d110008\\.sjob",
+    "jobs\\testexec_d11000d\\.sjob",
+    "jobs\\testexec_d11000e\\.sjob",
+    "jobs\\codegen_d11000f\\.sjob"
+  ],
+  "ModulesOrder": [
+    "assets\\Job.swani",
+    "assets\\Job.swan",
+    "assets\\JobList.swani",
+    "assets\\JobList.swan",
+    "assets\\WorkQueue.swan",
+    "assets\\View.swan",
+    "assets\\Demo.swant"
+  ]
+}

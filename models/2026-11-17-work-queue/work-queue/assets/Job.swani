@@ -1,0 +1,25 @@
+-- version swan: 2027.0 graph: 2.1
+
+type operation = enum {Inspect, Paint, Pack, Drill, Rework, SafetyCheck, Production};
+
+type t = {
+  operation: operation,
+  duration_cycles: uint32
+};
+
+-- Standard job for an operation, with that operation's usual duration.
+
+function make (kind: operation delay0;)
+  returns (job: t;);
+
+-- Filler job (no work): the value reported where there is no job.
+
+const DEFAULT: t = {operation: Production, duration_cycles: 0}: t;
+
+-- Selection key for JobList::remove_matching: a job matches its operation.
+
+type key = operation;
+
+function matches (value: t delay0;
+                  wanted: key delay0;)
+  returns (yes: bool;);

@@ -21,6 +21,14 @@ Below is a list of Ansys Scade One models stored in this repository. They are ty
 
 .. grid:: 2 2 3 3
 
+    .. grid-item-card:: Dynamic Data in Static Memory: A Live Work Queue in Swan
+        :margin: 0 4 0 0
+        :img-top: _static/thumbnails/2026-11-17-work-queue.jpg
+
+        :fas:`fa-solid fa-file-zipper` :model_zip:`Download model <2026-11-17-work-queue>`
+
+        :fas:`fa-solid fa-code` :model_sources:`View sources <2026-11-17-work-queue>`
+
     .. grid-item-card:: Scade One and SCADE Display integration on a hardware target
         :margin: 0 4 0 0
         :img-top: _static/thumbnails/2026-07-30-scade-display-integration.jpg

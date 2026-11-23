@@ -1,0 +1,20 @@
+{
+  "Version": "2.1",
+  "Kind": "Simulation",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "LivePanel",
+    "CustomArguments": "",
+    "FileScenario": "",
+    "SimulationInputType": "Harness",
+    "TestHarness": "LiveDemo::live",
+    "UseCycleTime": "True",
+    "CycleTime": "20"
+  },
+  "InputPaths": [
+    "assets/Console.swan",
+    "assets/LiveDemo.swant"
+  ]
+}

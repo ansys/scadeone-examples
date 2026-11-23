@@ -1,0 +1,1066 @@
+-- version swan: 2027.0 graph: 2.1
+-- Private storage. A slot is a free-list node or a queue node, and keeps its
+-- version across Free / Used changes. Only the operators of this module see it.
+
+type Node =
+  Free {next: ref}
+  | Used {value: Item::t, prev: ref, next: ref};
+
+type Slot = {version: version, entry: Node};
+
+type list = {
+  nodes: Slot ^ N,
+  head: ref,
+  tail: ref,
+  free_head: ref,
+  length: index
+};
+
+-- Returned by read for a Null, out-of-range or stale handle.
+
+const EMPTY_NODE: Node = Free {next: Null {}};
+
+-- Default for an out-of-range index in `nodes .[idx] default EMPTY_SLOT`:
+-- version 0, Free with no successor.
+
+const EMPTY_SLOT: Slot = {version: 0, entry: EMPTY_NODE}: Slot;
+
+inline function null ()
+  returns (result: ref;)
+{
+  diagram
+    (let result = Null {};
+    #pragma diagram {"xy":"H0;V0","wh":"24000;3200"} #end)
+}
+
+inline function handle (l: list;
+                        idx: index;)
+  returns (result: ref;)
+{
+  diagram
+    (let result = Ref {idx: idx, version: (l.nodes .[idx] default EMPTY_SLOT).version};
+    #pragma diagram {"xy":"H0;V0","wh":"68000;3200"} #end)
+}
+
+-- The version after `current`; wraps to 0 after MAX_VERSION.
+
+inline function next_version (current: version;)
+  returns (result: version;)
+{
+  diagram
+    (let result = if current = MAX_VERSION then 0 else current + 1;
+    #pragma diagram {"xy":"H0;V0","wh":"64000;3200"} #end)
+}
+
+-- The slot index of a handle; N for Null.
+
+inline function index_of (r: ref;)
+  returns (idx: index;)
+{
+  diagram
+    (activate #0 when r match
+       | Null :
+         {
+           diagram
+             (let idx = N;
+             #pragma diagram {"xy":"h-1000;v0","wh":"16000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-2091","wh":"30000;7200"} #end
+         }
+       | Ref {position} :
+         {
+           diagram
+             (let idx = position.idx;
+             #pragma diagram {"xy":"h0;v0","wh":"26000;3200"} #end)
+         #pragma diagram {"xy":"h0;v8809","wh":"30000;7200"} #end
+         }
+     #pragma diagram {"xy":"H0;V0","wh":"30000;24819"} #end)
+}
+
+-- Initial slot `idx`: version `first`, Free, linked to the next slot.
+
+inline function init_node (idx: index;
+                           first: version;)
+  returns (result: Slot;)
+{
+  diagram
+    (let result = {
+         version: first,
+         entry: Free {next: if idx < N - 1 then Ref {idx: idx + 1, version: first} else null()}
+         }: Slot;
+    #pragma diagram {"xy":"H4000;V2369","wh":"86000;7938"} #end)
+}
+
+-- An empty list whose N slots are all free, at version `first`, chained in
+-- index order in the free list.
+
+function init_at (first: version;)
+  returns (result: list;)
+{
+  diagram
+    (let
+       result = {
+         nodes: (mapi (init_node \ first: first)) <<N>> (),
+         head: null(),
+         tail: null(),
+         free_head: Ref {idx: 0, version: first},
+         length: 0
+       }: list;
+    #pragma diagram {"xy":"H0;V0","wh":"56000;15376"} #end)
+}
+
+function init ()
+  returns (result: list;)
+{
+  diagram
+    (let result = init_at(0);
+    #pragma diagram {"xy":"H0;V0","wh":"26000;3200"} #end)
+}
+
+inline function size (l: list;)
+  returns (result: index;)
+{
+  diagram
+    (let result = l.length;
+    #pragma diagram {"xy":"H0;V0","wh":"26000;3200"} #end)
+}
+
+inline function front (l: list;)
+  returns (result: ref;)
+{
+  diagram
+    (let result = l.head;
+    #pragma diagram {"xy":"H0;V0","wh":"24000;3200"} #end)
+}
+
+inline function back (l: list;)
+  returns (result: ref;)
+{
+  diagram
+    (let result = l.tail;
+    #pragma diagram {"xy":"H0;V0","wh":"24000;3200"} #end)
+}
+
+function read (l: list;
+               r: ref;)
+  returns (result: Node;)
+{
+  diagram
+    (activate #0 when r match
+       | Null :
+         {
+           diagram
+             (let result = EMPTY_NODE;
+             #pragma diagram {"xy":"h-17000;v0","wh":"22000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-6399","wh":"62000;7200"} #end
+         }
+       | Ref {position} :
+         {
+           diagram
+             (let
+                stored = (l.nodes .[position.idx] default EMPTY_SLOT);
+                result =
+                  if stored.version = position.version
+                  then stored.entry
+                  else EMPTY_NODE;
+             #pragma diagram {"xy":"h0;v0","wh":"58000;11657"} #end)
+             
+             (var
+                 stored: Slot;)
+         #pragma diagram {"xy":"h0;v8889","wh":"62000;15657"} #end
+         }
+     #pragma diagram {"xy":"H-2104;V-32182","wh":"62000;33435"} #end)
+}
+
+-- Replaces the value of a live item. The inner `Null` branch is defensive:
+-- read returns Free for a Null handle, so it is not reached.
+
+function set (l_in * : list;
+              r: ref;
+              value: Item::t;)
+  returns (l_out at l_in: list;
+           result: set_result;)
+{
+  diagram
+    (let entry = read(l_in, r);
+    #pragma diagram {"xy":"H-10325;V3888","wh":"34000;3200"} #end)
+    
+    (var
+        entry: Node;)
+    (activate #0 when entry match
+       | Free {available} :
+         {
+           diagram
+             (let l_out = l_in; result = SetInvalidRef {};
+             #pragma diagram {"xy":"h-10000;v0","wh":"46000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-15349","wh":"70000;7200"} #end
+         }
+       | Used {occupied} :
+         {
+           diagram
+             (activate #1 when r match
+                | Null :
+                  {
+                    diagram
+                      (let l_out = l_in; result = SetInvalidRef {};
+                      #pragma diagram {"xy":"h-8000;v0","wh":"46000;3200"} #end)
+                  #pragma diagram {"xy":"h0;v-4539","wh":"66000;7200"} #end
+                  }
+                | Ref {position} :
+                  {
+                    diagram
+                      (let
+                         l_out = (l_in with .nodes[position.idx].entry = Used {
+                           value: value, prev: occupied.prev, next: occupied.next});
+                         result = Set {};
+                      #pragma diagram {"xy":"h0;v0","wh":"62000;7938"} #end)
+                  #pragma diagram {"xy":"h0;v8889","wh":"66000;11938"} #end
+                  }
+              #pragma diagram {"xy":"h0;v80","wh":"66000;29716"} #end)
+         #pragma diagram {"xy":"h0;v8889","wh":"70000;33557"} #end
+         }
+     #pragma diagram {"xy":"H-1000;V-28920","wh":"70000;51335"} #end)
+}
+
+-- Sets previous.next := next, or head := next when previous is Null.
+
+inline function set_next_of (l_in * : list;
+                             previous: ref;
+                             next: ref;)
+  returns (l_out at l_in: list;)
+{
+  diagram
+    (activate #0 when previous match
+       | Null :
+         {
+           diagram
+             (let l_out = (l_in with .head = next);
+             #pragma diagram {"xy":"h-20988;v500","wh":"40000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-20729","wh":"85975;8200"} #end
+         }
+       | Ref {position} :
+         {
+           diagram
+             (let entry = !(l_in.nodes .[position.idx] default EMPTY_SLOT).entry;
+             #pragma diagram {"xy":"h-1812;v-18558","wh":"70000;3200"} #end)
+             
+             (var
+                 entry: Node;)
+             (activate #1 when entry match
+                | Free {available} :
+                  {
+                    diagram
+                      (assert $occupied_neighbor: false;
+                      #pragma diagram {"xy":"h-9000;v-2700","wh":"36000;3200"} #end)
+                      (let l_out = !l_in;
+                      #pragma diagram {"xy":"h-8100;v2700","wh":"22000;3200"} #end)
+                  #pragma diagram {"xy":"h0;v-4540","wh":"76000;12600"} #end
+                  }
+                | Used {occupied} :
+                  {
+                    diagram
+                      (let l_out = (l_in with .nodes[position.idx].entry = Used {
+                        value: occupied.value,
+                        prev: occupied.prev,
+                        next: next});
+                      #pragma diagram {"xy":"h0;v0","wh":"54000;7938"} #end)
+                  #pragma diagram {"xy":"h0;v11589","wh":"76000;11938"} #end
+                  }
+              #pragma diagram {"xy":"h-1812;v2600","wh":"76000;35116"} #end)
+         #pragma diagram {"xy":"h0;v9389","wh":"85975;44316"} #end
+         }
+     #pragma diagram {"xy":"H3788;V2105","wh":"85975;63094"} #end)
+}
+
+-- Sets next.prev := previous, or tail := previous when next is Null.
+
+inline function set_prev_of (l_in * : list;
+                             next: ref;
+                             previous: ref;)
+  returns (l_out at l_in: list;)
+{
+  diagram
+    (activate #0 when next match
+       | Null :
+         {
+           diagram
+             (let l_out = (l_in with .tail = previous);
+             #pragma diagram {"xy":"h-18000;v0","wh":"44000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-20729","wh":"84000;7200"} #end
+         }
+       | Ref {position} :
+         {
+           diagram
+             (let entry = !(l_in.nodes .[position.idx] default EMPTY_SLOT).entry;
+             #pragma diagram {"xy":"h-5000;v-18558","wh":"70000;3200"} #end)
+             
+             (var
+                 entry: Node;)
+             (activate #1 when entry match
+                | Free {available} :
+                  {
+                    diagram
+                      (assert $occupied_neighbor: false;
+                      #pragma diagram {"xy":"h-20000;v-2700","wh":"36000;3200"} #end)
+                      (let l_out = !l_in;
+                      #pragma diagram {"xy":"h-27000;v2700","wh":"22000;3200"} #end)
+                  #pragma diagram {"xy":"h0;v-4540","wh":"80000;12600"} #end
+                  }
+                | Used {occupied} :
+                  {
+                    diagram
+                      (let l_out = (l_in with .nodes[position.idx].entry = Used {
+                        value: occupied.value,
+                        prev: previous,
+                        next: occupied.next});
+                      #pragma diagram {"xy":"h-11000;v0","wh":"54000;7938"} #end)
+                  #pragma diagram {"xy":"h0;v11589","wh":"80000;11938"} #end
+                  }
+              #pragma diagram {"xy":"h0;v2600","wh":"80000;35116"} #end)
+         #pragma diagram {"xy":"h0;v8889","wh":"84000;44316"} #end
+         }
+     #pragma diagram {"xy":"H-975;V-1325","wh":"84000;62094"} #end)
+}
+
+function remove_live (l_in * : list;
+                      idx: index;
+                      previous: ref;
+                      next: ref;)
+  returns (l_out at l_in: list;
+           result: remove_result;)
+{
+  diagram
+    (let
+       left = set_next_of(l_in, previous, next);
+       unlinked = set_prev_of(left, next, previous);
+       fresh = !next_version((unlinked.nodes .[idx] default EMPTY_SLOT).version);
+       l_out = (unlinked with
+         .nodes[idx] = {version: fresh, entry: Free {next: unlinked.free_head}}: Slot;
+         .free_head = Ref {idx: idx, version: fresh};
+         .length = unlinked.length - 1);
+       result = Removed {};
+    #pragma diagram {"xy":"H0;V-14000","wh":"80000;19000"} #end)
+    
+    (var
+        left at l_in: list;
+        unlinked at left: list;
+        fresh: version;)
+}
+
+function insert_slot (l_in * : list;
+                      idx: index;
+                      next_free: ref;
+                      previous: ref;
+                      next_node: ref;
+                      value: Item::t;)
+  returns (l_out at l_in: list;
+           result: insert_result;)
+{
+  diagram
+    (let
+       slot_ref = !handle(l_in, idx);
+       left = set_next_of(l_in, previous, slot_ref);
+       linked = set_prev_of(left, next_node, slot_ref);
+       l_out = (linked with
+         .nodes[idx].entry = Used {value: value, prev: previous, next: next_node};
+         .free_head = next_free;
+         .length = linked.length + 1);
+       result = Inserted {ref: slot_ref};
+    #pragma diagram {"xy":"H0;V-20000","wh":"70000;20000"} #end)
+    
+    (var
+        slot_ref: ref;
+        left at l_in: list;
+        linked at left: list;)
+}
+
+function allocate_before (l_in * : list;
+                          previous: ref;
+                          next_node: ref;
+                          value: Item::t;)
+  returns (l_out at l_in: list;
+           result: insert_result;)
+{
+  diagram
+    (let available = !l_in.free_head;
+    #pragma diagram {"xy":"H-17925;V-66397","wh":"36000;3200"} #end)
+    
+    (var
+        available: ref;)
+    (activate #0 when available match
+       | Null :
+         {
+           diagram
+             (let
+                l_out = l_in;
+                result = Full {};
+             #pragma diagram {"xy":"h-21500;v0","wh":"22000;6078"} #end)
+         #pragma diagram {"xy":"h0;v-18170","wh":"71000;10078"} #end
+         }
+       | Ref {slot} :
+         {
+           diagram
+             (let entry = !(l_in.nodes .[slot.idx] default EMPTY_SLOT).entry;
+             #pragma diagram {"xy":"h-500;v-15999","wh":"66000;3200"} #end)
+             
+             (var
+                 entry: Node;)
+             (activate #1 when entry match
+                | Free {available} :
+                  {
+                    diagram
+                      (let l_out, result = insert_slot(
+                        l_in, slot.idx, available.next, previous, next_node, value);
+                      #pragma diagram {"xy":"h0;v0","wh":"62000;4219"} #end)
+                  #pragma diagram {"xy":"h0;v-4171","wh":"66000;8220"} #end
+                  }
+                | Used {occupied} :
+                  {
+                    diagram
+                      (assert $free_slot: false;
+                      #pragma diagram {"xy":"h-14000;v-2000","wh":"28000;3200"} #end)
+                      (let l_out = !l_in; result = Full {};
+                      #pragma diagram {"xy":"h-9000;v2000","wh":"38000;3200"} #end)
+                  #pragma diagram {"xy":"h0;v9399","wh":"66000;11200"} #end
+                  }
+              #pragma diagram {"xy":"h-500;v2600","wh":"66000;29998"} #end)
+         #pragma diagram {"xy":"h0;v10328","wh":"71000;39198"} #end
+         }
+     #pragma diagram {"xy":"H-425;V-32870","wh":"71000;59854"} #end)
+}
+
+function insert_before (l_in * : list;
+                        position: ref;
+                        value: Item::t;)
+  returns (l_out at l_in: list;
+           result: insert_result;)
+{
+  diagram
+    (activate #0 when position match
+       | Null :
+         {
+           diagram
+             (let
+                previous = !l_in.tail;
+                l_out, result = allocate_before(
+                  l_in, previous, position, value);
+             #pragma diagram {"xy":"h-12000;v0","wh":"40000;7938"} #end)
+             
+             (var
+                 previous: ref;)
+         #pragma diagram {"xy":"h0;v-17609","wh":"68000;11938"} #end
+         }
+       | Ref {target} :
+         {
+           diagram
+             (let entry = !read(l_in, position);
+             #pragma diagram {"xy":"h0;v-15438","wh":"64000;3200"} #end)
+             
+             (var
+                 entry: Node;)
+             (activate #1 when entry match
+                | Used {occupied} :
+                  {
+                    diagram
+                      (let l_out, result = allocate_before(
+                        l_in, occupied.prev, position, value);
+                      #pragma diagram {"xy":"h-11000;v0","wh":"38000;4219"} #end)
+                  #pragma diagram {"xy":"h0;v-3610","wh":"64000;8220"} #end
+                  }
+                | Free {available} :
+                  {
+                    diagram
+                      (let
+                         l_out = !l_in;
+                         result = InsertInvalidRef {};
+                      #pragma diagram {"xy":"h-13000;v0","wh":"34000;6078"} #end)
+                  #pragma diagram {"xy":"h0;v9399","wh":"64000;10078"} #end
+                  }
+              #pragma diagram {"xy":"h0;v2600","wh":"64000;28876"} #end)
+         #pragma diagram {"xy":"h0;v11258","wh":"68000;38076"} #end
+         }
+     #pragma diagram {"xy":"H0;V79","wh":"68000;60592"} #end)
+}
+
+function push_front (l_in * : list;
+                     value: Item::t;)
+  returns (l_out at l_in: list;
+           result: insert_result;)
+{
+  diagram
+    (let l_out, result = insert_before(l_in, !l_in.head, value);
+    #pragma diagram {"xy":"H0;V0","wh":"60000;3200"} #end)
+}
+
+function push_back (l_in * : list;
+                    value: Item::t;)
+  returns (l_out at l_in: list;
+           result: insert_result;)
+{
+  diagram
+    (let l_out, result = insert_before(l_in, null(), value);
+    #pragma diagram {"xy":"H0;V0","wh":"56000;3200"} #end)
+}
+
+function insert_after (l_in * : list;
+                       position: ref;
+                       value: Item::t;)
+  returns (l_out at l_in: list;
+           result: insert_result;)
+{
+  diagram
+    (activate #0 when position match
+       | Null :
+         {
+           diagram
+             (let l_out, result = push_front(l_in, value);
+             #pragma diagram {"xy":"h-11000;v0","wh":"46000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-16465","wh":"72000;7200"} #end
+         }
+       | Ref {target} :
+         {
+           diagram
+             (let entry = !read(l_in, position);
+             #pragma diagram {"xy":"h1100;v14374","wh":"40000;3200"} #end)
+             
+             (var
+                 entry: Node;)
+             (activate #1 when entry match
+                | Used {occupied} :
+                  {
+                    diagram
+                      (let l_out, result = insert_before(l_in, occupied.next, value);
+                      #pragma diagram {"xy":"h0;v0","wh":"64000;3200"} #end)
+                  #pragma diagram {"xy":"h0;v-3530","wh":"68000;7200"} #end
+                  }
+                | Free {available} :
+                  {
+                    diagram
+                      (let
+                         l_out = !l_in;
+                         result = InsertInvalidRef {};
+                      #pragma diagram {"xy":"h-15000;v0","wh":"34000;6078"} #end)
+                  #pragma diagram {"xy":"h0;v8809","wh":"68000;10078"} #end
+                  }
+              #pragma diagram {"xy":"h0;v-2125","wh":"68000;27698"} #end)
+         #pragma diagram {"xy":"h0;v8809","wh":"72000;35949"} #end
+         }
+     #pragma diagram {"xy":"H0;V0","wh":"72000;53567"} #end)
+}
+
+function remove (l_in * : list;
+                 r: ref;)
+  returns (l_out at l_in: list;
+           result: remove_result;)
+{
+  diagram
+    (activate #0 when r match
+       | Null :
+         {
+           diagram
+             (let
+                l_out = l_in;
+                result = RemoveInvalidRef {};
+             #pragma diagram {"xy":"h-21700;v0","wh":"34000;6078"} #end)
+         #pragma diagram {"xy":"h0;v-19389","wh":"90600;10078"} #end
+         }
+       | Ref {position} :
+         {
+           diagram
+             (let entry = !read(l_in, r);
+             #pragma diagram {"xy":"h-4700;v-15779","wh":"64000;3200"} #end)
+             
+             (var
+                 entry: Node;)
+             (activate #2 when entry match
+                | Used {occupied} :
+                  {
+                    diagram
+                      (let l_out, result = remove_live(l_in, position.idx, occupied.prev, occupied.next);
+                      #pragma diagram {"xy":"h0;v0","wh":"78000;4219"} #end)
+                  #pragma diagram {"xy":"h0;v-4959","wh":"82000;8219"} #end
+                  }
+                | Free {available} :
+                  {
+                    diagram
+                      (let
+                         l_out = !l_in;
+                         result = RemoveInvalidRef {};
+                      #pragma diagram {"xy":"h-21000;v0","wh":"36000;6078"} #end)
+                  #pragma diagram {"xy":"h0;v7889","wh":"82000;10078"} #end
+                  }
+              #pragma diagram {"xy":"h2300;v2189","wh":"82000;25857"} #end)
+         #pragma diagram {"xy":"h0;v10328","wh":"90600;41636"} #end
+         }
+     #pragma diagram {"xy":"H-65925;V-16106","wh":"90600;62293"} #end)
+}
+
+-- Moves `item` (currently between `previous` and `next`) to just before `before`.
+-- No-op when item = before or next = before: moved onto itself, or already in place.
+
+function relink (l_in * : list;
+                 item: ref;
+                 value: Item::t;
+                 previous: ref;
+                 next: ref;
+                 before: ref;
+                 new_previous: ref;)
+  returns (l_out at l_in: list;
+           result: move_result;)
+{
+  diagram
+    (activate #0
+       if item = before or next = before
+       then
+         {
+           diagram
+             (let l_out = !l_in; result = Moved {};
+             #pragma diagram {"xy":"h-12000;v0","wh":"40000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-16100","wh":"68000;7200"} #end
+         }
+       else
+         {
+           diagram
+             (let
+                detached = set_next_of(l_in, previous, next);
+                unlinked = set_prev_of(detached, next, previous);
+                attached = set_next_of(unlinked, new_previous, item);
+                linked = set_prev_of(attached, before, item);
+                l_out = (linked with .nodes[index_of(item)].entry = Used {
+                  value: value, prev: new_previous, next: before});
+                result = Moved {};
+             #pragma diagram {"xy":"h-1000;v-4625","wh":"62000;17000"} #end)
+             
+             (var
+                 detached at l_in: list;
+                 unlinked at detached: list;
+                 attached at unlinked: list;
+                 linked at attached: list;)
+         #pragma diagram {"xy":"h0;v7459","wh":"68000;32200"} #end
+         }
+     #pragma diagram {"xy":"H1000;V-79","wh":"68000;47119"} #end)
+}
+
+function move_before (l_in * : list;
+                      item: ref;
+                      before: ref;)
+  returns (l_out at l_in: list;
+           result: move_result;)
+{
+  diagram
+    (let
+       moving = !read(l_in, item);
+       anchor = !read(l_in, before);
+    #pragma diagram {"xy":"H-19000;V0","wh":"36000;6078"} #end)
+    
+    (var
+        moving: Node;
+        anchor: Node;)
+    (activate #0 when moving match
+       | Free {available} :
+         {
+           diagram
+             (let l_out = !l_in; result = MoveInvalidRef {};
+             #pragma diagram {"xy":"h-10000;v0","wh":"48000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-24728","wh":"72000;7200"} #end
+         }
+       | Used {occupied} :
+         {
+           diagram
+             (activate #1 when before match
+                | Null :
+                  {
+                    diagram
+                      (let l_out, result = relink(l_in, item, occupied.value,
+                         occupied.prev, occupied.next, before, !l_in.tail);
+                      #pragma diagram {"xy":"h-4000;v0","wh":"56000;4219"} #end)
+                  #pragma diagram {"xy":"h0;v-13409","wh":"68000;8219"} #end
+                  }
+                | Ref {target} :
+                  {
+                    diagram
+                      (activate #2 when anchor match
+                         | Free {available} :
+                           {
+                             diagram
+                               (let l_out = !l_in; result = MoveInvalidRef {};
+                               #pragma diagram {"xy":"h-6000;v0","wh":"48000;3200"} #end)
+                           #pragma diagram {"xy":"h0;v-2600","wh":"64000;7200"} #end
+                           }
+                         | Used {destination} :
+                           {
+                             diagram
+                               (let l_out, result = relink(l_in, item, occupied.value,
+                                  occupied.prev, occupied.next, before, destination.prev);
+                               #pragma diagram {"xy":"h0;v0","wh":"60000;4219"} #end)
+                           #pragma diagram {"xy":"h0;v8809","wh":"64000;8219"} #end
+                           }
+                       #pragma diagram {"xy":"h0;v0","wh":"64000;25838"} #end)
+                  #pragma diagram {"xy":"h0;v9319","wh":"68000;29838"} #end
+                  }
+              #pragma diagram {"xy":"h0;v0","wh":"68000;48476"} #end)
+         #pragma diagram {"xy":"h0;v8809","wh":"72000;52476"} #end
+         }
+     #pragma diagram {"xy":"H0;V42000","wh":"72000;70095"} #end)
+}
+
+-- One step of a copy: the value at `cursor` and the next handle in the given
+-- direction. Past the end, `filler` and Null.
+
+inline function copy_step (l: list;
+                           cursor: ref;
+                           filler: Item::t;
+                           toward_tail: bool;)
+  returns (value: Item::t;
+           link: ref;
+           present: bool;)
+{
+  diagram
+    (let entry = read(l, cursor);
+    #pragma diagram {"xy":"H-24475;V-36800","wh":"32000;3200"} #end)
+    
+    (var
+        entry: Node;)
+    (activate #0 when entry match
+       | Free {available} :
+         {
+           diagram
+             (let value = filler; link = null(); present = false;
+             #pragma diagram {"xy":"h-6000;v0","wh":"52000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-4459","wh":"68000;7200"} #end
+         }
+       | Used {occupied} :
+         {
+           diagram
+             (let
+                value = occupied.value;
+                link = if toward_tail then occupied.next else occupied.prev;
+                present = true;
+             #pragma diagram {"xy":"h0;v0","wh":"64000;7938"} #end)
+         #pragma diagram {"xy":"h0;v8809","wh":"68000;11938"} #end
+         }
+     #pragma diagram {"xy":"H-1000;V-18000","wh":"68000;29557"} #end)
+}
+
+function copy_items <<M>> (l: list;
+                           filler: Item::t;
+                           toward_tail: bool;)
+  returns (values: Item::t ^ M;
+           refs: ref ^ M;
+           count: index;)
+{
+  diagram
+    (#2 expr forward
+      <<M>>
+      diagram
+        (#3 block copy_step
+        #pragma diagram {"xy":"h0;v0","wh":"20000;14000"} #end)
+        (#4 expr l
+        #pragma diagram {"xy":"h-30500;v5650"} #end)
+        (#5 expr last 'cursor
+        #pragma diagram {"xy":"h-34500;v-5450","wh":"16000;3200"} #end)
+        (#6 expr filler
+        #pragma diagram {"xy":"h-31500;v-1750","wh":"10000;3200"} #end)
+        (#7 expr toward_tail
+        #pragma diagram {"xy":"h-34500;v1950","wh":"16000;3200"} #end)
+        (#8 def value
+        #pragma diagram {"xy":"h33500;v4667","wh":"10000;3200"} #end)
+        (#9 def cursor
+        #pragma diagram {"xy":"h33500;v-4667","wh":"10000;3200"} #end)
+        (#10 def present
+        #pragma diagram {"xy":"h32500;v0","wh":"12000;3200"} #end)
+        (let total = if present then last 'total + 1 else last 'total;
+        #pragma diagram {"xy":"h-2000;v11300","wh":"62000;3200"} #end)
+        
+        (#11 wire #4 => #3 .(l))
+        (#12 wire #5 => #3 .(cursor))
+        (#13 wire #6 => #3 .(filler))
+        (#14 wire #7 => #3 .(toward_tail))
+        (#15 wire #3 .(value) => #8
+        #pragma diagram {"wp":"v4667|#3 #8"} #end)
+        (#16 wire #3 .(link) => #9
+        #pragma diagram {"wp":"v-4667|#3 #9"} #end)
+        (#17 wire #3 .(present) => #10
+        #pragma diagram {"wp":"v0|#3 #10"} #end)
+        
+        (var
+            cursor: ref last = if toward_tail then l.head else l.tail;
+            value: Item::t;
+            present: bool;)
+      returns ([value],
+               [last 'cursor],
+               total: last = 0)
+    #pragma diagram {"xy":"H0;V0","wh":"70600;30000"} #end)
+    (#18 def values
+    #pragma diagram {"xy":"H56800;V10000","wh":"10000;3200"} #end)
+    (#19 def refs
+    #pragma diagram {"xy":"H57800;V-10000"} #end)
+    (#20 def count
+    #pragma diagram {"xy":"H56800;V0","wh":"10000;3200"} #end)
+    
+    (#21 wire #2 .(1) => #18
+    #pragma diagram {"wp":"v10000|#2 #18"} #end)
+    (#22 wire #2 .(2) => #19
+    #pragma diagram {"wp":"v-10000|#2 #19"} #end)
+    (#23 wire #2 .(3) => #20
+    #pragma diagram {"wp":"v0|#2 #20"} #end)
+}
+
+function copy_front <<M>> (l: list;
+                           filler: Item::t;)
+  returns (values: Item::t ^ M;
+           refs: ref ^ M;
+           count: index;)
+{
+  diagram
+    (let values, refs, count = copy_items <<M>> (l, filler, true);
+    #pragma diagram {"xy":"H0;V0","wh":"62000;3200"} #end)
+}
+
+function copy_back <<M>> (l: list;
+                          filler: Item::t;)
+  returns (values: Item::t ^ M;
+           refs: ref ^ M;
+           count: index;)
+{
+  diagram
+    (let values, refs, count = copy_items <<M>> (l, filler, false);
+    #pragma diagram {"xy":"H0;V0","wh":"64000;3200"} #end)
+}
+
+-- The item at `r`; Item::DEFAULT and found = false when `r` is Null,
+-- out of range or stale.
+
+function value_at (l: list;
+                   r: ref;)
+  returns (found: bool;
+           value: Item::t;)
+{
+  diagram
+    (let entry = read(l, r);
+    #pragma diagram {"xy":"H0;V0","wh":"30000;3200"} #end)
+    
+    (var
+        entry: Node;)
+    (activate #0 when entry match
+       | Free {available} :
+         {
+           diagram
+             (let found = false; value = Item::DEFAULT;
+             #pragma diagram {"xy":"h0;v0","wh":"48000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-2091","wh":"52000;7200"} #end
+         }
+       | Used {occupied} :
+         {
+           diagram
+             (let found = true; value = occupied.value;
+             #pragma diagram {"xy":"h0;v0","wh":"48000;3200"} #end)
+         #pragma diagram {"xy":"h0;v8809","wh":"52000;7200"} #end
+         }
+     #pragma diagram {"xy":"H-1000;V-16000","wh":"52000;24819"} #end)
+}
+
+-- Queue successor (toward_tail) or predecessor of the live item at `r`; Null
+-- at the ends of the queue and for a Null, out-of-range or stale handle.
+
+inline function neighbour_of (l: list;
+                              r: ref;
+                              toward_tail: bool;)
+  returns (link: ref;)
+{
+  diagram
+    (let entry = read(l, r);
+    #pragma diagram {"xy":"H0;V0","wh":"30000;3200"} #end)
+    
+    (var
+        entry: Node;)
+    (activate #0 when entry match
+       | Free {available} :
+         {
+           diagram
+             (let link = null();
+             #pragma diagram {"xy":"h-12000;v0","wh":"24000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-2091","wh":"68000;7200"} #end
+         }
+       | Used {occupied} :
+         {
+           diagram
+             (let link = if toward_tail then occupied.next else occupied.prev;
+             #pragma diagram {"xy":"h0;v0","wh":"64000;3200"} #end)
+         #pragma diagram {"xy":"h0;v8809","wh":"68000;7200"} #end
+         }
+     #pragma diagram {"xy":"H-1000;V-16000","wh":"68000;24819"} #end)
+}
+
+function next_of (l: list;
+                  r: ref;)
+  returns (next: ref;)
+{
+  diagram
+    (let next = neighbour_of(l, r, true);
+    #pragma diagram {"xy":"H0;V0","wh":"44000;3200"} #end)
+}
+
+function prev_of (l: list;
+                  r: ref;)
+  returns (previous: ref;)
+{
+  diagram
+    (let previous = neighbour_of(l, r, false);
+    #pragma diagram {"xy":"H0;V0","wh":"50000;3200"} #end)
+}
+
+-- One step of remove_matching at `cursor`: the next handle along the queue
+-- (read before any removal), and the item removed if it matches `wanted`.
+-- Past the end (Null cursor), the list is unchanged and `next` is Null.
+
+function remove_step (l_in * : list;
+                      cursor: ref;
+                      wanted: Item::key;
+                      count: index;)
+  returns (l_out at l_in: list;
+           next: ref;
+           total: index;)
+{
+  diagram
+    (let entry = !read(l_in, cursor);
+    #pragma diagram {"xy":"H0;V0","wh":"36000;3200"} #end)
+    
+    (var
+        entry: Node;)
+    (activate #0 when entry match
+       | Free {available} :
+         {
+           diagram
+             (let l_out = !l_in; next = null(); total = count;
+             #pragma diagram {"xy":"h-8000;v0","wh":"58000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-12000","wh":"78000;7200"} #end
+         }
+       | Used {occupied} :
+         {
+           diagram
+             (let next = occupied.next;
+             #pragma diagram {"xy":"h0;v-12000","wh":"30000;3200"} #end)
+             
+             (activate #1
+                if Item::matches(occupied.value, wanted)
+                then
+                  {
+                    diagram
+                      (let l_out, _ = remove(l_in, cursor); total = count + 1;
+                      #pragma diagram {"xy":"h0;v0","wh":"62000;3200"} #end)
+                  #pragma diagram {"xy":"h0;v-3600","wh":"70000;7200"} #end
+                  }
+                else
+                  {
+                    diagram
+                      (let l_out = !l_in; total = count;
+                      #pragma diagram {"xy":"h-14000;v0","wh":"34000;3200"} #end)
+                  #pragma diagram {"xy":"h0;v7459","wh":"70000;7200"} #end
+                  }
+              #pragma diagram {"xy":"h0;v4000","wh":"70000;22119"} #end)
+         #pragma diagram {"xy":"h0;v12000","wh":"78000;40000"} #end
+         }
+     #pragma diagram {"xy":"H1350;V36825","wh":"78000;60000"} #end)
+}
+
+-- Removes every item matching `wanted`: one bounded scan of at most N steps
+-- along the next links, from the head; the scan stops after the tail. The
+-- survivors keep their order, slots and handles. The `_` output of the
+-- partial forward is the index where the scan stopped, which is not needed.
+
+function remove_matching (l_in * : list;
+                          wanted: Item::key;)
+  returns (l_out at l_in: list;
+           removed: index;)
+{
+  diagram
+    (#2 expr forward
+      <<N>>
+      diagram
+        (#3 block remove_step
+        #pragma diagram {"xy":"h1000;v-100","wh":"20000;14000"} #end)
+        (#4 expr last 'l
+        #pragma diagram {"xy":"h-30500;v5550","wh":"10000;3200"} #end)
+        (#5 expr last 'cursor
+        #pragma diagram {"xy":"h-32500;v-5550","wh":"14000;3200"} #end)
+        (#6 expr wanted
+        #pragma diagram {"xy":"h-31500;v-1850","wh":"12000;3200"} #end)
+        (#7 expr last 'count
+        #pragma diagram {"xy":"h-31500;v1850","wh":"12000;3200"} #end)
+        (#8 def l
+        #pragma diagram {"xy":"h34500;v4567","wh":"10000;3200"} #end)
+        (#9 def cursor
+        #pragma diagram {"xy":"h33500;v-4767","wh":"12000;3200"} #end)
+        (#10 def count
+        #pragma diagram {"xy":"h33500;v-100","wh":"12000;3200"} #end)
+        
+        (#11 wire #4 => #3 .(l_in))
+        (#12 wire #5 => #3 .(cursor))
+        (#13 wire #6 => #3 .(wanted))
+        (#14 wire #7 => #3 .(count))
+        (#15 wire #3 .(l_out) => #8
+        #pragma diagram {"wp":"v4667|#3 #8"} #end)
+        (#16 wire #3 .(next) => #9
+        #pragma diagram {"wp":"v-4667|#3 #9"} #end)
+        (#17 wire #3 .(total) => #10
+        #pragma diagram {"wp":"v0|#3 #10"} #end)
+        
+        (var
+            cursor: ref last = l_in.head;)
+      until cursor = Null {}
+      returns (l: last = l_in,
+               count: last = 0)
+    #pragma diagram {"xy":"H-23750;V12600","wh":"87600;30300"} #end)
+    (#18 def l_out
+    #pragma diagram {"xy":"H43550;V20175","wh":"10000;3200"} #end)
+    (#19 def removed
+    #pragma diagram {"xy":"H42550;V5025","wh":"12000;3200"} #end)
+    
+    (#20 wire #2 .(2) => #18
+    #pragma diagram {"wp":"v7575|#2 #18"} #end)
+    (#21 wire #2 .(3) => #19
+    #pragma diagram {"wp":"v-7575|#2 #19"} #end)
+}
+
+-- Inspection API: the raw state of slot `idx`, for debug and teaching views.
+-- A slot past N shows as free, version 0, with no successor.
+
+function slot_info (l: list;
+                    idx: index;)
+  returns (info: slot_state;)
+{
+  diagram
+    (let stored = (l.nodes .[idx] default EMPTY_SLOT);
+    #pragma diagram {"xy":"H0;V0","wh":"52000;3200"} #end)
+    
+    (var
+        stored: Slot;)
+    (activate #0 when stored.entry match
+       | Free {available} :
+         {
+           diagram
+             (let info = {used: false, version: stored.version, value: Item::DEFAULT,
+                prev: null(), next: available.next}: slot_state;
+             #pragma diagram {"xy":"h0;v0","wh":"74000;4219"} #end)
+         #pragma diagram {"xy":"h0;v-4000","wh":"78000;8219"} #end
+         }
+       | Used {occupied} :
+         {
+           diagram
+             (let info = {used: true, version: stored.version, value: occupied.value,
+                prev: occupied.prev, next: occupied.next}: slot_state;
+             #pragma diagram {"xy":"h0;v0","wh":"74000;4219"} #end)
+         #pragma diagram {"xy":"h0;v8809","wh":"78000;8219"} #end
+         }
+     #pragma diagram {"xy":"H-1000;V-16000","wh":"78000;26838"} #end)
+}
+
+-- Inspection API: the head of the free list (Null when the list is full).
+
+inline function free_front (l: list;)
+  returns (result: ref;)
+{
+  diagram
+    (let result = l.free_head;
+    #pragma diagram {"xy":"H0;V0","wh":"28000;3200"} #end)
+}

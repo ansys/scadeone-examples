@@ -1,0 +1,15 @@
+-- version swan: 2027.0 graph: 2.1
+
+type t = int32;
+
+-- Filler value: the value reported where there is no item.
+
+const DEFAULT: t = 0;
+
+-- Selection key for Dll::remove_matching: an item matches an equal value.
+
+type key = t;
+
+function matches (value: t delay0;
+                  wanted: key delay0;)
+  returns (yes: bool;);

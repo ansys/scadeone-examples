@@ -1,0 +1,19 @@
+{
+  "JobsOrder": [
+    "jobs\\codegen_97791ea\\.sjob",
+    "jobs\\codegen_d110001\\.sjob",
+    "jobs\\testexec_d110002\\.sjob",
+    "jobs\\testexec_d110003\\.sjob",
+    "jobs\\testexec_d110004\\.sjob",
+    "jobs\\testexec_d110005\\.sjob",
+    "jobs\\testexec_d11000b\\.sjob",
+    "jobs\\testexec_d11000c\\.sjob",
+    "jobs\\testexec_d110010\\.sjob"
+  ],
+  "ModulesOrder": [
+    "assets\\Dll.swan",
+    "assets\\Dll.swani",
+    "assets\\Item.swani",
+    "assets\\Test.swant"
+  ]
+}
