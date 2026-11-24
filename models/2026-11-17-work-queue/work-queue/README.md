@@ -123,25 +123,23 @@ panel, independent of the capacity N:
 
 ### Interactive panel
 
-[display/](display) holds the SCADE Display panel and the Scade One project
-that drives it. Build the panel, then open
-[display/demo/demo.sproj](display/demo/demo.sproj) and run the `LivePanel`
-simulation job (harness `LiveDemo::live`):
-
-```powershell
-python display\tools\build_panel.py --snapshot
-```
+[../display/](../display) holds the SCADE Display panel and the Scade One
+project that drives it. Open
+[../display/demo/demo.sproj](../display/demo/demo.sproj) and run the `LivePanel`
+simulation job (harness `LiveDemo::live`); the panel is rebuilt from its sources
+by Scade One, so no extra step is needed. The `live` harness has no stop
+condition: closing the panel window does not end the run, so stop the session
+with Scade One's **Stop** button.
 
 The panel passes no coordinates to the model. Each interactive item (queue
 place, job button, End and Trash zones, control button) has its own rectangle
 active area; the panel outputs one `inside` flag per item plus the pointer
-`pressed` and `released` events. Moving or resizing items in
-[make_panel.py](display/tools/make_panel.py) changes nothing in Swan. While a job
+`pressed` and `released` events. While a job
 button or a card is dragged, a translucent ghost card follows the pointer. A
 full-screen active area gives its position, as a ratio of the screen; that
 position stays inside the panel and never reaches the model.
 
-[Console.swan](display/demo/assets/Console.swan) turns those flags into commands.
+[Console.swan](../display/demo/assets/Console.swan) turns those flags into commands.
 Its `console` node is a diagram of four small nodes: `drag` (press, drag and
 release tracking), `fill` (the Fill sequencer), `transport` (Pause, Step and the
 `pace_kind` Slow / Normal / Fast) and `pacer` (one `run` cycle per period).
@@ -183,10 +181,10 @@ check the resulting queue, highlights and last-command text.
 
 ## Capacity and memory
 
-[JobList](assets/JobList.swan) is an explicit instance of
-[Dll](../dll/assets/Dll.swan): `JobList.swan` is a copy of `Dll.swan`, and
-`JobList.swani` differs only by `use Job as Item;` and `N`. Copy algorithm fixes
-to both modules until Swan supports module instantiation.
+[JobList](assets/JobList.swan) is the doubly linked list, written directly on
+jobs: [JobList.swani](assets/JobList.swani) fixes the item type (`Job`) and the
+capacity `N`. The list body is generic in shape, so the same algorithms would
+serve any item type by changing only the interface.
 
 The list type is abstract: other modules hold, compare, delay and pass a
 `L::list`, but only the list's own operators read or change it. Its storage
@@ -246,6 +244,3 @@ the target before claiming it fits a real-time budget.
 $launcher = Join-Path $ScadeOneHome 'tools\job_launcher\scade_one_job_launcher.exe'
 & $launcher run --job DemoWorkQueue --project '.\work-queue.sproj'
 ```
-
-The integer list and its `TestDll...` jobs live in the separate
-[dll](../dll/dll.sproj) project.

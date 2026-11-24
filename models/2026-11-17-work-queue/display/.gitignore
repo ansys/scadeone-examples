@@ -1,0 +1,5 @@
+# Build outputs of the SCADE Display panel (recreate from the committed
+# panel sources with the Scade One / SCADE Display co-simulation build).
+# The compiled panel (*.spanel, *.dll, *.ewo) is already ignored repo-wide.
+snapshots/
+demo/*.sproj.user

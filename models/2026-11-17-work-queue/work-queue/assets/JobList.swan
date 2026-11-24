@@ -1,7 +1,4 @@
 -- version swan: 2027.0 graph: 2.1
--- Private storage. A slot is a free-list node or a queue node, and keeps its
--- version across Free / Used changes. Only the operators of this module see it.
-
 type Node =
   Free {next: ref}
   | Used {value: Item::t, prev: ref, next: ref};
@@ -16,12 +13,7 @@ type list = {
   length: index
 };
 
--- Returned by read for a Null, out-of-range or stale handle.
-
 const EMPTY_NODE: Node = Free {next: Null {}};
-
--- Default for an out-of-range index in `nodes .[idx] default EMPTY_SLOT`:
--- version 0, Free with no successor.
 
 const EMPTY_SLOT: Slot = {version: 0, entry: EMPTY_NODE}: Slot;
 
@@ -38,11 +30,12 @@ inline function handle (l: list;
   returns (result: ref;)
 {
   diagram
-    (let result = Ref {idx: idx, version: (l.nodes .[idx] default EMPTY_SLOT).version};
-    #pragma diagram {"xy":"H0;V0","wh":"68000;3200"} #end)
+    (let result = Ref {
+         idx: idx, 
+         version: (l.nodes .[idx] default EMPTY_SLOT).version
+         };
+    #pragma diagram {"xy":"H-5000;V2369","wh":"58000;7938"} #end)
 }
-
--- The version after `current`; wraps to 0 after MAX_VERSION.
 
 inline function next_version (current: version;)
   returns (result: version;)
@@ -51,8 +44,6 @@ inline function next_version (current: version;)
     (let result = if current = MAX_VERSION then 0 else current + 1;
     #pragma diagram {"xy":"H0;V0","wh":"64000;3200"} #end)
 }
-
--- The slot index of a handle; N for Null.
 
 inline function index_of (r: ref;)
   returns (idx: index;)
@@ -76,8 +67,6 @@ inline function index_of (r: ref;)
      #pragma diagram {"xy":"H0;V0","wh":"30000;24819"} #end)
 }
 
--- Initial slot `idx`: version `first`, Free, linked to the next slot.
-
 inline function init_node (idx: index;
                            first: version;)
   returns (result: Slot;)
@@ -85,13 +74,13 @@ inline function init_node (idx: index;
   diagram
     (let result = {
          version: first,
-         entry: Free {next: if idx < N - 1 then Ref {idx: idx + 1, version: first} else null()}
+         entry: Free {next: 
+             if idx < N - 1 
+             then Ref {idx: idx + 1, version: first} 
+             else null()}
          }: Slot;
-    #pragma diagram {"xy":"H4000;V2369","wh":"86000;7938"} #end)
+    #pragma diagram {"xy":"H-14000;V5158","wh":"50000;13516"} #end)
 }
-
--- An empty list whose N slots are all free, at version `first`, chained in
--- index order in the free list.
 
 function init_at (first: version;)
   returns (result: list;)
@@ -99,13 +88,23 @@ function init_at (first: version;)
   diagram
     (let
        result = {
-         nodes: (mapi (init_node \ first: first)) <<N>> (),
+         nodes: nodes,
          head: null(),
          tail: null(),
          free_head: Ref {idx: 0, version: first},
          length: 0
        }: list;
-    #pragma diagram {"xy":"H0;V0","wh":"56000;15376"} #end)
+    #pragma diagram {"xy":"H-5000;V-0","wh":"46000;15376"} #end)
+    (#1 def nodes
+    #pragma diagram {"xy":"H20450;V-28600","wh":"10000;3200"} #end)
+    (#2 block (mapi (init_node \ first: first)) <<N>>
+    #pragma diagram {"xy":"H-3450;V-30600","wh":"20000;18000"} #end)
+    
+    (#4 wire #2 => #1
+    #pragma diagram {"wp":"v0|#2 #1"} #end)
+    
+    (var
+        nodes;)
 }
 
 function init ()
@@ -171,9 +170,6 @@ function read (l: list;
      #pragma diagram {"xy":"H-2104;V-32182","wh":"62000;33435"} #end)
 }
 
--- Replaces the value of a live item. The inner `Null` branch is defensive:
--- read returns Free for a Null handle, so it is not reached.
-
 function set (l_in * : list;
               r: ref;
               value: Item::t;)
@@ -220,8 +216,6 @@ function set (l_in * : list;
          }
      #pragma diagram {"xy":"H-1000;V-28920","wh":"70000;51335"} #end)
 }
-
--- Sets previous.next := next, or head := next when previous is Null.
 
 inline function set_next_of (l_in * : list;
                              previous: ref;
@@ -270,8 +264,6 @@ inline function set_next_of (l_in * : list;
          }
      #pragma diagram {"xy":"H3788;V2105","wh":"85975;63094"} #end)
 }
-
--- Sets next.prev := previous, or tail := previous when next is Null.
 
 inline function set_prev_of (l_in * : list;
                              next: ref;
@@ -560,14 +552,14 @@ function remove (l_in * : list;
              (let
                 l_out = l_in;
                 result = RemoveInvalidRef {};
-             #pragma diagram {"xy":"h-21700;v0","wh":"34000;6078"} #end)
-         #pragma diagram {"xy":"h0;v-19389","wh":"90600;10078"} #end
+             #pragma diagram {"xy":"h-26000;v0","wh":"34000;6078"} #end)
+         #pragma diagram {"xy":"h0;v-18193","wh":"90000;10078"} #end
          }
        | Ref {position} :
          {
            diagram
-             (let entry = !read(l_in, r);
-             #pragma diagram {"xy":"h-4700;v-15779","wh":"64000;3200"} #end)
+             (let entry = !read(l_in, r); 
+             #pragma diagram {"xy":"h-27000;v-15923","wh":"32000;3200"} #end)
              
              (var
                  entry: Node;)
@@ -576,8 +568,9 @@ function remove (l_in * : list;
                   {
                     diagram
                       (let l_out, result = remove_live(l_in, position.idx, occupied.prev, occupied.next);
-                      #pragma diagram {"xy":"h0;v0","wh":"78000;4219"} #end)
-                  #pragma diagram {"xy":"h0;v-4959","wh":"82000;8219"} #end
+                       
+                      #pragma diagram {"xy":"h0;v0","wh":"82000;4219"} #end)
+                  #pragma diagram {"xy":"h0;v-3530","wh":"86000;8219"} #end
                   }
                 | Free {available} :
                   {
@@ -585,17 +578,14 @@ function remove (l_in * : list;
                       (let
                          l_out = !l_in;
                          result = RemoveInvalidRef {};
-                      #pragma diagram {"xy":"h-21000;v0","wh":"36000;6078"} #end)
-                  #pragma diagram {"xy":"h0;v7889","wh":"82000;10078"} #end
+                      #pragma diagram {"xy":"h-23000;v0","wh":"36000;6078"} #end)
+                  #pragma diagram {"xy":"h0;v9319","wh":"86000;10078"} #end
                   }
-              #pragma diagram {"xy":"h2300;v2189","wh":"82000;25857"} #end)
-         #pragma diagram {"xy":"h0;v10328","wh":"90600;41636"} #end
+              #pragma diagram {"xy":"h0;v3265","wh":"86000;28716"} #end)
+         #pragma diagram {"xy":"h0;v10328","wh":"90000;39246"} #end
          }
-     #pragma diagram {"xy":"H-65925;V-16106","wh":"90600;62293"} #end)
+     #pragma diagram {"xy":"H-64075;V-16026","wh":"90000;59903"} #end)
 }
-
--- Moves `item` (currently between `previous` and `next`) to just before `before`.
--- No-op when item = before or next = before: moved onto itself, or already in place.
 
 function relink (l_in * : list;
                  item: ref;
@@ -614,8 +604,8 @@ function relink (l_in * : list;
          {
            diagram
              (let l_out = !l_in; result = Moved {};
-             #pragma diagram {"xy":"h-12000;v0","wh":"40000;3200"} #end)
-         #pragma diagram {"xy":"h0;v-16100","wh":"68000;7200"} #end
+             #pragma diagram {"xy":"h-11000;v0","wh":"40000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-10421","wh":"66000;7200"} #end
          }
        else
          {
@@ -628,16 +618,16 @@ function relink (l_in * : list;
                 l_out = (linked with .nodes[index_of(item)].entry = Used {
                   value: value, prev: new_previous, next: before});
                 result = Moved {};
-             #pragma diagram {"xy":"h-1000;v-4625","wh":"62000;17000"} #end)
+             #pragma diagram {"xy":"h0;v0","wh":"62000;17000"} #end)
              
              (var
                  detached at l_in: list;
                  unlinked at detached: list;
                  attached at unlinked: list;
                  linked at attached: list;)
-         #pragma diagram {"xy":"h0;v7459","wh":"68000;32200"} #end
+         #pragma diagram {"xy":"h0;v7379","wh":"66000;21000"} #end
          }
-     #pragma diagram {"xy":"H1000;V-79","wh":"68000;47119"} #end)
+     #pragma diagram {"xy":"H1000;V-79","wh":"66000;35760"} #end)
 }
 
 function move_before (l_in * : list;
@@ -703,9 +693,6 @@ function move_before (l_in * : list;
      #pragma diagram {"xy":"H0;V42000","wh":"72000;70095"} #end)
 }
 
--- One step of a copy: the value at `cursor` and the next handle in the given
--- direction. Past the end, `filler` and Null.
-
 inline function copy_step (l: list;
                            cursor: ref;
                            filler: Item::t;
@@ -716,7 +703,7 @@ inline function copy_step (l: list;
 {
   diagram
     (let entry = read(l, cursor);
-    #pragma diagram {"xy":"H-24475;V-36800","wh":"32000;3200"} #end)
+    #pragma diagram {"xy":"H-19000;V-36200","wh":"32000;3200"} #end)
     
     (var
         entry: Node;)
@@ -753,23 +740,23 @@ function copy_items <<M>> (l: list;
       <<M>>
       diagram
         (#3 block copy_step
-        #pragma diagram {"xy":"h0;v0","wh":"20000;14000"} #end)
+        #pragma diagram {"xy":"h2000;v-2925","wh":"20000;14000"} #end)
         (#4 expr l
-        #pragma diagram {"xy":"h-30500;v5650"} #end)
+        #pragma diagram {"xy":"h-28500;v2725"} #end)
         (#5 expr last 'cursor
-        #pragma diagram {"xy":"h-34500;v-5450","wh":"16000;3200"} #end)
+        #pragma diagram {"xy":"h-32500;v-8375","wh":"16000;3200"} #end)
         (#6 expr filler
-        #pragma diagram {"xy":"h-31500;v-1750","wh":"10000;3200"} #end)
+        #pragma diagram {"xy":"h-29500;v-4675","wh":"10000;3200"} #end)
         (#7 expr toward_tail
-        #pragma diagram {"xy":"h-34500;v1950","wh":"16000;3200"} #end)
+        #pragma diagram {"xy":"h-32500;v-975","wh":"16000;3200"} #end)
         (#8 def value
-        #pragma diagram {"xy":"h33500;v4667","wh":"10000;3200"} #end)
+        #pragma diagram {"xy":"h35500;v1742","wh":"10000;3200"} #end)
         (#9 def cursor
-        #pragma diagram {"xy":"h33500;v-4667","wh":"10000;3200"} #end)
+        #pragma diagram {"xy":"h35500;v-7592","wh":"10000;3200"} #end)
         (#10 def present
-        #pragma diagram {"xy":"h32500;v0","wh":"12000;3200"} #end)
+        #pragma diagram {"xy":"h34500;v-2925","wh":"12000;3200"} #end)
         (let total = if present then last 'total + 1 else last 'total;
-        #pragma diagram {"xy":"h-2000;v11300","wh":"62000;3200"} #end)
+        #pragma diagram {"xy":"h0;v8375","wh":"62000;3200"} #end)
         
         (#11 wire #4 => #3 .(l))
         (#12 wire #5 => #3 .(cursor))
@@ -789,18 +776,18 @@ function copy_items <<M>> (l: list;
       returns ([value],
                [last 'cursor],
                total: last = 0)
-    #pragma diagram {"xy":"H0;V0","wh":"70600;30000"} #end)
+    #pragma diagram {"xy":"H0;V0","wh":"89600;35950"} #end)
     (#18 def values
-    #pragma diagram {"xy":"H56800;V10000","wh":"10000;3200"} #end)
+    #pragma diagram {"xy":"H66300;V11983","wh":"10000;3200"} #end)
     (#19 def refs
-    #pragma diagram {"xy":"H57800;V-10000"} #end)
+    #pragma diagram {"xy":"H67300;V-11983"} #end)
     (#20 def count
-    #pragma diagram {"xy":"H56800;V0","wh":"10000;3200"} #end)
+    #pragma diagram {"xy":"H66300;V0","wh":"10000;3200"} #end)
     
     (#21 wire #2 .(1) => #18
-    #pragma diagram {"wp":"v10000|#2 #18"} #end)
+    #pragma diagram {"wp":"v11983|#2 #18"} #end)
     (#22 wire #2 .(2) => #19
-    #pragma diagram {"wp":"v-10000|#2 #19"} #end)
+    #pragma diagram {"wp":"v-11983|#2 #19"} #end)
     (#23 wire #2 .(3) => #20
     #pragma diagram {"wp":"v0|#2 #20"} #end)
 }
@@ -826,9 +813,6 @@ function copy_back <<M>> (l: list;
     (let values, refs, count = copy_items <<M>> (l, filler, false);
     #pragma diagram {"xy":"H0;V0","wh":"64000;3200"} #end)
 }
-
--- The item at `r`; Item::DEFAULT and found = false when `r` is Null,
--- out of range or stale.
 
 function value_at (l: list;
                    r: ref;)
@@ -858,9 +842,6 @@ function value_at (l: list;
          }
      #pragma diagram {"xy":"H-1000;V-16000","wh":"52000;24819"} #end)
 }
-
--- Queue successor (toward_tail) or predecessor of the live item at `r`; Null
--- at the ends of the queue and for a Null, out-of-range or stale handle.
 
 inline function neighbour_of (l: list;
                               r: ref;
@@ -909,10 +890,6 @@ function prev_of (l: list;
     #pragma diagram {"xy":"H0;V0","wh":"50000;3200"} #end)
 }
 
--- One step of remove_matching at `cursor`: the next handle along the queue
--- (read before any removal), and the item removed if it matches `wanted`.
--- Past the end (Null cursor), the list is unchanged and `next` is Null.
-
 function remove_step (l_in * : list;
                       cursor: ref;
                       wanted: Item::key;
@@ -932,14 +909,14 @@ function remove_step (l_in * : list;
          {
            diagram
              (let l_out = !l_in; next = null(); total = count;
-             #pragma diagram {"xy":"h-8000;v0","wh":"58000;3200"} #end)
-         #pragma diagram {"xy":"h0;v-12000","wh":"78000;7200"} #end
+             #pragma diagram {"xy":"h-4000;v0","wh":"58000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-14860","wh":"70000;7200"} #end
          }
        | Used {occupied} :
          {
            diagram
              (let next = occupied.next;
-             #pragma diagram {"xy":"h0;v-12000","wh":"30000;3200"} #end)
+             #pragma diagram {"xy":"h-18000;v-11980","wh":"30000;3200"} #end)
              
              (activate #1
                 if Item::matches(occupied.value, wanted)
@@ -948,25 +925,20 @@ function remove_step (l_in * : list;
                     diagram
                       (let l_out, _ = remove(l_in, cursor); total = count + 1;
                       #pragma diagram {"xy":"h0;v0","wh":"62000;3200"} #end)
-                  #pragma diagram {"xy":"h0;v-3600","wh":"70000;7200"} #end
+                  #pragma diagram {"xy":"h0;v-3520","wh":"66000;7200"} #end
                   }
                 else
                   {
                     diagram
                       (let l_out = !l_in; total = count;
                       #pragma diagram {"xy":"h-14000;v0","wh":"34000;3200"} #end)
-                  #pragma diagram {"xy":"h0;v7459","wh":"70000;7200"} #end
+                  #pragma diagram {"xy":"h0;v7380","wh":"66000;7200"} #end
                   }
-              #pragma diagram {"xy":"h0;v4000","wh":"70000;22119"} #end)
-         #pragma diagram {"xy":"h0;v12000","wh":"78000;40000"} #end
+              #pragma diagram {"xy":"h0;v3310","wh":"66000;21960"} #end)
+         #pragma diagram {"xy":"h0;v8889","wh":"70000;32580"} #end
          }
-     #pragma diagram {"xy":"H1350;V36825","wh":"78000;60000"} #end)
+     #pragma diagram {"xy":"H1350;V41825","wh":"70000;50358"} #end)
 }
-
--- Removes every item matching `wanted`: one bounded scan of at most N steps
--- along the next links, from the head; the scan stops after the tail. The
--- survivors keep their order, slots and handles. The `_` output of the
--- partial forward is the index where the scan stopped, which is not needed.
 
 function remove_matching (l_in * : list;
                           wanted: Item::key;)
@@ -979,20 +951,20 @@ function remove_matching (l_in * : list;
       diagram
         (#3 block remove_step
         #pragma diagram {"xy":"h1000;v-100","wh":"20000;14000"} #end)
-        (#4 expr last 'l
-        #pragma diagram {"xy":"h-30500;v5550","wh":"10000;3200"} #end)
-        (#5 expr last 'cursor
-        #pragma diagram {"xy":"h-32500;v-5550","wh":"14000;3200"} #end)
-        (#6 expr wanted
+        (#4 expr last 'l 
+        #pragma diagram {"xy":"h-29500;v5550","wh":"12000;3200"} #end)
+        (#5 expr last 'cursor 
+        #pragma diagram {"xy":"h-30500;v-5550","wh":"18000;3200"} #end)
+        (#6 expr wanted 
         #pragma diagram {"xy":"h-31500;v-1850","wh":"12000;3200"} #end)
-        (#7 expr last 'count
-        #pragma diagram {"xy":"h-31500;v1850","wh":"12000;3200"} #end)
-        (#8 def l
-        #pragma diagram {"xy":"h34500;v4567","wh":"10000;3200"} #end)
-        (#9 def cursor
+        (#7 expr last 'count 
+        #pragma diagram {"xy":"h-29500;v1850","wh":"16000;3200"} #end)
+        (#8 def l 
+        #pragma diagram {"xy":"h33500;v4567"} #end)
+        (#9 def cursor 
         #pragma diagram {"xy":"h33500;v-4767","wh":"12000;3200"} #end)
-        (#10 def count
-        #pragma diagram {"xy":"h33500;v-100","wh":"12000;3200"} #end)
+        (#10 def count 
+        #pragma diagram {"xy":"h32500;v-100","wh":"10000;3200"} #end)
         
         (#11 wire #4 => #3 .(l_in))
         (#12 wire #5 => #3 .(cursor))
@@ -1011,9 +983,9 @@ function remove_matching (l_in * : list;
       returns (l: last = l_in,
                count: last = 0)
     #pragma diagram {"xy":"H-23750;V12600","wh":"87600;30300"} #end)
-    (#18 def l_out
+    (#18 def l_out 
     #pragma diagram {"xy":"H43550;V20175","wh":"10000;3200"} #end)
-    (#19 def removed
+    (#19 def removed 
     #pragma diagram {"xy":"H42550;V5025","wh":"12000;3200"} #end)
     
     (#20 wire #2 .(2) => #18
@@ -1021,9 +993,6 @@ function remove_matching (l_in * : list;
     (#21 wire #2 .(3) => #19
     #pragma diagram {"wp":"v-7575|#2 #19"} #end)
 }
-
--- Inspection API: the raw state of slot `idx`, for debug and teaching views.
--- A slot past N shows as free, version 0, with no successor.
 
 function slot_info (l: list;
                     idx: index;)
@@ -1042,7 +1011,7 @@ function slot_info (l: list;
              (let info = {used: false, version: stored.version, value: Item::DEFAULT,
                 prev: null(), next: available.next}: slot_state;
              #pragma diagram {"xy":"h0;v0","wh":"74000;4219"} #end)
-         #pragma diagram {"xy":"h0;v-4000","wh":"78000;8219"} #end
+         #pragma diagram {"xy":"h0;v-2600","wh":"78000;8219"} #end
          }
        | Used {occupied} :
          {
@@ -1050,12 +1019,10 @@ function slot_info (l: list;
              (let info = {used: true, version: stored.version, value: occupied.value,
                 prev: occupied.prev, next: occupied.next}: slot_state;
              #pragma diagram {"xy":"h0;v0","wh":"74000;4219"} #end)
-         #pragma diagram {"xy":"h0;v8809","wh":"78000;8219"} #end
+         #pragma diagram {"xy":"h0;v9319","wh":"78000;8219"} #end
          }
-     #pragma diagram {"xy":"H-1000;V-16000","wh":"78000;26838"} #end)
+     #pragma diagram {"xy":"H-2000;V-18320","wh":"78000;26857"} #end)
 }
-
--- Inspection API: the head of the free list (Null when the list is full).
 
 inline function free_front (l: list;)
   returns (result: ref;)

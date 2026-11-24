@@ -1,0 +1,19 @@
+{
+  "Version": "2.3",
+  "Kind": "Simulation",
+  "Properties": {
+    "RootDeclarations": [
+      ""
+    ],
+    "Name": "LivePanel",
+    "CustomArguments": "",
+    "FileScenario": "",
+    "SimulationInputType": "Harness",
+    "TestHarness": "LiveDemo::live",
+    "UseCycleTime": "True",
+    "CycleTime": "20"
+  },
+  "InputPaths": [
+    "assets/LiveDemo.swant"
+  ]
+}

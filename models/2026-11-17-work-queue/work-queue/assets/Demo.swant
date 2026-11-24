@@ -7,47 +7,25 @@ use Job as Job;
 
 use View as V;
 
--- ============================================================ constants
-
--- Length, in cycles, of the scripted storyline (README table).
-
 const STORY: uint32 = 35;
-
--- Length, in cycles, of duration_boundaries.
 
 const BOUNDARY_CYCLES: uint64 = 6;
 
--- Length, in cycles, of panel_gestures.
-
 const GESTURE_CYCLES: uint64 = 9;
-
--- command_validation and bulk_cancellation check one cycle.
 
 const ONE_SHOT: uint64 = 1;
 
--- Number of pending jobs compared by `order`.
-
 const SHOWN: uint32 = 4;
-
--- Standard durations (Job::make) of the jobs checked while running.
 
 const INSPECT_CYCLES: uint64 = 8;
 
 const PAINT_CYCLES: uint32 = 20;
 
--- Duration of every job queued by `fill`.
-
 const FILL_DURATION: uint32 = 2;
-
--- A full overview cell, in percent.
 
 const FULL_CELL: uint32 = 100;
 
--- The memory page shown by the panel.
-
 const FIRST_PAGE: uint32 = 0;
-
--- Jobs with non-standard durations. A zero duration is always rejected.
 
 const ONE_CYCLE_DRILL: Job::t = {operation: Job::Drill, duration_cycles: 1}: Job::t;
 
@@ -59,11 +37,7 @@ const ZERO_CYCLE_PAINT: Job::t = {operation: Job::Paint, duration_cycles: 0}: Jo
 
 const ZERO_CYCLE_PACK: Job::t = {operation: Job::Pack, duration_cycles: 0}: Job::t;
 
--- Never issued: duration_boundaries never uses slot 5.
-
 const NEVER_ISSUED: L::ref = L::Ref {idx: 5, version: 0};
-
--- Expected trace of the storyline, one entry per cycle (cycle k at index k - 1).
 
 const EXPECTED_STATUS: Q::command_result ^ STORY = [
            Q::Accepted, Q::Accepted, Q::Accepted, Q::Accepted, Q::Accepted, 
@@ -102,10 +76,6 @@ const EXPECTED_LENGTH: L::index ^ STORY = [
            0, 1, 2, 3, 4, 3, 4, 4, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 
            1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0];
 
--- ============================================================ helpers
-
--- True for a used slot holding `value` with these queue links (L::slot_info).
-
 inline function is_used_with (info: L::slot_state;
                               value: Job::t;
                               prev: L::ref;
@@ -116,8 +86,6 @@ inline function is_used_with (info: L::slot_state;
     (let matches = info.used and info.value = value and info.prev = prev and info.next = next;
     #pragma diagram {"xy":"H0;V0","wh":"96000;3200"} #end)
 }
-
--- Operation and remaining cycles of the running job (Production, 0 when Idle).
 
 inline function running_job (current: Q::work;)
   returns (operation: Job::operation;
@@ -141,8 +109,6 @@ inline function running_job (current: Q::work;)
          }
      #pragma diagram {"xy":"H0;V0","wh":"78000;24819"} #end)
 }
-
--- Compares the controller outputs at `cycle` with the expected storyline trace.
 
 function trace_ok (cycle: uint64;
                    status: Q::command_result;
@@ -172,8 +138,6 @@ function trace_ok (cycle: uint64;
         remaining: uint32;)
 }
 
--- Operation of the job at handle `r` (Production for a free slot).
-
 inline function operation_at (l: L::list;
                               r: L::ref;)
   returns (operation: Job::operation;)
@@ -197,8 +161,6 @@ inline function operation_of (job: Job::t;)
     #pragma diagram {"xy":"H0;V0","wh":"34000;3200"} #end)
 }
 
--- Operations of the first SHOWN jobs, from head to tail (Production past the end).
-
 function order (l: L::list;)
   returns (operations: Job::operation ^ SHOWN;)
 {
@@ -211,8 +173,6 @@ function order (l: L::list;)
     (var
         jobs: Job::t ^ SHOWN;)
 }
-
--- Job queued by `fill` in slot `idx`: Paint in even slots, Drill in odd slots.
 
 function fill_job (idx: L::index;)
   returns (job: Job::t;)
@@ -232,8 +192,6 @@ function fill_slot (idx: L::index;
     #pragma diagram {"xy":"H0;V0","wh":"48000;3200"} #end)
 }
 
--- Queues N jobs: the list is full.
-
 function fill (l_in * : L::list;)
   returns (l_out at l_in: L::list;)
 {
@@ -241,10 +199,6 @@ function fill (l_in * : L::list;)
     (let l_out = (foldi fill_slot) <<L::N>> (l_in);
     #pragma diagram {"xy":"H0;V0","wh":"48000;3200"} #end)
 }
-
--- Slot `idx` after the Paint jobs of a full list are cancelled: even slots
--- are free, freed once (version 1); odd slots keep their Drill job, linked to
--- the previous and next odd slots.
 
 inline function survivor_ok (idx: L::index;
                              ok_so_far: bool;
@@ -273,8 +227,6 @@ function all_survivors_linked (l: L::list;)
     #pragma diagram {"xy":"H0;V0","wh":"64000;3200"} #end)
 }
 
--- Commands of duration_boundaries, and the status each one must get.
-
 function boundary_script (c: uint64;)
   returns (request: Q::command;
            expected_status: Q::command_result;)
@@ -282,23 +234,21 @@ function boundary_script (c: uint64;)
   diagram
     (let request, expected_status = (case c of
        -- 1 a one-cycle job: runs at once
-
+     
        | 1 : (Q::Add {job: ONE_CYCLE_DRILL}, Q::Accepted)
        -- 2-3 two identical two-cycle jobs, the second one queued
-
+     
        | 2 : (Q::Add {job: TWO_CYCLE_PACK}, Q::Accepted)
        | 3 : (Q::Add {job: TWO_CYCLE_PACK}, Q::Accepted)
        -- 4 a zero duration is rejected
-
+     
        | 4 : (Q::Add {job: ZERO_CYCLE_PAINT}, Q::InvalidDuration)
        -- 5 a handle never issued is rejected
-
+     
        | 5 : (Q::Cancel {target: NEVER_ISSUED}, Q::UnknownJob)
        | _ : (Q::Wait {}, Q::NoCommand));
     #pragma diagram {"xy":"H0;V0","wh":"80000;24000"} #end)
 }
-
--- Gestures of panel_gestures, cycle by cycle (the machine runs every cycle).
 
 function gesture_script (c: uint64;)
   returns (action: V::gesture;)
@@ -306,115 +256,67 @@ function gesture_script (c: uint64;)
   diagram
     (let action = (case c of
        -- 1 new Inspect: the queue is empty, it starts at once (INSPECT_CYCLES)
-
+     
        | 1 : V::NewCard {operation: Job::Inspect, gap: 0}
        -- 2-3 new Paint, then Pack, dropped past the last card: appended
-
+     
        | 2 : V::NewCard {operation: Job::Paint, gap: V::CARDS}
        | 3 : V::NewCard {operation: Job::Pack, gap: V::CARDS}
        -- 4 new Drill dropped in gap 1: between Paint and Pack (slot 2)
-
+     
        | 4 : V::NewCard {operation: Job::Drill, gap: 1}
        -- 5 drag card 2 (Pack) to gap 0: to the front
-
+     
        | 5 : V::DragCard {card: 2, gap: 0}
        -- 6 drag card 0 (Pack) to gap 3: back to the end
-
+     
        | 6 : V::DragCard {card: 0, gap: 3}
        -- 7 delete card 1 (Drill): slot 2 is freed
-
+     
        | 7 : V::DeleteCard {card: 1}
        -- 8 new Rework in gap 1: reuses slot 2, at version 1
-
+     
        | 8 : V::NewCard {operation: Job::Rework, gap: 1}
        -- 9 no gesture: Inspect ends, Paint starts
-
+     
        | _ : V::NoGesture {});
     #pragma diagram {"xy":"H0;V0","wh":"80000;30000"} #end)
 }
 
--- ============================================================ harnesses
-
--- The storyline of the README: the scenario is fed back the handle accepted
--- at the previous cycle; every cycle is checked against the expected trace.
-
 _harness work_queue
 {
   diagram
-    (#0 expr _current_cycle
-    #pragma diagram {"xy":"H-80000;V0","wh":"16000;3200"} #end)
+    (#0 expr _current_cycle 
+    #pragma diagram {"xy":"H5038;V10000","wh":"20000;3200"} #end)
     (#1 expr #2 >= #90001
       where
         (#2 group)
         (#90001 group)
-    #pragma diagram {"xy":"H-44500;V3800"} #end)
-    (#90002 expr (STORY :> uint64)
-    #pragma diagram {"xy":"H-82000;V5700","wh":"20000;3200"} #end)
-    (#90003 wire #90002 => #90001)
-    (#3 def _stop_condition
-    #pragma diagram {"xy":"H-11000;V3800","wh":"16000;3200"} #end)
+    #pragma diagram {"xy":"H-52900;V10000"} #end)
+    (#90002 expr (STORY :> uint64) 
+    #pragma diagram {"xy":"H-77500;V11900","wh":"22000;3200"} #end)
+    (#3 def _stop_condition 
+    #pragma diagram {"xy":"H-28150;V10000","wh":"20000;3200"} #end)
     (#4 expr L::null()
-    #pragma diagram {"xy":"H-9000;V-31200","wh":"12000;3200"} #end)
+    #pragma diagram {"dir":"nw","xy":"H5038;V-35300","wh":"12000;3200"} #end)
     (#5 expr #6 pre #7
       where
         (#6 group)
         (#7 group)
-    #pragma diagram {"xy":"H25500;V-29300"} #end)
+    #pragma diagram {"dir":"nw","xy":"H-19300;V-33400"} #end)
     (#8 block Q::scenario
     #pragma diagram {"xy":"H-47500;V-16300","wh":"16000;8000"} #end)
-    (#9 def request
-    #pragma diagram {"xy":"H-8000;V-25400","wh":"10000;3200"} #end)
     (#10 block Q::controller
-    #pragma diagram {"xy":"H-13000;V-16300","wh":"20000;14000"} #end)
-    (#11 def current
-    #pragma diagram {"xy":"H26500;V-16300","wh":"10000;3200"} #end)
-    (#12 def queue_length
-    #pragma diagram {"xy":"H24500;V-20000","wh":"14000;3200"} #end)
-    (#13 def command_status
-    #pragma diagram {"xy":"H23500;V-12600","wh":"16000;3200"} #end)
-    (#14 def accepted
-    #pragma diagram {"xy":"H26500;V-23700","wh":"10000;3200"} #end)
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-13000;V-13131","wh":"20000;20338"} #end)
     (#15 block trace_ok
-    #pragma diagram {"xy":"H22500;V-3500","wh":"18000;14000"} #end)
-    (#16 def status_ok
-    #pragma diagram {"xy":"H54000;V3900","wh":"12000;3200"} #end)
-    (#17 def accepted_ok
-    #pragma diagram {"xy":"H54000;V-10900","wh":"12000;3200"} #end)
-    (#18 def operation_ok
-    #pragma diagram {"xy":"H54000;V-7200","wh":"12000;3200"} #end)
-    (#19 def remaining_ok
-    #pragma diagram {"xy":"H54000;V-3500","wh":"12000;3200"} #end)
-    (#20 def length_ok
-    #pragma diagram {"xy":"H54000;V200","wh":"12000;3200"} #end)
-    
-    (#30 wire #0 => #2, #8 .(cycle), #15 .(cycle)
-    #pragma diagram {"wp":"#0 h9250[v1900 #2, v-16300 #8, #15]"} #end)
-    (#31 wire #1 => #3)
-    (#32 wire #4 => #6)
-    (#33 wire #5 => #8 .(previous)
-    #pragma diagram {"wp":"#5 h3250 v-4500 h-96500 v16500 #8"} #end)
-    (#34 wire #8 .(request) => #9, #10 .(request)
-    #pragma diagram {"wp":"v0|#8 h8250[v-9100 #9, #10]"} #end)
-    (#35 wire #10 .(current) => #11
-    #pragma diagram {"wp":"v0|#10 #11"} #end)
-    (#900 wire #10 .(current:, queue_length:, command_status:, accepted:) => #15 .(current: current, queue_length: queue_length, status: command_status, accepted: accepted)
-    #pragma diagram {"wp":"v6050|#10 #15"} #end)
-    (#36 wire #10 .(queue_length) => #12
-    #pragma diagram {"wp":"v-3700|#10 #12"} #end)
-    (#37 wire #10 .(command_status) => #13
-    #pragma diagram {"wp":"v3700|#10 #13"} #end)
-    (#38 wire #10 .(accepted) => #14, #7
-    #pragma diagram {"wp":"v-5400|#10 h10250 v-2000[#14, v-3700 #7]"} #end)
-    (#39 wire #15 .(status_ok) => #16
-    #pragma diagram {"wp":"v5850|#15 h8250 v1550 #16"} #end)
-    (#40 wire #15 .(accepted_ok) => #17
-    #pragma diagram {"wp":"v-6750|#15 h8250 v-650 #17"} #end)
-    (#41 wire #15 .(operation_ok) => #18
-    #pragma diagram {"wp":"v-3700|#15 #18"} #end)
-    (#42 wire #15 .(remaining_ok) => #19
-    #pragma diagram {"wp":"v0|#15 #19"} #end)
-    (#43 wire #15 .(length_ok) => #20
-    #pragma diagram {"wp":"v3700|#15 #20"} #end)
+    #pragma diagram {"xy":"H32688;V7300","wh":"18000;14000"} #end)
+    (#17 def accepted_ok, 
+             operation_ok, 
+             remaining_ok, 
+             length_ok, 
+             status_ok
+    #pragma diagram {"xy":"H57662;V8100","wh":"18000;9797"} #end)
     (assert
      $command_status: status_ok;
      $accepted_handle: accepted_ok;
@@ -422,13 +324,32 @@ _harness work_queue
      $remaining_cycles: remaining_ok;
      $pending_queue_length: length_ok;
     #pragma diagram {"xy":"H-14000;V-49500","wh":"60000;12000"} #end)
+    (#11 expr _current_cycle 
+    #pragma diagram {"xy":"H-86400;V-15475","wh":"20000;3200"} #end)
+    (#12 expr _current_cycle 
+    #pragma diagram {"xy":"H-76500;V8100","wh":"20000;3200"} #end)
+    
+    (#90003 wire #90002 => #90001)
+    (#30 wire #0 => #15 .(cycle))
+    (#31 wire #1 => #3)
+    (#32 wire #4 => #6)
+    (#33 wire #5 => #8 .(previous)
+    #pragma diagram {"wp":"#5 h-41450 v15100 #8"} #end)
+    (#34 wire #8 => #10
+    #pragma diagram {"wp":"v0|#8 #10"} #end)
+    (#900 wire #10 .(current:, 
+queue_length:, 
+command_status:status, 
+accepted:) => #15
+    #pragma diagram {"wp":"v4602|#10 h19516 v12829 #15"} #end)
+    (#38 wire #10 .(accepted) => #7
+    #pragma diagram {"wp":"v-8150|#10 h1000 v-10219 #7"} #end)
+    (#40 wire #15 => #17
+    #pragma diagram {"wp":"v800|#15 #17"} #end)
+    (#13 wire #11 => #8 .(cycle))
+    (#14 wire #12 => #2)
     
     (var
-        request: Q::command;
-        current: Q::work;
-        queue_length: L::index;
-        command_status: Q::command_result;
-        accepted: L::ref;
         status_ok: bool;
         accepted_ok: bool;
         operation_ok: bool;
@@ -436,55 +357,24 @@ _harness work_queue
         length_ok: bool;)
 }
 
--- Durations 1 and 2, no idle cycle between jobs, identical jobs, rejections.
-
 _harness duration_boundaries
 {
   diagram
-    (#0 expr _current_cycle
-    #pragma diagram {"xy":"H-80000;V0","wh":"16000;3200"} #end)
-    (#1 expr #2 >= #90001
-      where
-        (#2 group)
-        (#90001 group)
-    #pragma diagram {"xy":"H-42500;V5600"} #end)
-    (#90002 expr BOUNDARY_CYCLES
-    #pragma diagram {"xy":"H-82000;V7500","wh":"20000;3200"} #end)
-    (#90003 wire #90002 => #90001)
-    (#3 def _stop_condition
-    #pragma diagram {"xy":"H-9000;V5600","wh":"16000;3200"} #end)
-    (#4 def c
-    #pragma diagram {"xy":"H-41500;V0"} #end)
+    (#0 expr c
+    #pragma diagram {"xy":"H-73900;V-8100"} #end)
     (#5 block boundary_script
     #pragma diagram {"xy":"H-46500;V-8100","wh":"18000;8000"} #end)
-    (#6 def expected_status
-    #pragma diagram {"xy":"H-9000;V1000","wh":"16000;3200"} #end)
+    (#6 def expected_status 
+    #pragma diagram {"xy":"H-12800;V4500","wh":"20000;3200"} #end)
     (#7 block Q::controller
+    #pragma swt under_test #end
     #pragma diagram {"xy":"H-11000;V-10100","wh":"20000;14000"} #end)
-    (#8 def current
-    #pragma diagram {"xy":"H26500;V-4450","wh":"10000;3200"} #end)
-    (#9 def queue_length
-    #pragma diagram {"xy":"H24500;V-15550","wh":"14000;3200"} #end)
-    (#10 def command_status
-    #pragma diagram {"xy":"H23500;V-11850","wh":"16000;3200"} #end)
-    (#11 def accepted
-    #pragma diagram {"xy":"H26500;V-8150","wh":"10000;3200"} #end)
-    
-    (#20 wire #0 => #2, #4, #5 .(c)
-    #pragma diagram {"wp":"#0 h8625[h10250[v3700 #2, #4], v-8100 #5]"} #end)
-    (#21 wire #1 => #3)
-    (#22 wire #5 .(request) => #7 .(request)
-    #pragma diagram {"wp":"v-1500|#5 #7"} #end)
-    (#23 wire #5 .(expected_status) => #6
-    #pragma diagram {"wp":"v1500|#5 h8250 v7600 #6"} #end)
-    (#24 wire #7 .(current) => #8
-    #pragma diagram {"wp":"v5650|#7 #8"} #end)
-    (#25 wire #7 .(queue_length) => #9
-    #pragma diagram {"wp":"v-5450|#7 #9"} #end)
-    (#26 wire #7 .(command_status) => #10
-    #pragma diagram {"wp":"v-1750|#7 #10"} #end)
-    (#27 wire #7 .(accepted) => #11
-    #pragma diagram {"wp":"v1950|#7 #11"} #end)
+    (#9 def current, 
+            queue_length, 
+            command_status, 
+            accepted
+            
+    #pragma diagram {"xy":"H27800;V-9170","wh":"20000;9797"} #end)
     (assert
      $one_cycle_job:
        c <> 1 or current = Q::Working {job: ONE_CYCLE_DRILL, remaining_cycles: 1};
@@ -498,7 +388,19 @@ _harness duration_boundaries
      $returns_idle:
        c < BOUNDARY_CYCLES or current = Q::Idle {};
      $public_command_result: command_status = expected_status;
-    #pragma diagram {"xy":"H-4250;V-37025","wh":"80000;24000"} #end)
+    #pragma diagram {"xy":"H-5250;V-36688","wh":"78000;24673"} #end)
+    (let
+         c = _current_cycle;
+         _stop_condition = c >= BOUNDARY_CYCLES;
+    #pragma diagram {"xy":"H-12800;V17477","wh":"46000;6078"} #end)
+    
+    (#20 wire #0 => #5)
+    (#22 wire #5 .(request) => #7 .(request)
+    #pragma diagram {"wp":"v-1500|#5 #7"} #end)
+    (#23 wire #5 .(expected_status) => #6
+    #pragma diagram {"wp":"v1500|#5 h7350 v11100 #6"} #end)
+    (#25 wire #7 => #9
+    #pragma diagram {"wp":"v930|#7 #9"} #end)
     
     (var
         c: uint64;
@@ -509,363 +411,25 @@ _harness duration_boundaries
         accepted: L::ref;)
 }
 
--- Every command applied to small queues, all in one cycle: each Q::apply
--- block takes its input queue from the wire of an earlier result, through a
--- `!` copy, since Q::apply updates its input queue in place.
--- The diagram reads top to bottom:
---   1. two jobs queued: Inspect (h0), then Paint (h1);
---   2. every insertion command, each on that same two-job queue;
---   3. move and cancel, on the same queue;
---   4. h0 is stale once cancelled, even after its slot is reused;
---   5. rejections: Null target, zero duration, and Wait.
-
 _harness command_validation
 {
   diagram
-    (#0 expr _current_cycle
-    #pragma diagram {"xy":"H-90000;V-30000","wh":"16000;3200"} #end)
-    (#1 expr #2 >= #90001
-      where
-        (#2 group)
-        (#90001 group)
-    #pragma diagram {"xy":"H-60500;V-28100"} #end)
-    (#90002 expr ONE_SHOT
-    #pragma diagram {"xy":"H-92000;V-26200","wh":"20000;3200"} #end)
-    (#90003 wire #90002 => #90001)
-    (#3 def _stop_condition
-    #pragma diagram {"xy":"H-31000;V-28100","wh":"16000;3200"} #end)
     (let
        inspect = Job::make(Job::Inspect);
        paint = Job::make(Job::Paint);
        drill = Job::make(Job::Drill);
-    #pragma diagram {"xy":"H-92500;V-17750","wh":"40000;9797"} #end)
-    (#4 expr L::init()
-    #pragma diagram {"xy":"H-279250;V60333","wh":"14000;3200"} #end)
-    (#11 expr Q::Add {job: inspect}
-    #pragma diagram {"xy":"H-232750;V64333","wh":"46000;3200"} #end)
-    (#15 expr !#16
-      where
-        (#16 group)
-    #pragma diagram {"xy":"H-213750;V60333"} #end)
+       _stop_condition = _current_cycle >= ONE_SHOT;
+    #pragma diagram {"xy":"H-179000;V94432","wh":"50000;9797"} #end)
+    (#4 expr (!L::init(), Q::Add {job: inspect})
+    #pragma diagram {"xy":"H-295421;V91133","wh":"38000;3200"} #end)
     (#10 block Q::apply
-    #pragma diagram {"xy":"H-185250;V62333","wh":"16000;8000"} #end)
-    (#13 def one
-    #pragma diagram {"xy":"H-121750;V65000","wh":"14000;3200"} #end)
-    (#12 def s0
-    #pragma diagram {"xy":"H-118750;V61300"} #end)
-    (#14 def h0
-    #pragma diagram {"xy":"H-118750;V57600"} #end)
-    (#18 expr Q::Add {job: paint}
-    #pragma diagram {"xy":"H-137750;V72700","wh":"46000;3200"} #end)
-    (#22 expr !#23
-      where
-        (#23 group)
-    #pragma diagram {"xy":"H-118750;V68700"} #end)
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-265050;V91133","wh":"16000;8000"} #end)
+    (#13 def one, s0, h0
+    #pragma diagram {"xy":"H-241125;V91133","wh":"16000;3200"} #end)
     (#17 block Q::apply
-    #pragma diagram {"xy":"H-90250;V70700","wh":"16000;8000"} #end)
-    (#20 def two
-    #pragma diagram {"xy":"H-26750;V65967","wh":"14000;3200"} #end)
-    (#19 def s1
-    #pragma diagram {"xy":"H-23750;V41267"} #end)
-    (#21 def h1
-    #pragma diagram {"xy":"H-23750;V33867"} #end)
-    (#25 expr Q::Urgent {job: drill}
-    #pragma diagram {"xy":"H-42750;V79567","wh":"46000;3200"} #end)
-    (#29 expr !#30
-      where
-        (#30 group)
-    #pragma diagram {"xy":"H-23750;V83567"} #end)
-    (#24 block Q::apply
-    #pragma diagram {"xy":"H4750;V81567","wh":"16000;8000"} #end)
-    (#27 def front
-    #pragma diagram {"xy":"H68250;V77867","wh":"14000;3200"} #end)
-    (#26 def s2
-    #pragma diagram {"xy":"H71250;V85267"} #end)
-    (#28 def h2
-    #pragma diagram {"xy":"H71250;V81567"} #end)
-    (#32 expr Q::InsertBefore {target: h1, job: drill}
-    #pragma diagram {"xy":"H-42750;V100567","wh":"46000;3200"} #end)
-    (#35 expr !#36
-      where
-        (#36 group)
-    #pragma diagram {"xy":"H-23750;V104567"} #end)
-    (#31 block Q::apply
-    #pragma diagram {"xy":"H4750;V102567","wh":"16000;8000"} #end)
-    (#34 def before
-    #pragma diagram {"xy":"H68250;V104567","wh":"14000;3200"} #end)
-    (#33 def s3
-    #pragma diagram {"xy":"H71250;V100567"} #end)
-    (#38 expr Q::InsertAfter {target: h1, job: drill}
-    #pragma diagram {"xy":"H-42750;V58567","wh":"46000;3200"} #end)
-    (#42 expr !#43
-      where
-        (#43 group)
-    #pragma diagram {"xy":"H-23750;V62267"} #end)
-    (#37 block Q::apply
-    #pragma diagram {"xy":"H4750;V60567","wh":"16000;8000"} #end)
-    (#40 def after
-    #pragma diagram {"xy":"H68250;V64267","wh":"14000;3200"} #end)
-    (#39 def s4
-    #pragma diagram {"xy":"H71250;V60567"} #end)
-    (#41 def h4
-    #pragma diagram {"xy":"H71250;V56867"} #end)
-    (#45 expr Q::InsertAfter {target: h0, job: drill}
-    #pragma diagram {"xy":"H-42750;V90067","wh":"46000;3200"} #end)
-    (#48 expr !#49
-      where
-        (#49 group)
-    #pragma diagram {"xy":"H-23750;V94067"} #end)
-    (#44 block Q::apply
-    #pragma diagram {"xy":"H4750;V92067","wh":"16000;8000"} #end)
-    (#47 def middle
-    #pragma diagram {"xy":"H68250;V90067","wh":"14000;3200"} #end)
-    (#46 def s5
-    #pragma diagram {"xy":"H71250;V94067"} #end)
-    (#51 expr Q::Move {item: h1, before: h0}
-    #pragma diagram {"xy":"H-42750;V37567","wh":"46000;3200"} #end)
-    (#55 expr !#56
-      where
-        (#56 group)
-    #pragma diagram {"xy":"H-23750;V44967"} #end)
-    (#50 block Q::apply
-    #pragma diagram {"xy":"H4750;V39567","wh":"16000;8000"} #end)
-    (#53 def moved
-    #pragma diagram {"xy":"H68250;V43267","wh":"14000;3200"} #end)
-    (#52 def s6
-    #pragma diagram {"xy":"H71250;V32167"} #end)
-    (#54 def h6
-    #pragma diagram {"xy":"H71250;V39567"} #end)
-    (#58 expr Q::Cancel {target: h0}
-    #pragma diagram {"xy":"H-42750;V125567","wh":"46000;3200"} #end)
-    (#61 expr !#62
-      where
-        (#62 group)
-    #pragma diagram {"xy":"H-23750;V121567"} #end)
-    (#57 block Q::apply
-    #pragma diagram {"xy":"H4750;V123567","wh":"16000;8000"} #end)
-    (#60 def cancelled
-    #pragma diagram {"xy":"H68250;V131567","wh":"14000;3200"} #end)
-    (#59 def s7
-    #pragma diagram {"xy":"H71250;V120467"} #end)
-    (#64 expr Q::Cancel {target: h0}
-    #pragma diagram {"xy":"H52250;V35867","wh":"46000;3200"} #end)
-    (#67 expr !#68
-      where
-        (#68 group)
-    #pragma diagram {"xy":"H71250;V124167"} #end)
-    (#63 block Q::apply
-    #pragma diagram {"xy":"H99750;V112033","wh":"16000;8000"} #end)
-    (#66 def stale
-    #pragma diagram {"xy":"H163250;V114033","wh":"14000;3200"} #end)
-    (#65 def s8
-    #pragma diagram {"xy":"H166250;V110033"} #end)
-    (#70 expr Q::Add {job: drill}
-    #pragma diagram {"xy":"H52250;V127867","wh":"46000;3200"} #end)
-    (#74 expr !#75
-      where
-        (#75 group)
-    #pragma diagram {"xy":"H71250;V135267"} #end)
-    (#69 block Q::apply
-    #pragma diagram {"xy":"H99750;V129867","wh":"16000;8000"} #end)
-    (#72 def reused
-    #pragma diagram {"xy":"H163250;V125133","wh":"14000;3200"} #end)
-    (#71 def s9
-    #pragma diagram {"xy":"H166250;V117733"} #end)
-    (#73 def h9
-    #pragma diagram {"xy":"H166250;V121433"} #end)
-    (#77 expr Q::InsertAfter {target: h0, job: paint}
-    #pragma diagram {"xy":"H147250;V153533","wh":"46000;3200"} #end)
-    (#80 expr !#81
-      where
-        (#81 group)
-    #pragma diagram {"xy":"H166250;V149533"} #end)
-    (#76 block Q::apply
-    #pragma diagram {"xy":"H194750;V151533","wh":"16000;8000"} #end)
-    (#79 def stale_after
-    #pragma diagram {"xy":"H226250;V153533","wh":"14000;3200"} #end)
-    (#78 def s10
-    #pragma diagram {"xy":"H229250;V149533"} #end)
-    (#83 expr Q::InsertBefore {target: h0, job: paint}
-    #pragma diagram {"xy":"H147250;V128833","wh":"46000;3200"} #end)
-    (#86 expr !#87
-      where
-        (#87 group)
-    #pragma diagram {"xy":"H166250;V132533"} #end)
-    (#82 block Q::apply
-    #pragma diagram {"xy":"H194750;V130533","wh":"16000;8000"} #end)
-    (#85 def stale_before
-    #pragma diagram {"xy":"H226250;V132533","wh":"14000;3200"} #end)
-    (#84 def s11
-    #pragma diagram {"xy":"H229250;V128533"} #end)
-    (#89 expr Q::Move {item: h0, before: L::null()}
-    #pragma diagram {"xy":"H147250;V139033","wh":"46000;3200"} #end)
-    (#92 expr !#93
-      where
-        (#93 group)
-    #pragma diagram {"xy":"H166250;V143033"} #end)
-    (#88 block Q::apply
-    #pragma diagram {"xy":"H194750;V141033","wh":"16000;8000"} #end)
-    (#91 def stale_move
-    #pragma diagram {"xy":"H226250;V143033","wh":"14000;3200"} #end)
-    (#90 def s12
-    #pragma diagram {"xy":"H229250;V139033"} #end)
-    (#95 expr Q::InsertAfter {target: L::null(), job: drill}
-    #pragma diagram {"xy":"H-42750;V69667","wh":"46000;3200"} #end)
-    (#98 expr !#99
-      where
-        (#99 group)
-    #pragma diagram {"xy":"H-23750;V73367"} #end)
-    (#94 block Q::apply
-    #pragma diagram {"xy":"H4750;V71067","wh":"16000;8000"} #end)
-    (#97 def null_after
-    #pragma diagram {"xy":"H68250;V73067","wh":"14000;3200"} #end)
-    (#96 def s13
-    #pragma diagram {"xy":"H71250;V69067"} #end)
-    (#101 expr Q::Add {job: ZERO_CYCLE_PACK}
-    #pragma diagram {"xy":"H-42750;V111067","wh":"46000;3200"} #end)
-    (#105 expr !#106
-      where
-        (#106 group)
-    #pragma diagram {"xy":"H-23750;V115067"} #end)
-    (#100 block Q::apply
-    #pragma diagram {"xy":"H4750;V113067","wh":"16000;8000"} #end)
-    (#103 def zero
-    #pragma diagram {"xy":"H68250;V113067","wh":"14000;3200"} #end)
-    (#102 def s14
-    #pragma diagram {"xy":"H71250;V116767"} #end)
-    (#104 def h14
-    #pragma diagram {"xy":"H71250;V109367"} #end)
-    (#108 expr Q::Wait {}
-    #pragma diagram {"xy":"H-42750;V48667","wh":"46000;3200"} #end)
-    (#111 expr !#112
-      where
-        (#112 group)
-    #pragma diagram {"xy":"H-23750;V52367"} #end)
-    (#107 block Q::apply
-    #pragma diagram {"xy":"H4750;V50067","wh":"16000;8000"} #end)
-    (#110 def waited
-    #pragma diagram {"xy":"H68250;V52067","wh":"14000;3200"} #end)
-    (#109 def s15
-    #pragma diagram {"xy":"H71250;V48067"} #end)
-    
-    (#123 wire #4 => #16)
-    (#124 wire #10 .(l_out) => #13, #23
-    #pragma diagram {"wp":"v2667|#10 h8750[#13, v3700 #23]"} #end)
-    (#125 wire #17 .(l_out) => #20, #30, #36, #43, #49, #56, #62, #99, #106, #112
-    #pragma diagram {"wp":"v-3817|#17 h6375[h25125 v-916 #20, v6484[v10200[#30, v10500[v10500[#36, v10500[v6500 #62, #106]], #49]], #99], v-4616[#43, v-9900[v-7400 #56, #112]]]"} #end)
-    (#126 wire #24 .(l_out) => #27
-    #pragma diagram {"wp":"v-3700|#24 #27"} #end)
-    (#127 wire #31 .(l_out) => #34
-    #pragma diagram {"wp":"v2000|#31 #34"} #end)
-    (#128 wire #37 .(l_out) => #40
-    #pragma diagram {"wp":"v3700|#37 #40"} #end)
-    (#129 wire #44 .(l_out) => #47
-    #pragma diagram {"wp":"v-2000|#44 #47"} #end)
-    (#130 wire #50 .(l_out) => #53
-    #pragma diagram {"wp":"v3700|#50 #53"} #end)
-    (#131 wire #57 .(l_out) => #60, #68, #75
-    #pragma diagram {"wp":"v2850|#57 h8750[v5150[#60, v3700 #75], v-2250 #68]"} #end)
-    (#132 wire #63 .(l_out) => #66
-    #pragma diagram {"wp":"v2000|#63 #66"} #end)
-    (#133 wire #69 .(l_out) => #72, #81, #87, #93
-    #pragma diagram {"wp":"v2666|#69 h8750[v-7400 #72, v10500 h25750[v6500 #81, #93], #87]"} #end)
-    (#134 wire #76 .(l_out) => #79
-    #pragma diagram {"wp":"v2000|#76 #79"} #end)
-    (#135 wire #82 .(l_out) => #85
-    #pragma diagram {"wp":"v2000|#82 #85"} #end)
-    (#136 wire #88 .(l_out) => #91
-    #pragma diagram {"wp":"v2000|#88 #91"} #end)
-    (#137 wire #94 .(l_out) => #97
-    #pragma diagram {"wp":"v2000|#94 #97"} #end)
-    (#138 wire #100 .(l_out) => #103
-    #pragma diagram {"wp":"v0|#100 #103"} #end)
-    (#139 wire #107 .(l_out) => #110
-    #pragma diagram {"wp":"v2000|#107 #110"} #end)
-    (#140 wire #15 => #10 .(l_in))
-    (#141 wire #11 => #10 .(request))
-    (#142 wire #10 .(status) => #12
-    #pragma diagram {"wp":"v-1033|#10 #12"} #end)
-    (#143 wire #10 .(accepted) => #14
-    #pragma diagram {"wp":"v-3066|#10 h49500 v-1667 #14"} #end)
-    (#144 wire #22 => #17 .(l_in))
-    (#145 wire #18 => #17 .(request))
-    (#146 wire #17 .(status) => #19
-    #pragma diagram {"wp":"v-1075|#17 h1500 v-28358 #19"} #end)
-    (#147 wire #17 .(accepted) => #21
-    #pragma diagram {"wp":"v-75|#17 h2000 v-36758 #21"} #end)
-    (#148 wire #29 => #24 .(l_in))
-    (#149 wire #25 => #24 .(request))
-    (#150 wire #24 .(status) => #26
-    #pragma diagram {"wp":"v3700|#24 #26"} #end)
-    (#151 wire #24 .(accepted) => #28
-    #pragma diagram {"wp":"v0|#24 #28"} #end)
-    (#152 wire #35 => #31 .(l_in))
-    (#153 wire #32 => #31 .(request))
-    (#154 wire #31 .(status) => #33
-    #pragma diagram {"wp":"v-2000|#31 #33"} #end)
-    (#155 wire #42 => #37 .(l_in))
-    (#156 wire #38 => #37 .(request))
-    (#157 wire #37 .(status) => #39
-    #pragma diagram {"wp":"v0|#37 #39"} #end)
-    (#158 wire #37 .(accepted) => #41
-    #pragma diagram {"wp":"v-3700|#37 #41"} #end)
-    (#159 wire #48 => #44 .(l_in))
-    (#160 wire #45 => #44 .(request))
-    (#161 wire #44 .(status) => #46
-    #pragma diagram {"wp":"v2000|#44 #46"} #end)
-    (#162 wire #55 => #50 .(l_in)
-    #pragma diagram {"wp":"#55 h9750 v-3900 #50"} #end)
-    (#163 wire #51 => #50 .(request))
-    (#164 wire #50 .(status) => #52
-    #pragma diagram {"wp":"v4000|#50 h8750 v-11400 #52"} #end)
-    (#165 wire #50 .(accepted) => #54
-    #pragma diagram {"wp":"v0|#50 #54"} #end)
-    (#166 wire #61 => #57 .(l_in))
-    (#167 wire #58 => #57 .(request))
-    (#168 wire #57 .(status) => #59
-    #pragma diagram {"wp":"v-3100|#57 #59"} #end)
-    (#169 wire #67 => #63 .(l_in)
-    #pragma diagram {"wp":"#67 h9250 v-11634 #63"} #end)
-    (#170 wire #64 => #63 .(request)
-    #pragma diagram {"wp":"#64 h10250 v75666 #63"} #end)
-    (#171 wire #63 .(status) => #65
-    #pragma diagram {"wp":"v-2000|#63 #65"} #end)
-    (#172 wire #74 => #69 .(l_in)
-    #pragma diagram {"wp":"#74 h9750 v-3900 #69"} #end)
-    (#173 wire #70 => #69 .(request))
-    (#174 wire #69 .(status) => #71
-    #pragma diagram {"wp":"v4000|#69 h9750 v-16134 #71"} #end)
-    (#175 wire #69 .(accepted) => #73
-    #pragma diagram {"wp":"v3400|#69 h7750 v-11834 #73"} #end)
-    (#176 wire #80 => #76 .(l_in))
-    (#177 wire #77 => #76 .(request))
-    (#178 wire #76 .(status) => #78
-    #pragma diagram {"wp":"v-2000|#76 #78"} #end)
-    (#179 wire #86 => #82 .(l_in))
-    (#180 wire #83 => #82 .(request))
-    (#181 wire #82 .(status) => #84
-    #pragma diagram {"wp":"v-2000|#82 #84"} #end)
-    (#182 wire #92 => #88 .(l_in))
-    (#183 wire #89 => #88 .(request))
-    (#184 wire #88 .(status) => #90
-    #pragma diagram {"wp":"v-2000|#88 #90"} #end)
-    (#185 wire #98 => #94 .(l_in))
-    (#186 wire #95 => #94 .(request))
-    (#187 wire #94 .(status) => #96
-    #pragma diagram {"wp":"v-2000|#94 #96"} #end)
-    (#188 wire #105 => #100 .(l_in))
-    (#189 wire #101 => #100 .(request))
-    (#190 wire #100 .(status) => #102
-    #pragma diagram {"wp":"v3700|#100 #102"} #end)
-    (#191 wire #100 .(accepted) => #104
-    #pragma diagram {"wp":"v-3700|#100 #104"} #end)
-    (#192 wire #111 => #107 .(l_in))
-    (#193 wire #108 => #107 .(request))
-    (#194 wire #107 .(status) => #109
-    #pragma diagram {"wp":"v-2000|#107 #109"} #end)
-    (#195 wire #0 => #2)
-    (#196 wire #1 => #3)
-    
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-265050;V102167","wh":"16000;8000"} #end)
     (assert
      $add_returns_handles: s0 = Q::Accepted and s1 = Q::Accepted
        and h0 = L::Ref {idx: 0, version: 0} and h1 = L::Ref {idx: 1, version: 0};
@@ -893,7 +457,18 @@ _harness command_validation
        and order(null_after) = [Job::Drill, Job::Inspect, Job::Paint, V::NO_OPERATION];
      $zero_duration_rejected: s14 = Q::InvalidDuration and zero = two and h14 = L::null();
      $wait: s15 = Q::NoCommand and waited = two;
-    #pragma diagram {"xy":"H-2500;V-87750","wh":"90000;50000"} #end)
+    #pragma diagram {"xy":"H-212625;V50050","wh":"90000;50000"} #end)
+    (#0 expr (!one, Q::Add {job: paint})
+    #pragma diagram {"xy":"H-299421;V101900","wh":"30000;3200"} #end)
+    (#1 def two, s1, h1
+    #pragma diagram {"xy":"H-242750;V104567","wh":"16000;3200"} #end)
+    
+    (#124 wire #10 => #13
+    #pragma diagram {"wp":"v0|#10 #13"} #end)
+    (#2 wire #4 => #10)
+    (#3 wire #0 => #17)
+    (#7 wire #17 => #1
+    #pragma diagram {"wp":"v2400|#17 #1"} #end)
     
     (var
         inspect: Job::t;
@@ -938,156 +513,177 @@ _harness command_validation
         h6: L::ref;
         h9: L::ref;
         h14: L::ref;)
+    (diagram $OnTwo
+       (#8 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h16150;v-10500","wh":"16000;8000"} #end)
+       (#9 expr (!two, Q::InsertAfter {target: L::null(), job: drill})
+       #pragma diagram {"xy":"h-26350;v-11900","wh":"56000;3200"} #end)
+       (#11 def before, s3, _
+       #pragma diagram {"xy":"h41350;v21000","wh":"18000;3200"} #end)
+       (#12 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h16150;v10500","wh":"16000;8000"} #end)
+       (#14 expr (!two, Q::Wait {})
+       #pragma diagram {"xy":"h-43350;v-32900","wh":"22000;3200"} #end)
+       (#15 def zero, s14, h14
+       #pragma diagram {"xy":"h41350;v31500","wh":"18000;3200"} #end)
+       (#16 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h16150;v42000","wh":"16000;8000"} #end)
+       (#18 def waited, s15, _
+       #pragma diagram {"xy":"h41350;v-31500","wh":"18000;3200"} #end)
+       (#19 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h16150;v-42000","wh":"16000;8000"} #end)
+       (#20 def cancelled, s7, _
+       #pragma diagram {"xy":"h42350;v42000","wh":"20000;3200"} #end)
+       (#21 expr (!two, Q::InsertBefore {target: h1, job: drill})
+       #pragma diagram {"xy":"h-29350;v19000","wh":"50000;3200"} #end)
+       (#22 def front, s2, h2
+       #pragma diagram {"xy":"h41350;v0","wh":"18000;3200"} #end)
+       (#23 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h16150;v-21000","wh":"16000;8000"} #end)
+       (#24 def middle, s5, _
+       #pragma diagram {"xy":"h41350;v10500","wh":"18000;3200"} #end)
+       (#25 expr (!two, Q::Urgent {job: drill})
+       #pragma diagram {"xy":"h-37350;v-2000","wh":"34000;3200"} #end)
+       (#26 def null_after, s13, _
+       #pragma diagram {"xy":"h43350;v-10500","wh":"22000;3200"} #end)
+       (#27 expr (!two, Q::Add {job: ZERO_CYCLE_PACK})
+       #pragma diagram {"xy":"h-34350;v29500","wh":"40000;3200"} #end)
+       (#28 expr (!two, Q::Cancel {target: h0})
+       #pragma diagram {"xy":"h-37350;v44000","wh":"34000;3200"} #end)
+       (#29 expr (!two, Q::Move {item: h1, before: h0})
+       #pragma diagram {"xy":"h-34350;v-44000","wh":"40000;3200"} #end)
+       (#30 expr (!two, Q::InsertAfter {target: h1, job: drill})
+       #pragma diagram {"xy":"h-29350;v-23000","wh":"50000;3200"} #end)
+       (#31 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h16150;v21000","wh":"16000;8000"} #end)
+       (#32 def after, s4, h4
+       #pragma diagram {"xy":"h41350;v-21000","wh":"18000;3200"} #end)
+       (#33 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h16150;v31500","wh":"16000;8000"} #end)
+       (#34 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h16150;v0","wh":"16000;8000"} #end)
+       (#35 def moved, s6, h6
+       #pragma diagram {"xy":"h41350;v-42000","wh":"18000;3200"} #end)
+       (#36 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h16150;v-31500","wh":"16000;8000"} #end)
+       (#37 expr (!two, Q::InsertAfter {target: h0, job: drill})
+       #pragma diagram {"xy":"h-29350;v8500","wh":"50000;3200"} #end)
+       
+       (#38 wire #8 => #26
+       #pragma diagram {"wp":"v0|#8 #26"} #end)
+       (#39 wire #34 => #22
+       #pragma diagram {"wp":"v0|#34 #22"} #end)
+       (#40 wire #23 => #32
+       #pragma diagram {"wp":"v0|#23 #32"} #end)
+       (#41 wire #16 => #20
+       #pragma diagram {"wp":"v0|#16 #20"} #end)
+       (#42 wire #29 => #19)
+       (#43 wire #31 => #11
+       #pragma diagram {"wp":"v0|#31 #11"} #end)
+       (#44 wire #37 => #12)
+       (#45 wire #28 => #16)
+       (#46 wire #19 => #35
+       #pragma diagram {"wp":"v0|#19 #35"} #end)
+       (#47 wire #27 => #33)
+       (#48 wire #33 => #15
+       #pragma diagram {"wp":"v0|#33 #15"} #end)
+       (#49 wire #12 => #24
+       #pragma diagram {"wp":"v0|#12 #24"} #end)
+       (#50 wire #36 => #18
+       #pragma diagram {"wp":"v0|#36 #18"} #end)
+       (#51 wire #25 => #34)
+       (#52 wire #21 => #31)
+       (#53 wire #14 => #36)
+       (#54 wire #9 => #8)
+       (#55 wire #30 => #23)
+     #pragma diagram {"xy":"H-281200;V167900","wh":"116700;100000"} #end)
+    (diagram $OnCancelled
+       (#64 expr (!cancelled, Q::Cancel {target: h0})
+       #pragma diagram {"xy":"h-34502;v-5317","wh":"38000;3200"} #end)
+       (#63 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h10873;v-5317","wh":"16000;8000"} #end)
+       (#66 def stale, s8, _
+       #pragma diagram {"xy":"h35573;v-5317","wh":"16000;3200"} #end)
+       (#70 expr (!cancelled, Q::Add {job: drill})
+       #pragma diagram {"xy":"h-33502;v4550","wh":"36000;3200"} #end)
+       (#69 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h10873;v4550","wh":"16000;8000"} #end)
+       (#72 def reused, s9, h9
+       #pragma diagram {"xy":"h36573;v4550","wh":"18000;3200"} #end)
+       
+       (#132 wire #63 => #66
+       #pragma diagram {"wp":"v0|#63 #66"} #end)
+       (#133 wire #69 => #72
+       #pragma diagram {"wp":"v0|#69 #72"} #end)
+       (#170 wire #64 => #63)
+       (#173 wire #70 => #69)
+     #pragma diagram {"xy":"H-155823;V132200","wh":"116700;28600"} #end)
+    (diagram $OnReused
+       (#77 expr (!reused, Q::InsertAfter {target: h0, job: paint})
+       #pragma diagram {"xy":"h-33500;v12500","wh":"52000;3200"} #end)
+       (#76 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h11000;v10500","wh":"16000;8000"} #end)
+       (#79 def stale_after, s10, _
+       #pragma diagram {"xy":"h46500;v12500","wh":"22000;3200"} #end)
+       (#83 expr (!reused, Q::InsertBefore {target: h0, job: paint})
+       #pragma diagram {"xy":"h-33500;v-12200","wh":"52000;3200"} #end)
+       (#82 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h11000;v-10500","wh":"16000;8000"} #end)
+       (#85 def stale_before, s11, _
+       #pragma diagram {"xy":"h47500;v-8500","wh":"24000;3200"} #end)
+       (#89 expr (!reused, Q::Move {item: h0, before: L::null()})
+       #pragma diagram {"xy":"h-34500;v-2000","wh":"50000;3200"} #end)
+       (#88 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h11000;v0","wh":"16000;8000"} #end)
+       (#91 def stale_move, s12, _
+       #pragma diagram {"xy":"h46500;v2000","wh":"22000;3200"} #end)
+       
+       (#134 wire #76 => #79
+       #pragma diagram {"wp":"v2000|#76 #79"} #end)
+       (#135 wire #82 => #85
+       #pragma diagram {"wp":"v2000|#82 #85"} #end)
+       (#136 wire #88 => #91
+       #pragma diagram {"wp":"v2000|#88 #91"} #end)
+       (#177 wire #77 => #76)
+       (#180 wire #83 => #82)
+       (#183 wire #89 => #88)
+     #pragma diagram {"xy":"H-150673;V174000","wh":"127000;37000"} #end)
 }
-
--- A full queue (Paint in even slots, Drill in odd slots), all in one cycle:
--- saturation, removal of every Paint job in one command, survivor links,
--- reuse of a freed slot, dispatch, removal of every remaining job.
--- Each Q::apply block works in place on a `!` copy of its input queue.
--- The diagram reads top to bottom:
---   1. adding to the full queue is rejected;
---   2. cancelling every Paint job leaves the Drill jobs of the odd slots;
---   3. on that half queue: no Paint job left, an urgent job, dispatch, clear.
 
 _harness bulk_cancellation
 {
   diagram
-    (#0 expr _current_cycle
-    #pragma diagram {"xy":"H-90000;V-30000","wh":"16000;3200"} #end)
-    (#1 expr #2 >= #90001
-      where
-        (#2 group)
-        (#90001 group)
-    #pragma diagram {"xy":"H-60500;V-28100"} #end)
-    (#90002 expr ONE_SHOT
-    #pragma diagram {"xy":"H-92000;V-26200","wh":"20000;3200"} #end)
-    (#90003 wire #90002 => #90001)
-    (#3 def _stop_condition
-    #pragma diagram {"xy":"H-31000;V-28100","wh":"16000;3200"} #end)
-    (#4 expr L::init()
-    #pragma diagram {"xy":"H-146750;V16950","wh":"14000;3200"} #end)
-    (#5 block fill
-    #pragma diagram {"xy":"H-92750;V16950","wh":"12000;6000"} #end)
-    (#6 def full
-    #pragma diagram {"xy":"H-38250;V20650"} #end)
-    (#7 expr Q::Add {job: ONE_CYCLE_PACK}
-    #pragma diagram {"xy":"H-49250;V-950","wh":"30000;3200"} #end)
+    (#7 expr (!full, Q::Add {job: ONE_CYCLE_PACK})
+    #pragma diagram {"xy":"H-44250;V-950","wh":"40000;3200"} #end)
     (#8 block Q::apply
+    #pragma swt under_test #end
     #pragma diagram {"xy":"H-9750;V1050","wh":"16000;8000"} #end)
-    (#9 def rejected
-    #pragma diagram {"xy":"H44750;V3050","wh":"12000;3200"} #end)
-    (#10 def full_status
-    #pragma diagram {"xy":"H43750;V-950","wh":"14000;3200"} #end)
-    (#11 expr Q::CancelType {operation: Job::Paint}
-    #pragma diagram {"xy":"H-52250;V7350","wh":"36000;3200"} #end)
+    (#9 def rejected, full_status, _
+    #pragma diagram {"xy":"H18750;V1050","wh":"28000;3200"} #end)
     (#12 block Q::apply
+    #pragma swt under_test #end
     #pragma diagram {"xy":"H-9750;V14950","wh":"16000;8000"} #end)
-    (#13 def half
-    #pragma diagram {"xy":"H46750;V12950"} #end)
-    (#14 def cancel_status
-    #pragma diagram {"xy":"H43750;V34850","wh":"14000;3200"} #end)
-    (#15 block Q::apply
-    #pragma diagram {"xy":"H75250;V7250","wh":"16000;8000"} #end)
-    (#16 def no_match
-    #pragma diagram {"xy":"H109750;V4950","wh":"12000;3200"} #end)
-    (#17 def no_match_status
-    #pragma diagram {"xy":"H107750;V8650","wh":"16000;3200"} #end)
-    (#18 expr Q::Urgent {job: ONE_CYCLE_DRILL}
-    #pragma diagram {"xy":"H34750;V20650","wh":"32000;3200"} #end)
-    (#19 block Q::apply
-    #pragma diagram {"xy":"H75250;V18650","wh":"16000;8000"} #end)
-    (#20 def recycled
-    #pragma diagram {"xy":"H109750;V16050","wh":"12000;3200"} #end)
-    (#21 def recycle_status
-    #pragma diagram {"xy":"H107750;V23450","wh":"16000;3200"} #end)
-    (#22 def recycled_handle
-    #pragma diagram {"xy":"H107750;V19750","wh":"16000;3200"} #end)
+    (#13 def half, cancel_status, _
+    #pragma diagram {"xy":"H15950;V13950","wh":"26000;3200"} #end)
     (#23 block Q::start_next
-    #pragma diagram {"xy":"H140250;V12350","wh":"16000;8000"} #end)
-    (#24 def dispatched
-    #pragma diagram {"xy":"H170750;V14350","wh":"12000;3200"} #end)
-    (#25 def current
-    #pragma diagram {"xy":"H171750;V10350","wh":"10000;3200"} #end)
-    (#26 expr Q::CancelType {operation: Job::Drill}
-    #pragma diagram {"xy":"H32750;V31150","wh":"36000;3200"} #end)
-    (#27 block Q::apply
-    #pragma diagram {"xy":"H75250;V29150","wh":"16000;8000"} #end)
-    (#28 def cleared
-    #pragma diagram {"xy":"H110750;V31150","wh":"10000;3200"} #end)
-    (#29 def clear_status
-    #pragma diagram {"xy":"H108750;V27150","wh":"14000;3200"} #end)
-    (#61 expr !#62
-      where
-        (#62 group)
-    #pragma diagram {"xy":"H-119250;V16950"} #end)
-    (#63 expr !#64
-      where
-        (#64 group)
-    #pragma diagram {"xy":"H-38250;V3050"} #end)
-    (#65 expr !#66
-      where
-        (#66 group)
-    #pragma diagram {"xy":"H-38250;V16950"} #end)
-    (#67 expr !#68
-      where
-        (#68 group)
-    #pragma diagram {"xy":"H46750;V9250"} #end)
-    (#69 expr !#70
-      where
-        (#70 group)
-    #pragma diagram {"xy":"H46750;V16650"} #end)
-    (#71 expr !#72
-      where
-        (#72 group)
-    #pragma diagram {"xy":"H46750;V27150"} #end)
-    (#73 expr !#74
-      where
-        (#74 group)
-    #pragma diagram {"xy":"H111750;V12350"} #end)
-    
-    (#40 wire #0 => #2)
-    (#41 wire #1 => #3)
-    (#42 wire #4 => #62)
-    (#43 wire #5 .(l_out) => #6, #64, #66
-    #pragma diagram {"wp":"v0|#5 h11125[v3700 #6, v-13900 #64, #66]"} #end)
-    (#44 wire #7 => #8 .(request))
-    (#45 wire #8 .(l_out) => #9
-    #pragma diagram {"wp":"v2000|#8 #9"} #end)
-    (#46 wire #8 .(status) => #10
-    #pragma diagram {"wp":"v-2000|#8 #10"} #end)
-    (#47 wire #11 => #12 .(request), #15 .(request)
-    #pragma diagram {"wp":"#11 h9750[v6267 #12, #15]"} #end)
-    (#48 wire #12 .(l_out) => #13, #68, #70, #72
-    #pragma diagram {"wp":"v1700|#12 h15500[h16000[v-3700[#13, v-3700 #68], #70], v10500 #72]"} #end)
-    (#49 wire #12 .(status) => #14
-    #pragma diagram {"wp":"v2700|#12 h6500 v17200 #14"} #end)
-    (#50 wire #15 .(l_out) => #16
-    #pragma diagram {"wp":"v-2300|#15 #16"} #end)
-    (#51 wire #15 .(status) => #17
-    #pragma diagram {"wp":"v1400|#15 #17"} #end)
-    (#52 wire #18 => #19 .(request))
-    (#53 wire #19 .(l_out) => #20, #74
-    #pragma diagram {"wp":"v-2600|#19 h14500[#20, v-3700 #74]"} #end)
-    (#54 wire #19 .(status) => #21
-    #pragma diagram {"wp":"v2367|#19 h6167 v2433 #21"} #end)
-    (#55 wire #19 .(accepted) => #22
-    #pragma diagram {"wp":"v1100|#19 #22"} #end)
-    (#56 wire #23 .(l_out) => #24
-    #pragma diagram {"wp":"v2000|#23 #24"} #end)
-    (#57 wire #23 .(current) => #25
-    #pragma diagram {"wp":"v-2000|#23 #25"} #end)
-    (#58 wire #26 => #27 .(request))
-    (#59 wire #27 .(l_out) => #28
-    #pragma diagram {"wp":"v2000|#27 #28"} #end)
-    (#60 wire #27 .(status) => #29
-    #pragma diagram {"wp":"v-2000|#27 #29"} #end)
-    (#81 wire #61 => #5 .(l_in))
-    (#83 wire #63 => #8 .(l_in))
-    (#85 wire #65 => #12 .(l_in))
-    (#87 wire #67 => #15 .(l_in))
-    (#89 wire #69 => #19 .(l_in))
-    (#91 wire #71 => #27 .(l_in))
-    (#93 wire #73 => #23 .(l_in))
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-6512;V84150","wh":"16000;8000"} #end)
+    (#24 def dispatched, current
+    #pragma diagram {"xy":"H28988;V86150","wh":"22000;3200"} #end)
     (assert
      $capacity: L::size(full) = L::N and L::free_front(full) = L::null();
      $full_rejected: full_status = Q::QueueFull and rejected = full;
@@ -1108,7 +704,27 @@ _harness bulk_cancellation
      $cancel_every_remaining_job:
        clear_status = Q::Accepted and L::size(cleared) = 0
        and L::front(cleared) = L::null() and L::back(cleared) = L::null();
-    #pragma diagram {"xy":"H-2500;V-74050","wh":"90000;40000"} #end)
+    #pragma diagram {"xy":"H145975;V30950","wh":"90000;40000"} #end)
+    (#0 expr (!full, cancel_paint)
+    #pragma diagram {"xy":"H-43012;V14950","wh":"24000;3200"} #end)
+    (#1 expr !recycled
+    #pragma diagram {"xy":"H-27037;V86150","wh":"14000;3200"} #end)
+    (let 
+         _stop_condition = _current_cycle >= ONE_SHOT;
+         full = fill(!L::init()); -- Creates a full list
+         cancel_paint = Q::CancelType {operation: Job::Paint};
+         
+    #pragma diagram {"xy":"H-9750;V-20149","wh":"58000;9797"} #end)
+    
+    (#44 wire #7 => #8)
+    (#45 wire #8 => #9
+    #pragma diagram {"wp":"v0|#8 #9"} #end)
+    (#48 wire #12 => #13
+    #pragma diagram {"wp":"v-1000|#12 #13"} #end)
+    (#56 wire #23 => #24
+    #pragma diagram {"wp":"v2000|#23 #24"} #end)
+    (#3 wire #0 => #12)
+    (#4 wire #1 => #23)
     
     (var
         full: L::list;
@@ -1124,112 +740,77 @@ _harness bulk_cancellation
         dispatched: L::list;
         current: Q::work;
         cleared: L::list;
-        clear_status: Q::command_result;)
+        clear_status: Q::command_result;
+        cancel_paint;)
+    (diagram $OnHalf
+       (#11 expr (!half, cancel_paint)
+       #pragma diagram {"xy":"h-34500;v-12450","wh":"24000;3200"} #end)
+       (#15 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h-6000;v-11300","wh":"16000;8000"} #end)
+       (#16 def no_match, no_match_status, _
+       #pragma diagram {"xy":"h38500;v-12450","wh":"32000;3200"} #end)
+       (#18 expr (!half, Q::Urgent {job: ONE_CYCLE_DRILL})
+       #pragma diagram {"xy":"h-40500;v0","wh":"44000;3200"} #end)
+       (#19 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h-6000;v0","wh":"16000;8000"} #end)
+       (#20 def recycled, recycle_status, recycled_handle
+       #pragma diagram {"xy":"h44500;v0","wh":"44000;3200"} #end)
+       (#26 expr (!half, Q::CancelType {operation: Job::Drill})
+       #pragma diagram {"xy":"h-42500;v10600","wh":"48000;3200"} #end)
+       (#27 block Q::apply
+       #pragma swt under_test #end
+       #pragma diagram {"xy":"h-6000;v10600","wh":"16000;8000"} #end)
+       (#28 def cleared, clear_status, _
+       #pragma diagram {"xy":"h36500;v10600","wh":"28000;3200"} #end)
+       
+       (#47 wire #11 => #15)
+       (#50 wire #15 => #16
+       #pragma diagram {"wp":"v-1150|#15 #16"} #end)
+       (#52 wire #18 => #19)
+       (#53 wire #19 => #20
+       #pragma diagram {"wp":"v0|#19 #20"} #end)
+       (#58 wire #26 => #27)
+       (#59 wire #27 => #28
+       #pragma diagram {"wp":"v0|#27 #28"} #end)
+     #pragma diagram {"xy":"H-512;V49550","wh":"141000;45250"} #end)
 }
-
--- Panel gestures decoded against the cards shown at the previous cycle
--- (see gesture_script):
---   1 new Inspect, runs at once      5 drag Pack to the front
---   2 new Paint, appended            6 drag Pack back to the end
---   3 new Pack, appended             7 delete Drill: slot 2 freed
---   4 new Drill between them         8 new Rework: reuses slot 2 (version 1)
---   9 Inspect ends, Paint starts
--- The panel runs in interactive mode, every cycle, on the first memory page;
--- the gestures are decoded against the cards shown at the previous cycle
--- (the `pre` feedback of `cards`).
 
 _harness panel_gestures
 {
   diagram
-    (#0 expr _current_cycle
-    #pragma diagram {"xy":"H-80000;V0","wh":"16000;3200"} #end)
-    (#1 expr #2 >= #90001
-      where
-        (#2 group)
-        (#90001 group)
-    #pragma diagram {"xy":"H-42500;V17100"} #end)
-    (#90002 expr GESTURE_CYCLES
-    #pragma diagram {"xy":"H-82000;V19000","wh":"20000;3200"} #end)
-    (#90003 wire #90002 => #90001)
-    (#3 def _stop_condition
-    #pragma diagram {"xy":"H-13000;V17100","wh":"16000;3200"} #end)
-    (#4 def c
-    #pragma diagram {"xy":"H-41500;V-5100"} #end)
-    (#5 block gesture_script
-    #pragma diagram {"xy":"H-46500;V0","wh":"18000;6000"} #end)
-    (#6 def action
-    #pragma diagram {"xy":"H-10000;V0","wh":"10000;3200"} #end)
-    (#90004 expr V::NO_CARD ^ V::CARDS
-    #pragma diagram {"xy":"H21500;V-32150","wh":"20000;3200"} #end)
+    (#90004 expr V::NO_CARD ^ V::CARDS 
+    #pragma diagram {"xy":"H38600;V-32150","wh":"26000;3200"} #end)
     (#7 expr #90005 pre #8
       where
         (#90005 group)
         (#8 group)
     #pragma diagram {"xy":"H72000;V-30250"} #end)
-    (#90006 wire #90004 => #90005)
-    (#9 def shown
-    #pragma diagram {"xy":"H99500;V-30250","wh":"10000;3200"} #end)
     (#10 block V::decode
     #pragma diagram {"xy":"H-13000;V-8100","wh":"16000;8000"} #end)
     (#11 expr false
     #pragma diagram {"xy":"H-10000;V13400","wh":"10000;3200"} #end)
     (#12 expr true
     #pragma diagram {"xy":"H-9000;V3700"} #end)
-    (#13 expr FIRST_PAGE
-    #pragma diagram {"xy":"H-11000;V7400","wh":"12000;3200"} #end)
+    (#13 expr FIRST_PAGE 
+    #pragma diagram {"xy":"H-9000;V7400","wh":"16000;3200"} #end)
     (#14 block V::panel
+    #pragma swt under_test #end
     #pragma diagram {"xy":"H21500;V4400","wh":"20000;24000"} #end)
-    (#15 def current
-    #pragma diagram {"xy":"H73000;V-4500","wh":"10000;3200"} #end)
-    (#16 def queue_length
-    #pragma diagram {"xy":"H71000;V-800","wh":"14000;3200"} #end)
-    (#17 def command_status
-    #pragma diagram {"xy":"H70000;V10300","wh":"16000;3200"} #end)
-    (#18 def accepted
-    #pragma diagram {"xy":"H73000;V2900","wh":"10000;3200"} #end)
-    (#19 def cards
-    #pragma diagram {"xy":"H73000;V-24650","wh":"10000;3200"} #end)
-    (#20 def slots
-    #pragma diagram {"xy":"H73000;V14000","wh":"10000;3200"} #end)
-    (#21 def cells
-    #pragma diagram {"xy":"H73000;V17700","wh":"10000;3200"} #end)
-    (#22 def capacity
-    #pragma diagram {"xy":"H73000;V6600","wh":"10000;3200"} #end)
+    (#15 def current, 
+             queue_length, 
+             command_status, 
+             accepted, 
+             cards, 
+             slots, 
+             cells, 
+             capacity
+    #pragma diagram {"xy":"H68000;V12912","wh":"20000;15376"} #end)
     (#23 block (map V::card_operation) <<V::CARDS>>
-    #pragma diagram {"xy":"H63000;V-15575","wh":"30000;13950"} #end)
+    #pragma diagram {"xy":"H64225;V-13575","wh":"30000;13950"} #end)
     (#24 def ops
     #pragma diagram {"xy":"H100500;V-13588"} #end)
-    
-    (#30 wire #0 => #2, #4, #5 .(c)
-    #pragma diagram {"wp":"#0 h9750[v15200 #2, v-5100 #4, #5]"} #end)
-    (#31 wire #1 => #3)
-    (#32 wire #5 .(action) => #6, #10 .(action)
-    #pragma diagram {"wp":"v0|#5 h7750[#6, v-7600 #10]"} #end)
-    (#33 wire #7 => #9, #10 .(cards)
-    #pragma diagram {"wp":"#7 h9750[#9, v-12913 h-115000 v34563 #10]"} #end)
-    (#34 wire #10 .(request) => #14 .(command)
-    #pragma diagram {"wp":"v2250|#10 #14"} #end)
-    (#35 wire #11 => #14 .(scripted))
-    (#36 wire #12 => #14 .(run))
-    (#37 wire #13 => #14 .(page))
-    (#38 wire #14 .(current) => #15
-    #pragma diagram {"wp":"v-8900|#14 #15"} #end)
-    (#39 wire #14 .(queue_length) => #16
-    #pragma diagram {"wp":"v-5200|#14 #16"} #end)
-    (#40 wire #14 .(command_status) => #17
-    #pragma diagram {"wp":"v5900|#14 #17"} #end)
-    (#41 wire #14 .(accepted) => #18
-    #pragma diagram {"wp":"v-1500|#14 #18"} #end)
-    (#42 wire #14 .(cards) => #19, #8, #23 .(1)
-    #pragma diagram {"wp":"v-10500|#14 h2100 v-50 v-7438[v-11062[#19, v-3700 #8], #23]"} #end)
-    (#43 wire #14 .(slots) => #20
-    #pragma diagram {"wp":"v9600|#14 #20"} #end)
-    (#44 wire #14 .(cells) => #21
-    #pragma diagram {"wp":"v11300|#14 h31500 v2000 #21"} #end)
-    (#45 wire #14 .(capacity) => #22
-    #pragma diagram {"wp":"v2200|#14 #22"} #end)
-    (#46 wire #23 .(1) => #24
-    #pragma diagram {"wp":"v-0|#23 #24"} #end)
     (assert
      $statuses: command_status = (if c = GESTURE_CYCLES then Q::NoCommand else Q::Accepted);
      $capacity_shown: capacity = L::N;
@@ -1265,18 +846,41 @@ _harness panel_gestures
            and slots[1].is_tail and slots[1].next = V::NoLink {}
            and slots[3].is_free_head and not slots[3].used and slots[3].next = V::ToSlot {slot: 4});
      -- three used slots (0, 1, 2)
-
+     
      $overview: c <> 8
        or (if L::N = V::STRIP
            then cells[0] = FULL_CELL and cells[1] = FULL_CELL and cells[2] = FULL_CELL
              and cells[3] = 0
            else cells[0] = (3 * FULL_CELL * V::STRIP) / L::N and cells[1] = 0);
     #pragma diagram {"xy":"H9250;V-82576","wh":"90000;60000"} #end)
+    (#0 expr action
+    #pragma diagram {"xy":"H-37245;V-3076","wh":"10000;3200"} #end)
+    (let 
+         c= _current_cycle;
+         action = gesture_script(c);
+         _stop_condition = c >= GESTURE_CYCLES;
+    #pragma diagram {"xy":"H24462;V39448","wh":"44000;7938"} #end)
+    
+    (#90006 wire #90004 => #90005)
+    (#33 wire #7 => #10 .(cards)
+    #pragma diagram {"wp":"#7 h9750 v-12913 h-115000 v34563 #10"} #end)
+    (#34 wire #10 => #14 .(command)
+    #pragma diagram {"wp":"v2250|#10 #14"} #end)
+    (#35 wire #11 => #14 .(scripted))
+    (#36 wire #12 => #14 .(run))
+    (#37 wire #13 => #14 .(page))
+    (#38 wire #14 => #15
+    #pragma diagram {"wp":"v8512|#14 #15"} #end)
+    (#42 wire #14 .(cards) => #8, #23
+    #pragma diagram {"wp":"v-4496|#14 h8862 v-11979[v-16275 #8, #23]"} #end)
+    (#46 wire #23 => #24
+    #pragma diagram {"wp":"v-2013|#23 #24"} #end)
+    (#2 wire #0 => #10 .(action)
+    #pragma diagram {"wp":"#0 h9495 v-3191 #10"} #end)
     
     (var
         c: uint64;
         action: V::gesture;
-        shown: V::card ^ V::CARDS;
         current: Q::work;
         queue_length: L::index;
         command_status: Q::command_result;
@@ -1288,84 +892,21 @@ _harness panel_gestures
         ops: Job::operation ^ V::CARDS;)
 }
 
--- The panel's scripted mode, running every cycle, reproduces the storyline.
--- In scripted mode the panel ignores its `command` input.
-
 _harness panel_scripted
 {
   diagram
-    (#0 expr _current_cycle
-    #pragma diagram {"xy":"H-80000;V0","wh":"16000;3200"} #end)
-    (#1 expr #2 >= #90001
-      where
-        (#2 group)
-        (#90001 group)
-    #pragma diagram {"xy":"H-42500;V1900"} #end)
-    (#90002 expr (STORY :> uint64)
-    #pragma diagram {"xy":"H-82000;V3800","wh":"20000;3200"} #end)
-    (#90003 wire #90002 => #90001)
-    (#3 def _stop_condition
-    #pragma diagram {"xy":"H-13000;V1900","wh":"16000;3200"} #end)
-    (#4 expr true
-    #pragma diagram {"xy":"H-112500;V-23200"} #end)
-    (#5 expr Q::Wait {}
-    #pragma diagram {"xy":"H-114500;V-17200","wh":"12000;3200"} #end)
-    (#6 expr FIRST_PAGE
-    #pragma diagram {"xy":"H-114500;V-35200","wh":"12000;3200"} #end)
+    (#0 expr _current_cycle 
+    #pragma diagram {"xy":"H-53800;V0","wh":"20000;3200"} #end)
+    (#6 expr (page: FIRST_PAGE, 
+                 scripted: true, 
+                 run: true, 
+                 command: Q::Wait {})
+    #pragma diagram {"xy":"H-111800;V-28031","wh":"28000;7938"} #end)
     (#7 block V::panel
+    #pragma swt under_test #end
     #pragma diagram {"xy":"H-82000;V-26200","wh":"20000;24000"} #end)
-    (#8 def current
-    #pragma diagram {"xy":"H-42500;V-32200","wh":"10000;3200"} #end)
-    (#9 def queue_length
-    #pragma diagram {"xy":"H-44500;V-28200","wh":"14000;3200"} #end)
-    (#10 def command_status
-    #pragma diagram {"xy":"H-45500;V-20200","wh":"16000;3200"} #end)
-    (#11 def accepted
-    #pragma diagram {"xy":"H-42500;V-24200","wh":"10000;3200"} #end)
-    (#12 def cards
-    #pragma diagram {"xy":"H-42500;V-36200","wh":"10000;3200"} #end)
     (#13 block trace_ok
-    #pragma diagram {"xy":"H-46500;V-11100","wh":"18000;14000"} #end)
-    (#14 def status_ok
-    #pragma diagram {"xy":"H-11000;V-3700","wh":"12000;3200"} #end)
-    (#15 def accepted_ok
-    #pragma diagram {"xy":"H-11000;V-18500","wh":"12000;3200"} #end)
-    (#16 def operation_ok
-    #pragma diagram {"xy":"H-11000;V-14800","wh":"12000;3200"} #end)
-    (#17 def remaining_ok
-    #pragma diagram {"xy":"H-11000;V-11100","wh":"12000;3200"} #end)
-    (#18 def length_ok
-    #pragma diagram {"xy":"H-11000;V-7400","wh":"12000;3200"} #end)
-    
-    (#30 wire #0 => #2, #13 .(cycle)
-    #pragma diagram {"wp":"#0 h9750[#2, v-8150 #13]"} #end)
-    (#31 wire #1 => #3)
-    (#32 wire #4 => #7 .(scripted), #7 .(run)
-    #pragma diagram {"wp":"#4 h3250[#7, v1733 #7]"} #end)
-    (#33 wire #5 => #7 .(command))
-    (#34 wire #6 => #7 .(page))
-    (#35 wire #7 .(current) => #8
-    #pragma diagram {"wp":"v-6000|#7 #8"} #end)
-    (#900 wire #7 .(current:, queue_length:, command_status:, accepted:) => #13 .(current: current, queue_length: queue_length, status: command_status, accepted: accepted)
-    #pragma diagram {"wp":"v10050|#7 #13"} #end)
-    (#36 wire #7 .(queue_length) => #9
-    #pragma diagram {"wp":"v-2000|#7 #9"} #end)
-    (#37 wire #7 .(command_status) => #10
-    #pragma diagram {"wp":"v6000|#7 #10"} #end)
-    (#38 wire #7 .(accepted) => #11
-    #pragma diagram {"wp":"v2000|#7 #11"} #end)
-    (#39 wire #7 .(cards) => #12
-    #pragma diagram {"wp":"v-10000|#7 #12"} #end)
-    (#40 wire #13 .(status_ok) => #14
-    #pragma diagram {"wp":"v5233|#13 h17500 v2167 #14"} #end)
-    (#41 wire #13 .(accepted_ok) => #15
-    #pragma diagram {"wp":"v-5233|#13 h15500 v-2167 #15"} #end)
-    (#42 wire #13 .(operation_ok) => #16
-    #pragma diagram {"wp":"v-3700|#13 #16"} #end)
-    (#43 wire #13 .(remaining_ok) => #17
-    #pragma diagram {"wp":"v0|#13 #17"} #end)
-    (#44 wire #13 .(length_ok) => #18
-    #pragma diagram {"wp":"v3700|#13 #18"} #end)
+    #pragma diagram {"xy":"H-24100;V-3600","wh":"18000;14000"} #end)
     (assert
      $command_status: status_ok;
      $accepted_handle: accepted_ok;
@@ -1374,13 +915,37 @@ _harness panel_scripted
      $pending_queue_length: length_ok;
      $cards_match_length: (cards .[queue_length] default V::NO_CARD).present = false
        and (queue_length = 0 or cards[0].present);
-    #pragma diagram {"xy":"H-60750;V-56600","wh":"80000;16000"} #end)
+    #pragma diagram {"xy":"H-63750;V-67000","wh":"80000;16000"} #end)
+    (#1 def accepted_ok, 
+            operation_ok, 
+            remaining_ok, 
+            length_ok, 
+            status_ok
+    #pragma diagram {"xy":"H13000;V-3600","wh":"18000;9797"} #end)
+    (let _stop_condition = _current_cycle >= (STORY:>uint64);
+    #pragma diagram {"xy":"H-44100;V-50400","wh":"58000;3200"} #end)
+    (#3 def _, 
+            queue_length, 
+            _, 
+            _, 
+            cards, 
+            _, _, _
+    #pragma diagram {"xy":"H-40900;V-36059","wh":"18000;11657"} #end)
+    
+    (#30 wire #0 => #13 .(cycle))
+    (#34 wire #6 => #7)
+    (#900 wire #7 .(current:, 
+queue_length:, 
+command_status:status, 
+accepted:) => #13
+    #pragma diagram {"wp":"v3984|#7 h22250 v16116 #13"} #end)
+    (#4 wire #7 => #3
+    #pragma diagram {"wp":"v-9859|#7 #3"} #end)
+    (#5 wire #13 => #1
+    #pragma diagram {"wp":"v0|#13 #1"} #end)
     
     (var
-        current: Q::work;
         queue_length: L::index;
-        command_status: Q::command_result;
-        accepted: L::ref;
         cards: V::card ^ V::CARDS;
         status_ok: bool;
         accepted_ok: bool;

@@ -25,19 +25,18 @@ inspected.
 
 - Ansys Scade One 2027 R1
 - Ansys SCADE Display 2027 R1, for the interactive panel only
-- Python 3, to build the panel
 
 ## Content
 
 | Folder | Content |
 |---|---|
-| `dll` | The generic list, on integers, with its tests (`TestDll...` jobs) |
-| `work-queue` | The work queue: controller, storyline, display views and tests |
-| `work-queue/display` | The SCADE Display panel generator and the Scade One project that drives the panel |
+| `work-queue` | The work queue: the list, the controller, the storyline, the display views and the tests |
+| `display` | The SCADE Display panel and the Scade One project that drives the live panel |
+| `tools` | `run_at_capacity.py`: rerun the checks at another queue capacity and measure context and stack sizes |
 
-The list in `work-queue/assets/JobList.swan` is the same module body as
-`dll/assets/Dll.swan`, instantiated on jobs: the two interfaces differ only by
-`use Job as Item;` and the capacity `N`.
+The doubly linked list is written directly on jobs in
+`work-queue/assets/JobList.swan`; its interface
+`work-queue/assets/JobList.swani` fixes the item type and the capacity `N`.
 
 ## Instructions - Scripted demo and tests
 
@@ -46,26 +45,18 @@ The list in `work-queue/assets/JobList.swan` is the same module body as
       a 35-cycle storyline that exercises every command.
     - Run the `Demo...` test jobs; each one must report all tests passed.
 
-2. In **Scade One**, open project `.\dll\dll.sproj`
-    - Run the `TestDll...` test jobs.
-
 ## Instructions - Interactive panel
 
-1. Build the panel (SCADE Display 2027 R1 command line, no GUI needed):
+Open project `.\display\demo\demo.sproj` in **Scade One** and run the `LivePanel`
+simulation job (harness `LiveDemo::live`), or start a debug session on it. Scade
+One rebuilds the panel from its sources, so no extra step is needed.
 
-    ```powershell
-    cd work-queue
-    python display\tools\build_panel.py --snapshot
-    ```
+- Click or drag the job buttons to queue jobs, drag cards to reorder them, drop
+  them on Trash to cancel them, and hover the memory slots to see their links.
 
-   If SCADE Display is not installed in `C:\Program Files\ANSYS Inc\v271`, set
-   `SCADE_DISPLAY_HOME` to its `SCADE Display` folder first.
-
-2. In **Scade One**, open project `.\work-queue\display\demo\demo.sproj`
-    - Run the `LivePanel` simulation job.
-    - Click or drag the job buttons to queue jobs, drag cards to reorder them,
-      drop them on Trash to cancel them, and hover the memory slots to see their
-      links.
+The simulation runs until you stop it from Scade One: the `live` harness has no
+stop condition, so closing the panel window alone does not end the run. Use
+Scade One's **Stop** button to finish the session.
 
 See [work-queue/README.md](work-queue/README.md) for the full description of
 the controller, the storyline, the panel gestures and the memory figures.

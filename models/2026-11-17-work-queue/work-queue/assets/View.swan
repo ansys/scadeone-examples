@@ -56,8 +56,10 @@ function card_operation (c: card;)
   returns (operation: Job::operation;)
 {
   diagram
-    (let operation = if c.present then c.operation else NO_OPERATION;
-    #pragma diagram {"xy":"H0;V0","wh":"58000;3200"} #end)
+    (let operation = if c.present 
+         then c.operation 
+         else NO_OPERATION;
+    #pragma diagram {"xy":"H-13000;V1439","wh":"32000;6078"} #end)
 }
 
 inline function link_of (r: L::ref;)
@@ -90,14 +92,14 @@ inline function slot_number (r: L::ref;)
        | L::Null :
          {
            diagram
-             (let slot = NO_SLOT;
-             #pragma diagram {"xy":"h-7000;v0","wh":"18000;3200"} #end)
+             (let slot = NO_SLOT; 
+             #pragma diagram {"xy":"h-4000;v0","wh":"24000;3200"} #end)
          #pragma diagram {"xy":"h0;v-2091","wh":"42000;7200"} #end
          }
        | L::Ref {position} :
          {
            diagram
-             (let slot = (position.idx :> int32);
+             (let slot = (position.idx :> int32); 
              #pragma diagram {"xy":"h0;v0","wh":"38000;3200"} #end)
          #pragma diagram {"xy":"h0;v8809","wh":"42000;7200"} #end
          }
@@ -109,8 +111,8 @@ inline function is_slot (r: L::ref;
   returns (matches: bool;)
 {
   diagram
-    (let matches = link_of(r) = ToSlot {slot: idx};
-    #pragma diagram {"xy":"H0;V0","wh":"48000;3200"} #end)
+    (let matches = link_of(r) = ToSlot {slot: idx}; 
+    #pragma diagram {"xy":"H1000;V0","wh":"50000;3200"} #end)
 }
 
 inline function view_slot (i: uint32;
@@ -122,12 +124,19 @@ inline function view_slot (i: uint32;
     (let
        idx = first + i;
        info = L::slot_info(l, idx);
-       view = {used: info.used, operation: if info.used then info.value.operation else Job::Production,
-         version: info.version, next: link_of(info.next), prev: link_of(info.prev),
+       view = {
+         used: info.used, 
+         operation: if info.used 
+             then info.value.operation 
+             else Job::Production,
+         version: info.version, 
+         next: link_of(info.next), 
+         prev: link_of(info.prev),
          is_head: info.used and is_slot(L::front(l), idx),
          is_tail: info.used and is_slot(L::back(l), idx),
-         is_free_head: not info.used and is_slot(L::free_front(l), idx)}: slot_view;
-    #pragma diagram {"xy":"H0;V0","wh":"96000;15376"} #end)
+         is_free_head: not info.used and is_slot(L::free_front(l), idx)
+         }: slot_view;
+    #pragma diagram {"xy":"H-13700;V-6692","wh":"66000;28392"} #end)
     
     (var
         idx: L::index;
@@ -198,17 +207,17 @@ inline function cell_fill (cell: uint32;
       <<L::N>> with <<j>>
       diagram
         (#3 block count_used
-        #pragma diagram {"xy":"h-8050;v29400","wh":"20000;14000"} #end)
+        #pragma diagram {"xy":"h3000;v-100","wh":"20000;14000"} #end)
         (#4 expr j
-        #pragma diagram {"xy":"h-38550;v35050"} #end)
+        #pragma diagram {"xy":"h-27500;v1850"} #end)
         (#5 expr last 'total
-        #pragma diagram {"xy":"h-42550;v23950","wh":"16000;3200"} #end)
+        #pragma diagram {"xy":"h-31500;v-1850","wh":"16000;3200"} #end)
         (#6 expr l
-        #pragma diagram {"xy":"h-38550;v27650"} #end)
+        #pragma diagram {"xy":"h-27500;v-5550"} #end)
         (#7 expr first
-        #pragma diagram {"xy":"h-39550;v31350","wh":"10000;3200"} #end)
+        #pragma diagram {"xy":"h-28500;v5550","wh":"10000;3200"} #end)
         (#8 def total
-        #pragma diagram {"xy":"h23450;v29400","wh":"10000;3200"} #end)
+        #pragma diagram {"xy":"h34500;v-100","wh":"10000;3200"} #end)
         
         (#9 wire #4 => #3 .(i))
         (#10 wire #5 => #3 .(count))
@@ -218,9 +227,9 @@ inline function cell_fill (cell: uint32;
         #pragma diagram {"wp":"v0|#3 #8"} #end)
       until j + 1 >= covered
       returns (total: last = 0)
-    #pragma diagram {"xy":"H-8050;V29400","wh":"56600;30000"} #end)
+    #pragma diagram {"xy":"H-18638;V30375","wh":"87600;30300"} #end)
     (#14 def used
-    #pragma diagram {"xy":"H40750;V29400"} #end)
+    #pragma diagram {"xy":"H45662;V30375"} #end)
     
     (#15 wire #2 .(2) => #14
     #pragma diagram {"wp":"v0|#2 #14"} #end)
@@ -236,8 +245,13 @@ function occupancy (l: L::list;)
   returns (cells: uint32 ^ STRIP;)
 {
   diagram
-    (let cells = (mapi (cell_fill \ l: l)) <<STRIP>> ();
-    #pragma diagram {"xy":"H0;V0","wh":"52000;3200"} #end)
+    (#0 def cells
+    #pragma diagram {"xy":"H18650;V-28400","wh":"10000;3200"} #end)
+    (#1 block (mapi (cell_fill  \ l: l)) <<STRIP>>
+    #pragma diagram {"xy":"H-4550;V-30400","wh":"20000;18000"} #end)
+    
+    (#3 wire #1 => #0
+    #pragma diagram {"wp":"v0|#1 #0"} #end)
 }
 
 inline function gap_target (cards: card ^ CARDS;
@@ -336,36 +350,24 @@ node panel (scripted: bool;
            capacity: L::index;)
 {
   diagram
-    (#0 expr run
-    #pragma diagram {"xy":"H-90738;V-21900"} #end)
+    (#0 expr if run then 1 else 0
+    #pragma diagram {"xy":"H-82913;V-14400","wh":"24000;3200"} #end)
     (#1 expr scripted
     #pragma diagram {"xy":"H2000;V-27900","wh":"12000;3200"} #end)
     (#2 expr command
     #pragma diagram {"xy":"H2000;V-13700","wh":"12000;3200"} #end)
-    (#3 expr page
-    #pragma diagram {"xy":"H156175;V11242"} #end)
-    (#4 expr if #5 then #75 else #76
-      where
-        (#5 group)
-        (#75 group)
-        (#76 group)
-    #pragma diagram {"xy":"H-84500;V-14400"} #end)
-    (#77 expr 1
-    #pragma diagram {"xy":"H-94975;V-16300","wh":"6000;3200"} #end)
-    (#78 expr 0
-    #pragma diagram {"xy":"H-94975;V-12500","wh":"6000;3200"} #end)
     (#79 expr #80 pre #7
       where
         (#80 group)
         (#7 group)
-    #pragma diagram {"dir":"nw","xy":"H-56000;V-30450"} #end)
+    #pragma diagram {"dir":"nw","xy":"H-60000;V-30450"} #end)
     (#81 expr 0
-    #pragma diagram {"dir":"nw","xy":"H-42250;V-32350","wh":"6000;3200"} #end)
+    #pragma diagram {"dir":"nw","xy":"H-46250;V-32350","wh":"6000;3200"} #end)
     (#6 expr #82 + #8
       where
         (#82 group)
         (#8 group)
-    #pragma diagram {"xy":"H-58000;V-16300"} #end)
+    #pragma diagram {"xy":"H-62000;V-16300"} #end)
     (#9 expr if #10 then #11 else #83
       where
         (#10 group)
@@ -377,18 +379,18 @@ node panel (scripted: bool;
     (#12 block Q::scenario
     #pragma diagram {"xy":"H0;V-21800","wh":"16000;8000"} #end)
     (#85 expr L::null()
-    #pragma diagram {"dir":"nw","xy":"H89250;V11367","wh":"14000;3200"} #end)
+    #pragma diagram {"xy":"H-33350;V5517","wh":"14000;3200"} #end)
     (#13 expr #86 pre #14
       where
         (#86 group)
         (#14 group)
-    #pragma diagram {"dir":"nw","xy":"H75000;V15042"} #end)
+    #pragma diagram {"xy":"H-20050;V7417"} #end)
     (#15 expr if #16 then #17 else #18
       where
         (#16 group)
         (#17 group)
         (#18 group)
-    #pragma diagram {"xy":"H92750;V1567"} #end)
+    #pragma diagram {"xy":"H14438;V5455"} #end)
     (#19 expr if #20 then #21 else #22
       where
         (#20 group)
@@ -403,70 +405,53 @@ node panel (scripted: bool;
         (#26 group)
     #pragma diagram {"dir":"nw","xy":"H118025;V21467"} #end)
     (#27 block Q::apply
-    #pragma diagram {"xy":"H71000;V-18300","wh":"20000;14000"} #end)
+    #pragma diagram {"xy":"H60675;V-18300","wh":"20000;14000"} #end)
     (#28 expr Q::Idle {}
-    #pragma diagram {"dir":"nw","xy":"H142000;V-32333","wh":"12000;3200"} #end)
+    #pragma diagram {"dir":"nw","xy":"H147450;V-33631","wh":"12000;3200"} #end)
     (#29 expr #30 pre #31
       where
         (#30 group)
         (#31 group)
-    #pragma diagram {"dir":"nw","xy":"H121450;V-31333"} #end)
+    #pragma diagram {"dir":"nw","xy":"H127350;V-31731"} #end)
     (#32 block paced_advance
     #pragma diagram {"xy":"H129125;V-12133","wh":"20000;14000"} #end)
-    (#33 block L::size
-    #pragma diagram {"xy":"H183675;V22742","wh":"14000;6000"} #end)
-    (#34 block queue_view
-    #pragma diagram {"xy":"H183675;V34942","wh":"14000;6000"} #end)
-    (#35 block page_view
-    #pragma diagram {"xy":"H183675;V13242","wh":"14000;8000"} #end)
-    (#36 block occupancy
-    #pragma diagram {"xy":"H183675;V1567","wh":"14000;6000"} #end)
-    (#37 expr L::N
-    #pragma diagram {"xy":"H102050;V29017"} #end)
     (#38 def queue
-    #pragma diagram {"xy":"H185675;V29842","wh":"10000;3200"} #end)
+    #pragma diagram {"xy":"H176250;V-6733","wh":"10000;3200"} #end)
     (#39 def current
     #pragma diagram {"xy":"H158175;V-12133","wh":"12000;3200"} #end)
-    (#40 def queue_length
-    #pragma diagram {"xy":"H215175;V22742","wh":"16000;3200"} #end)
     (#41 def command_status
-    #pragma diagram {"xy":"H108500;V-21033","wh":"18000;3200"} #end)
+    #pragma diagram {"xy":"H87800;V-18300","wh":"18000;3200"} #end)
     (#42 def accepted
-    #pragma diagram {"xy":"H111500;V-6708","wh":"12000;3200"} #end)
-    (#43 def cards
-    #pragma diagram {"xy":"H218175;V34942","wh":"10000;3200"} #end)
-    (#44 def slots
-    #pragma diagram {"xy":"H218175;V13242","wh":"10000;3200"} #end)
-    (#45 def cells
-    #pragma diagram {"xy":"H218175;V1567","wh":"10000;3200"} #end)
-    (#46 def capacity
-    #pragma diagram {"xy":"H128550;V29017","wh":"12000;3200"} #end)
+    #pragma diagram {"xy":"H84800;V-22558","wh":"12000;3200"} #end)
     (#47 expr run
     #pragma diagram {"xy":"H-50075;V-58450"} #end)
     (#48 expr run
-    #pragma diagram {"xy":"H82438;V-30450"} #end)
+    #pragma diagram {"xy":"H4000;V-2933"} #end)
     (#49 expr run
     #pragma diagram {"xy":"H113500;V167"} #end)
+    (#3 expr accepted 
+    #pragma diagram {"xy":"H-1000;V3555","wh":"14000;3200"} #end)
+    (let
+         capacity = L::N;
+         cells = occupancy(queue);
+         slots = page_view(queue, page);
+         queue_length = L::size(queue);
+         cards = queue_view(queue);
+    #pragma diagram {"xy":"H134450;V-52097","wh":"38000;11657"} #end)
     
-    (#50 wire #0 => #5
-    #pragma diagram {"wp":"#0 h3738 #5"} #end)
-    (#51 wire #4 => #8)
     (#52 wire #6 => #7, #11
-    #pragma diagram {"wp":"#6 h12250 v-9400[v-2850 #7, #11]"} #end)
-    (#87 wire #77 => #75)
-    (#88 wire #78 => #76)
+    #pragma diagram {"wp":"#6 h12013 v-9400[v-2850 #7, #11]"} #end)
     (#89 wire #81 => #80)
     (#90 wire #79 => #82
     #pragma diagram {"wp":"#79 h-3500 v12250 #82"} #end)
     (#91 wire #84 => #83
     #pragma diagram {"wp":"#84 v-8100 #83"} #end)
-    (#92 wire #85 => #86
-    #pragma diagram {"wp":"#85 h-2000 v1775 #86"} #end)
+    (#92 wire #85 => #86)
     (#53 wire #9 => #12 .(cycle))
     (#54 wire #13 => #12 .(previous), #18
-    #pragma diagram {"wp":"#13 h-79500 v-11575[v-23934 #12, #18]"} #end)
+    #pragma diagram {"wp":"#13 h6550[v-26467 #12, h11625 v-62 #18]"} #end)
     (#55 wire #15 => #14
-    #pragma diagram {"wp":"#15 h2500 v15375 #14"} #end)
+    #pragma diagram {"wp":"#15 h2500 v6462 h-47488 v-2600 #14"} #end)
     (#56 wire #1 => #20)
     (#57 wire #12 .(request) => #21
     #pragma diagram {"wp":"v0|#12 h23000 #21"} #end)
@@ -474,37 +459,28 @@ node panel (scripted: bool;
     (#59 wire #19 => #27 .(request))
     (#60 wire #23 => #25)
     (#61 wire #24 => #27 .(l_in)
-    #pragma diagram {"wp":"#24 h-53525 v-36934 #27"} #end)
+    #pragma diagram {"wp":"#24 h-63850 v-36934 #27"} #end)
     (#62 wire #27 .(l_out) => #32 .(l_in)
     #pragma diagram {"wp":"v5143|#27 #32"} #end)
     (#63 wire #27 .(status) => #41
-    #pragma diagram {"wp":"v0|#27 h20000 #41"} #end)
-    (#64 wire #27 .(accepted) => #42, #17
-    #pragma diagram {"wp":"v0|#27 h3375 v11592[#42, v6375 #17]"} #end)
-    (#65 wire #28 => #30
-    #pragma diagram {"wp":"#28 h-5775 v-900 #30"} #end)
+    #pragma diagram {"wp":"v0|#27 #41"} #end)
+    (#64 wire #27 .(accepted) => #42
+    #pragma diagram {"wp":"v-4258|#27 #42"} #end)
+    (#65 wire #28 => #30)
     (#66 wire #29 => #32 .(previous)
-    #pragma diagram {"wp":"#29 h-18450 v14747 #32"} #end)
-    (#67 wire #32 .(l_out) => #26, #38, #33 .(l), #34 .(l), #35 .(l), #36 .(l)
-    #pragma diagram {"wp":"v4000|#32 h7050 v9700[v13475[v8325[#26, v6475[#38, v5100 #34], #33], #35], #36]"} #end)
+    #pragma diagram {"wp":"#29 h-24350 v16003 #32"} #end)
+    (#67 wire #32 .(l_out) => #26, #38
+    #pragma diagram {"wp":"v5400|#32 h7050[v30100 #26, #38]"} #end)
     (#68 wire #32 .(current) => #31, #39
-    #pragma diagram {"wp":"v0|#32 h1000[v-17300 #31, #39]"} #end)
-    (#69 wire #3 => #35 .(page))
-    (#70 wire #33 => #40
-    #pragma diagram {"wp":"v0|#33 #40"} #end)
-    (#71 wire #34 .(cards) => #43
-    #pragma diagram {"wp":"v0|#34 #43"} #end)
-    (#72 wire #35 .(slots) => #44
-    #pragma diagram {"wp":"v0|#35 #44"} #end)
-    (#73 wire #36 .(cells) => #45
-    #pragma diagram {"wp":"v0|#36 #45"} #end)
-    (#74 wire #37 => #46)
+    #pragma diagram {"wp":"v0|#32 h1000[v-17698 #31, #39]"} #end)
     (#93 wire #47 => #10
     #pragma diagram {"wp":"#47 h18075 #10"} #end)
     (#94 wire #48 => #16
-    #pragma diagram {"wp":"#48 h7812 #16"} #end)
+    #pragma diagram {"wp":"#48 h7938 #16"} #end)
     (#95 wire #49 => #32 .(run)
     #pragma diagram {"wp":"#49 h2062 v-7887 #32"} #end)
+    (#5 wire #3 => #17)
+    (#33 wire #0 => #8)
     
     (var
         queue: L::list;)

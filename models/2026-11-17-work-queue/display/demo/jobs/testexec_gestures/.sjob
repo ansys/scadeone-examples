@@ -1,0 +1,18 @@
+{
+  "Version": "2.3",
+  "Kind": "TestExecution",
+  "Properties": {
+    "RootDeclarations": [
+      "LiveDemo::pointer_sessions",
+      "LiveDemo::pacing_and_fill",
+      "LiveDemo::memory_focus",
+      "LiveDemo::command_text"
+    ],
+    "Name": "TestGestures",
+    "CustomArguments": "",
+    "TestResultFile": "testResults.json"
+  },
+  "InputPaths": [
+    "assets/LiveDemo.swant"
+  ]
+}
