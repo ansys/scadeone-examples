@@ -47,16 +47,27 @@ The doubly linked list is written directly on jobs in
 
 ## Instructions - Interactive panel
 
-Open project `.\display\demo\demo.sproj` in **Scade One** and run the `LivePanel`
-simulation job (harness `LiveDemo::live`), or start a debug session on it. Scade
-One rebuilds the panel from its sources, so no extra step is needed.
+1. Build the panel bridge once, in **SCADE Display**:
+    - Open `.\display\panel\WorkQueuePanel.etp`.
+    - Select the **Scade One Co-simulation** configuration and click
+      **Generate**. This writes the panel bridge (`WorkQueuePanel.sproj`,
+      `WorkQueuePanel.swan` and `WorkQueuePanel.spanel`) into `.\display\WorkQueuePanel\`.
 
-- Click or drag the job buttons to queue jobs, drag cards to reorder them, drop
-  them on Trash to cancel them, and hover the memory slots to see their links.
+    The panel sources are committed, but the generated `.spanel` is not: Scade
+    One does not rebuild it, so this step is required before the first run (and
+    again after any change to the panel graphics).
 
-The simulation runs until you stop it from Scade One: the `live` harness has no
-stop condition, so closing the panel window alone does not end the run. Use
-Scade One's **Stop** button to finish the session.
+2. In **Scade One**, open project `.\display\demo\demo.sproj` and run the
+   `LivePanel` simulation job (harness `LiveDemo::live`), or start a debug
+   session on it.
+
+    - Click or drag the job buttons to queue jobs, drag cards to reorder them,
+      drop them on Trash to cancel them, and hover the memory slots to see their
+      links.
+
+    The simulation runs until you stop it from Scade One: the `live` harness has
+    no stop condition, so closing the panel window alone does not end the run.
+    Use Scade One's **Stop** button to finish the session.
 
 See [work-queue/README.md](work-queue/README.md) for the full description of
 the controller, the storyline, the panel gestures and the memory figures.

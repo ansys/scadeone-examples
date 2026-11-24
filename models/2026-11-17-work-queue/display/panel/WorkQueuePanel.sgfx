@@ -957,19 +957,19 @@
                             </y>
                         </scale>
                         <inputParameters>
-                            <parameter control="false" name="color" oid="699e6dbd-6648-4005-8eac-3297fe74fb98" type="int32^6">
+                            <parameter control="false" name="color" oid="7a5e0000-0000-4000-8000-000000000017" type="int32^6">
                                 <init>[4,4,4,4,4,74]</init>
                             </parameter>
-                            <parameter control="false" name="lit" oid="19e34959-8ee9-4b70-912f-cbf04ea23553" type="bool^6">
+                            <parameter control="false" name="lit" oid="7a5e0000-0000-4000-8000-000000000018" type="bool^6">
                                 <expr>control_lit</expr>
                                 <init>[false]</init>
                             </parameter>
-                            <parameter control="false" name="text" oid="1d8e5570-cbb9-4ed3-b5a7-89169d3e5814" type="char^16^6">
+                            <parameter control="false" name="text" oid="7a5e0000-0000-4000-8000-000000000019" type="char^16^6">
                                 <init>[[80,97,117,115,101,0],[83,116,101,112,0],[83,108,111,119,0],[78,111,114,109,97,108,0],[70,97,115,116,0],[70,105,108,108,0]]</init>
                             </parameter>
                         </inputParameters>
                         <outputParameters>
-                            <parameter name="hover" oid="c5923881-a36d-45c7-bc87-0866eb62490b" type="bool^6">
+                            <parameter name="hover" oid="7a5e0000-0000-4000-8000-000000000020" type="bool^6">
                                 <expr>control_hover</expr>
                             </parameter>
                         </outputParameters>
@@ -1185,19 +1185,19 @@
                             </y>
                         </scale>
                         <inputParameters>
-                            <parameter control="false" name="color" oid="b4fe3f10-7cb5-4bfa-9ad3-76509ed542b5" type="int32^7">
+                            <parameter control="false" name="color" oid="7a5e0000-0000-4000-8000-000000000017" type="int32^7">
                                 <init>[51,21,41,61,71,11,31]</init>
                             </parameter>
-                            <parameter control="false" name="lit" oid="5f2a365e-d2ba-418e-ac1d-ad77e21cd117" type="bool^7">
+                            <parameter control="false" name="lit" oid="7a5e0000-0000-4000-8000-000000000018" type="bool^7">
                                 <expr>tool_lit</expr>
                                 <init>[false]</init>
                             </parameter>
-                            <parameter control="false" name="text" oid="264fe469-d674-422b-ac2b-d2c6075bf572" type="char^16^7">
+                            <parameter control="false" name="text" oid="7a5e0000-0000-4000-8000-000000000019" type="char^16^7">
                                 <init>[[73,110,115,112,101,99,116,0],[80,97,105,110,116,0],[80,97,99,107,0],[68,114,105,108,108,0],[82,101,119,111,114,107,0],[83,97,102,101,116,121,0],[80,114,111,100,117,99,116,105,111,110,0]]</init>
                             </parameter>
                         </inputParameters>
                         <outputParameters>
-                            <parameter name="hover" oid="ac1c2a02-af24-4305-b8b4-27f2f553b558" type="bool^7">
+                            <parameter name="hover" oid="7a5e0000-0000-4000-8000-000000000020" type="bool^7">
                                 <expr>tool_hover</expr>
                             </parameter>
                         </outputParameters>
@@ -1281,33 +1281,33 @@
                             </y>
                         </scale>
                         <inputParameters>
-                            <parameter control="false" name="present" oid="e6117fff-87d8-4a89-869b-73c39bcb388d" type="bool^8">
+                            <parameter control="false" name="present" oid="7a5e0000-0000-4000-8000-000000000002" type="bool^8">
                                 <expr>card_present</expr>
                                 <init>[false]</init>
                             </parameter>
-                            <parameter control="false" name="color" oid="37ea426e-3ceb-4280-b6f2-ddc6c3dad75f" type="int32^8">
+                            <parameter control="false" name="color" oid="7a5e0000-0000-4000-8000-000000000003" type="int32^8">
                                 <expr>card_color</expr>
                                 <init>[5]</init>
                             </parameter>
-                            <parameter control="false" name="edge" oid="4b19a7f2-2d42-4c13-8342-13082a7445f3" type="int32^8">
+                            <parameter control="false" name="edge" oid="7a5e0000-0000-4000-8000-000000000004" type="int32^8">
                                 <expr>card_edge</expr>
                                 <init>[2]</init>
                             </parameter>
-                            <parameter control="false" name="slot" oid="fc8831f9-cd1b-4f2b-896e-2d2443dc63d9" type="float32^8">
+                            <parameter control="false" name="slot" oid="7a5e0000-0000-4000-8000-000000000005" type="float32^8">
                                 <expr>card_slot</expr>
                                 <init>[0.0]</init>
                             </parameter>
-                            <parameter control="false" name="name" oid="2e6fefa8-e0d6-4b50-9005-db1405e712e4" type="char^16^8">
+                            <parameter control="false" name="name" oid="7a5e0000-0000-4000-8000-000000000006" type="char^16^8">
                                 <expr>card_name</expr>
                                 <init>[[0]]</init>
                             </parameter>
-                            <parameter control="false" name="ink" oid="c939497a-897c-4d55-96f2-a04d66126d3a" type="int32^8">
+                            <parameter control="false" name="ink" oid="7a5e0000-0000-4000-8000-000000000007" type="int32^8">
                                 <expr>card_ink</expr>
                                 <init>[1]</init>
                             </parameter>
                         </inputParameters>
                         <outputParameters>
-                            <parameter name="hover" oid="e2792706-1351-4bbb-a04b-07b309b63d1d" type="bool^8">
+                            <parameter name="hover" oid="7a5e0000-0000-4000-8000-000000000008" type="bool^8">
                                 <expr>card_hover</expr>
                             </parameter>
                         </outputParameters>
@@ -1348,19 +1348,19 @@
                             </y>
                         </scale>
                         <inputParameters>
-                            <parameter control="false" name="color" oid="e8e58420-9556-4158-a596-2b01a57257b0" type="int32^2">
+                            <parameter control="false" name="color" oid="7a5e0000-0000-4000-8000-000000000017" type="int32^2">
                                 <init>[6,16]</init>
                             </parameter>
-                            <parameter control="false" name="lit" oid="7ae7e791-c0db-46e6-9063-bc6986cbce1d" type="bool^2">
+                            <parameter control="false" name="lit" oid="7a5e0000-0000-4000-8000-000000000018" type="bool^2">
                                 <expr>zone_lit</expr>
                                 <init>[false]</init>
                             </parameter>
-                            <parameter control="false" name="text" oid="ca5ef923-d448-46d2-97c4-f55eb971400a" type="char^16^2">
+                            <parameter control="false" name="text" oid="7a5e0000-0000-4000-8000-000000000019" type="char^16^2">
                                 <init>[[69,110,100,0],[84,114,97,115,104,0]]</init>
                             </parameter>
                         </inputParameters>
                         <outputParameters>
-                            <parameter name="hover" oid="5330ba39-5772-4628-8fb0-2b451397a5ed" type="bool^2">
+                            <parameter name="hover" oid="7a5e0000-0000-4000-8000-000000000020" type="bool^2">
                                 <expr>zone_hover</expr>
                             </parameter>
                         </outputParameters>
@@ -1444,45 +1444,45 @@
                             </y>
                         </scale>
                         <inputParameters>
-                            <parameter control="false" name="color" oid="3449015e-361c-49ee-a6d7-a54c08a907a4" type="int32^64">
+                            <parameter control="false" name="color" oid="7a5e0000-0000-4000-8000-000000000026" type="int32^64">
                                 <expr>cell_color</expr>
                                 <init>[7]</init>
                             </parameter>
-                            <parameter control="false" name="ink" oid="143262b3-fe32-48c7-9b17-73e7bfd01839" type="int32^64">
+                            <parameter control="false" name="ink" oid="7a5e0000-0000-4000-8000-000000000027" type="int32^64">
                                 <expr>cell_ink</expr>
                                 <init>[2]</init>
                             </parameter>
-                            <parameter control="false" name="version" oid="1033f90e-c157-4ee6-835d-3de09d2c1e29" type="float32^64">
+                            <parameter control="false" name="version" oid="7a5e0000-0000-4000-8000-000000000028" type="float32^64">
                                 <expr>cell_version</expr>
                                 <init>[0.0]</init>
                             </parameter>
-                            <parameter control="false" name="next" oid="172c4287-5604-464c-ab33-8f81fde9c4ba" type="float32^64">
+                            <parameter control="false" name="next" oid="7a5e0000-0000-4000-8000-000000000029" type="float32^64">
                                 <expr>cell_next</expr>
                                 <init>[0.0]</init>
                             </parameter>
-                            <parameter control="false" name="linked" oid="64d66a8a-a530-4eb3-b4b1-778c47b165d5" type="bool^64">
+                            <parameter control="false" name="linked" oid="7a5e0000-0000-4000-8000-000000000030" type="bool^64">
                                 <expr>cell_linked</expr>
                                 <init>[false]</init>
                             </parameter>
-                            <parameter control="false" name="head" oid="e5b9359f-b144-4f98-99a3-ac3fd71cb8d4" type="bool^64">
+                            <parameter control="false" name="head" oid="7a5e0000-0000-4000-8000-000000000031" type="bool^64">
                                 <expr>cell_head</expr>
                                 <init>[false]</init>
                             </parameter>
-                            <parameter control="false" name="tail" oid="32c0cf0b-7033-4b18-adc4-029aef848e2e" type="bool^64">
+                            <parameter control="false" name="tail" oid="7a5e0000-0000-4000-8000-000000000032" type="bool^64">
                                 <expr>cell_tail</expr>
                                 <init>[false]</init>
                             </parameter>
-                            <parameter control="false" name="free_head" oid="6ea43620-dffb-4ff7-bc0b-2c07e74821f9" type="bool^64">
+                            <parameter control="false" name="free_head" oid="7a5e0000-0000-4000-8000-000000000033" type="bool^64">
                                 <expr>cell_free_head</expr>
                                 <init>[false]</init>
                             </parameter>
-                            <parameter control="false" name="mark" oid="56fa453f-032d-42a5-9601-f12fec8cce29" type="int32^64">
+                            <parameter control="false" name="mark" oid="7a5e0000-0000-4000-8000-000000000034" type="int32^64">
                                 <expr>cell_mark</expr>
                                 <init>[-1]</init>
                             </parameter>
                         </inputParameters>
                         <outputParameters>
-                            <parameter name="hover" oid="f575b198-fa3d-46f5-ba24-7ca4385b7343" type="bool^64">
+                            <parameter name="hover" oid="7a5e0000-0000-4000-8000-000000000035" type="bool^64">
                                 <expr>cell_hover</expr>
                             </parameter>
                         </outputParameters>
@@ -2268,5 +2268,5 @@
     </children>
 </specification>
 
-<!-- crc32 : 3565412107 -->
+<!-- crc32 : 3743677255 -->
 

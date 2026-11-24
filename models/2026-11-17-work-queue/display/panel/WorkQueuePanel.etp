@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Project id="1" oid_count="157" defaultConfiguration="2">
+<Project id="1" oid_count="158" defaultConfiguration="2">
 	<props>
 		<Prop id="3" name="@STUDIO:PRODUCT">
 			<value>DISPLAY</value>
 		</Prop>
 		<Prop id="4" name="@SDY:RELEASE">
-			<value>27.1</value>
+			<value>25.2</value>
 		</Prop>
 		<Prop id="7" name="@SDY:DEFAULTCOLORTABLE">
 			<value>color_table.sct</value>
@@ -186,7 +186,8 @@
 			<configuration>62</configuration>
 		</Prop>
 		<Prop id="64" name="@SDY:CONFSOURCE">
-			<value>WorkQueuePanel.sgfx</value><configuration>62</configuration>
+			<value>WorkQueuePanel.sgfx</value>
+			<configuration>62</configuration>
 		</Prop>
 		<Prop id="65" name="@SDY:SUITEKCG">
 			<value>C QUAL663</value>
@@ -208,7 +209,7 @@
 			<configuration>62</configuration>
 		</Prop>
 		<Prop id="70" name="@SDY:CONFOUTPUT">
-			<value>%ModelName%_%Target%</value>
+			<value>..\WorkQueuePanel</value>
 			<configuration>62</configuration>
 		</Prop>
 		<Prop id="71" name="@SDY:CONFPANELNAME">
@@ -499,6 +500,9 @@ $(CreatedDate)</value>
 		<Prop id="157" name="@SDY:KEYBOARDID">
 			<value>0</value>
 			<configuration>149</configuration>
+		</Prop>
+		<Prop id="158" name="@SDY:FONTLIBRARY">
+			<value>Fonts.dll</value>
 		</Prop>
 	</props>
 	<roots>

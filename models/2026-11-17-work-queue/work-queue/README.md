@@ -124,10 +124,13 @@ panel, independent of the capacity N:
 ### Interactive panel
 
 [../display/](../display) holds the SCADE Display panel and the Scade One
-project that drives it. Open
+project that drives it. First generate the panel bridge in SCADE Display: open
+[../display/panel/WorkQueuePanel.etp](../display/panel/WorkQueuePanel.etp),
+select the **Scade One Co-simulation** configuration and click **Generate**
+(the committed `.spanel` is not rebuilt by Scade One, so this is needed before
+the first run and after any panel change). Then open
 [../display/demo/demo.sproj](../display/demo/demo.sproj) and run the `LivePanel`
-simulation job (harness `LiveDemo::live`); the panel is rebuilt from its sources
-by Scade One, so no extra step is needed. The `live` harness has no stop
+simulation job (harness `LiveDemo::live`). The `live` harness has no stop
 condition: closing the panel window does not end the run, so stop the session
 with Scade One's **Stop** button.
 
