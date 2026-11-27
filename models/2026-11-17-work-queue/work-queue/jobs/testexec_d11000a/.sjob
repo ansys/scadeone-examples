@@ -1,0 +1,15 @@
+{
+  "Version": "2.3",
+  "Kind": "TestExecution",
+  "Properties": {
+    "RootDeclarations": [
+      "Demo::bulk_cancellation"
+    ],
+    "Name": "DemoBulkCancellation",
+    "CustomArguments": "",
+    "TestResultFile": "testResults.json"
+  },
+  "InputPaths": [
+    "assets/Demo.swant"
+  ]
+}

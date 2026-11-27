@@ -1,0 +1,32 @@
+-- version swan: 2027.0 graph: 2.1
+-- Standard job for an operation: its usual duration, in cycles of work.
+
+function make (kind: operation;)
+  returns (job: t;)
+{
+  diagram
+    (let
+       job = {
+         operation: kind,
+         duration_cycles: (case kind of
+           | Inspect : 8
+           | Paint : 20
+           | Pack : 3
+           | Drill : 8
+           | Rework : 12
+           | SafetyCheck : 2
+           | Production : 10)
+       }: t;
+    #pragma diagram {"xy":"H0;V0","wh":"48000;20954"} #end)
+}
+
+-- True when the job is of the wanted operation.
+
+function matches (value: t;
+                  wanted: key;)
+  returns (yes: bool;)
+{
+  diagram
+    (let yes = value.operation = wanted;
+    #pragma diagram {"xy":"H0;V0","wh":"42000;3200"} #end)
+}

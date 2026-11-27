@@ -1,0 +1,25 @@
+{
+  "Version": "2.3",
+  "Kind": "CodeGeneration",
+  "Properties": {
+    "RootDeclarations": [
+      "View::panel"
+    ],
+    "Name": "DemoPanelCode",
+    "CustomArguments": "",
+    "Expansion": "None",
+    "ExpansionExp": "",
+    "ExpansionNoExp": "",
+    "NameLength": "255",
+    "KeepAssume": "False",
+    "GlobalsPrefix": "",
+    "UseMacros": "False",
+    "StaticLocals": "False",
+    "Probes": "False",
+    "RootInterfaceAsGlobals": "False",
+    "MaxFunctionParameters": ""
+  },
+  "InputPaths": [
+    "assets/View.swan"
+  ]
+}

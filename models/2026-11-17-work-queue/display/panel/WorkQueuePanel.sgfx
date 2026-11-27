@@ -1,0 +1,2272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?dom version="19.0" ?>
+
+<specification>
+    <IDE>
+        <project path="WorkQueuePanel.etp"/>
+        <ratio horizontal="1" vertical="1"/>
+    </IDE>
+    <symbology>
+        <dimension height="800" width="1280"/>
+    </symbology>
+    <children>
+        <layer oid="7a5e0000-0000-4000-8000-000000000057">
+            <pathFromRoot value=""/>
+            <declaration>
+                <inputs>
+                    <input name="card_present" oid="7a5e0000-0000-4000-8000-000000000058" type="bool^8">
+                        <init>[true,true,true,true,false]</init>
+                    </input>
+                    <input name="card_color" oid="7a5e0000-0000-4000-8000-000000000059" type="int32^8">
+                        <init>[11,71,21,41,5]</init>
+                    </input>
+                    <input name="card_edge" oid="7a5e0000-0000-4000-8000-000000000060" type="int32^8">
+                        <init>[2]</init>
+                    </input>
+                    <input name="card_slot" oid="7a5e0000-0000-4000-8000-000000000061" type="float32^8">
+                        <init>[2.0,3.0,0.0,1.0,0.0]</init>
+                    </input>
+                    <input name="card_name" oid="7a5e0000-0000-4000-8000-000000000062" type="char^16^8">
+                        <init>[[83,97,102,101,116,121,0],[82,101,119,111,114,107,0],[80,97,105,110,116,0],[80,97,99,107,0],[0]]</init>
+                    </input>
+                    <input name="card_ink" oid="7a5e0000-0000-4000-8000-000000000063" type="int32^8">
+                        <init>[1]</init>
+                    </input>
+                    <input name="cell_color" oid="7a5e0000-0000-4000-8000-000000000064" type="int32^64">
+                        <init>[21,41,11,71,7]</init>
+                    </input>
+                    <input name="cell_ink" oid="7a5e0000-0000-4000-8000-000000000065" type="int32^64">
+                        <init>[2]</init>
+                    </input>
+                    <input name="cell_version" oid="7a5e0000-0000-4000-8000-000000000066" type="float32^64">
+                        <init>[0.0]</init>
+                    </input>
+                    <input name="cell_next" oid="7a5e0000-0000-4000-8000-000000000067" type="float32^64">
+                        <init>[0.0]</init>
+                    </input>
+                    <input name="cell_linked" oid="7a5e0000-0000-4000-8000-000000000068" type="bool^64">
+                        <init>[false]</init>
+                    </input>
+                    <input name="cell_head" oid="7a5e0000-0000-4000-8000-000000000069" type="bool^64">
+                        <init>[false]</init>
+                    </input>
+                    <input name="cell_tail" oid="7a5e0000-0000-4000-8000-000000000070" type="bool^64">
+                        <init>[false]</init>
+                    </input>
+                    <input name="cell_free_head" oid="7a5e0000-0000-4000-8000-000000000071" type="bool^64">
+                        <init>[false]</init>
+                    </input>
+                    <input name="cell_mark" oid="7a5e0000-0000-4000-8000-000000000072" type="int32^64">
+                        <init>[-1]</init>
+                    </input>
+                    <input name="running_color" oid="7a5e0000-0000-4000-8000-000000000073" type="int32">
+                        <init>51</init>
+                    </input>
+                    <input name="running_progress" oid="7a5e0000-0000-4000-8000-000000000074" type="float32">
+                        <init>0.4</init>
+                    </input>
+                    <input name="running_name" oid="7a5e0000-0000-4000-8000-000000000075" type="char^16">
+                        <init>[73,110,115,112,101,99,116,0]</init>
+                    </input>
+                    <input name="remaining" oid="7a5e0000-0000-4000-8000-000000000076" type="float32">
+                        <init>5.0</init>
+                    </input>
+                    <input name="queue_length" oid="7a5e0000-0000-4000-8000-000000000077" type="float32">
+                        <init>4.0</init>
+                    </input>
+                    <input name="last_text" oid="7a5e0000-0000-4000-8000-000000000078" type="char^48">
+                        <init>[73,110,115,101,114,116,32,68,114,105,108,108,32,98,101,102,111,114,101,32,80,97,99,107,0]</init>
+                    </input>
+                    <input name="status_text" oid="7a5e0000-0000-4000-8000-000000000079" type="char^24">
+                        <init>[65,99,99,101,112,116,101,100,0]</init>
+                    </input>
+                    <input name="status_color" oid="7a5e0000-0000-4000-8000-000000000080" type="int32">
+                        <init>41</init>
+                    </input>
+                    <input name="tool_lit" oid="7a5e0000-0000-4000-8000-000000000081" type="bool^7">
+                        <init>[false]</init>
+                    </input>
+                    <input name="zone_lit" oid="7a5e0000-0000-4000-8000-000000000082" type="bool^2">
+                        <init>[false]</init>
+                    </input>
+                    <input name="control_lit" oid="7a5e0000-0000-4000-8000-000000000083" type="bool^6">
+                        <init>[false,false,false,true,false]</init>
+                    </input>
+                    <input name="ghost_visible" oid="7a5e0000-0000-4000-8000-000000000084" type="bool">
+                        <init>false</init>
+                    </input>
+                    <input name="ghost_color" oid="7a5e0000-0000-4000-8000-000000000085" type="int32">
+                        <init>5</init>
+                    </input>
+                    <input name="ghost_name" oid="7a5e0000-0000-4000-8000-000000000086" type="char^16">
+                        <init>[0]</init>
+                    </input>
+                </inputs>
+                <outputs>
+                    <output memory="true" name="card_hover" oid="7a5e0000-0000-4000-8000-000000000087" type="bool^8">
+                        <init>[false]</init>
+                    </output>
+                    <output memory="true" name="tool_hover" oid="7a5e0000-0000-4000-8000-000000000088" type="bool^7">
+                        <init>[false]</init>
+                    </output>
+                    <output memory="true" name="zone_hover" oid="7a5e0000-0000-4000-8000-000000000089" type="bool^2">
+                        <init>[false]</init>
+                    </output>
+                    <output memory="true" name="control_hover" oid="7a5e0000-0000-4000-8000-000000000090" type="bool^6">
+                        <init>[false]</init>
+                    </output>
+                    <output memory="true" name="cell_hover" oid="7a5e0000-0000-4000-8000-000000000091" type="bool^64">
+                        <init>[false]</init>
+                    </output>
+                    <output memory="false" name="pressed" oid="7a5e0000-0000-4000-8000-000000000092" type="bool">
+                        <init>false</init>
+                    </output>
+                    <output memory="false" name="released" oid="7a5e0000-0000-4000-8000-000000000093" type="bool">
+                        <init>false</init>
+                    </output>
+                </outputs>
+                <locals>
+                    <local memory="true" name="ghost_px" oid="7a5e0000-0000-4000-8000-000000000094" type="float32">
+                        <init>0.5</init>
+                    </local>
+                    <local memory="true" name="ghost_py" oid="7a5e0000-0000-4000-8000-000000000095" type="float32">
+                        <init>0.5</init>
+                    </local>
+                </locals>
+            </declaration>
+            <properties name="main_layer">
+                <visible>
+                    <init>true</init>
+                </visible>
+                <origin>
+                    <x>
+                        <init>0.0</init>
+                    </x>
+                    <y>
+                        <init>0.0</init>
+                    </y>
+                </origin>
+                <id>
+                    <init>1</init>
+                </id>
+                <ratio horizontal="1" vertical="1"/>
+            </properties>
+            <children>
+                <rectangle oid="7a5e0000-0000-4000-8000-000000000096">
+                    <pathFromRoot value="0"/>
+                    <properties name="background">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <firstPoint>
+                            <x>
+                                <init>-640.0</init>
+                            </x>
+                            <y>
+                                <init>400.0</init>
+                            </y>
+                        </firstPoint>
+                        <thirdPoint>
+                            <x>
+                                <init>640.0</init>
+                            </x>
+                            <y>
+                                <init>-400.0</init>
+                            </y>
+                        </thirdPoint>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <lineStipple>
+                            <init>0</init>
+                        </lineStipple>
+                        <lineCap>
+                            <init>round</init>
+                        </lineCap>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>-1</init>
+                        </outlineColor>
+                        <outlineOpacity>
+                            <init>255</init>
+                        </outlineOpacity>
+                        <fillColor>
+                            <init>1</init>
+                        </fillColor>
+                        <fillOpacity>
+                            <init>255</init>
+                        </fillOpacity>
+                        <polygonSmooth>
+                            <init>false</init>
+                        </polygonSmooth>
+                        <textureControl>
+                            <init>false</init>
+                        </textureControl>
+                        <texture horizAlign="center" horizPattern="1.0" vertAlign="middle" vertPattern="1.0">
+                            <textureId>
+                                <init>-1</init>
+                            </textureId>
+                        </texture>
+                        <gradient>
+                            <init>-1</init>
+                        </gradient>
+                        <modulate>
+                            <init>false</init>
+                        </modulate>
+                        <tessellate>
+                            <init>false</init>
+                        </tessellate>
+                    </properties>
+                </rectangle>
+                <text oid="7a5e0000-0000-4000-8000-000000000097">
+                    <pathFromRoot value="1"/>
+                    <properties name="title">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>-620.0</init>
+                            </x>
+                            <y>
+                                <init>375.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>16</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[76, 105, 118, 101, 32, 119, 111, 114, 107, 32, 113, 117, 101, 117, 101, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>3</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000098">
+                    <pathFromRoot value="2"/>
+                    <properties name="machine_title">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>-620.0</init>
+                            </x>
+                            <y>
+                                <init>335.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>8</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[77, 97, 99, 104, 105, 110, 101, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>2</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <rectangle oid="7a5e0000-0000-4000-8000-000000000099">
+                    <pathFromRoot value="3"/>
+                    <properties name="machine_frame">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <firstPoint>
+                            <x>
+                                <init>-500.0</init>
+                            </x>
+                            <y>
+                                <init>350.0</init>
+                            </y>
+                        </firstPoint>
+                        <thirdPoint>
+                            <x>
+                                <init>-140.0</init>
+                            </x>
+                            <y>
+                                <init>320.0</init>
+                            </y>
+                        </thirdPoint>
+                        <lineWidth>
+                            <init>1</init>
+                        </lineWidth>
+                        <lineStipple>
+                            <init>0</init>
+                        </lineStipple>
+                        <lineCap>
+                            <init>round</init>
+                        </lineCap>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>5</init>
+                        </outlineColor>
+                        <outlineOpacity>
+                            <init>255</init>
+                        </outlineOpacity>
+                        <fillColor>
+                            <init>7</init>
+                        </fillColor>
+                        <fillOpacity>
+                            <init>255</init>
+                        </fillOpacity>
+                        <polygonSmooth>
+                            <init>false</init>
+                        </polygonSmooth>
+                        <textureControl>
+                            <init>false</init>
+                        </textureControl>
+                        <texture horizAlign="center" horizPattern="1.0" vertAlign="middle" vertPattern="1.0">
+                            <textureId>
+                                <init>-1</init>
+                            </textureId>
+                        </texture>
+                        <gradient>
+                            <init>-1</init>
+                        </gradient>
+                        <modulate>
+                            <init>false</init>
+                        </modulate>
+                        <tessellate>
+                            <init>false</init>
+                        </tessellate>
+                    </properties>
+                </rectangle>
+                <container oid="7a5e0000-0000-4000-8000-000000000103">
+                    <pathFromRoot value="4"/>
+                    <properties name="machine_bar">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>0.0</init>
+                            </x>
+                            <y>
+                                <init>0.0</init>
+                            </y>
+                        </origin>
+                        <priority>
+                            <init>-1</init>
+                        </priority>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <static editorLinked="true" generateStaticSequence="true" maxX="-134.0" maxY="355.0" minX="-506.0" minY="315.0">
+                            <init>false</init>
+                        </static>
+                    </properties>
+                    <children>
+                        <clipBox oid="7a5e0000-0000-4000-8000-000000000101">
+                            <pathFromRoot value="2147483647,4"/>
+                            <properties name="machine_clip">
+                                <maskActivity>
+                                    <init>true</init>
+                                </maskActivity>
+                                <clipInside>
+                                    <init>false</init>
+                                </clipInside>
+                                <firstPoint>
+                                    <x>
+                                        <init>-500.0</init>
+                                    </x>
+                                    <y>
+                                        <init>350.0</init>
+                                    </y>
+                                </firstPoint>
+                                <thirdPoint>
+                                    <x>
+                                        <init>-140.0</init>
+                                    </x>
+                                    <y>
+                                        <init>320.0</init>
+                                    </y>
+                                </thirdPoint>
+                            </properties>
+                        </clipBox>
+                        <translationContainer oid="7a5e0000-0000-4000-8000-000000000100">
+                            <pathFromRoot value="0,4"/>
+                            <properties name="machine_progress">
+                                <visible>
+                                    <init>true</init>
+                                </visible>
+                                <origin>
+                                    <x>
+                                        <init>0.0</init>
+                                    </x>
+                                    <y>
+                                        <init>0.0</init>
+                                    </y>
+                                </origin>
+                                <priority>
+                                    <init>-1</init>
+                                </priority>
+                                <refPoint>
+                                    <x>
+                                        <init>0.0</init>
+                                    </x>
+                                    <y>
+                                        <init>0.0</init>
+                                    </y>
+                                </refPoint>
+                                <startTranslationPoint>
+                                    <x>
+                                        <init>-360.0</init>
+                                    </x>
+                                    <y>
+                                        <init>0.0</init>
+                                    </y>
+                                </startTranslationPoint>
+                                <endTranslationPoint>
+                                    <x>
+                                        <init>0.0</init>
+                                    </x>
+                                    <y>
+                                        <init>0.0</init>
+                                    </y>
+                                </endTranslationPoint>
+                                <startTranslationValue>
+                                    <init>0.0</init>
+                                </startTranslationValue>
+                                <endTranslationValue>
+                                    <init>1.0</init>
+                                </endTranslationValue>
+                                <startTranslationLocked>
+                                    <init>false</init>
+                                </startTranslationLocked>
+                                <endTranslationLocked>
+                                    <init>false</init>
+                                </endTranslationLocked>
+                                <functionalTranslationValue>
+                                    <init>0.0</init>
+                                    <expr>running_progress</expr>
+                                </functionalTranslationValue>
+                            </properties>
+                            <children>
+                                <rectangle oid="7a5e0000-0000-4000-8000-000000000102">
+                                    <pathFromRoot value="0,0,4"/>
+                                    <properties name="machine_fill">
+                                        <visible>
+                                            <init>true</init>
+                                        </visible>
+                                        <firstPoint>
+                                            <x>
+                                                <init>-500.0</init>
+                                            </x>
+                                            <y>
+                                                <init>349.0</init>
+                                            </y>
+                                        </firstPoint>
+                                        <thirdPoint>
+                                            <x>
+                                                <init>-140.0</init>
+                                            </x>
+                                            <y>
+                                                <init>321.0</init>
+                                            </y>
+                                        </thirdPoint>
+                                        <lineWidth>
+                                            <init>0</init>
+                                        </lineWidth>
+                                        <lineStipple>
+                                            <init>0</init>
+                                        </lineStipple>
+                                        <lineCap>
+                                            <init>round</init>
+                                        </lineCap>
+                                        <haloing>
+                                            <init>false</init>
+                                        </haloing>
+                                        <haloColor>
+                                            <init>-1</init>
+                                        </haloColor>
+                                        <outlineColor>
+                                            <init>-1</init>
+                                        </outlineColor>
+                                        <outlineOpacity>
+                                            <init>255</init>
+                                        </outlineOpacity>
+                                        <fillColor>
+                                            <init>7</init>
+                                            <expr>running_color</expr>
+                                        </fillColor>
+                                        <fillOpacity>
+                                            <init>255</init>
+                                        </fillOpacity>
+                                        <polygonSmooth>
+                                            <init>false</init>
+                                        </polygonSmooth>
+                                        <textureControl>
+                                            <init>false</init>
+                                        </textureControl>
+                                        <texture horizAlign="center" horizPattern="1.0" vertAlign="middle" vertPattern="1.0">
+                                            <textureId>
+                                                <init>-1</init>
+                                            </textureId>
+                                        </texture>
+                                        <gradient>
+                                            <init>-1</init>
+                                        </gradient>
+                                        <modulate>
+                                            <init>false</init>
+                                        </modulate>
+                                        <tessellate>
+                                            <init>false</init>
+                                        </tessellate>
+                                    </properties>
+                                </rectangle>
+                            </children>
+                        </translationContainer>
+                    </children>
+                </container>
+                <text oid="7a5e0000-0000-4000-8000-000000000104">
+                    <pathFromRoot value="5"/>
+                    <properties name="running_label">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>-320.0</init>
+                            </x>
+                            <y>
+                                <init>335.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>16</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[73, 110, 115, 112, 101, 99, 116, 0]</init>
+                            <expr>running_name</expr>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>2</init>
+                        </font>
+                        <horizAlign>
+                            <init>center</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000105">
+                    <pathFromRoot value="6"/>
+                    <properties name="remaining_tag">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>-110.0</init>
+                            </x>
+                            <y>
+                                <init>335.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>12</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[99, 121, 99, 108, 101, 115, 32, 108, 101, 102, 116, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>0</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <biFont oid="7a5e0000-0000-4000-8000-000000000106">
+                    <pathFromRoot value="7"/>
+                    <properties name="remaining_value">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>-5.0</init>
+                            </x>
+                            <y>
+                                <init>335.0</init>
+                            </y>
+                        </position>
+                        <value>
+                            <init>0.0</init>
+                            <expr>remaining</expr>
+                        </value>
+                        <format separator="46">
+                            <integralPart>
+                                <init>5</init>
+                            </integralPart>
+                            <fractionalPart>
+                                <init>0</init>
+                            </fractionalPart>
+                            <secondFontPos>
+                                <init>0</init>
+                            </secondFontPos>
+                            <leadingZeros>
+                                <init>false</init>
+                            </leadingZeros>
+                            <displaySign>
+                                <init>whenNegative</init>
+                            </displaySign>
+                        </format>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <firstLineWidth>
+                            <init>0</init>
+                        </firstLineWidth>
+                        <firstFont>
+                            <init>2</init>
+                        </firstFont>
+                        <secondLineWidth>
+                            <init>0</init>
+                        </secondLineWidth>
+                        <secondFont>
+                            <init>2</init>
+                        </secondFont>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </biFont>
+                <text oid="7a5e0000-0000-4000-8000-000000000107">
+                    <pathFromRoot value="8"/>
+                    <properties name="length_tag">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>90.0</init>
+                            </x>
+                            <y>
+                                <init>335.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>8</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[112, 101, 110, 100, 105, 110, 103, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>0</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <biFont oid="7a5e0000-0000-4000-8000-000000000108">
+                    <pathFromRoot value="9"/>
+                    <properties name="length_value">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>195.0</init>
+                            </x>
+                            <y>
+                                <init>335.0</init>
+                            </y>
+                        </position>
+                        <value>
+                            <init>0.0</init>
+                            <expr>queue_length</expr>
+                        </value>
+                        <format separator="46">
+                            <integralPart>
+                                <init>5</init>
+                            </integralPart>
+                            <fractionalPart>
+                                <init>0</init>
+                            </fractionalPart>
+                            <secondFontPos>
+                                <init>0</init>
+                            </secondFontPos>
+                            <leadingZeros>
+                                <init>false</init>
+                            </leadingZeros>
+                            <displaySign>
+                                <init>whenNegative</init>
+                            </displaySign>
+                        </format>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <firstLineWidth>
+                            <init>0</init>
+                        </firstLineWidth>
+                        <firstFont>
+                            <init>2</init>
+                        </firstFont>
+                        <secondLineWidth>
+                            <init>0</init>
+                        </secondLineWidth>
+                        <secondFont>
+                            <init>2</init>
+                        </secondFont>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </biFont>
+                <text oid="7a5e0000-0000-4000-8000-000000000109">
+                    <pathFromRoot value="10"/>
+                    <properties name="pace_title">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>-620.0</init>
+                            </x>
+                            <y>
+                                <init>305.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>13</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[77, 97, 99, 104, 105, 110, 101, 32, 112, 97, 99, 101, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>2</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000110">
+                    <pathFromRoot value="11"/>
+                    <properties name="fill_title">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>80.0</init>
+                            </x>
+                            <y>
+                                <init>305.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>6</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[81, 117, 101, 117, 101, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>2</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <nplicatorContainer oid="7a5e0000-0000-4000-8000-000000000111">
+                    <pathFromRoot value="12"/>
+                    <properties modular="false" name="controls">
+                        <replication>
+                            <init>6</init>
+                        </replication>
+                        <file name="button.ogfx" path="."/>
+                        <crc value="186676871"/>
+                        <visible>
+                            <init>[true]</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>[-560.0, -428.0, -296.0, -164.0, -32.0, 140.0]</init>
+                            </x>
+                            <y>
+                                <init>[270.0]</init>
+                            </y>
+                        </origin>
+                        <rotate>
+                            <angle>
+                                <init>[0.0]</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <scale>
+                            <x>
+                                <init>[1.0]</init>
+                            </x>
+                            <y>
+                                <init>[1.0]</init>
+                            </y>
+                        </scale>
+                        <inputParameters>
+                            <parameter control="false" name="color" oid="7a5e0000-0000-4000-8000-000000000017" type="int32^6">
+                                <init>[4,4,4,4,4,74]</init>
+                            </parameter>
+                            <parameter control="false" name="lit" oid="7a5e0000-0000-4000-8000-000000000018" type="bool^6">
+                                <expr>control_lit</expr>
+                                <init>[false]</init>
+                            </parameter>
+                            <parameter control="false" name="text" oid="7a5e0000-0000-4000-8000-000000000019" type="char^16^6">
+                                <init>[[80,97,117,115,101,0],[83,116,101,112,0],[83,108,111,119,0],[78,111,114,109,97,108,0],[70,97,115,116,0],[70,105,108,108,0]]</init>
+                            </parameter>
+                        </inputParameters>
+                        <outputParameters>
+                            <parameter name="hover" oid="7a5e0000-0000-4000-8000-000000000020" type="bool^6">
+                                <expr>control_hover</expr>
+                            </parameter>
+                        </outputParameters>
+                    </properties>
+                    <children/>
+                </nplicatorContainer>
+                <text oid="7a5e0000-0000-4000-8000-000000000112">
+                    <pathFromRoot value="13"/>
+                    <properties name="last_tag">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>280.0</init>
+                            </x>
+                            <y>
+                                <init>367.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>14</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[76, 97, 115, 116, 32, 99, 111, 109, 109, 97, 110, 100, 58, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>0</init>
+                        </font>
+                        <horizAlign>
+                            <init>right</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000113">
+                    <pathFromRoot value="14"/>
+                    <properties name="last_text">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>290.0</init>
+                            </x>
+                            <y>
+                                <init>381.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>48</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[73, 110, 115, 101, 114, 116, 32, 68, 114, 105, 108, 108, 32, 98, 101, 102, 111, 114, 101, 32, 80, 97, 99, 107, 0]</init>
+                            <expr>last_text</expr>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>2</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000114">
+                    <pathFromRoot value="15"/>
+                    <properties name="status">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>290.0</init>
+                            </x>
+                            <y>
+                                <init>359.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>24</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[65, 99, 99, 101, 112, 116, 101, 100, 0]</init>
+                            <expr>status_text</expr>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>41</init>
+                            <expr>status_color</expr>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>2</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000115">
+                    <pathFromRoot value="16"/>
+                    <properties name="tools_title">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>-620.0</init>
+                            </x>
+                            <y>
+                                <init>225.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>5</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[74, 111, 98, 115, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>2</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <nplicatorContainer oid="7a5e0000-0000-4000-8000-000000000116">
+                    <pathFromRoot value="17"/>
+                    <properties modular="false" name="tools">
+                        <replication>
+                            <init>7</init>
+                        </replication>
+                        <file name="button.ogfx" path="."/>
+                        <crc value="186676871"/>
+                        <visible>
+                            <init>[true]</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>[-560.0, -428.0, -296.0, -164.0, -32.0, 100.0, 232.0]</init>
+                            </x>
+                            <y>
+                                <init>[190.0]</init>
+                            </y>
+                        </origin>
+                        <rotate>
+                            <angle>
+                                <init>[0.0]</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <scale>
+                            <x>
+                                <init>[1.0]</init>
+                            </x>
+                            <y>
+                                <init>[1.0]</init>
+                            </y>
+                        </scale>
+                        <inputParameters>
+                            <parameter control="false" name="color" oid="7a5e0000-0000-4000-8000-000000000017" type="int32^7">
+                                <init>[51,21,41,61,71,11,31]</init>
+                            </parameter>
+                            <parameter control="false" name="lit" oid="7a5e0000-0000-4000-8000-000000000018" type="bool^7">
+                                <expr>tool_lit</expr>
+                                <init>[false]</init>
+                            </parameter>
+                            <parameter control="false" name="text" oid="7a5e0000-0000-4000-8000-000000000019" type="char^16^7">
+                                <init>[[73,110,115,112,101,99,116,0],[80,97,105,110,116,0],[80,97,99,107,0],[68,114,105,108,108,0],[82,101,119,111,114,107,0],[83,97,102,101,116,121,0],[80,114,111,100,117,99,116,105,111,110,0]]</init>
+                            </parameter>
+                        </inputParameters>
+                        <outputParameters>
+                            <parameter name="hover" oid="7a5e0000-0000-4000-8000-000000000020" type="bool^7">
+                                <expr>tool_hover</expr>
+                            </parameter>
+                        </outputParameters>
+                    </properties>
+                    <children/>
+                </nplicatorContainer>
+                <text oid="7a5e0000-0000-4000-8000-000000000117">
+                    <pathFromRoot value="18"/>
+                    <properties name="queue_title">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>-620.0</init>
+                            </x>
+                            <y>
+                                <init>140.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>22</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[81, 117, 101, 117, 101, 32, 40, 108, 111, 103, 105, 99, 97, 108, 32, 111, 114, 100, 101, 114, 41, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>2</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <nplicatorContainer oid="7a5e0000-0000-4000-8000-000000000118">
+                    <pathFromRoot value="19"/>
+                    <properties modular="false" name="cards">
+                        <replication>
+                            <init>8</init>
+                        </replication>
+                        <file name="card.ogfx" path="."/>
+                        <crc value="3626366053"/>
+                        <visible>
+                            <init>[true]</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>[-560.0, -428.0, -296.0, -164.0, -32.0, 100.0, 232.0, 364.0]</init>
+                            </x>
+                            <y>
+                                <init>[90.0]</init>
+                            </y>
+                        </origin>
+                        <rotate>
+                            <angle>
+                                <init>[0.0]</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <scale>
+                            <x>
+                                <init>[1.0]</init>
+                            </x>
+                            <y>
+                                <init>[1.0]</init>
+                            </y>
+                        </scale>
+                        <inputParameters>
+                            <parameter control="false" name="present" oid="7a5e0000-0000-4000-8000-000000000002" type="bool^8">
+                                <expr>card_present</expr>
+                                <init>[false]</init>
+                            </parameter>
+                            <parameter control="false" name="color" oid="7a5e0000-0000-4000-8000-000000000003" type="int32^8">
+                                <expr>card_color</expr>
+                                <init>[5]</init>
+                            </parameter>
+                            <parameter control="false" name="edge" oid="7a5e0000-0000-4000-8000-000000000004" type="int32^8">
+                                <expr>card_edge</expr>
+                                <init>[2]</init>
+                            </parameter>
+                            <parameter control="false" name="slot" oid="7a5e0000-0000-4000-8000-000000000005" type="float32^8">
+                                <expr>card_slot</expr>
+                                <init>[0.0]</init>
+                            </parameter>
+                            <parameter control="false" name="name" oid="7a5e0000-0000-4000-8000-000000000006" type="char^16^8">
+                                <expr>card_name</expr>
+                                <init>[[0]]</init>
+                            </parameter>
+                            <parameter control="false" name="ink" oid="7a5e0000-0000-4000-8000-000000000007" type="int32^8">
+                                <expr>card_ink</expr>
+                                <init>[1]</init>
+                            </parameter>
+                        </inputParameters>
+                        <outputParameters>
+                            <parameter name="hover" oid="7a5e0000-0000-4000-8000-000000000008" type="bool^8">
+                                <expr>card_hover</expr>
+                            </parameter>
+                        </outputParameters>
+                    </properties>
+                    <children/>
+                </nplicatorContainer>
+                <nplicatorContainer oid="7a5e0000-0000-4000-8000-000000000119">
+                    <pathFromRoot value="20"/>
+                    <properties modular="false" name="zones">
+                        <replication>
+                            <init>2</init>
+                        </replication>
+                        <file name="button.ogfx" path="."/>
+                        <crc value="186676871"/>
+                        <visible>
+                            <init>[true]</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>[500.0]</init>
+                            </x>
+                            <y>
+                                <init>[112.0, 68.0]</init>
+                            </y>
+                        </origin>
+                        <rotate>
+                            <angle>
+                                <init>[0.0]</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <scale>
+                            <x>
+                                <init>[1.0]</init>
+                            </x>
+                            <y>
+                                <init>[1.0]</init>
+                            </y>
+                        </scale>
+                        <inputParameters>
+                            <parameter control="false" name="color" oid="7a5e0000-0000-4000-8000-000000000017" type="int32^2">
+                                <init>[6,16]</init>
+                            </parameter>
+                            <parameter control="false" name="lit" oid="7a5e0000-0000-4000-8000-000000000018" type="bool^2">
+                                <expr>zone_lit</expr>
+                                <init>[false]</init>
+                            </parameter>
+                            <parameter control="false" name="text" oid="7a5e0000-0000-4000-8000-000000000019" type="char^16^2">
+                                <init>[[69,110,100,0],[84,114,97,115,104,0]]</init>
+                            </parameter>
+                        </inputParameters>
+                        <outputParameters>
+                            <parameter name="hover" oid="7a5e0000-0000-4000-8000-000000000020" type="bool^2">
+                                <expr>zone_hover</expr>
+                            </parameter>
+                        </outputParameters>
+                    </properties>
+                    <children/>
+                </nplicatorContainer>
+                <text oid="7a5e0000-0000-4000-8000-000000000120">
+                    <pathFromRoot value="21"/>
+                    <properties name="memory_title">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>-620.0</init>
+                            </x>
+                            <y>
+                                <init>5.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>24</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[77, 101, 109, 111, 114, 121, 32, 40, 112, 104, 121, 115, 105, 99, 97, 108, 32, 115, 108, 111, 116, 115, 41, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>2</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>2</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <nplicatorContainer oid="7a5e0000-0000-4000-8000-000000000121">
+                    <pathFromRoot value="22"/>
+                    <properties modular="false" name="cells">
+                        <replication>
+                            <init>64</init>
+                        </replication>
+                        <file name="cell.ogfx" path="."/>
+                        <crc value="1801182057"/>
+                        <visible>
+                            <init>[true]</init>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>[-560.0, -490.0, -420.0, -350.0, -280.0, -210.0, -140.0, -70.0, -560.0, -490.0, -420.0, -350.0, -280.0, -210.0, -140.0, -70.0, -560.0, -490.0, -420.0, -350.0, -280.0, -210.0, -140.0, -70.0, -560.0, -490.0, -420.0, -350.0, -280.0, -210.0, -140.0, -70.0, -560.0, -490.0, -420.0, -350.0, -280.0, -210.0, -140.0, -70.0, -560.0, -490.0, -420.0, -350.0, -280.0, -210.0, -140.0, -70.0, -560.0, -490.0, -420.0, -350.0, -280.0, -210.0, -140.0, -70.0, -560.0, -490.0, -420.0, -350.0, -280.0, -210.0, -140.0, -70.0]</init>
+                            </x>
+                            <y>
+                                <init>[-30.0, -30.0, -30.0, -30.0, -30.0, -30.0, -30.0, -30.0, -74.0, -74.0, -74.0, -74.0, -74.0, -74.0, -74.0, -74.0, -118.0, -118.0, -118.0, -118.0, -118.0, -118.0, -118.0, -118.0, -162.0, -162.0, -162.0, -162.0, -162.0, -162.0, -162.0, -162.0, -206.0, -206.0, -206.0, -206.0, -206.0, -206.0, -206.0, -206.0, -250.0, -250.0, -250.0, -250.0, -250.0, -250.0, -250.0, -250.0, -294.0, -294.0, -294.0, -294.0, -294.0, -294.0, -294.0, -294.0, -338.0]</init>
+                            </y>
+                        </origin>
+                        <rotate>
+                            <angle>
+                                <init>[0.0]</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <scale>
+                            <x>
+                                <init>[1.0]</init>
+                            </x>
+                            <y>
+                                <init>[1.0]</init>
+                            </y>
+                        </scale>
+                        <inputParameters>
+                            <parameter control="false" name="color" oid="7a5e0000-0000-4000-8000-000000000026" type="int32^64">
+                                <expr>cell_color</expr>
+                                <init>[7]</init>
+                            </parameter>
+                            <parameter control="false" name="ink" oid="7a5e0000-0000-4000-8000-000000000027" type="int32^64">
+                                <expr>cell_ink</expr>
+                                <init>[2]</init>
+                            </parameter>
+                            <parameter control="false" name="version" oid="7a5e0000-0000-4000-8000-000000000028" type="float32^64">
+                                <expr>cell_version</expr>
+                                <init>[0.0]</init>
+                            </parameter>
+                            <parameter control="false" name="next" oid="7a5e0000-0000-4000-8000-000000000029" type="float32^64">
+                                <expr>cell_next</expr>
+                                <init>[0.0]</init>
+                            </parameter>
+                            <parameter control="false" name="linked" oid="7a5e0000-0000-4000-8000-000000000030" type="bool^64">
+                                <expr>cell_linked</expr>
+                                <init>[false]</init>
+                            </parameter>
+                            <parameter control="false" name="head" oid="7a5e0000-0000-4000-8000-000000000031" type="bool^64">
+                                <expr>cell_head</expr>
+                                <init>[false]</init>
+                            </parameter>
+                            <parameter control="false" name="tail" oid="7a5e0000-0000-4000-8000-000000000032" type="bool^64">
+                                <expr>cell_tail</expr>
+                                <init>[false]</init>
+                            </parameter>
+                            <parameter control="false" name="free_head" oid="7a5e0000-0000-4000-8000-000000000033" type="bool^64">
+                                <expr>cell_free_head</expr>
+                                <init>[false]</init>
+                            </parameter>
+                            <parameter control="false" name="mark" oid="7a5e0000-0000-4000-8000-000000000034" type="int32^64">
+                                <expr>cell_mark</expr>
+                                <init>[-1]</init>
+                            </parameter>
+                        </inputParameters>
+                        <outputParameters>
+                            <parameter name="hover" oid="7a5e0000-0000-4000-8000-000000000035" type="bool^64">
+                                <expr>cell_hover</expr>
+                            </parameter>
+                        </outputParameters>
+                    </properties>
+                    <children/>
+                </nplicatorContainer>
+                <text oid="7a5e0000-0000-4000-8000-000000000122">
+                    <pathFromRoot value="23"/>
+                    <properties name="help_0">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-20.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>27</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[74, 111, 98, 32, 98, 117, 116, 116, 111, 110, 32, 32, 32, 99, 108, 105, 99, 107, 58, 32, 97, 112, 112, 101, 110, 100, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000123">
+                    <pathFromRoot value="24"/>
+                    <properties name="help_1">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-46.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>48</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 100, 114, 97, 103, 32, 111, 110, 116, 111, 32, 97, 32, 99, 97, 114, 100, 58, 32, 105, 110, 115, 101, 114, 116, 32, 98, 101, 102, 111, 114, 101, 32, 105, 116, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000124">
+                    <pathFromRoot value="25"/>
+                    <properties name="help_2">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-72.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>54</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 100, 114, 97, 103, 32, 111, 110, 116, 111, 32, 84, 114, 97, 115, 104, 58, 32, 99, 97, 110, 99, 101, 108, 32, 97, 108, 108, 32, 111, 102, 32, 116, 104, 97, 116, 32, 107, 105, 110, 100, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000125">
+                    <pathFromRoot value="26"/>
+                    <properties name="help_3">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-98.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>27</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[67, 97, 114, 100, 32, 32, 32, 32, 32, 32, 32, 32, 32, 99, 108, 105, 99, 107, 58, 32, 99, 97, 110, 99, 101, 108, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000126">
+                    <pathFromRoot value="27"/>
+                    <properties name="help_4">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-124.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>46</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 100, 114, 97, 103, 32, 111, 110, 116, 111, 32, 97, 32, 99, 97, 114, 100, 58, 32, 109, 111, 118, 101, 32, 98, 101, 102, 111, 114, 101, 32, 105, 116, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000127">
+                    <pathFromRoot value="28"/>
+                    <properties name="help_5">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-150.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>56</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 100, 114, 97, 103, 32, 111, 110, 116, 111, 32, 69, 110, 100, 32, 111, 114, 32, 97, 110, 32, 101, 109, 112, 116, 121, 32, 112, 108, 97, 99, 101, 58, 32, 109, 111, 118, 101, 32, 108, 97, 115, 116, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000128">
+                    <pathFromRoot value="29"/>
+                    <properties name="help_6">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-176.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>37</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 100, 114, 97, 103, 32, 111, 110, 116, 111, 32, 84, 114, 97, 115, 104, 58, 32, 99, 97, 110, 99, 101, 108, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000129">
+                    <pathFromRoot value="30"/>
+                    <properties name="help_7">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-202.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>40</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[80, 97, 117, 115, 101, 32, 47, 32, 83, 116, 101, 112, 32, 47, 32, 115, 112, 101, 101, 100, 115, 32, 112, 97, 99, 101, 32, 116, 104, 101, 32, 109, 97, 99, 104, 105, 110, 101, 46, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000130">
+                    <pathFromRoot value="31"/>
+                    <properties name="help_8">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-228.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>34</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[70, 105, 108, 108, 32, 113, 117, 101, 117, 101, 115, 32, 111, 110, 101, 32, 106, 111, 98, 32, 111, 102, 32, 101, 97, 99, 104, 32, 107, 105, 110, 100, 46, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000131">
+                    <pathFromRoot value="32"/>
+                    <properties name="help_9">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-254.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>42</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[77, 101, 109, 111, 114, 121, 58, 32, 72, 32, 104, 101, 97, 100, 44, 32, 84, 32, 116, 97, 105, 108, 44, 32, 70, 32, 102, 114, 101, 101, 45, 108, 105, 115, 116, 32, 104, 101, 97, 100, 46, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000132">
+                    <pathFromRoot value="33"/>
+                    <properties name="help_10">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-280.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>49</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[72, 111, 118, 101, 114, 32, 97, 32, 115, 108, 111, 116, 32, 111, 114, 32, 99, 97, 114, 100, 58, 32, 119, 104, 105, 116, 101, 32, 61, 32, 105, 116, 44, 32, 121, 101, 108, 108, 111, 119, 32, 61, 32, 110, 101, 120, 116, 44, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000133">
+                    <pathFromRoot value="34"/>
+                    <properties name="help_11">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-306.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>13</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[99, 121, 97, 110, 32, 61, 32, 112, 114, 101, 118, 46, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <text oid="7a5e0000-0000-4000-8000-000000000134">
+                    <pathFromRoot value="35"/>
+                    <properties name="help_12">
+                        <visible>
+                            <init>true</init>
+                        </visible>
+                        <position>
+                            <x>
+                                <init>20.0</init>
+                            </x>
+                            <y>
+                                <init>-332.0</init>
+                            </y>
+                        </position>
+                        <maxLength>
+                            <init>44</init>
+                        </maxLength>
+                        <textValue type="char">
+                            <init>[84, 111, 112, 32, 114, 105, 103, 104, 116, 58, 32, 116, 104, 101, 32, 108, 97, 115, 116, 32, 99, 111, 109, 109, 97, 110, 100, 32, 97, 110, 100, 32, 105, 116, 115, 32, 114, 101, 115, 117, 108, 116, 46, 0]</init>
+                        </textValue>
+                        <haloing>
+                            <init>false</init>
+                        </haloing>
+                        <haloColor>
+                            <init>-1</init>
+                        </haloColor>
+                        <outlineColor>
+                            <init>4</init>
+                        </outlineColor>
+                        <lineWidth>
+                            <init>0</init>
+                        </lineWidth>
+                        <font>
+                            <init>4</init>
+                        </font>
+                        <horizAlign>
+                            <init>left</init>
+                        </horizAlign>
+                        <vertAlign>
+                            <init>middle</init>
+                        </vertAlign>
+                    </properties>
+                </text>
+                <rectangleArea oid="7a5e0000-0000-4000-8000-000000000135">
+                    <pathFromRoot value="36"/>
+                    <properties name="pointer_tracker">
+                        <enable>
+                            <init>true</init>
+                        </enable>
+                        <pointerId>
+                            <init>-1</init>
+                        </pointerId>
+                        <firstPoint>
+                            <x>
+                                <init>-640.0</init>
+                            </x>
+                            <y>
+                                <init>-400.0</init>
+                            </y>
+                        </firstPoint>
+                        <thirdPoint>
+                            <x>
+                                <init>640.0</init>
+                            </x>
+                            <y>
+                                <init>400.0</init>
+                            </y>
+                        </thirdPoint>
+                        <output>
+                            <percentWidth>
+                                <expr>ghost_px</expr>
+                            </percentWidth>
+                            <percentHeight>
+                                <expr>ghost_py</expr>
+                            </percentHeight>
+                        </output>
+                    </properties>
+                </rectangleArea>
+                <container oid="7a5e0000-0000-4000-8000-000000000136">
+                    <pathFromRoot value="37"/>
+                    <properties name="ghost">
+                        <visible>
+                            <init>false</init>
+                            <expr>ghost_visible</expr>
+                        </visible>
+                        <origin>
+                            <x>
+                                <init>0.0</init>
+                                <expr>-640.0 + (ghost_px * 1280.0)</expr>
+                            </x>
+                            <y>
+                                <init>0.0</init>
+                                <expr>-400.0 + (ghost_py * 800.0)</expr>
+                            </y>
+                        </origin>
+                        <priority>
+                            <init>-1</init>
+                        </priority>
+                        <scale>
+                            <x>
+                                <init>1.0</init>
+                            </x>
+                            <y>
+                                <init>1.0</init>
+                            </y>
+                        </scale>
+                        <rotate>
+                            <angle>
+                                <init>0.0</init>
+                            </angle>
+                        </rotate>
+                        <orientation clockwise="false"/>
+                        <static editorLinked="true" generateStaticSequence="true" maxX="66.0" maxY="41.0" minX="-66.0" minY="-41.0">
+                            <init>false</init>
+                        </static>
+                    </properties>
+                    <children>
+                        <rectangle oid="7a5e0000-0000-4000-8000-000000000137">
+                            <pathFromRoot value="0,37"/>
+                            <properties name="ghost_box">
+                                <visible>
+                                    <init>true</init>
+                                </visible>
+                                <firstPoint>
+                                    <x>
+                                        <init>-60.0</init>
+                                    </x>
+                                    <y>
+                                        <init>35.0</init>
+                                    </y>
+                                </firstPoint>
+                                <thirdPoint>
+                                    <x>
+                                        <init>60.0</init>
+                                    </x>
+                                    <y>
+                                        <init>-35.0</init>
+                                    </y>
+                                </thirdPoint>
+                                <lineWidth>
+                                    <init>2</init>
+                                </lineWidth>
+                                <lineStipple>
+                                    <init>0</init>
+                                </lineStipple>
+                                <lineCap>
+                                    <init>round</init>
+                                </lineCap>
+                                <haloing>
+                                    <init>false</init>
+                                </haloing>
+                                <haloColor>
+                                    <init>-1</init>
+                                </haloColor>
+                                <outlineColor>
+                                    <init>31</init>
+                                </outlineColor>
+                                <outlineOpacity>
+                                    <init>255</init>
+                                </outlineOpacity>
+                                <fillColor>
+                                    <init>5</init>
+                                    <expr>ghost_color</expr>
+                                </fillColor>
+                                <fillOpacity>
+                                    <init>110</init>
+                                </fillOpacity>
+                                <polygonSmooth>
+                                    <init>false</init>
+                                </polygonSmooth>
+                                <textureControl>
+                                    <init>false</init>
+                                </textureControl>
+                                <texture horizAlign="center" horizPattern="1.0" vertAlign="middle" vertPattern="1.0">
+                                    <textureId>
+                                        <init>-1</init>
+                                    </textureId>
+                                </texture>
+                                <gradient>
+                                    <init>-1</init>
+                                </gradient>
+                                <modulate>
+                                    <init>false</init>
+                                </modulate>
+                                <tessellate>
+                                    <init>false</init>
+                                </tessellate>
+                            </properties>
+                        </rectangle>
+                        <text oid="7a5e0000-0000-4000-8000-000000000138">
+                            <pathFromRoot value="1,37"/>
+                            <properties name="ghost_label">
+                                <visible>
+                                    <init>true</init>
+                                </visible>
+                                <position>
+                                    <x>
+                                        <init>0.0</init>
+                                    </x>
+                                    <y>
+                                        <init>0.0</init>
+                                    </y>
+                                </position>
+                                <maxLength>
+                                    <init>16</init>
+                                </maxLength>
+                                <textValue type="char">
+                                    <init>[0, 0]</init>
+                                    <expr>ghost_name</expr>
+                                </textValue>
+                                <haloing>
+                                    <init>false</init>
+                                </haloing>
+                                <haloColor>
+                                    <init>-1</init>
+                                </haloColor>
+                                <outlineColor>
+                                    <init>2</init>
+                                </outlineColor>
+                                <lineWidth>
+                                    <init>0</init>
+                                </lineWidth>
+                                <font>
+                                    <init>2</init>
+                                </font>
+                                <horizAlign>
+                                    <init>center</init>
+                                </horizAlign>
+                                <vertAlign>
+                                    <init>middle</init>
+                                </vertAlign>
+                            </properties>
+                        </text>
+                    </children>
+                </container>
+                <pointerEventListener oid="7a5e0000-0000-4000-8000-000000000139">
+                    <pathFromRoot value="38"/>
+                    <properties name="pointer">
+                        <enable>
+                            <init>true</init>
+                        </enable>
+                        <eventId>
+                            <init>0</init>
+                        </eventId>
+                        <relative>
+                            <init>false</init>
+                        </relative>
+                        <output>
+                            <pressed>
+                                <expr>pressed</expr>
+                            </pressed>
+                            <released>
+                                <expr>released</expr>
+                            </released>
+                            <pointerPosition/>
+                        </output>
+                    </properties>
+                </pointerEventListener>
+            </children>
+        </layer>
+    </children>
+</specification>
+
+<!-- crc32 : 3743677255 -->
+

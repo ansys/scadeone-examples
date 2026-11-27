@@ -1,6 +1,6 @@
 # Satellite Control Simulation with Scade One Python Wrapper
 
-This example is adapted from the [blog published on Ansys Innovation Space](https://innovationspace.ansys.com/knowledge/forums/forum/digital-engineering/embedded-software/).
+This example is adapted from the [blog published on Ansys Innovation Space](https://innovation.ansys.com/public/articles?public=embedded-software).
 It demonstrates how to use a Python Proxy generated from a Scade One model to perform discrete-time simulations of a satellite control system.
 
 ## Overview

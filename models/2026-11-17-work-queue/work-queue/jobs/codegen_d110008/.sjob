@@ -1,0 +1,26 @@
+{
+  "Version": "2.3",
+  "Kind": "CodeGeneration",
+  "Properties": {
+    "RootDeclarations": [
+      "WorkQueue::controller",
+      "WorkQueue::scenario"
+    ],
+    "Name": "DemoWorkQueueCode",
+    "CustomArguments": "",
+    "Expansion": "None",
+    "ExpansionExp": "",
+    "ExpansionNoExp": "",
+    "NameLength": "255",
+    "KeepAssume": "False",
+    "GlobalsPrefix": "",
+    "UseMacros": "False",
+    "StaticLocals": "False",
+    "Probes": "False",
+    "RootInterfaceAsGlobals": "False",
+    "MaxFunctionParameters": ""
+  },
+  "InputPaths": [
+    "assets/WorkQueue.swan"
+  ]
+}

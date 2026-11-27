@@ -1,0 +1,10 @@
+{
+  "JobsOrder": [
+    "jobs\\simu_live\\.sjob",
+    "jobs\\testexec_gestures\\.sjob"
+  ],
+  "ModulesOrder": [
+    "assets\\Console.swan",
+    "assets\\LiveDemo.swant"
+  ]
+}

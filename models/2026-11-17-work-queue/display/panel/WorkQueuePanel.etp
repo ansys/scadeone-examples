@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project id="1" oid_count="158" defaultConfiguration="2">
+	<props>
+		<Prop id="3" name="@STUDIO:PRODUCT">
+			<value>DISPLAY</value>
+		</Prop>
+		<Prop id="4" name="@SDY:RELEASE">
+			<value>25.2</value>
+		</Prop>
+		<Prop id="7" name="@SDY:DEFAULTCOLORTABLE">
+			<value>color_table.sct</value>
+		</Prop>
+		<Prop id="9" name="@SDY:DEFAULTLWTABLE">
+			<value>line_width_table.swt</value>
+		</Prop>
+		<Prop id="11" name="@SDY:DEFAULTLSTABLE">
+			<value>line_stipple_table.sst</value>
+		</Prop>
+		<Prop id="13" name="@SDY:TEXTURETABLE">
+			<value>texture_table.stt</value>
+		</Prop>
+		<Prop id="15" name="@SDY:GRADIENTTABLE">
+			<value>gradient_table.sgt</value>
+		</Prop>
+		<Prop id="17" name="@SDY:FONTTABLE">
+			<value>font_table.sft</value>
+		</Prop>
+		<Prop id="19" name="@SDY:CONFTARGET">
+			<value>Windows</value>
+			<configuration>18</configuration>
+		</Prop>
+		<Prop id="20" name="CONFIGURATIONS">
+			<value>18</value>
+			<value>28</value>
+			<value>37</value>
+			<value>45</value>
+			<value>54</value>
+			<value>62</value>
+			<value>72</value>
+			<value>81</value>
+			<value>90</value>
+			<value>98</value>
+			<value>140</value>
+			<value>149</value>
+		</Prop>
+		<Prop id="21" name="@SDY:CONFSOURCE">
+			<configuration>18</configuration>
+		</Prop>
+		<Prop id="22" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>18</configuration>
+		</Prop>
+		<Prop id="23" name="@SDY:KCGTEMPLATE">
+			<configuration>18</configuration>
+		</Prop>
+		<Prop id="24" name="@SDY:CONFOUTPUT">
+			<value>%ModelName%_Exe</value>
+			<configuration>18</configuration>
+		</Prop>
+		<Prop id="25" name="@SDY:APPPERIODICITY">
+			<value>33</value>
+			<configuration>18</configuration>
+		</Prop>
+		<Prop id="26" name="@SDY:POINTERID">
+			<value>0</value>
+			<configuration>18</configuration>
+		</Prop>
+		<Prop id="27" name="@SDY:KEYBOARDID">
+			<value>0</value>
+			<configuration>18</configuration>
+		</Prop>
+		<Prop id="29" name="@SDY:CONFTARGET">
+			<value>codegen</value>
+			<configuration>28</configuration>
+		</Prop>
+		<Prop id="30" name="@SDY:CONFSOURCE">
+			<configuration>28</configuration>
+		</Prop>
+		<Prop id="31" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>28</configuration>
+		</Prop>
+		<Prop id="32" name="@SDY:KCGTEMPLATE">
+			<configuration>28</configuration>
+		</Prop>
+		<Prop id="33" name="@SDY:CONFOUTPUT">
+			<value>%ModelName%_Code</value>
+			<configuration>28</configuration>
+		</Prop>
+		<Prop id="34" name="@SDY:CODEGENERATOR">
+			<value>KCG672</value>
+			<configuration>28</configuration>
+		</Prop>
+		<Prop id="35" name="@SDY:POINTERID">
+			<value>0</value>
+			<configuration>28</configuration>
+		</Prop>
+		<Prop id="36" name="@SDY:KEYBOARDID">
+			<value>0</value>
+			<configuration>28</configuration>
+		</Prop>
+		<Prop id="38" name="@SDY:CONFTARGET">
+			<value>Simulation</value>
+			<configuration>37</configuration>
+		</Prop>
+		<Prop id="39" name="@SDY:CONFSOURCE">
+			<configuration>37</configuration>
+		</Prop>
+		<Prop id="40" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>37</configuration>
+		</Prop>
+		<Prop id="41" name="@SDY:KCGTEMPLATE">
+			<configuration>37</configuration>
+		</Prop>
+		<Prop id="42" name="@SDY:CONFOUTPUT">
+			<value>%ModelName%_Simulation</value>
+			<configuration>37</configuration>
+		</Prop>
+		<Prop id="43" name="@SDY:POINTERID">
+			<value>0</value>
+			<configuration>37</configuration>
+		</Prop>
+		<Prop id="44" name="@SDY:KEYBOARDID">
+			<value>0</value>
+			<configuration>37</configuration>
+		</Prop>
+		<Prop id="46" name="@SDY:CONFTARGET">
+			<value>codegen</value>
+			<configuration>45</configuration>
+		</Prop>
+		<Prop id="47" name="@SDY:CONFSOURCE">
+			<configuration>45</configuration>
+		</Prop>
+		<Prop id="48" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>45</configuration>
+		</Prop>
+		<Prop id="49" name="@SDY:KCGTEMPLATE">
+			<configuration>45</configuration>
+		</Prop>
+		<Prop id="50" name="@SDY:CONFOUTPUT">
+			<value>%ModelName%_Code</value>
+			<configuration>45</configuration>
+		</Prop>
+		<Prop id="51" name="@SDY:CODEGENERATOR">
+			<value>KCG672</value>
+			<configuration>45</configuration>
+		</Prop>
+		<Prop id="52" name="@SDY:POINTERID">
+			<value>0</value>
+			<configuration>45</configuration>
+		</Prop>
+		<Prop id="53" name="@SDY:KEYBOARDID">
+			<value>0</value>
+			<configuration>45</configuration>
+		</Prop>
+		<Prop id="55" name="@SDY:CONFTARGET">
+			<value>Simulation</value>
+			<configuration>54</configuration>
+		</Prop>
+		<Prop id="56" name="@SDY:CONFSOURCE">
+			<configuration>54</configuration>
+		</Prop>
+		<Prop id="57" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>54</configuration>
+		</Prop>
+		<Prop id="58" name="@SDY:KCGTEMPLATE">
+			<configuration>54</configuration>
+		</Prop>
+		<Prop id="59" name="@SDY:CONFOUTPUT">
+			<value>%ModelName%_Simulation</value>
+			<configuration>54</configuration>
+		</Prop>
+		<Prop id="60" name="@SDY:POINTERID">
+			<value>0</value>
+			<configuration>54</configuration>
+		</Prop>
+		<Prop id="61" name="@SDY:KEYBOARDID">
+			<value>0</value>
+			<configuration>54</configuration>
+		</Prop>
+		<Prop id="63" name="@SDY:CONFTARGET">
+			<value>ScadeOneCosimulation</value>
+			<configuration>62</configuration>
+		</Prop>
+		<Prop id="64" name="@SDY:CONFSOURCE">
+			<value>WorkQueuePanel.sgfx</value>
+			<configuration>62</configuration>
+		</Prop>
+		<Prop id="65" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>62</configuration>
+		</Prop>
+		<Prop id="66" name="@SDY:KCGTEMPLATE">
+			<configuration>62</configuration>
+		</Prop>
+		<Prop id="67" name="@SDY:INTEGRATIONMODE">
+			<value>synchronous</value>
+			<configuration>62</configuration>
+		</Prop>
+		<Prop id="68" name="@SDY:POINTERID">
+			<value>0</value>
+			<configuration>62</configuration>
+		</Prop>
+		<Prop id="69" name="@SDY:KEYBOARDID">
+			<value>0</value>
+			<configuration>62</configuration>
+		</Prop>
+		<Prop id="70" name="@SDY:CONFOUTPUT">
+			<value>..\WorkQueuePanel</value>
+			<configuration>62</configuration>
+		</Prop>
+		<Prop id="71" name="@SDY:CONFPANELNAME">
+			<value>WorkQueuePanel</value>
+			<configuration>62</configuration>
+		</Prop>
+		<Prop id="73" name="@SDY:CONFTARGET">
+			<value>SuiteCosimulation</value>
+			<configuration>72</configuration>
+		</Prop>
+		<Prop id="74" name="@SDY:CONFSOURCE">
+			<configuration>72</configuration>
+		</Prop>
+		<Prop id="75" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>72</configuration>
+		</Prop>
+		<Prop id="76" name="@SDY:KCGTEMPLATE">
+			<configuration>72</configuration>
+		</Prop>
+		<Prop id="77" name="@SDY:APPPERIODICITY">
+			<value>33</value>
+			<configuration>72</configuration>
+		</Prop>
+		<Prop id="78" name="@SDY:INTEGRATIONMODE">
+			<value>synchronous</value>
+			<configuration>72</configuration>
+		</Prop>
+		<Prop id="79" name="@SDY:POINTERID">
+			<value>0</value>
+			<configuration>72</configuration>
+		</Prop>
+		<Prop id="80" name="@SDY:KEYBOARDID">
+			<value>0</value>
+			<configuration>72</configuration>
+		</Prop>
+		<Prop id="82" name="@SDY:CONFTARGET">
+			<value>Windows</value>
+			<configuration>81</configuration>
+		</Prop>
+		<Prop id="83" name="@SDY:CONFSOURCE">
+			<configuration>81</configuration>
+		</Prop>
+		<Prop id="84" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>81</configuration>
+		</Prop>
+		<Prop id="85" name="@SDY:KCGTEMPLATE">
+			<configuration>81</configuration>
+		</Prop>
+		<Prop id="86" name="@SDY:CONFOUTPUT">
+			<value>%ModelName%_Exe</value>
+			<configuration>81</configuration>
+		</Prop>
+		<Prop id="87" name="@SDY:APPPERIODICITY">
+			<value>33</value>
+			<configuration>81</configuration>
+		</Prop>
+		<Prop id="88" name="@SDY:POINTERID">
+			<value>0</value>
+			<configuration>81</configuration>
+		</Prop>
+		<Prop id="89" name="@SDY:KEYBOARDID">
+			<value>0</value>
+			<configuration>81</configuration>
+		</Prop>
+		<Prop id="91" name="@SDY:CONFTARGET">
+			<value>Android</value>
+			<configuration>90</configuration>
+		</Prop>
+		<Prop id="92" name="@SDY:CONFSOURCE">
+			<configuration>90</configuration>
+		</Prop>
+		<Prop id="93" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>90</configuration>
+		</Prop>
+		<Prop id="94" name="@SDY:KCGTEMPLATE">
+			<configuration>90</configuration>
+		</Prop>
+		<Prop id="95" name="@SDY:CONFOUTPUT">
+			<value>%ModelName%_%Target%</value>
+			<configuration>90</configuration>
+		</Prop>
+		<Prop id="96" name="@SDY:APPPERIODICITY">
+			<value>33</value>
+			<configuration>90</configuration>
+		</Prop>
+		<Prop id="97" name="@SDY:APPORIENTATION">
+			<value>Landscape</value>
+			<configuration>90</configuration>
+		</Prop>
+		<Prop id="99" name="@SDY:CONFTARGET">
+			<value>FMU</value>
+			<configuration>98</configuration>
+		</Prop>
+		<Prop id="100" name="@SDY:CONFSOURCE">
+			<configuration>98</configuration>
+		</Prop>
+		<Prop id="101" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>98</configuration>
+		</Prop>
+		<Prop id="102" name="@SDY:KCGTEMPLATE">
+			<configuration>98</configuration>
+		</Prop>
+		<Prop id="103" name="@SDY:CONFOUTPUT">
+			<value>%ModelName%_%Target%</value>
+			<configuration>98</configuration>
+		</Prop>
+		<Prop id="104" name="@SDY:APPPERIODICITY">
+			<value>33</value>
+			<configuration>98</configuration>
+		</Prop>
+		<Prop id="106" name="REPCONFIGURATIONS">
+			<value>105</value>
+		</Prop>
+		<Prop id="107" name="@SDYREP:CONFSOURCE">
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="108" name="@SDYREP:OUTPUT">
+			<value>%ModelName%_Report</value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="109" name="@SDYREP:INTERNATIONALIZATION">
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="110" name="@SDYREP:AUTHORS">
+			<value>&lt;authors></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="111" name="@SDYREP:CLASSIFICATION">
+			<value>&lt;document classification></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="112" name="@SDYREP:COMPANYINFO">
+			<value>&lt;company></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="113" name="@SDYREP:DISTLIST">
+			<value>&lt;distribution list></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="114" name="@SDYREP:IMAGEPATH">
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="115" name="@SDYREP:LOGOPATH">
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="116" name="@SDYREP:BANNERPATH">
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="117" name="@SDYREP:SUMMARY">
+			<value>&lt;summary></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="118" name="@SDYREP:DATE">
+			<value>&lt;date></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="119" name="@SDYREP:DESCRIPTION">
+			<value>&lt;description></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="120" name="@SDYREP:INDEX">
+			<value>&lt;index></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="121" name="@SDYREP:ISSUE">
+			<value>&lt;issue number></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="122" name="@SDYREP:REFERENCE">
+			<value>&lt;reference></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="123" name="@SDYREP:REFERENCENB">
+			<value>&lt;reference number></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="124" name="@SDYREP:SUBTITLE">
+			<value>&lt;subtitle></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="125" name="@SDYREP:TITLE">
+			<value>&lt;title></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="126" name="@SDYREP:HEADERLEFT">
+			<value>$(ReferenceNr)
+$(CreatedDate)</value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="127" name="@SDYREP:HEADERCENTER">
+			<value>$(IssueNr)</value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="128" name="@SDYREP:HEADERRIGHT">
+			<value>$(PageNumbering)</value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="129" name="@SDYREP:FOOTERLEFT">
+			<value></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="130" name="@SDYREP:FOOTERCENTER">
+			<value>&lt;Corporate Info></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="131" name="@SDYREP:FOOTERRIGHT">
+			<value></value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="132" name="@SDYREP:SCREENSHOTS">
+			<value>true</value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="133" name="@SDYREP:RESOURCES">
+			<value>$(CONFIG)/default</value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="134" name="@SDYREP:FORMAT">
+			<value>HTML</value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="135" name="@SDYREP:SUBMODELS">
+			<value>false</value>
+			<configuration>105</configuration>
+		</Prop>
+		<Prop id="141" name="@SDY:CONFTARGET">
+			<value>codegen</value>
+			<configuration>140</configuration>
+		</Prop>
+		<Prop id="142" name="@SDY:CONFSOURCE">
+			<value>WorkQueuePanel.sgfx</value>
+			<configuration>140</configuration>
+		</Prop>
+		<Prop id="143" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>140</configuration>
+		</Prop>
+		<Prop id="144" name="@SDY:KCGTEMPLATE">
+			<configuration>140</configuration>
+		</Prop>
+		<Prop id="145" name="@SDY:CONFOUTPUT">
+			<value>%ModelName%_Code</value>
+			<configuration>140</configuration>
+		</Prop>
+		<Prop id="146" name="@SDY:CODEGENERATOR">
+			<value>KCG672</value>
+			<configuration>140</configuration>
+		</Prop>
+		<Prop id="147" name="@SDY:POINTERID">
+			<value>0</value>
+			<configuration>140</configuration>
+		</Prop>
+		<Prop id="148" name="@SDY:KEYBOARDID">
+			<value>0</value>
+			<configuration>140</configuration>
+		</Prop>
+		<Prop id="150" name="@SDY:CONFTARGET">
+			<value>Windows</value>
+			<configuration>149</configuration>
+		</Prop>
+		<Prop id="151" name="@SDY:CONFSOURCE">
+			<value>WorkQueuePanel.sgfx</value>
+			<configuration>149</configuration>
+		</Prop>
+		<Prop id="152" name="@SDY:SUITEKCG">
+			<value>C QUAL663</value>
+			<configuration>149</configuration>
+		</Prop>
+		<Prop id="153" name="@SDY:KCGTEMPLATE">
+			<configuration>149</configuration>
+		</Prop>
+		<Prop id="154" name="@SDY:CONFOUTPUT">
+			<value>%ModelName%_Exe</value>
+			<configuration>149</configuration>
+		</Prop>
+		<Prop id="155" name="@SDY:APPPERIODICITY">
+			<value>33</value>
+			<configuration>149</configuration>
+		</Prop>
+		<Prop id="156" name="@SDY:POINTERID">
+			<value>0</value>
+			<configuration>149</configuration>
+		</Prop>
+		<Prop id="157" name="@SDY:KEYBOARDID">
+			<value>0</value>
+			<configuration>149</configuration>
+		</Prop>
+		<Prop id="158" name="@SDY:FONTLIBRARY">
+			<value>Fonts.dll</value>
+		</Prop>
+	</props>
+	<roots>
+		<Folder id="5" extensions="sct;sft;sgt;sst;stt;swt" name="Resource Files">
+			<elements>
+				<FileRef id="6" persistAs="color_table.sct"/>
+				<FileRef id="8" persistAs="line_width_table.swt"/>
+				<FileRef id="10" persistAs="line_stipple_table.sst"/>
+				<FileRef id="12" persistAs="texture_table.stt"/>
+				<FileRef id="14" persistAs="gradient_table.sgt"/>
+				<FileRef id="16" persistAs="font_table.sft"/>
+			</elements>
+		</Folder>
+		<FileRef id="136" persistAs="card.ogfx"/>
+		<FileRef id="137" persistAs="button.ogfx"/>
+		<FileRef id="138" persistAs="cell.ogfx"/>
+		<FileRef id="139" persistAs="WorkQueuePanel.sgfx"/>
+	</roots>
+	<configurations>
+		<Configuration id="2" name="Default"/>
+		<Configuration id="18" name="Windows"/>
+		<Configuration id="28" name="Code"/>
+		<Configuration id="37" name="Simulation"/>
+		<Configuration id="45" name="Code"/>
+		<Configuration id="54" name="Simulation"/>
+		<Configuration id="62" name="Scade One Co-simulation"/>
+		<Configuration id="72" name="Co-simulation"/>
+		<Configuration id="81" name="Windows"/>
+		<Configuration id="90" name="Android"/>
+		<Configuration id="98" name="FMU"/>
+		<Configuration id="105" name="Reporter"/>
+		<Configuration id="140" name="Code: WorkQueuePanel"/>
+		<Configuration id="149" name="Windows: WorkQueuePanel"/>
+	</configurations>
+</Project>

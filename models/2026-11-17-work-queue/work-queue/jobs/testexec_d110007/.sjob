@@ -1,0 +1,15 @@
+{
+  "Version": "2.3",
+  "Kind": "TestExecution",
+  "Properties": {
+    "RootDeclarations": [
+      "Demo::duration_boundaries"
+    ],
+    "Name": "DemoDurationBoundaries",
+    "CustomArguments": "",
+    "TestResultFile": "testResults.json"
+  },
+  "InputPaths": [
+    "assets/Demo.swant"
+  ]
+}

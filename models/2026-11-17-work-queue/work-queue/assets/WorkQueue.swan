@@ -1,0 +1,436 @@
+-- version swan: 2027.0 graph: 2.1
+use JobList as L;
+
+use Job;
+
+-- Jobs are identified by the list handle returned when they are queued.
+-- A handle stays valid while the job is pending; it goes stale when the job
+-- is cancelled or starts running, even if its slot is reused.
+
+type command =
+  Add {job: Job::t}
+  | Urgent {job: Job::t}
+  | InsertBefore {target: L::ref, job: Job::t}
+  | InsertAfter {target: L::ref, job: Job::t}
+  | Move {item: L::ref, before: L::ref}
+  | Cancel {target: L::ref}
+  | CancelType {operation: Job::operation}
+  | Wait {};
+
+type work = Idle {} | Working {job: Job::t, remaining_cycles: uint32};
+
+type command_result = enum {
+  Accepted, QueueFull, UnknownJob, InvalidDuration, NoCommand
+};
+
+-- Never a valid handle (slot index N is out of range): insert_before rejects it.
+
+const INVALID_POSITION: L::ref = L::Ref {idx: L::N, version: 0};
+
+-- Command status and returned handle for the outcome of a list insertion.
+
+function insertion_result (result: L::insert_result;)
+  returns (status: command_result;
+           accepted: L::ref;)
+{
+  diagram
+    (activate #0 when result match
+       | L::Inserted {inserted} :
+         {
+           diagram
+             (let status = Accepted; accepted = inserted.ref;
+             #pragma diagram {"xy":"h-1000;v0","wh":"46000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-7541","wh":"52000;7200"} #end
+         }
+       | L::Full :
+         {
+           diagram
+             (let status = QueueFull; accepted = L::null();
+             #pragma diagram {"xy":"h0;v0","wh":"48000;3200"} #end)
+         #pragma diagram {"xy":"h0;v3359","wh":"52000;7200"} #end
+         }
+       | L::InsertInvalidRef :
+         {
+           diagram
+             (let status = UnknownJob; accepted = L::null();
+             #pragma diagram {"xy":"h0;v0","wh":"48000;3200"} #end)
+         #pragma diagram {"xy":"h0;v14259","wh":"52000;7200"} #end
+         }
+     #pragma diagram {"xy":"H0;V0","wh":"52000;35719"} #end)
+}
+
+-- Insert `job` before `position` (Null: at the end of the queue).
+
+function insert_job (l_in * : L::list;
+                     job: Job::t;
+                     position: L::ref;)
+  returns (l_out at l_in: L::list;
+           status: command_result;
+           accepted: L::ref;)
+{
+  diagram
+    (activate #0
+       if job.duration_cycles = 0
+       then
+         {
+           diagram
+             (let l_out = !l_in; status = InvalidDuration; accepted = L::null();
+             #pragma diagram {"xy":"h0;v0","wh":"66000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-4959","wh":"70000;7200"} #end
+         }
+       else
+         {
+           diagram
+             (let
+                l_out, result = L::insert_before(l_in, position, job);
+                status, accepted = insertion_result(result);
+             #pragma diagram {"xy":"h-3000;v0","wh":"60000;6078"} #end)
+             
+             (var
+                 result: L::insert_result;)
+         #pragma diagram {"xy":"h0;v7380","wh":"70000;10078"} #end
+         }
+     #pragma diagram {"xy":"H0;V0","wh":"70000;24837"} #end)
+}
+
+-- Position just after `target`, as for L::insert_after: its successor (Null for
+-- the last job), the head for a Null target. A stale target yields an invalid
+-- position, so the insertion is rejected.
+
+function after_position (l: L::list;
+                         target: L::ref;)
+  returns (position: L::ref;)
+{
+  diagram
+    (let found, _ = L::value_at(l, target);
+    #pragma diagram {"xy":"H0;V0","wh":"36000;3200"} #end)
+    
+    (var
+        found: bool;)
+    (activate #0
+       if found
+       then
+         {
+           diagram
+             (let position = L::next_of(l, target);
+             #pragma diagram {"xy":"h-5000;v0","wh":"40000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-2600","wh":"54000;7200"} #end
+         }
+       else
+         {
+           diagram
+             (let position = if target = L::null() then L::front(l)
+              else INVALID_POSITION;
+             #pragma diagram {"xy":"h0;v0","wh":"50000;4219"} #end)
+         #pragma diagram {"xy":"h0;v8809","wh":"54000;8219"} #end
+         }
+     #pragma diagram {"xy":"H-1000;V18000","wh":"54000;25838"} #end)
+}
+
+-- Cancels the pending job at `target`; a stale handle is rejected.
+
+function cancel_job (l_in * : L::list;
+                     target: L::ref;)
+  returns (l_out at l_in: L::list;
+           status: command_result;)
+{
+  diagram
+    (let
+       l_out, result = L::remove(l_in, target);
+       status = if result = L::Removed {} then Accepted else UnknownJob;
+    #pragma diagram {"xy":"H0;V0","wh":"70000;6078"} #end)
+    
+    (var
+        result: L::remove_result;)
+}
+
+-- Relinks the pending job `item` before `before` (Null: at the end of the
+-- queue); the job keeps its slot and its handle.
+
+function move_job (l_in * : L::list;
+                   item: L::ref;
+                   before: L::ref;)
+  returns (l_out at l_in: L::list;
+           status: command_result;)
+{
+  diagram
+    (let
+       l_out, result = L::move_before(l_in, item, before);
+       status = if result = L::Moved {} then Accepted else UnknownJob;
+    #pragma diagram {"xy":"H0;V0","wh":"68000;6078"} #end)
+    
+    (var
+        result: L::move_result;)
+}
+
+-- Cancels every pending job of the given operation (L::remove_matching with
+-- Job::matches): one bounded scan of at most N steps inside the list; the
+-- survivors keep their order, slots and handles.
+
+function cancel_type (l_in * : L::list;
+                      operation: Job::operation;)
+  returns (l_out at l_in: L::list;)
+{
+  diagram
+    (let l_out, _ = L::remove_matching(l_in, operation);
+    #pragma diagram {"xy":"H0;V0","wh":"56000;3200"} #end)
+}
+
+-- Applies one command to the pending queue; a rejected command leaves it unchanged.
+
+function apply (l_in * : L::list;
+                request: command;)
+  returns (l_out at l_in: L::list;
+           status: command_result;
+           accepted: L::ref;)
+{
+  diagram
+    (activate #0 when request match
+       | Add {args} :
+         {
+           diagram
+             (let l_out, status, accepted = insert_job(l_in, args.job, L::null());
+             #pragma diagram {"xy":"h-12000;v0","wh":"68000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-36739","wh":"96000;7200"} #end
+         }
+       | Urgent {args} :
+         {
+           diagram
+             (let l_out, status, accepted = insert_job(l_in, args.job, !L::front(l_in));
+             #pragma diagram {"xy":"h-11000;v0","wh":"70000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-25839","wh":"96000;7200"} #end
+         }
+       | InsertBefore {args} :
+         {
+           diagram
+             (let l_out, status, accepted = insert_job(l_in, args.job, args.target);
+             #pragma diagram {"xy":"h-11000;v0","wh":"70000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-14939","wh":"96000;7200"} #end
+         }
+       | InsertAfter {args} :
+         {
+           diagram
+             (let l_out, status, accepted = insert_job(l_in, args.job, !after_position(l_in, args.target));
+             #pragma diagram {"xy":"h0;v0","wh":"92000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-4039","wh":"96000;7200"} #end
+         }
+       | Move {args} :
+         {
+           diagram
+             (let l_out, status = move_job(l_in, args.item, args.before);
+                  accepted = L::null();
+             #pragma diagram {"xy":"h-16000;v0","wh":"60000;4219"} #end)
+         #pragma diagram {"xy":"h0;v7370","wh":"96000;8219"} #end
+         }
+       | Cancel {args} :
+         {
+           diagram
+             (let l_out, status = cancel_job(l_in, args.target); accepted = L::null();
+             #pragma diagram {"xy":"h-10000;v0","wh":"72000;3200"} #end)
+         #pragma diagram {"xy":"h0;v18780","wh":"96000;7200"} #end
+         }
+       | CancelType {args} :
+         {
+           diagram
+             (let l_out = cancel_type(l_in, args.operation);
+                  status = Accepted;
+                  accepted = L::null();
+             #pragma diagram {"xy":"h-22000;v0","wh":"48000;6078"} #end)
+         #pragma diagram {"xy":"h0;v31119","wh":"96000;10078"} #end
+         }
+       | Wait :
+         {
+           diagram
+             (let l_out = l_in; status = NoCommand; accepted = L::null();
+             #pragma diagram {"xy":"h-16000;v0","wh":"60000;3200"} #end)
+         #pragma diagram {"xy":"h0;v43458","wh":"96000;7200"} #end
+         }
+     #pragma diagram {"xy":"H0;V0","wh":"96000;94116"} #end)
+}
+
+-- Dispatches the head job, or stays Idle when the queue is empty.
+
+function start_next (l_in * : L::list;)
+  returns (l_out at l_in: L::list;
+           current: work;)
+{
+  diagram
+    (let found, head_job = L::value_at(l_in, L::front(l_in));
+    #pragma diagram {"xy":"H0;V0","wh":"56000;3200"} #end)
+    
+    (var
+        found: bool;
+        head_job: Job::t;)
+    (activate #0
+       if not found
+       then
+         {
+           diagram
+             (let l_out = !l_in; current = Idle {};
+             #pragma diagram {"xy":"h-15000;v-2750","wh":"40000;3200"} #end)
+             (assert $empty_has_no_head: L::size(l_in) = 0;
+             #pragma diagram {"xy":"h-15000;v2750","wh":"46000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-8240","wh":"80000;12700"} #end
+         }
+       else
+         {
+           diagram
+             (let
+                job = !head_job;
+                target = !L::front(l_in);
+                l_out, result = L::remove(l_in, target);
+                current = Working {job: job, remaining_cycles: job.duration_cycles};
+             #pragma diagram {"xy":"h0;v-2851","wh":"70000;9797"} #end)
+             (assert $dispatch_valid: result = L::Removed {} and job.duration_cycles > 0;
+             #pragma diagram {"xy":"h0;v6149","wh":"76000;3200"} #end)
+             
+             (var
+                 job: Job::t;
+                 target: L::ref;
+                 result: L::remove_result;)
+         #pragma diagram {"xy":"h0;v11559","wh":"80000;19498"} #end
+         }
+     #pragma diagram {"xy":"H0;V24000","wh":"80000;42618"} #end)
+}
+
+-- One cycle of work: the running job counts down; when it ends, or when the
+-- machine is Idle, the next pending job is dispatched.
+
+function advance (l_in * : L::list;
+                  previous: work;)
+  returns (l_out at l_in: L::list;
+           current: work;)
+{
+  diagram
+    (activate #0 when previous match
+       | Idle :
+         {
+           diagram
+             (let l_out, current = start_next(l_in);
+             #pragma diagram {"xy":"h-8000;v0","wh":"40000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-13840","wh":"60000;7200"} #end
+         }
+       | Working {active} :
+         {
+           diagram
+             (activate #1
+                if active.remaining_cycles > 1
+                then
+                  {
+                    diagram
+                      (let
+                         l_out = !l_in;
+                         current = Working {job: active.job,
+                           remaining_cycles: active.remaining_cycles - 1};
+                      #pragma diagram {"xy":"h0;v0","wh":"52000;7938"} #end)
+                  #pragma diagram {"xy":"h0;v-3521","wh":"56000;11938"} #end
+                  }
+                else
+                  {
+                    diagram
+                      (let l_out, current = start_next(l_in);
+                      #pragma diagram {"xy":"h-6000;v0","wh":"40000;3200"} #end)
+                  #pragma diagram {"xy":"h0;v9748","wh":"56000;7200"} #end
+                  }
+              #pragma diagram {"xy":"h0;v0","wh":"56000;26698"} #end)
+         #pragma diagram {"xy":"h0;v8809","wh":"60000;30698"} #end
+         }
+     #pragma diagram {"xy":"H0;V0","wh":"60000;48316"} #end)
+}
+
+-- One cycle: apply the command to the pending queue, then advance the machine.
+-- The queue and the machine state are fed back through the two `pre` delays.
+-- `accepted` is the handle of the job queued this cycle, or Null.
+
+node controller (request: command;)
+  returns (current: work;
+           queue_length: L::index;
+           command_status: command_result;
+           accepted: L::ref;)
+{
+  diagram
+    (#0 expr request
+    #pragma diagram {"xy":"H-62000;V3500","wh":"12000;3200"} #end)
+    (#1 expr #2 pre #3
+      where
+        (#2 group)
+        (#3 group)
+    #pragma diagram {"dir":"nw","xy":"H36100;V-28000"} #end)
+    (#4 expr L::init()
+    #pragma diagram {"dir":"nw","xy":"H65600;V-29900","wh":"14000;3200"} #end)
+    (#5 expr #6 pre #7
+      where
+        (#6 group)
+        (#7 group)
+    #pragma diagram {"dir":"nw","xy":"H36100;V-20500"} #end)
+    (#8 expr Idle {}
+    #pragma diagram {"dir":"nw","xy":"H64600;V-22400","wh":"12000;3200"} #end)
+    (#9 block apply
+    #pragma diagram {"xy":"H-29500;V0","wh":"20000;14000"} #end)
+    (#10 block advance
+    #pragma diagram {"xy":"H17000;V-7000","wh":"20000;14000"} #end)
+    (#11 block L::size
+    #pragma diagram {"xy":"H49400;V4100","wh":"12000;7000"} #end)
+    (#12 def current
+    #pragma diagram {"xy":"H66700;V-10500","wh":"12000;3200"} #end)
+    (#13 def queue_length
+    #pragma diagram {"xy":"H68700;V4100","wh":"16000;3200"} #end)
+    (#14 def command_status, accepted
+    #pragma diagram {"xy":"H12000;V4100","wh":"30000;3200"} #end)
+    
+    (#16 wire #4 => #2)
+    (#17 wire #8 => #6)
+    (#18 wire #1 => #9 .(l_in)
+    #pragma diagram {"wp":"#1 h-73100 v25167 #9"} #end)
+    (#19 wire #0 => #9 .(request))
+    (#20 wire #9 .(l_out) => #10 .(l_in)
+    #pragma diagram {"wp":"v-4000|#9 #10"} #end)
+    (#21 wire #5 => #10 .(previous)
+    #pragma diagram {"wp":"#5 h-26600 v10500 #10"} #end)
+    (#22 wire #9 .(status, accepted) => #14
+    #pragma diagram {"wp":"v4100|#9 #14"} #end)
+    (#24 wire #10 .(l_out) => #3, #11
+    #pragma diagram {"wp":"v2550|#10 h8200[h38500 v-21650 #3, v8550 #11]"} #end)
+    (#25 wire #10 .(current) => #7, #12
+    #pragma diagram {"wp":"v-3500|#10 h17100[v-8100 #7, #12]"} #end)
+    (#26 wire #11 => #13
+    #pragma diagram {"wp":"v0|#11 #13"} #end)
+}
+
+-- Scripted storyline (see the README table). `previous` is the handle accepted
+-- at the previous cycle, so the job added at cycle k is captured at cycle k+1;
+-- the script keeps the handles it reuses in later commands.
+
+node scenario (cycle: uint64;
+               previous: L::ref;)
+  returns (request: command;)
+{
+  diagram
+    (let
+       paint_job = if cycle = 3 then previous else last'paint_job;
+       pack_job = if cycle = 4 then previous else last'pack_job;
+       drill_job = if cycle = 6 then previous else last'drill_job;
+       rework_job = if cycle = 8 then previous else last'rework_job;
+       request = (case cycle of
+         | 1 : Add {job: Job::make(Job::Inspect)}
+         | 2 : Add {job: Job::make(Job::Paint)}
+         | 3 : Add {job: Job::make(Job::Pack)}
+         | 4 : Urgent {job: Job::make(Job::SafetyCheck)}
+         | 5 : InsertAfter {target: paint_job, job: Job::make(Job::Drill)}
+         | 6 : Cancel {target: drill_job}
+         | 7 : Add {job: Job::make(Job::Rework)}
+         | 8 : Move {item: rework_job, before: paint_job}
+         | 9 : Cancel {target: drill_job}
+         | 10 : CancelType {operation: Job::Paint}
+         | 11 : InsertBefore {target: pack_job, job: Job::make(Job::Drill)}
+         | 12 : Add {job: {operation: Job::Paint, duration_cycles: 0}: Job::t}
+         | 13 : CancelType {operation: Job::Rework}
+         | _ : Wait {});
+    #pragma diagram {"xy":"H0;V0","wh":"90000;38000"} #end)
+    
+    (var
+        paint_job: L::ref last = L::null();
+        pack_job: L::ref last = L::null();
+        drill_job: L::ref last = L::null();
+        rework_job: L::ref last = L::null();)
+}

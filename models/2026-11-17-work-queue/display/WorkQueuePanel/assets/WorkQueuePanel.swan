@@ -1,0 +1,42 @@
+-- version swan: 2025.2 graph: 2.1
+{text%
+node #pragma cg keep #end #pragma swt data_source="../resources/WorkQueuePanel.spanel" #end WorkQueuePanel(
+  card_present: bool^8;
+  card_color: int32^8;
+  card_edge: int32^8;
+  card_slot: float32^8;
+  card_name: char^16^8;
+  card_ink: int32^8;
+  cell_color: int32^64;
+  cell_ink: int32^64;
+  cell_version: float32^64;
+  cell_next: float32^64;
+  cell_linked: bool^64;
+  cell_head: bool^64;
+  cell_tail: bool^64;
+  cell_free_head: bool^64;
+  cell_mark: int32^64;
+  running_color: int32;
+  running_progress: float32;
+  running_name: char^16;
+  remaining: float32;
+  queue_length: float32;
+  last_text: char^48;
+  status_text: char^24;
+  status_color: int32;
+  tool_lit: bool^7;
+  zone_lit: bool^2;
+  control_lit: bool^6;
+  ghost_visible: bool;
+  ghost_color: int32;
+  ghost_name: char^16
+) returns (
+  card_hover: bool^8;
+  tool_hover: bool^7;
+  zone_hover: bool^2;
+  control_hover: bool^6;
+  cell_hover: bool^64;
+  pressed: bool;
+  released: bool
+);
+%text}

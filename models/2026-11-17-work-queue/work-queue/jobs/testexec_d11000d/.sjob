@@ -1,0 +1,15 @@
+{
+  "Version": "2.3",
+  "Kind": "TestExecution",
+  "Properties": {
+    "RootDeclarations": [
+      "Demo::panel_gestures"
+    ],
+    "Name": "DemoPanelGestures",
+    "CustomArguments": "",
+    "TestResultFile": "testResults.json"
+  },
+  "InputPaths": [
+    "assets/Demo.swant"
+  ]
+}

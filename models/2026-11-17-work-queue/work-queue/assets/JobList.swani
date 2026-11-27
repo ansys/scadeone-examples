@@ -1,0 +1,169 @@
+-- version swan: 2027.0 graph: 2.1
+use Job as Item;
+
+const N: uint32 = 64;
+
+type index = uint32;
+
+type version = uint32;
+
+const MAX_VERSION: version = 0xffffffff;
+
+type ref = Null {} | Ref {idx: index, version: version};
+
+-- The list is abstract: other modules can hold, compare, delay and pass it,
+-- but only the operators below can read or change it. Its storage (N slots,
+-- each a free-list or queue node with a version) is private to the list body.
+
+type list;
+
+-- Read-only view of one slot, for inspection (debug / teaching views); see
+-- slot_info. `value` is Item::DEFAULT and `prev` is Null for a free slot; `next`
+-- is the queue successor of a used slot, the free-list successor of a free one.
+
+type slot_state = {
+  used: bool,
+  version: version,
+  value: Item::t,
+  prev: ref,
+  next: ref
+};
+
+type insert_result =
+  Inserted {ref: ref}
+  | Full {}
+  | InsertInvalidRef {};
+
+type set_result =
+  Set {}
+  | SetInvalidRef {};
+
+type remove_result =
+  Removed {}
+  | RemoveInvalidRef {};
+
+type move_result =
+  Moved {}
+  | MoveInvalidRef {};
+
+inline function null ()
+  returns (result: ref;);
+
+inline function handle (l: list;
+                        idx: index;)
+  returns (result: ref;);
+
+inline function next_version (current: version;)
+  returns (result: version;);
+
+function init ()
+  returns (result: list;);
+
+-- An empty list whose slots all start at version `first` (init is init_at(0)).
+
+function init_at (first: version delay0;)
+  returns (result: list;);
+
+inline function size (l: list;)
+  returns (result: index;);
+
+inline function front (l: list;)
+  returns (result: ref;);
+
+inline function back (l: list;)
+  returns (result: ref;);
+
+function insert_before (l_in * : list delay0;
+                        position: ref delay0;
+                        value: Item::t delay0;)
+  returns (l_out at l_in: list;
+           result: insert_result;);
+
+function insert_after (l_in * : list delay0;
+                       position: ref delay0;
+                       value: Item::t delay0;)
+  returns (l_out at l_in: list;
+           result: insert_result;);
+
+function push_front (l_in * : list delay0;
+                     value: Item::t delay0;)
+  returns (l_out at l_in: list;
+           result: insert_result;);
+
+function push_back (l_in * : list delay0;
+                    value: Item::t delay0;)
+  returns (l_out at l_in: list;
+           result: insert_result;);
+
+-- The item at `r`: found = true and its value when `r` designates a live item;
+-- found = false and Item::DEFAULT for a Null, out-of-range or stale handle. O(1).
+
+function value_at (l: list delay0;
+                   r: ref delay0;)
+  returns (found: bool;
+           value: Item::t;);
+
+-- Queue neighbours of the live item at `r` (Null at the ends of the queue);
+-- Null for a Null, out-of-range or stale handle. O(1).
+
+function next_of (l: list delay0;
+                  r: ref delay0;)
+  returns (next: ref;);
+
+function prev_of (l: list delay0;
+                  r: ref delay0;)
+  returns (previous: ref;);
+
+function set (l_in * : list delay0;
+              r: ref delay0;
+              value: Item::t delay0;)
+  returns (l_out at l_in: list;
+           result: set_result;);
+
+function remove (l_in * : list delay0;
+                 r: ref delay0;)
+  returns (l_out at l_in: list;
+           result: remove_result;);
+
+-- Removes every item for which Item::matches(item, wanted) holds: one bounded
+-- scan of at most N steps along the queue links. The survivors keep their
+-- order, slots and handles. `removed` is the number of items removed.
+
+function remove_matching (l_in * : list delay0;
+                          wanted: Item::key delay0;)
+  returns (l_out at l_in: list;
+           removed: index;);
+
+-- Copy the values of the first M items, from the head (copy_front) or from the
+-- tail (copy_back), with their handles. This copies data: O(M) time, and the
+-- result holds M values. Entries past the end of the list hold `filler` and Null.
+-- `count` is the number of entries that are real items: min(M, size).
+
+function copy_front <<M>> (l: list delay0;
+                           filler: Item::t delay0;)
+  returns (values: Item::t ^ M;
+           refs: ref ^ M;
+           count: index;);
+
+function copy_back <<M>> (l: list delay0;
+                          filler: Item::t delay0;)
+  returns (values: Item::t ^ M;
+           refs: ref ^ M;
+           count: index;);
+
+function move_before (l_in * : list delay0;
+                      item: ref delay0;
+                      before: ref delay0;)
+  returns (l_out at l_in: list;
+           result: move_result;);
+
+-- Inspection API (debug / teaching views only; O(1) per call): the raw state of
+-- slot `idx` (a slot past N shows as free, version 0, with no successor), and
+-- the head of the free list. Regular clients use the operators above.
+
+function slot_info (l: list delay0;
+                    idx: index delay0;)
+  returns (info: slot_state;);
+
+inline function free_front (l: list;)
+  returns (result: ref;);

@@ -1,0 +1,689 @@
+-- version swan: 2027.0 graph: 2.1 swant: 1.1
+use JobList as L;
+
+use Job as Job;
+
+use WorkQueue as Q;
+
+use View as V;
+
+use Console as C;
+
+use WorkQueuePanel as P;
+
+const SESSION_CYCLES: uint64 = 26;
+
+const PACING_CYCLES: uint64 = 60;
+
+const FOCUS_CYCLES: uint64 = 12;
+
+inline function is_at (i: uint32;
+                       kind: C::area_kind;
+                       place: C::spot;)
+  returns (inside: bool;)
+{
+  diagram
+    (let inside = place = {kind: kind, index: i}: C::spot;
+    #pragma diagram {"xy":"H0;V0","wh":"52000;3200"} #end)
+}
+
+function hover_on (place: C::spot;)
+  returns (card_hover: bool ^ V::CARDS;
+           tool_hover: bool ^ C::TOOLS;
+           zone_hover: bool ^ C::ZONES;
+           control_hover: bool ^ C::CONTROLS;)
+{
+  diagram
+    (let
+       card_hover = (mapi (is_at \ kind: C::OnCard, place: place)) <<V::CARDS>> ();
+       tool_hover = (mapi (is_at \ kind: C::OnTool, place: place)) <<C::TOOLS>> ();
+       zone_hover = (mapi (is_at \ kind: C::OnZone, place: place)) <<C::ZONES>> ();
+       control_hover = (mapi (is_at \ kind: C::OnControl, place: place)) <<C::CONTROLS>> ();
+    #pragma diagram {"xy":"H0;V0","wh":"90000;9797"} #end)
+}
+
+function spot_at (kind: C::area_kind;
+                  index: uint32;)
+  returns (place: C::spot;)
+{
+  diagram
+    (let place = {kind: kind, index: index}: C::spot; 
+    #pragma diagram {"xy":"H4000;V0","wh":"50000;3200"} #end)
+}
+
+inline function cell_is (i: uint32;
+                         hovered: uint32;)
+  returns (inside: bool;)
+{
+  diagram
+    (let inside = i = hovered;
+    #pragma diagram {"xy":"H0;V0","wh":"30000;3200"} #end)
+}
+
+inline function pad (i: uint32;
+                     word: char ^ C::WORD;)
+  returns (c: char;)
+{
+  diagram
+    (let c = (word .[i] default '\x00');
+    #pragma diagram {"xy":"H0;V0","wh":"40000;3200"} #end)
+}
+
+function text_of (word: char ^ C::WORD;)
+  returns (text: char ^ C::TEXT;)
+{
+  diagram
+    (let text = (mapi (pad \ word: word)) <<C::TEXT>> (); 
+    #pragma diagram {"xy":"H-300;V1600","wh":"54000;3200"} #end)
+}
+
+function session_script (c: uint64;)
+  returns (place: C::spot;
+           pressed: bool;
+           released: bool;)
+{
+  diagram
+    (let place, pressed, released = (case c of
+       -- cycle : (place, pressed, released)
+       -- 1-2 click Pause
+     
+       | 1 : (spot_at(C::OnControl, C::PAUSE), true, false)
+       | 2 : (spot_at(C::OnControl, C::PAUSE), false, true)
+       -- 3-8 click Paint, Pack, Drill
+     
+       | 3 : (spot_at(C::OnTool, 1), true, false)
+       | 4 : (spot_at(C::OnTool, 1), false, true)
+       | 5 : (spot_at(C::OnTool, 2), true, false)
+       | 6 : (spot_at(C::OnTool, 2), false, true)
+       | 7 : (spot_at(C::OnTool, 3), true, false)
+       | 8 : (spot_at(C::OnTool, 3), false, true)
+       -- 9-11 drag Inspect: over nothing, then onto card 1 (Pack): insert before it
+     
+       | 9 : (spot_at(C::OnTool, 0), true, false)
+       | 10 : (C::NOWHERE, false, false)
+       | 11 : (spot_at(C::OnCard, 1), false, true)
+       -- 12-13 drag card 3 (Drill) onto card 0: move to the front
+     
+       | 12 : (spot_at(C::OnCard, 3), true, false)
+       | 13 : (spot_at(C::OnCard, 0), false, true)
+       -- 14-15 drag card 0 (Drill) onto End: move last
+     
+       | 14 : (spot_at(C::OnCard, 0), true, false)
+       | 15 : (spot_at(C::OnZone, C::END_ZONE), false, true)
+       -- 16-17 click card 1 (Inspect): cancel it
+     
+       | 16 : (spot_at(C::OnCard, 1), true, false)
+       | 17 : (spot_at(C::OnCard, 1), false, true)
+       -- 18-19 drag the Paint button onto Trash: cancel every Paint
+     
+       | 18 : (spot_at(C::OnTool, 1), true, false)
+       | 19 : (spot_at(C::OnZone, C::TRASH_ZONE), false, true)
+       -- 20-22 press card 0, leave it, come back, release: abandoned
+     
+       | 20 : (spot_at(C::OnCard, 0), true, false)
+       | 21 : (spot_at(C::OnZone, C::END_ZONE), false, false)
+       | 22 : (spot_at(C::OnCard, 0), false, true)
+       -- 23-24 click Step: Pack starts, one unit of work done
+     
+       | 23 : (spot_at(C::OnControl, C::STEP), true, false)
+       | 24 : (spot_at(C::OnControl, C::STEP), false, true)
+       | _ : (C::NOWHERE, false, false));
+    #pragma diagram {"xy":"H0;V0","wh":"90000;50000"} #end)
+}
+
+function pacing_script (c: uint64;)
+  returns (place: C::spot;
+           pressed: bool;
+           released: bool;)
+{
+  diagram
+    (let place, pressed, released = (case c of
+       | 1 : (spot_at(C::OnControl, C::FILL), true, false)
+       | 2 : (spot_at(C::OnControl, C::FILL), false, true)
+       | _ : (C::NOWHERE, false, false));
+    #pragma diagram {"xy":"H0;V0","wh":"80000;9797"} #end)
+}
+
+function focus_script (c: uint64;)
+  returns (place: C::spot;
+           pressed: bool;
+           released: bool;
+           hovered_cell: uint32;)
+{
+  diagram
+    (let place, pressed, released, hovered_cell = (case c of
+       -- 1-8 click Pause, then Paint, Pack, Drill
+     
+       | 1 : (spot_at(C::OnControl, C::PAUSE), true, false, C::NONE)
+       | 2 : (spot_at(C::OnControl, C::PAUSE), false, true, C::NONE)
+       | 3 : (spot_at(C::OnTool, 1), true, false, C::NONE)
+       | 4 : (spot_at(C::OnTool, 1), false, true, C::NONE)
+       | 5 : (spot_at(C::OnTool, 2), true, false, C::NONE)
+       | 6 : (spot_at(C::OnTool, 2), false, true, C::NONE)
+       | 7 : (spot_at(C::OnTool, 3), true, false, C::NONE)
+       | 8 : (spot_at(C::OnTool, 3), false, true, C::NONE)
+       -- 9 over memory cell 1; 10 over card 2; 11 over memory cell 3
+     
+       | 9 : (C::NOWHERE, false, false, 1)
+       | 10 : (spot_at(C::OnCard, 2), false, false, C::NONE)
+       | 11 : (C::NOWHERE, false, false, 3)
+       | _ : (C::NOWHERE, false, false, C::NONE));
+    #pragma diagram {"xy":"H0;V0","wh":"90000;30000"} #end)
+}
+
+function card_edges (cards: V::card ^ V::CARDS;
+                     over: C::spot;
+                     held: C::spot;
+                     grabbed: V::card;)
+  returns (edges: int32 ^ V::CARDS;)
+{
+  diagram
+    (let edges = (mapi (C::card_edge \ over: over, held: held, grabbed: grabbed)) <<V::CARDS>> (cards);
+    #pragma diagram {"xy":"H3000;V509","wh":"96000;4219"} #end)
+}
+
+function cell_hover_on (hovered: uint32;)
+  returns (cell_hover: bool ^ V::PAGE;)
+{
+  diagram
+    (let cell_hover = (mapi (cell_is \ hovered: hovered)) <<V::PAGE>> ();
+    #pragma diagram {"xy":"H4000;V509","wh":"68000;4219"} #end)
+}
+
+function length_value (queue_length: L::index;)
+  returns (value: float32;)
+{
+  diagram
+    (let value = (queue_length :> float32);
+    #pragma diagram {"xy":"H0;V0","wh":"40000;3200"} #end)
+}
+
+node latch_status (command_status: Q::command_result;)
+  returns (status: Q::command_result;)
+{
+  diagram
+    (let status = 
+         Q::NoCommand -> 
+         (if command_status = Q::NoCommand 
+             then pre status 
+             else command_status);
+    #pragma diagram {"xy":"H-23125;V-12301","wh":"40000;9797"} #end)
+}
+
+node latch_text (command: Q::command;
+                 text: char ^ C::TEXT;)
+  returns (last_text: char ^ C::TEXT;)
+{
+  diagram
+    (let last_text = C::EMPTY_TEXT -> (if command = Q::Wait {} then pre last_text else text);
+    #pragma diagram {"xy":"H0;V0","wh":"90000;3200"} #end)
+}
+
+_harness live
+{
+  diagram
+    (#28 block C::station
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-45688;V-19050","wh":"35575;206612"} #end)
+    (#29 block C::running_view
+    #pragma diagram {"xy":"H-675;V3500","wh":"18000;10000"} #end)
+    (#30 block C::highlights
+    #pragma diagram {"xy":"H26800;V-92562","wh":"19000;10000"} #end)
+    (#31 block C::ghost
+    #pragma diagram {"xy":"H17500;V-29138","wh":"12000;8000"} #end)
+    (#32 block C::focus_of
+    #pragma diagram {"dir":"es","xy":"H66400;V96012","wh":"16000;18000"} #end)
+    (#33 block C::cell_marks
+    #pragma diagram {"dir":"es","xy":"H60575;V61900","wh":"18000;18000"} #end)
+    (#36 block card_edges
+    #pragma diagram {"xy":"H26300;V-68838","wh":"20000;14000"} #end)
+    (#48 block (map C::cell) <<V::PAGE>>
+    #pragma diagram {"xy":"H23250;V-14538","wh":"30000;13900"} #end)
+    (#49 block length_value
+    #pragma diagram {"xy":"H26800;V-81538","wh":"19000;6000"} #end)
+    (#51 block latch_status
+    #pragma diagram {"xy":"H6375;V33462","wh":"18000;6000"} #end)
+    (#54 block C::status_text
+    #pragma diagram {"xy":"H50975;V31738","wh":"16000;6000"} #end)
+    (#55 block C::status_color
+    #pragma diagram {"xy":"H50975;V19012","wh":"16000;6000"} #end)
+    (#56 block C::describe
+    #pragma diagram {"xy":"H26800;V-110988","wh":"18000;10000"} #end)
+    (#57 block latch_text
+    #pragma diagram {"xy":"H57800;V-118688","wh":"18000;20000"} #end)
+    (#61 block P::WorkQueuePanel
+    #pragma diagram {"xy":"H92500;V-32459","wh":"24000;140400"} #end)
+    (#0 block (map C::card) <<V::CARDS>>
+    #pragma diagram {"xy":"H26300;V-49788","wh":"24000;18000"} #end)
+    (#10 expr (
+               card_hover: false ^ V::CARDS, 
+               tool_hover: false ^ C::TOOLS, 
+               zone_hover: false ^ C::ZONES, 
+               control_hover: false ^ C::CONTROLS, 
+               cell_hover: false ^ V::PAGE,
+               pressed: false, 
+               released: false
+              )
+    #pragma diagram {"dir":"nw","xy":"H127125;V114321","wh":"40000;17235"} #end)
+    (#11 expr #12 pre #13
+      where
+        (#12 group)
+        (#13 group)
+    #pragma diagram {"dir":"nw","xy":"H92400;V130504"} #end)
+    (#14 group byname
+    #pragma diagram {"dir":"nw","xy":"H127125;V136841"} #end)
+    (#15 group
+    #pragma diagram {"dir":"nw","xy":"H80900;V131904","wh":"800;14000"} #end)
+    (let _stop_condition = false;
+    #pragma diagram {"xy":"H22300;V-142022","wh":"32000;3200"} #end)
+    
+    (#902 wire #28 .(over:, held:, grabbed:, cards:) => #36
+    #pragma diagram {"wp":"v-49788|#28 #36"} #end)
+    (#901 wire #28 .(over:, shown:cards) => #32
+    #pragma diagram {"wp":"v99467|#28 h74395 v25595 h16405 #32"} #end)
+    (#900 wire #28 .(over, held, paused, pace) => #30
+    #pragma diagram {"wp":"v-69872|#28 #30"} #end)
+    (#903 wire #28 .(shown:cards, command:, grabbed:) => #56
+    #pragma diagram {"wp":"v-91938|#28 #56"} #end)
+    (#86 wire #28 .(command) => #57 .(command)
+    #pragma diagram {"wp":"v-100122|#28 #57"} #end)
+    (#904 wire #28 .(held, grabbed) => #31
+    #pragma diagram {"wp":"v-13088|#28 #31"} #end)
+    (#91 wire #28 .(current) => #29
+    #pragma diagram {"wp":"v22550|#28 #29"} #end)
+    (#92 wire #28 .(queue_length) => #49
+    #pragma diagram {"wp":"v-62488|#28 #49"} #end)
+    (#93 wire #28 .(command_status) => #51
+    #pragma diagram {"wp":"v52512|#28 #51"} #end)
+    (#94 wire #28 .(cards) => #0
+    #pragma diagram {"wp":"v-28738|#28 #0"} #end)
+    (#95 wire #28 .(slots) => #48
+    #pragma diagram {"wp":"v5350|#28 #48"} #end)
+    (#96 wire #32 .(focus:) => #33
+    #pragma diagram {"wp":"h-1825|#32 #33"} #end)
+    (#97 wire #51 => #54, #55
+    #pragma diagram {"wp":"v-1725|#51 h4400[#54, v-12726 #55]"} #end)
+    (#98 wire #56 => #57 .(text)
+    #pragma diagram {"wp":"v226|#56 #57"} #end)
+    (#99 wire #57 => #61 .(last_text)
+    #pragma diagram {"wp":"v-1|#57 h6850 v20420 #61"} #end)
+    (#102 wire #36 => #61 .(card_edge)
+    #pragma diagram {"wp":"v-2600|#36 #61"} #end)
+    (#114 wire #33 => #61 .(cell_mark)
+    #pragma diagram {"wp":"h3700|#33 v-17827 #61"} #end)
+    (#115 wire #29 => #61 .(running_color: color, running_progress: progress, running_name: name, remaining:)
+    #pragma diagram {"wp":"v-1000|#29 #61"} #end)
+    (#119 wire #49 => #61 .(queue_length)
+    #pragma diagram {"wp":"v0|#49 #61"} #end)
+    (#120 wire #54 => #61 .(status_text)
+    #pragma diagram {"wp":"v0|#54 #61"} #end)
+    (#121 wire #55 => #61 .(status_color)
+    #pragma diagram {"wp":"v0|#55 #61"} #end)
+    (#122 wire #30 => #61 .(tool_lit , zone_lit , control_lit)
+    #pragma diagram {"wp":"v1077|#30 #61"} #end)
+    (#125 wire #31 => #61 .(ghost_visible: visible, ghost_color: color, ghost_name: name)
+    #pragma diagram {"wp":"v-3000|#31 #61"} #end)
+    (#16 wire #15 .(cell_hover:) => #32
+    #pragma diagram {"wp":"v-3000|#15 h-10600 #32"} #end)
+    (#3 wire #48 .(head: cell_head, 
+tail: cell_tail,
+free_head: cell_free_head, 
+color: cell_color, 
+ink: cell_ink, 
+linked: cell_linked, 
+next: cell_next, 
+version: cell_version) => #61
+    #pragma diagram {"wp":"v-3247|#48 #61"} #end)
+    (#4 wire #28 .(slots:) => #33
+    #pragma diagram {"wp":"v93789|#28 h83434 #33"} #end)
+    (#2 wire #0 .(name, 
+present, 
+ink, 
+slot, 
+color) => #61 .(card_name, 
+card_present, 
+card_ink, 
+card_slot, 
+card_color)
+    #pragma diagram {"wp":"v0|#0 #61"} #end)
+    (#17 wire #10 => #12
+    #pragma diagram {"wp":"#10 h-5863 v14283 #12"} #end)
+    (#18 wire #14 => #13
+    #pragma diagram {"wp":"#14 h-9500 v-4437 #13"} #end)
+    (#19 wire #61 => #14
+    #pragma diagram {"wp":"v0|#61 h43625 v169300 #14"} #end)
+    (#20 wire #15 .(card_hover:, 
+tool_hover:, 
+zone_hover:, 
+control_hover:, 
+pressed:, 
+released:) => #28
+    #pragma diagram {"wp":"v3000|#15 h-144975 v-78545 #28"} #end)
+    (#21 wire #11 => #15)
+}
+
+_harness pointer_sessions
+{
+  diagram
+    (#0 expr c
+    #pragma diagram {"xy":"H-116300;V-13075"} #end)
+    (#5 block session_script
+    #pragma diagram {"xy":"H-86800;V-13075","wh":"18000;10000"} #end)
+    (#8 def place, 
+            pressed, 
+            released
+    #pragma diagram {"xy":"H-54300;V-16414","wh":"14000;6078"} #end)
+    (#9 block hover_on
+    #pragma diagram {"xy":"H-53300;V7300","wh":"12000;15400"} #end)
+    (#10 block C::station
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H-20800;V-2888","wh":"20000;40750"} #end)
+    (#12 def over, 
+             _, 
+             command, 
+             _, 
+             held,
+             _, 
+             paused, 
+             _,
+             current,  
+             _, 
+             command_status,
+             _, 
+             _, 
+             _
+    #pragma diagram {"xy":"H25700;V16879","wh":"20000;26533"} #end)
+    (#17 block (map V::card_operation) <<V::CARDS>>
+    #pragma diagram {"xy":"H20700;V-18458","wh":"30000;13925"} #end)
+    (#18 def ops
+    #pragma diagram {"xy":"H62200;V-16471"} #end)
+    (#19 block C::ghost
+    #pragma diagram {"xy":"H27700;V-2888","wh":"16000;8000"} #end)
+    (#20 def ghost_visible
+    #pragma diagram {"xy":"H59200;V-2888","wh":"14000;3200"} #end)
+    (assert
+     $spot_found: over = place;
+     $paused_from_first_click: c < 2 or paused;
+     $machine_idle_until_step: c >= 24 or current = Q::Idle {};
+     $press_alone_does_nothing: not pressed or command = Q::Wait {};
+     $clicks_append: c <> 8
+       or ops = [Job::Paint, Job::Pack, Job::Drill] @ (V::NO_OPERATION ^ 5);
+     $ghost_while_dragging: c <> 10 or (ghost_visible and held = spot_at(C::OnTool, 0));
+     $drop_on_card_inserts: c <> 11
+       or ops = [Job::Paint, Job::Inspect, Job::Pack, Job::Drill] @ (V::NO_OPERATION ^ 4);
+     $drag_card_to_front: c <> 13
+       or ops = [Job::Drill, Job::Paint, Job::Inspect, Job::Pack] @ (V::NO_OPERATION ^ 4);
+     $drag_card_to_end: c <> 15
+       or ops = [Job::Paint, Job::Inspect, Job::Pack, Job::Drill] @ (V::NO_OPERATION ^ 4);
+     $click_card_cancels: c <> 17
+       or ops = [Job::Paint, Job::Pack, Job::Drill] @ (V::NO_OPERATION ^ 5);
+     $trash_cancels_kind: c <> 19
+       or ops = [Job::Pack, Job::Drill] @ (V::NO_OPERATION ^ 6);
+     $abandoned_gesture: c <> 22
+       or (command = Q::Wait {} and ops = [Job::Pack, Job::Drill] @ (V::NO_OPERATION ^ 6));
+     $not_dragging_after_release: not released or not ghost_visible;
+     $accepted_on_release: not released or c = 2 or c = 22 or c = 24
+       or command_status = Q::Accepted;
+     $step_runs_one_unit: c < 24
+       or (paused and current = Q::Working {job: Job::make(Job::Pack), remaining_cycles: 3}
+           and ops = [Job::Drill] @ (V::NO_OPERATION ^ 7));
+    #pragma diagram {"xy":"H-2900;V-70854","wh":"90000;40000"} #end)
+    (let 
+         c = _current_cycle;
+         _stop_condition = c >= SESSION_CYCLES;
+    #pragma diagram {"xy":"H-80400;V-30685","wh":"44000;6078"} #end)
+    
+    (#30 wire #0 => #5)
+    (#32 wire #5 .(place) => #9
+    #pragma diagram {"wp":"v2532|#5 h8250 v17843 #9"} #end)
+    (#901 wire #5 .(pressed:, released:) => #10
+    #pragma diagram {"wp":"v700|#5 #10"} #end)
+    (#900 wire #9 .(card_hover:, 
+tool_hover:, 
+zone_hover:, 
+control_hover:) => #10
+    #pragma diagram {"wp":"v0|#9 #10"} #end)
+    (#40 wire #10 => #12
+    #pragma diagram {"wp":"v10660|#10 h20000 v9107 #12"} #end)
+    (#902 wire #10 .(held:, grabbed:) => #19
+    #pragma diagram {"wp":"v1554|#10 #19"} #end)
+    (#46 wire #10 .(cards) => #17
+    #pragma diagram {"wp":"v-13583|#10 #17"} #end)
+    (#47 wire #17 => #18
+    #pragma diagram {"wp":"v0|#17 #18"} #end)
+    (#48 wire #19 .(visible) => #20
+    #pragma diagram {"wp":"v0|#19 #20"} #end)
+    (#2 wire #5 => #8
+    #pragma diagram {"wp":"v-3339|#5 #8"} #end)
+    
+    (var
+        c: uint64;
+        place: C::spot;
+        pressed: bool;
+        released: bool;
+        over: C::spot;
+        command: Q::command;
+        held: C::spot;
+        paused: bool;
+        current: Q::work;
+        command_status: Q::command_result;
+        ops: Job::operation ^ V::CARDS;
+        ghost_visible: bool;)
+}
+
+_harness pacing_and_fill
+{
+  diagram
+    (#5 block pacing_script
+    #pragma diagram {"xy":"H-64770;V-15650","wh":"18000;10000"} #end)
+    (#9 block hover_on
+    #pragma diagram {"xy":"H-36520;V-22022","wh":"16000;10000"} #end)
+    (#10 block C::station
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H21500;V-13800","wh":"20000;30000"} #end)
+    (#11 expr if #12 then #90007 else #90008
+      where
+        (#12 group)
+        (#90007 group)
+        (#90008 group)
+    #pragma diagram {"xy":"H60925;V15550"} #end)
+    (#90009 expr 1
+    #pragma diagram {"xy":"H46725;V13650","wh":"6000;3200"} #end)
+    (#90010 expr 0
+    #pragma diagram {"xy":"H46725;V17450","wh":"6000;3200"} #end)
+    (#14 expr #15 + #16
+      where
+        (#15 group)
+        (#16 group)
+    #pragma diagram {"xy":"H85500;V13650"} #end)
+    (#17 expr #18 pre #19
+      where
+        (#18 group)
+        (#19 group)
+    #pragma diagram {"dir":"nw","xy":"H85500;V1500"} #end)
+    (#20 expr 0
+    #pragma diagram {"dir":"nw","xy":"H111000;V-400","wh":"6000;3200"} #end)
+    (#21 def runs
+    #pragma diagram {"xy":"H111000;V13650"} #end)
+    (assert
+     $normal_speed: runs = (c + (C::NORMAL_PERIOD :> uint64) - 1) / (C::NORMAL_PERIOD :> uint64);
+     $fill_accepted: c < 2 or c > 8 or command_status = Q::Accepted;
+     $fill_adds_every_kind: c <> 9
+       or queue_length + (if current = Q::Idle {} then 0 else 1) = C::TOOLS;
+     $fill_done: c < 9 or command = Q::Wait {};
+    #pragma diagram {"xy":"H15525;V-51825","wh":"90000;12000"} #end)
+    (#0 expr c
+    #pragma diagram {"xy":"H-81690;V-16875"} #end)
+    (let 
+         c = _current_cycle;
+         _stop_condition = c >= PACING_CYCLES;
+    #pragma diagram {"xy":"H-66520;V-33042","wh":"44000;6078"} #end)
+    (#2 def current, 
+            queue_length, 
+            command, 
+            command_status
+    #pragma diagram {"xy":"H64925;V-22106","wh":"18000;7938"} #end)
+    
+    (#90011 wire #90009 => #90007)
+    (#90012 wire #90010 => #90008)
+    (#32 wire #5 .(place) => #9
+    #pragma diagram {"wp":"v-3186|#5 #9"} #end)
+    (#901 wire #5 .(pressed:, released:) => #10
+    #pragma diagram {"wp":"v2950|#5 #10"} #end)
+    (#900 wire #9 => #10 .(card_hover: , 
+tool_hover: , 
+zone_hover: , 
+control_hover:)
+    #pragma diagram {"wp":"v-250|#9 #10"} #end)
+    (#39 wire #10 .(run) => #12
+    #pragma diagram {"wp":"v5331|#10 h29425 #12"} #end)
+    (#40 wire #11 => #16)
+    (#41 wire #20 => #18)
+    (#42 wire #17 => #15
+    #pragma diagram {"wp":"#17 h-2500 v10250 #15"} #end)
+    (#43 wire #14 => #19, #21
+    #pragma diagram {"wp":"#14 h3500[v-10250 #19, #21]"} #end)
+    (#3 wire #10 .(current, 
+queue_length, 
+command, 
+command_status) => #2
+    #pragma diagram {"wp":"v-8306|#10 #2"} #end)
+    (#4 wire #0 => #5)
+    
+    (var
+        c: uint64;
+        runs: uint64;
+        command: Q::command;
+        queue_length: L::index;
+        current: Q::work;
+        command_status: Q::command_result;)
+}
+
+_harness memory_focus
+{
+  diagram
+    (#0 expr c
+    #pragma diagram {"xy":"H-87350;V-10100"} #end)
+    (#5 block focus_script
+    #pragma diagram {"xy":"H-71025;V-10100","wh":"18000;12000"} #end)
+    (#9 block hover_on
+    #pragma diagram {"xy":"H-37375;V2975","wh":"16000;10000"} #end)
+    (#10 block C::station
+    #pragma swt under_test #end
+    #pragma diagram {"xy":"H25500;V-2600","wh":"20000;30000"} #end)
+    (#11 block cell_hover_on
+    #pragma diagram {"xy":"H-11000;V-18900","wh":"20000;6000"} #end)
+    (#13 block C::focus_of
+    #pragma diagram {"xy":"H74000;V-17900","wh":"16000;8000"} #end)
+    (#14 block C::cell_marks
+    #pragma diagram {"xy":"H112675;V-6900","wh":"16000;8000"} #end)
+    (#15 def marks
+    #pragma diagram {"xy":"H136000;V-6900","wh":"10000;3200"} #end)
+    (#16 block (map C::cell_roles) <<V::PAGE>>
+    #pragma diagram {"xy":"H67000;V4168","wh":"30000;16463"} #end)
+    (#17 def head, 
+             tail, 
+             free_head
+    #pragma diagram {"xy":"H99600;V7608","wh":"14000;6078"} #end)
+    (assert
+     $no_focus: (c = 9 or c = 10 or c = 11) or marks = C::PLAIN_COLOR ^ V::PAGE;
+     $used_slot_shows_both_links: c <> 9
+       or (marks[1] = C::FOCUS_COLOR and marks[2] = C::NEXT_COLOR
+           and marks[0] = C::PREV_COLOR and marks[3] = C::PLAIN_COLOR);
+     $tail_card_focus: c <> 10
+       or (marks[2] = C::FOCUS_COLOR and marks[1] = C::PREV_COLOR
+           and marks[0] = C::PLAIN_COLOR and marks[3] = C::PLAIN_COLOR);
+     $free_slot_shows_next_only: c <> 11
+       or (marks[3] = C::FOCUS_COLOR and marks[4] = C::NEXT_COLOR
+           and marks[2] = C::PLAIN_COLOR);
+     $roles: c < 8
+       or (head[0] and tail[2] and free_head[3]
+           and not head[1] and not tail[1] and not free_head[1]);
+    #pragma diagram {"xy":"H27000;V-50456","wh":"90000;22000"} #end)
+    (let 
+         c = _current_cycle;
+         _stop_condition = c >= FOCUS_CYCLES;
+    #pragma diagram {"xy":"H-54275;V-38043","wh":"42000;6078"} #end)
+    
+    (#30 wire #0 => #5)
+    (#32 wire #5 .(place) => #9
+    #pragma diagram {"wp":"v3800|#5 h8325 v9275 #9"} #end)
+    (#901 wire #5 .(pressed:, released:) => #10
+    #pragma diagram {"wp":"v-600|#5 #10"} #end)
+    (#900 wire #9 .(card_hover:, tool_hover:, zone_hover:, control_hover:) => #10
+    #pragma diagram {"wp":"v1058|#9 #10"} #end)
+    (#39 wire #5 .(hovered_cell) => #11
+    #pragma diagram {"wp":"v-4900|#5 h36837 v-3900 #11"} #end)
+    (#40 wire #11 => #13 .(cell_hover)
+    #pragma diagram {"wp":"v-350|#11 #13"} #end)
+    (#902 wire #10 .(over:, shown:cards) => #13
+    #pragma diagram {"wp":"v-13150|#10 #13"} #end)
+    (#43 wire #13 .(focus) => #14 .(focus)
+    #pragma diagram {"wp":"v0|#13 h5300 v9273 #14"} #end)
+    (#44 wire #10 .(slots) => #14 .(slots), #16
+    #pragma diagram {"wp":"v8768|#10 h8250[v-12250 #14, #16]"} #end)
+    (#45 wire #14 .(outlines) => #15
+    #pragma diagram {"wp":"v0|#14 #15"} #end)
+    (#46 wire #16 => #17
+    #pragma diagram {"wp":"v1439|#16 #17"} #end)
+    
+    (var
+        c: uint64;
+        marks: int32 ^ V::PAGE;
+        head: bool ^ V::PAGE;
+        tail: bool ^ V::PAGE;
+        free_head: bool ^ V::PAGE;)
+}
+
+_harness command_text
+{
+  diagram
+    (let
+       c = _current_cycle;
+       _stop_condition = c >= 6;
+       paint = Job::make(Job::Paint);
+       drill = Job::make(Job::Drill);
+       cards = V::NO_CARD ^ V::CARDS;
+       first = {present: true, item: L::Ref {idx: 0, version: 0}, slot: 0,
+                operation: Job::Paint, duration_cycles: 20}: V::card;
+       second = {present: true, item: L::Ref {idx: 1, version: 0}, slot: 1,
+                 operation: Job::Pack, duration_cycles: 4}: V::card;
+       shown = [first, second, V::NO_CARD, V::NO_CARD, V::NO_CARD, V::NO_CARD, V::NO_CARD,
+                V::NO_CARD];
+       add = C::describe(Q::Add {job: paint}, cards, V::NO_CARD);
+       insert = C::describe(Q::InsertBefore {target: second.item, job: drill}, shown, V::NO_CARD);
+       to_end = C::describe(Q::Move {item: first.item, before: L::null()}, shown, first);
+       gone = C::describe(Q::Cancel {target: L::Ref {idx: 5, version: 2}}, shown, V::NO_CARD);
+       all = C::describe(Q::CancelType {operation: Job::Production}, shown, V::NO_CARD);
+       nothing = C::describe(Q::Wait {}, shown, V::NO_CARD);
+    #pragma diagram {"xy":"H0;V0","wh":"96000;30000"} #end)
+    (assert
+     $add: add = text_of((['A', 'd', 'd', ' ', 'P', 'a', 'i', 'n', 't'] @ ('\x00' ^ 7)));
+     $insert_names_target: (insert .[0] default ' ') = 'I' and (insert .[13] default ' ') = 'b'
+       and (insert .[20] default ' ') = 'P' and (insert .[23] default ' ') = 'k'
+       and (insert .[24] default ' ') = '\x00';
+     $move_to_end: (to_end .[0] default ' ') = 'M' and (to_end .[5] default ' ') = 'P'
+       and (to_end .[11] default ' ') = 't' and (to_end .[20] default ' ') = 'd'
+       and (to_end .[21] default ' ') = '\x00';
+     $gone_job: (gone .[7] default ' ') = 'a' and (gone .[16] default ' ') = 'b'
+       and (gone .[17] default ' ') = '\x00';
+     $cancel_all: (all .[7] default ' ') = 'a' and (all .[11] default ' ') = 'P'
+       and (all .[21] default ' ') = '\x00';
+     $wait_is_empty: nothing = C::EMPTY_TEXT;
+    #pragma diagram {"xy":"H0;V-36000","wh":"96000;20000"} #end)
+    
+    (var
+        c: uint64;
+        paint: Job::t;
+        drill: Job::t;
+        cards: V::card ^ V::CARDS;
+        first: V::card;
+        second: V::card;
+        shown: V::card ^ V::CARDS;
+        add: char ^ C::TEXT;
+        insert: char ^ C::TEXT;
+        to_end: char ^ C::TEXT;
+        gone: char ^ C::TEXT;
+        all: char ^ C::TEXT;
+        nothing: char ^ C::TEXT;)
+}

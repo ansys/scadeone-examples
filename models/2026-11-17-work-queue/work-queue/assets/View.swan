@@ -1,0 +1,487 @@
+-- version swan: 2027.0 graph: 2.1
+use JobList as L;
+
+use Job as Job;
+
+use WorkQueue as Q;
+
+const PAGE: uint32 = 64;
+
+const CARDS: uint32 = 8;
+
+const STRIP: uint32 = 64;
+
+type link = NoLink {} | ToSlot {slot: L::index};
+
+type slot_view = {
+  used: bool,
+  operation: Job::operation,
+  version: L::version,
+  next: link,
+  prev: link,
+  is_head: bool,
+  is_tail: bool,
+  is_free_head: bool
+};
+
+type card = {
+  present: bool,
+  item: L::ref,
+  slot: int32,
+  operation: Job::operation,
+  duration_cycles: uint32
+};
+
+type gesture =
+  NoGesture {}
+  | NewCard {operation: Job::operation, gap: uint32}
+  | DragCard {card: uint32, gap: uint32}
+  | DeleteCard {card: uint32}
+  | CancelOperation {operation: Job::operation};
+
+const NO_SLOT: int32 = -1;
+
+const NO_JOB: Job::t = {operation: Job::Production, duration_cycles: 0}: Job::t;
+
+const FREE_VIEW: slot_view = {used: false, operation: Job::Production, version: 0,
+  next: NoLink {}, prev: NoLink {}, is_head: false, is_tail: false,
+  is_free_head: false}: slot_view;
+
+const NO_CARD: card = {present: false, item: L::Null {}, slot: NO_SLOT,
+  operation: Job::Production, duration_cycles: 0}: card;
+
+const NO_OPERATION: Job::operation = Job::Production;
+
+function card_operation (c: card;)
+  returns (operation: Job::operation;)
+{
+  diagram
+    (let operation = if c.present 
+         then c.operation 
+         else NO_OPERATION;
+    #pragma diagram {"xy":"H-13000;V1439","wh":"32000;6078"} #end)
+}
+
+inline function link_of (r: L::ref;)
+  returns (target: link;)
+{
+  diagram
+    (activate #0 when r match
+       | L::Null :
+         {
+           diagram
+             (let target = NoLink {};
+             #pragma diagram {"xy":"h-11000;v0","wh":"24000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-2091","wh":"50000;7200"} #end
+         }
+       | L::Ref {position} :
+         {
+           diagram
+             (let target = ToSlot {slot: position.idx};
+             #pragma diagram {"xy":"h0;v0","wh":"46000;3200"} #end)
+         #pragma diagram {"xy":"h0;v8809","wh":"50000;7200"} #end
+         }
+     #pragma diagram {"xy":"H0;V0","wh":"50000;24819"} #end)
+}
+
+inline function slot_number (r: L::ref;)
+  returns (slot: int32;)
+{
+  diagram
+    (activate #0 when r match
+       | L::Null :
+         {
+           diagram
+             (let slot = NO_SLOT; 
+             #pragma diagram {"xy":"h-4000;v0","wh":"24000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-2091","wh":"42000;7200"} #end
+         }
+       | L::Ref {position} :
+         {
+           diagram
+             (let slot = (position.idx :> int32); 
+             #pragma diagram {"xy":"h0;v0","wh":"38000;3200"} #end)
+         #pragma diagram {"xy":"h0;v8809","wh":"42000;7200"} #end
+         }
+     #pragma diagram {"xy":"H0;V0","wh":"42000;24819"} #end)
+}
+
+inline function is_slot (r: L::ref;
+                         idx: L::index;)
+  returns (matches: bool;)
+{
+  diagram
+    (let matches = link_of(r) = ToSlot {slot: idx}; 
+    #pragma diagram {"xy":"H1000;V0","wh":"50000;3200"} #end)
+}
+
+inline function view_slot (i: uint32;
+                           l: L::list;
+                           first: L::index;)
+  returns (view: slot_view;)
+{
+  diagram
+    (let
+       idx = first + i;
+       info = L::slot_info(l, idx);
+       view = {
+         used: info.used, 
+         operation: if info.used 
+             then info.value.operation 
+             else Job::Production,
+         version: info.version, 
+         next: link_of(info.next), 
+         prev: link_of(info.prev),
+         is_head: info.used and is_slot(L::front(l), idx),
+         is_tail: info.used and is_slot(L::back(l), idx),
+         is_free_head: not info.used and is_slot(L::free_front(l), idx)
+         }: slot_view;
+    #pragma diagram {"xy":"H-13700;V-6692","wh":"66000;28392"} #end)
+    
+    (var
+        idx: L::index;
+        info: L::slot_state;)
+}
+
+function page_view (l: L::list;
+                    page: uint32;)
+  returns (slots: slot_view ^ PAGE;)
+{
+  diagram
+    (let
+       first = page * PAGE;
+       slots = (mapi (view_slot \ l: l, first: first)) <<PAGE>> ();
+    #pragma diagram {"xy":"H0;V0","wh":"66000;6078"} #end)
+    
+    (var
+        first: L::index;)
+}
+
+inline function card_of (job: Job::t;
+                         r: L::ref;)
+  returns (view: card;)
+{
+  diagram
+    (let view = {present: r <> L::null(), item: r, slot: slot_number(r),
+       operation: job.operation, duration_cycles: job.duration_cycles}: card;
+    #pragma diagram {"xy":"H0;V0","wh":"72000;4219"} #end)
+}
+
+function queue_view (l: L::list;)
+  returns (cards: card ^ CARDS;)
+{
+  diagram
+    (let
+       jobs, refs, _ = L::copy_front <<CARDS>> (l, NO_JOB);
+       cards = (map card_of) <<CARDS>> (jobs, refs);
+    #pragma diagram {"xy":"H0;V0","wh":"58000;6078"} #end)
+    
+    (var
+        jobs: Job::t ^ CARDS;
+        refs: L::ref ^ CARDS;)
+}
+
+inline function count_used (i: uint32;
+                            count: uint32;
+                            l: L::list;
+                            first: L::index;)
+  returns (total: uint32;)
+{
+  diagram
+    (let total = if L::slot_info(l, first + i).used then count + 1 else count;
+    #pragma diagram {"xy":"H0;V0","wh":"76000;3200"} #end)
+}
+
+inline function cell_fill (cell: uint32;
+                           l: L::list;)
+  returns (percent: uint32;)
+{
+  diagram
+    (let
+       first = (cell * L::N) / STRIP;
+       end_slot = ((cell + 1) * L::N) / STRIP;
+       covered = end_slot - first;
+       percent = if covered = 0 then 0 else (100 * used) / covered;
+    #pragma diagram {"xy":"H0;V0","wh":"64000;17235"} #end)
+    (#2 expr forward
+      <<L::N>> with <<j>>
+      diagram
+        (#3 block count_used
+        #pragma diagram {"xy":"h3000;v-100","wh":"20000;14000"} #end)
+        (#4 expr j
+        #pragma diagram {"xy":"h-27500;v1850"} #end)
+        (#5 expr last 'total
+        #pragma diagram {"xy":"h-31500;v-1850","wh":"16000;3200"} #end)
+        (#6 expr l
+        #pragma diagram {"xy":"h-27500;v-5550"} #end)
+        (#7 expr first
+        #pragma diagram {"xy":"h-28500;v5550","wh":"10000;3200"} #end)
+        (#8 def total
+        #pragma diagram {"xy":"h34500;v-100","wh":"10000;3200"} #end)
+        
+        (#9 wire #4 => #3 .(i))
+        (#10 wire #5 => #3 .(count))
+        (#11 wire #6 => #3 .(l))
+        (#12 wire #7 => #3 .(first))
+        (#13 wire #3 .(total) => #8
+        #pragma diagram {"wp":"v0|#3 #8"} #end)
+      until j + 1 >= covered
+      returns (total: last = 0)
+    #pragma diagram {"xy":"H-18638;V30375","wh":"87600;30300"} #end)
+    (#14 def used
+    #pragma diagram {"xy":"H45662;V30375"} #end)
+    
+    (#15 wire #2 .(2) => #14
+    #pragma diagram {"wp":"v0|#2 #14"} #end)
+    
+    (var
+        first: L::index;
+        end_slot: L::index;
+        covered: uint32;
+        used: uint32;)
+}
+
+function occupancy (l: L::list;)
+  returns (cells: uint32 ^ STRIP;)
+{
+  diagram
+    (#0 def cells
+    #pragma diagram {"xy":"H18650;V-28400","wh":"10000;3200"} #end)
+    (#1 block (mapi (cell_fill  \ l: l)) <<STRIP>>
+    #pragma diagram {"xy":"H-4550;V-30400","wh":"20000;18000"} #end)
+    
+    (#3 wire #1 => #0
+    #pragma diagram {"wp":"v0|#1 #0"} #end)
+}
+
+inline function gap_target (cards: card ^ CARDS;
+                            gap: uint32;)
+  returns (target: L::ref;)
+{
+  diagram
+    (let target = (cards .[gap] default NO_CARD).item;
+    #pragma diagram {"xy":"H0;V0","wh":"50000;3200"} #end)
+}
+
+function decode (cards: card ^ CARDS;
+                 action: gesture;)
+  returns (request: Q::command;)
+{
+  diagram
+    (activate #0 when action match
+       | NoGesture :
+         {
+           diagram
+             (let request = Q::Wait {};
+             #pragma diagram {"xy":"h-26000;v0","wh":"28000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-20389","wh":"84000;7200"} #end
+         }
+       | NewCard {added} :
+         {
+           diagram
+             (let request = Q::InsertBefore {target: gap_target(cards, added.gap),
+                job: Job::make(added.operation)};
+             #pragma diagram {"xy":"h-6000;v0","wh":"68000;4219"} #end)
+         #pragma diagram {"xy":"h0;v-8980","wh":"84000;8219"} #end
+         }
+       | DragCard {dragged} :
+         {
+           diagram
+             (let request = Q::Move {
+                item: (cards .[dragged.card] default NO_CARD).item,
+                before: gap_target(cards, dragged.gap)};
+             #pragma diagram {"xy":"h-13000;v0","wh":"54000;6078"} #end)
+         #pragma diagram {"xy":"h0;v3869","wh":"84000;10078"} #end
+         }
+       | DeleteCard {deleted} :
+         {
+           diagram
+             (let request = Q::Cancel {target: (cards .[deleted.card] default NO_CARD).item};
+             #pragma diagram {"xy":"h0;v0","wh":"80000;3200"} #end)
+         #pragma diagram {"xy":"h0;v16208","wh":"84000;7200"} #end
+         }
+       | CancelOperation {selected} :
+         {
+           diagram
+             (let request = Q::CancelType {operation: selected.operation};
+             #pragma diagram {"xy":"h-9000;v0","wh":"62000;3200"} #end)
+         #pragma diagram {"xy":"h0;v27108","wh":"84000;7200"} #end
+         }
+     #pragma diagram {"xy":"H0;V0","wh":"84000;61416"} #end)
+}
+
+function paced_advance (l_in * : L::list;
+                        previous: Q::work;
+                        run: bool;)
+  returns (l_out at l_in: L::list;
+           current: Q::work;)
+{
+  diagram
+    (activate #0
+       if run
+       then
+         {
+           diagram
+             (let l_out, current = Q::advance(l_in, previous);
+             #pragma diagram {"xy":"h0;v0","wh":"50000;3200"} #end)
+         #pragma diagram {"xy":"h0;v-3520","wh":"54000;7200"} #end
+         }
+       else
+         {
+           diagram
+             (let l_out = !l_in; current = previous;
+             #pragma diagram {"xy":"h-5000;v0","wh":"40000;3200"} #end)
+         #pragma diagram {"xy":"h0;v7380","wh":"54000;7200"} #end
+         }
+     #pragma diagram {"xy":"H0;V0","wh":"54000;21960"} #end)
+}
+
+node panel (scripted: bool;
+            command: Q::command;
+            run: bool;
+            page: uint32;)
+  returns (current: Q::work;
+           queue_length: L::index;
+           command_status: Q::command_result;
+           accepted: L::ref;
+           cards: card ^ CARDS;
+           slots: slot_view ^ PAGE;
+           cells: uint32 ^ STRIP;
+           capacity: L::index;)
+{
+  diagram
+    (#0 expr if run then 1 else 0
+    #pragma diagram {"xy":"H-82913;V-14400","wh":"24000;3200"} #end)
+    (#1 expr scripted
+    #pragma diagram {"xy":"H2000;V-27900","wh":"12000;3200"} #end)
+    (#2 expr command
+    #pragma diagram {"xy":"H2000;V-13700","wh":"12000;3200"} #end)
+    (#79 expr #80 pre #7
+      where
+        (#80 group)
+        (#7 group)
+    #pragma diagram {"dir":"nw","xy":"H-60000;V-30450"} #end)
+    (#81 expr 0
+    #pragma diagram {"dir":"nw","xy":"H-46250;V-32350","wh":"6000;3200"} #end)
+    (#6 expr #82 + #8
+      where
+        (#82 group)
+        (#8 group)
+    #pragma diagram {"xy":"H-62000;V-16300"} #end)
+    (#9 expr if #10 then #11 else #83
+      where
+        (#10 group)
+        (#11 group)
+        (#83 group)
+    #pragma diagram {"xy":"H-29500;V-23800"} #end)
+    (#84 expr 0
+    #pragma diagram {"dir":"es","xy":"H-37375;V-11300","wh":"3200;8000"} #end)
+    (#12 block Q::scenario
+    #pragma diagram {"xy":"H0;V-21800","wh":"16000;8000"} #end)
+    (#85 expr L::null()
+    #pragma diagram {"xy":"H-33350;V5517","wh":"14000;3200"} #end)
+    (#13 expr #86 pre #14
+      where
+        (#86 group)
+        (#14 group)
+    #pragma diagram {"xy":"H-20050;V7417"} #end)
+    (#15 expr if #16 then #17 else #18
+      where
+        (#16 group)
+        (#17 group)
+        (#18 group)
+    #pragma diagram {"xy":"H14438;V5455"} #end)
+    (#19 expr if #20 then #21 else #22
+      where
+        (#20 group)
+        (#21 group)
+        (#22 group)
+    #pragma diagram {"xy":"H34500;V-21800"} #end)
+    (#23 expr L::init()
+    #pragma diagram {"dir":"nw","xy":"H133175;V19567","wh":"14000;3200"} #end)
+    (#24 expr #25 pre #26
+      where
+        (#25 group)
+        (#26 group)
+    #pragma diagram {"dir":"nw","xy":"H118025;V21467"} #end)
+    (#27 block Q::apply
+    #pragma diagram {"xy":"H60675;V-18300","wh":"20000;14000"} #end)
+    (#28 expr Q::Idle {}
+    #pragma diagram {"dir":"nw","xy":"H147450;V-33631","wh":"12000;3200"} #end)
+    (#29 expr #30 pre #31
+      where
+        (#30 group)
+        (#31 group)
+    #pragma diagram {"dir":"nw","xy":"H127350;V-31731"} #end)
+    (#32 block paced_advance
+    #pragma diagram {"xy":"H129125;V-12133","wh":"20000;14000"} #end)
+    (#38 def queue
+    #pragma diagram {"xy":"H176250;V-6733","wh":"10000;3200"} #end)
+    (#39 def current
+    #pragma diagram {"xy":"H158175;V-12133","wh":"12000;3200"} #end)
+    (#41 def command_status
+    #pragma diagram {"xy":"H87800;V-18300","wh":"18000;3200"} #end)
+    (#42 def accepted
+    #pragma diagram {"xy":"H84800;V-22558","wh":"12000;3200"} #end)
+    (#47 expr run
+    #pragma diagram {"xy":"H-50075;V-58450"} #end)
+    (#48 expr run
+    #pragma diagram {"xy":"H4000;V-2933"} #end)
+    (#49 expr run
+    #pragma diagram {"xy":"H113500;V167"} #end)
+    (#3 expr accepted 
+    #pragma diagram {"xy":"H-1000;V3555","wh":"14000;3200"} #end)
+    (let
+         capacity = L::N;
+         cells = occupancy(queue);
+         slots = page_view(queue, page);
+         queue_length = L::size(queue);
+         cards = queue_view(queue);
+    #pragma diagram {"xy":"H134450;V-52097","wh":"38000;11657"} #end)
+    
+    (#52 wire #6 => #7, #11
+    #pragma diagram {"wp":"#6 h12013 v-9400[v-2850 #7, #11]"} #end)
+    (#89 wire #81 => #80)
+    (#90 wire #79 => #82
+    #pragma diagram {"wp":"#79 h-3500 v12250 #82"} #end)
+    (#91 wire #84 => #83
+    #pragma diagram {"wp":"#84 v-8100 #83"} #end)
+    (#92 wire #85 => #86)
+    (#53 wire #9 => #12 .(cycle))
+    (#54 wire #13 => #12 .(previous), #18
+    #pragma diagram {"wp":"#13 h6550[v-26467 #12, h11625 v-62 #18]"} #end)
+    (#55 wire #15 => #14
+    #pragma diagram {"wp":"#15 h2500 v6462 h-47488 v-2600 #14"} #end)
+    (#56 wire #1 => #20)
+    (#57 wire #12 .(request) => #21
+    #pragma diagram {"wp":"v0|#12 h23000 #21"} #end)
+    (#58 wire #2 => #22)
+    (#59 wire #19 => #27 .(request))
+    (#60 wire #23 => #25)
+    (#61 wire #24 => #27 .(l_in)
+    #pragma diagram {"wp":"#24 h-63850 v-36934 #27"} #end)
+    (#62 wire #27 .(l_out) => #32 .(l_in)
+    #pragma diagram {"wp":"v5143|#27 #32"} #end)
+    (#63 wire #27 .(status) => #41
+    #pragma diagram {"wp":"v0|#27 #41"} #end)
+    (#64 wire #27 .(accepted) => #42
+    #pragma diagram {"wp":"v-4258|#27 #42"} #end)
+    (#65 wire #28 => #30)
+    (#66 wire #29 => #32 .(previous)
+    #pragma diagram {"wp":"#29 h-24350 v16003 #32"} #end)
+    (#67 wire #32 .(l_out) => #26, #38
+    #pragma diagram {"wp":"v5400|#32 h7050[v30100 #26, #38]"} #end)
+    (#68 wire #32 .(current) => #31, #39
+    #pragma diagram {"wp":"v0|#32 h1000[v-17698 #31, #39]"} #end)
+    (#93 wire #47 => #10
+    #pragma diagram {"wp":"#47 h18075 #10"} #end)
+    (#94 wire #48 => #16
+    #pragma diagram {"wp":"#48 h7938 #16"} #end)
+    (#95 wire #49 => #32 .(run)
+    #pragma diagram {"wp":"#49 h2062 v-7887 #32"} #end)
+    (#5 wire #3 => #17)
+    (#33 wire #0 => #8)
+    
+    (var
+        queue: L::list;)
+}
